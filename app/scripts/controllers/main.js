@@ -21,11 +21,11 @@ angular.module('rpcExplorerApp')
                 }
             };
         };
-        
+
         function errorCallback(data) {
             $scope.error = JSON.stringify(data, null, 4);
         };
-        
+
         function rpcCall(rpcMethod, vRpcParams, successCallback) {
             var backendUrl = 'http://127.0.0.1:5000/bitcoind';
             var requestData = {"method": rpcMethod, "params": vRpcParams, "jsonrpc": "1.0", "id": "curltest"};

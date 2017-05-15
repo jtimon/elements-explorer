@@ -7,13 +7,13 @@
     </pre>
   </div>
 </div>
-</p>
+<p></p>
 
 <!-- DETAIL -->
 
 <div ng-show="chaininfo" border="1">
 Chain Data:
-</p>
+<p></p>
 
 <table ng-show="chaininfo" border="1">
 
@@ -38,18 +38,18 @@ Chain Data:
   </tr>
 
 </table>
-</p>
+<p></p>
 </div>
 
 <div>
   Block Height: <input ng-model="blockheight" ng-change="searchBlockByHeight()">
   Block Hash: <input ng-model="blockid" ng-change="searchBlock()">
-</p>
+<p></p>
 </div>
 
 <div ng-show="block" border="1">
 Block Data:
-</p>
+<p></p>
 
 <table ng-show="block" border="1">
 
@@ -109,9 +109,10 @@ Block Data:
   </tr>
 
 </table>
-</p>
+<p></p>
 
 Block Transactions:
+<p></p>
 
   <table border="1">
     <tr ng-repeat="txhash in block.tx">
@@ -120,18 +121,18 @@ Block Transactions:
   </table>
 
 
-</p>
-</p>
+<p></p>
+<p></p>
 </div>
 
 <div>
   Tx Hash: <input ng-model="txid" ng-change="searchTx()">
 </div>
-</p>
+<p></p>
 
 <div ng-show="transaction" border="1">
 Transaction Data:
-</p>
+<p></p>
 
 <table ng-show="transaction" border="1">
 
@@ -196,8 +197,10 @@ Transaction Data:
   </tr>
 
 </table>
+<p></p>
 
 Transaction Inputs:
+<p></p>
 
 <div ng-repeat="input in transaction.vin">  
   <table border="1">
@@ -238,10 +241,11 @@ Transaction Inputs:
 
   </table>
   
-</p>
+<p></p>
 </div>
 
 Transaction Outputs:
+<p></p>
 
 <div ng-repeat="output in transaction.vout">
   <table border="1">
@@ -314,9 +318,9 @@ Transaction Outputs:
       </td>
     </tr>
   </table>
-</p>
+<p></p>
 </div>
-</p>
+<p></p>
 
 <pre>
 {{ txjson }}
