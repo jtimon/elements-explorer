@@ -31,9 +31,10 @@ rpcpassword=password1
 
 Run the daemon, examples:
 ```
-./bitcoind -daemon
-./elementsd -daemon -server=1 -txindex=1 -rpcuser=user1 -rpcpassword=password1 validatepegout=0
-./betad -daemon -chain=betaregtest -conf=beta.conf
+./betad -daemon -regtest -conf=betaregtest.conf
+./betad -daemon -testnet -conf=betatestnet3.conf
+./betad -daemon -conf=liquid.conf
+./bitcoind -daemon -testnet -conf=testnet3.conf
 ```
 
 Run the http server:
@@ -57,5 +58,23 @@ Running `grunt test` will run the unit tests with karma.
 ## TODO
 
 - [ ] Select chain
+- [ ] Cleanup error display
+- [ ] Hide non interesting things for coinbase inputs and their complement
+- [ ] Hide non interesting things for betad chains
+- [ ] Hide or show CT/non-CT values in a more beauty way
+- [ ] Show -signblockscript and block.scriptSig
+- [ ] Show -fedpegscript
+- [ ] Angular directive for both scriptSig and scriptPubKey
 - [ ] Whitelist rpc calls from python server (only the few needed ones)
 - [ ] Not hardcoded rpcuser/rpcpassword:
+- [ ] Deploy in blockstream servers
+- [ ] Hide non interesting things for bitcoind chains
+- [ ] Adapt to elementsd chains (both show/hide)
+- [ ] Make sure we're not missing data from differences in chains
+- [ ] TODO Fix/Test these:
+```
+./bitcoind -daemon -conf=explorer.conf -datadir=$BTCTXINDEX_DATADIR
+./bitcoind -daemon -regstest -conf=regtest.conf
+./elementsd -daemon -server=1 -txindex=1 -rpcuser=user1 -rpcpassword=password1 validatepegout=0
+./elementsd -daemon -conf=elements.conf
+```
