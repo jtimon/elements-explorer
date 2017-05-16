@@ -16,324 +16,324 @@
 </div> <!-- container -->
 
 <div ng-show="chaininfo" class="container" border="1">
-Chain Data:
-<p></p>
+  Chain Data:
+  <p></p>
 
-<table ng-show="chaininfo" border="1">
+  <table ng-show="chaininfo" border="1">
 
-  <tr>
-    <td>Chain:</td>
-    <td>{{ chaininfo.chain }}</td>
-  </tr>
+    <tr>
+      <td>Chain:</td>
+      <td>{{ chaininfo.chain }}</td>
+    </tr>
 
-  <tr>
-    <td>Blocks:</td>
-    <td>{{ chaininfo.blocks }}</td>
-  </tr>
+    <tr>
+      <td>Blocks:</td>
+      <td>{{ chaininfo.blocks }}</td>
+    </tr>
 
-  <tr>
-    <td>Best block hash:</td>
-    <td><a href ng-click="goToBlock(chaininfo.bestblockhash);">{{ chaininfo.bestblockhash }}</a></td>
-  </tr>
+    <tr>
+      <td>Best block hash:</td>
+      <td><a href ng-click="goToBlock(chaininfo.bestblockhash);">{{ chaininfo.bestblockhash }}</a></td>
+    </tr>
 
-  <tr>
-    <td>Median time:</td>
-    <td>{{ chaininfo.mediantime }}</td>
-  </tr>
+    <tr>
+      <td>Median time:</td>
+      <td>{{ chaininfo.mediantime }}</td>
+    </tr>
 
-</table>
-<p></p>
+  </table>
+  <p></p>
 </div>
 
 <div class="container">
-<div>
-  Block Height: <input ng-model="blockheight" ng-change="searchBlockByHeight()">
-  Block Hash: <input ng-model="blockid" ng-change="searchBlock()">
-<p></p>
-</div>
+  <div>
+    Block Height: <input ng-model="blockheight" ng-change="searchBlockByHeight()">
+    Block Hash: <input ng-model="blockid" ng-change="searchBlock()">
+    <p></p>
+  </div>
 
-<div ng-show="block" border="1">
-Block Data:
-<p></p>
+  <div ng-show="block" border="1">
+    Block Data:
+    <p></p>
 
-<table ng-show="block" border="1">
+    <table ng-show="block" border="1">
 
-  <tr>
-    <td>Height:</td>
-    <td>{{ block.height }}</td>
-  </tr>
-  
-  <tr>
-    <td>Hash:</td>
-    <td>{{ block.hash }}</td>
-  </tr>
+      <tr>
+        <td>Height:</td>
+        <td>{{ block.height }}</td>
+      </tr>
 
-  <tr>
-    <td>Confirmations:</td>
-    <td>{{ block.confirmations }}</td>
-  </tr>
-    
-  <tr>
-    <td>Stripped size:</td>
-    <td>{{ block.strippedsize }}</td>
-  </tr>
-  
-  <tr>
-    <td>Size:</td>
-    <td>{{ block.size }}</td>
-  </tr>
-  
-  <tr>
-    <td>Weight:</td>
-    <td>{{ block.weight }}</td>
-  </tr>
-  
-  <tr>
-    <td>Version:</td>
-    <td>{{ block.version }}</td>
-  </tr>
-  
-  <tr>
-    <td>Merkle root:</td>
-    <td>{{ block.merkleroot }}</td>
-  </tr>
-  
-  <tr>
-    <td>Time:</td>
-    <td>{{ block.time }}</td>
-  </tr>
+      <tr>
+        <td>Hash:</td>
+        <td>{{ block.hash }}</td>
+      </tr>
 
-  <tr>
-    <td>Median time:</td>
-    <td>{{ block.mediantime }}</td>
-  </tr>
-  
-  <tr>
-    <td>Previous block hash:</td>
-    <td><a href ng-click="goToBlock(block.previousblockhash);">{{ block.previousblockhash }}</a></td>
-  </tr>
+      <tr>
+        <td>Confirmations:</td>
+        <td>{{ block.confirmations }}</td>
+      </tr>
 
-</table>
-<p></p>
+      <tr>
+        <td>Stripped size:</td>
+        <td>{{ block.strippedsize }}</td>
+      </tr>
 
-Block Transactions:
-<p></p>
+      <tr>
+        <td>Size:</td>
+        <td>{{ block.size }}</td>
+      </tr>
 
-  <table border="1">
-    <tr ng-repeat="txhash in block.tx">
-      <td><a href ng-click="goToTx(txhash);">{{txhash}}</a></td>
-    </tr>
-  </table>
+      <tr>
+        <td>Weight:</td>
+        <td>{{ block.weight }}</td>
+      </tr>
+
+      <tr>
+        <td>Version:</td>
+        <td>{{ block.version }}</td>
+      </tr>
+
+      <tr>
+        <td>Merkle root:</td>
+        <td>{{ block.merkleroot }}</td>
+      </tr>
+
+      <tr>
+        <td>Time:</td>
+        <td>{{ block.time }}</td>
+      </tr>
+
+      <tr>
+        <td>Median time:</td>
+        <td>{{ block.mediantime }}</td>
+      </tr>
+
+      <tr>
+        <td>Previous block hash:</td>
+        <td><a href ng-click="goToBlock(block.previousblockhash);">{{ block.previousblockhash }}</a></td>
+      </tr>
+
+    </table>
+    <p></p>
+
+    Block Transactions:
+    <p></p>
+
+    <table border="1">
+      <tr ng-repeat="txhash in block.tx">
+        <td><a href ng-click="goToTx(txhash);">{{txhash}}</a></td>
+      </tr>
+    </table>
 
 
-<p></p>
-<p></p>
-</div>
+    <p></p>
+    <p></p>
+  </div>
 </div> <!-- block-container -->
 
 <div class="container">
-<div>
-  Tx Hash: <input ng-model="txid" ng-change="searchTx()">
-</div>
-<p></p>
+  <div>
+    Tx Hash: <input ng-model="txid" ng-change="searchTx()">
+  </div>
+  <p></p>
 
-<div ng-show="transaction" border="1">
-Transaction Data:
-<p></p>
+  <div ng-show="transaction" border="1">
+    Transaction Data:
+    <p></p>
 
-<table ng-show="transaction" border="1">
+    <table ng-show="transaction" border="1">
 
-  <tr>
-    <td>Hex:</td>
-    <td>{{ transaction.hex }}</td>
-  </tr>
+      <tr>
+        <td>Hex:</td>
+        <td>{{ transaction.hex }}</td>
+      </tr>
 
-  <tr>
-    <td>Txid:</td>
-    <td>{{ transaction.txid }}</td>
-  </tr>
+      <tr>
+        <td>Txid:</td>
+        <td>{{ transaction.txid }}</td>
+      </tr>
 
-  <tr>
-    <td>Hash:</td>
-    <td>{{ transaction.hash }}</td>
-  </tr>
+      <tr>
+        <td>Hash:</td>
+        <td>{{ transaction.hash }}</td>
+      </tr>
 
-  <tr>
-    <td>Size:</td>
-    <td>{{ transaction.size }}</td>
-  </tr>
-  
-  <tr>
-    <td>Vsize:</td>
-    <td>{{ transaction.vsize }}</td>
-  </tr>
-  
-  <tr>
-    <td>Version:</td>
-    <td>{{ transaction.version }}</td>
-  </tr>
-  
-  <tr>
-    <td>Locktime:</td>
-    <td>{{ transaction.locktime }}</td>
-  </tr>
-  
-  <tr>
-    <td>Fee:</td>
-    <td>{{ transaction.fee }}</td>
-  </tr>
-  
-  <tr>
-    <td>Blockhash:</td>
-    <td>{{ transaction.blockhash }}</td>
-  </tr>
-  
-  <tr>
-    <td>Confirmations:</td>
-    <td>{{ transaction.confirmations }}</td>
-  </tr>
-  
-  <tr>
-    <td>Time:</td>
-    <td>{{ transaction.time }}</td>
-  </tr>
-  
-  <tr>
-    <td>Blocktime:</td>
-    <td>{{ transaction.blocktime }}</td>
-  </tr>
+      <tr>
+        <td>Size:</td>
+        <td>{{ transaction.size }}</td>
+      </tr>
 
-</table>
-<p></p>
+      <tr>
+        <td>Vsize:</td>
+        <td>{{ transaction.vsize }}</td>
+      </tr>
 
-Transaction Inputs:
-<p></p>
+      <tr>
+        <td>Version:</td>
+        <td>{{ transaction.version }}</td>
+      </tr>
 
-<div ng-repeat="input in transaction.vin">  
-  <table border="1">
-    <tr>
-      <td>Sequence:</td>
-      <td>{{ input.sequence }}</td>
-    </tr>
+      <tr>
+        <td>Locktime:</td>
+        <td>{{ transaction.locktime }}</td>
+      </tr>
 
-    <tr>
-      <td>Coinbase:</td>
-      <td>{{ input.coinbase }}</td>
-    </tr>
+      <tr>
+        <td>Fee:</td>
+        <td>{{ transaction.fee }}</td>
+      </tr>
 
-    <tr>
-      <td>Txid:</td>
-      <td>{{ input.txid }}</td>
-    </tr>
+      <tr>
+        <td>Blockhash:</td>
+        <td>{{ transaction.blockhash }}</td>
+      </tr>
 
-    <tr>
-      <td>vout:</td>
-      <td>{{ input.vout }}</td>
-    </tr>
+      <tr>
+        <td>Confirmations:</td>
+        <td>{{ transaction.confirmations }}</td>
+      </tr>
 
-    <tr>
-      <td>scriptSig.asm:</td>
-      <td>{{ input.scriptSig.asm }}</td>
-    </tr>
+      <tr>
+        <td>Time:</td>
+        <td>{{ transaction.time }}</td>
+      </tr>
 
-    <tr>
-      <td>scriptSig.hex:</td>
-      <td>{{ input.scriptSig.hex }}</td>
-    </tr>
+      <tr>
+        <td>Blocktime:</td>
+        <td>{{ transaction.blocktime }}</td>
+      </tr>
 
-    <tr>
-      <td>txinwitness:</td>
-      <td>{{ input.txinwitness }}</td>
-    </tr>
+    </table>
+    <p></p>
 
-  </table>
-  
-<p></p>
-</div>
+    Transaction Inputs:
+    <p></p>
 
-Transaction Outputs:
-<p></p>
+    <div ng-repeat="input in transaction.vin">
+      <table border="1">
+        <tr>
+          <td>Sequence:</td>
+          <td>{{ input.sequence }}</td>
+        </tr>
 
-<div ng-repeat="output in transaction.vout">
-  <table border="1">
-    <tr>
-    </tr>
+        <tr>
+          <td>Coinbase:</td>
+          <td>{{ input.coinbase }}</td>
+        </tr>
 
-    <tr>
-      <td>n:</td>
-      <td>{{ output.n }}</td>
-    </tr>
+        <tr>
+          <td>Txid:</td>
+          <td>{{ input.txid }}</td>
+        </tr>
 
-    <tr>
-      <td>value:</td>
-      <td>{{ output.value }}</td>
-    </tr>
+        <tr>
+          <td>vout:</td>
+          <td>{{ input.vout }}</td>
+        </tr>
 
-    <tr>
-      <td>serValue:</td>
-      <td>{{ output.serValue }}</td>
-    </tr>
+        <tr>
+          <td>scriptSig.asm:</td>
+          <td>{{ input.scriptSig.asm }}</td>
+        </tr>
 
-    <tr>
-      <td>ct-bits:</td>
-      <td>{{ output["ct-bits"] }}</td>
-    </tr>
+        <tr>
+          <td>scriptSig.hex:</td>
+          <td>{{ input.scriptSig.hex }}</td>
+        </tr>
 
-    <tr>
-      <td>ct-exponent:</td>
-      <td>{{ output["ct-exponent"] }}</td>
-    </tr>
+        <tr>
+          <td>txinwitness:</td>
+          <td>{{ input.txinwitness }}</td>
+        </tr>
 
-    <tr>
-      <td>value-maximum:</td>
-      <td>{{ output["value-maximum"] }}</td>
-    </tr>
+      </table>
 
-    <tr>
-      <td>value-minimum:</td>
-      <td>{{ output["value-minimum"] }}</td>
-    </tr>
+      <p></p>
+    </div>
 
-    <tr>
-      <td>scriptSig.asm:</td>
-      <td>{{ output.scriptPubKey.asm }}</td>
-    </tr>
+    Transaction Outputs:
+    <p></p>
 
-    <tr>
-      <td>scriptPubKey.hex:</td>
-      <td>{{ output.scriptPubKey.hex }}</td>
-    </tr>
+    <div ng-repeat="output in transaction.vout">
+      <table border="1">
+        <tr>
+        </tr>
 
-    <tr>
-      <td>scriptPubKey.reqSigs:</td>
-      <td>{{ output.scriptPubKey.reqSigs }}</td>
-    </tr>
+        <tr>
+          <td>n:</td>
+          <td>{{ output.n }}</td>
+        </tr>
 
-    <tr>
-      <td>scriptPubKey.type:</td>
-      <td>{{ output.scriptPubKey.type }}</td>
-    </tr>
+        <tr>
+          <td>value:</td>
+          <td>{{ output.value }}</td>
+        </tr>
 
-    <tr>
-      <td>output.scriptPubKey.addresses:</td>
-      <td>
-          <table border="1">
-            <tr ng-repeat="addr in output.scriptPubKey.addresses">
-              <td>{{ addr }}</td>
-            </tr>
-          </table>
-      </td>
-    </tr>
-  </table>
-<p></p>
-</div>
-<p></p>
+        <tr>
+          <td>serValue:</td>
+          <td>{{ output.serValue }}</td>
+        </tr>
 
-<div class="container" ng-show="verbose">
-<pre>
-{{ txjson }}
-</pre>
-</div>
+        <tr>
+          <td>ct-bits:</td>
+          <td>{{ output["ct-bits"] }}</td>
+        </tr>
+
+        <tr>
+          <td>ct-exponent:</td>
+          <td>{{ output["ct-exponent"] }}</td>
+        </tr>
+
+        <tr>
+          <td>value-maximum:</td>
+          <td>{{ output["value-maximum"] }}</td>
+        </tr>
+
+        <tr>
+          <td>value-minimum:</td>
+          <td>{{ output["value-minimum"] }}</td>
+        </tr>
+
+        <tr>
+          <td>scriptSig.asm:</td>
+          <td>{{ output.scriptPubKey.asm }}</td>
+        </tr>
+
+        <tr>
+          <td>scriptPubKey.hex:</td>
+          <td>{{ output.scriptPubKey.hex }}</td>
+        </tr>
+
+        <tr>
+          <td>scriptPubKey.reqSigs:</td>
+          <td>{{ output.scriptPubKey.reqSigs }}</td>
+        </tr>
+
+        <tr>
+          <td>scriptPubKey.type:</td>
+          <td>{{ output.scriptPubKey.type }}</td>
+        </tr>
+
+        <tr>
+          <td>output.scriptPubKey.addresses:</td>
+          <td>
+            <table border="1">
+              <tr ng-repeat="addr in output.scriptPubKey.addresses">
+                <td>{{ addr }}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      <p></p>
+    </div>
+    <p></p>
+
+    <div class="container" ng-show="verbose">
+      <pre>
+        {{ txjson }}
+      </pre>
+    </div>
 
   </div>
 </div> <!-- tx-container -->

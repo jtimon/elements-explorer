@@ -91,4 +91,4 @@ angular.module('rpcExplorerApp')
             $scope.searchBlock();
         };
         rpcCall("getblockchaininfo", [], initCallback);
-  });
+    });
