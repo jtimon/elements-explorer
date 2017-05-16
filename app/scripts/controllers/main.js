@@ -10,6 +10,8 @@
 angular.module('rpcExplorerApp')
     .controller('MainCtrl', function ($scope, $http) {
 
+        $scope.verbose = true;
+
         function safeCallback(callback) {
             return function(data) {
                 if (data["data"]["error"]) {
@@ -42,6 +44,7 @@ angular.module('rpcExplorerApp')
         $scope.searchBlock = function() {
             function successCallbackBlock(data) {
                 $scope.block = data["data"]["result"];
+                $scope.blockjson = JSON.stringify($scope.block, null, 4);
                 $scope.blockheight = $scope.block["height"];
                 $scope.getBlockchainInfo();
             };

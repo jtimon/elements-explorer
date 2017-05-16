@@ -9,9 +9,13 @@
 </div>
 <p></p>
 
-<!-- DETAIL -->
+<div class="container">
+  Verbose:
+  <input type="checkbox" ng-model="verbose">
+  <p></p>
+</div> <!-- container -->
 
-<div ng-show="chaininfo" border="1">
+<div ng-show="chaininfo" class="container" border="1">
 Chain Data:
 <p></p>
 
@@ -41,6 +45,7 @@ Chain Data:
 <p></p>
 </div>
 
+<div class="container">
 <div>
   Block Height: <input ng-model="blockheight" ng-change="searchBlockByHeight()">
   Block Hash: <input ng-model="blockid" ng-change="searchBlock()">
@@ -124,7 +129,9 @@ Block Transactions:
 <p></p>
 <p></p>
 </div>
+</div> <!-- block-container -->
 
+<div class="container">
 <div>
   Tx Hash: <input ng-model="txid" ng-change="searchTx()">
 </div>
@@ -322,8 +329,17 @@ Transaction Outputs:
 </div>
 <p></p>
 
+<div class="container" ng-show="verbose">
 <pre>
 {{ txjson }}
 </pre>
+</div>
 
+  </div>
+</div> <!-- tx-container -->
+
+<div class="container" ng-show="verbose">
+  <pre>
+    {{ blockjson }}
+  </pre>
 </div>
