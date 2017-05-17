@@ -82,7 +82,7 @@
 
       <tr>
         <td>Hash:</td>
-        <td>{{ block.hash }}</td>
+        <td><a href ng-click="goToBlock(block.hash);">{{ block.hash }}</a></td>
       </tr>
 
       <tr>
@@ -142,7 +142,6 @@
       </tr>
     </table>
 
-
     <p></p>
     <p></p>
   </div>
@@ -163,7 +162,7 @@
 
       <tr>
         <td>Txid:</td>
-        <td>{{ transaction.txid }}</td>
+        <td><a href ng-click="goToTx(transaction.txid);">{{ transaction.txid }}</a></td>
       </tr>
 
       <tr>
@@ -198,7 +197,7 @@
 
       <tr>
         <td>Blockhash:</td>
-        <td>{{ transaction.blockhash }}</td>
+        <td><a href ng-click="goToBlock(transaction.blockhash);">{{ transaction.blockhash }}</a></td>
       </tr>
 
       <tr>
@@ -236,7 +235,7 @@
 
         <tr ng-show="!input.coinbase">
           <td>Txid:</td>
-          <td>{{ input.txid }}</td>
+          <td><a href ng-click="goToTx(input.txid);">{{ input.txid }}</a></td>
         </tr>
 
         <tr ng-show="!input.coinbase">
