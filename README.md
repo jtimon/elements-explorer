@@ -58,7 +58,7 @@ Running `grunt test` will run the unit tests with karma.
 ## TODO
 
 - [x] Whitelist rpc calls from python server (only the few needed ones)
-- [ ] Select chain
+- [x] Select chain
 - [ ] Cleanup error display
 - [ ] Hide non interesting things for coinbase inputs and their complement
 - [ ] Hide non interesting things for betad chains

@@ -12,6 +12,14 @@ angular.module('rpcExplorerApp')
 
         var BACKEND_URL = 'http://127.0.0.1:5000/rpcexplorerrest';
         $scope.verbose = true;
+        $scope.available_chains = [
+            "betaregtest",
+            "liquid",
+            "betatestnet3",
+            "testnet3",
+            "main",
+        ];
+        $scope.selected_chain = "betaregtest";
 
         function safeCallback(callback) {
             return function(data) {
@@ -30,7 +38,13 @@ angular.module('rpcExplorerApp')
         };
 
         function rpcCall(rpcMethod, vRpcParams, successCallback) {
-            var requestData = {"method": rpcMethod, "params": vRpcParams, "jsonrpc": "1.0", "id": "curltest"};
+            var requestData = {
+                "chain": $scope.selected_chain,
+                "method": rpcMethod,
+                "params": vRpcParams,
+                "jsonrpc": "1.0",
+                "id": "curltest",
+            };
             $http.post(BACKEND_URL, requestData).then(safeCallback(successCallback), errorCallback);
         };
 

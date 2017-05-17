@@ -17,10 +17,31 @@ ALLOWED_CALLS = [
 
 frontend = Blueprint('frontend', __name__)
 
+# TODO duplicated default ports, adapt to elements (with CA),
+# uncomment, clean up
+AVAILABLE_CHAINS = {
+    "main": "8332",
+    # "testnet3": "18332",
+    # "regtest": "18332",
+    # "elements": "9042",
+    # "elementsregtest": "7041",
+    "betatestnet3": "9041",
+    "betaregtest": "7041",
+    "liquid": "10098",
+}
+
+def urlForChain(chain):
+    return DEFAULT_DEAMONS_HOST + ":" + AVAILABLE_CHAINS[chain]
+
+def rpcCall(rpcUrl, requestData, rpcAuth, rpcHeaders):
+    print(rpcUrl, requestData, rpcAuth, rpcHeaders) # TODO move to logs
+    response = requests.request('post', rpcUrl, data=requestData, auth=rpcAuth, headers=rpcHeaders)
+    # response.raise_for_status()
+    return jsonify( response.json() ), 200
+
 @frontend.route('/rpcexplorerrest', methods = ['POST'])
 @crossdomain.crossdomain(origin='*')
 def rpcexplorerrest():
-    rpcUrl = DEFAULT_DEAMONS_HOST + ':' + DEFAULT_DEAMONS_PORT
     rpcAuth = ('user1', 'password1')
     rpcHeaders = {'content-type': 'application/json'}
     requestData = json.loads(request.data)
@@ -28,11 +49,15 @@ def rpcexplorerrest():
     if 'method' in requestData and (not requestData['method'] in ALLOWED_CALLS):
         return jsonify( {'error': {'message': 'Method "%s" not supported.' % requestData['method']}} ), 200
 
+    if not "chain" in requestData:
+        return jsonify({"error": {"message": "No chain specified."} }), 200
+    chain = requestData["chain"]
+    del requestData["chain"]
+    if not chain in AVAILABLE_CHAINS:
+        return jsonify( {'error': {'message': 'Chain "%s" not supported.' % chain}} ), 200
+
     strRequestData = json.dumps(requestData)
-    print(requestData, strRequestData)
-    response = requests.request('post', rpcUrl, data=strRequestData, auth=rpcAuth, headers = rpcHeaders)
-    # response.raise_for_status()
-    return jsonify( response.json() ), 200
+    return rpcCall(urlForChain(chain), strRequestData, rpcAuth, rpcHeaders)
 
 @frontend.route('/rpcexplorerrest', methods = ['OPTIONS'])
 @crossdomain.crossdomain(origin='*', headers='Content-Type')
