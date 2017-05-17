@@ -52,6 +52,9 @@ curl  --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "p
 
 Run `grunt` for building and `grunt serve` for preview.
 
+Once the bower components have been installed (run grunt once), you can also test the web 
+without grunt just going to http://127.0.0.1:5000 (as noted by the python server).
+
 ## Testing
 
 Running `grunt test` will run the unit tests with karma.
