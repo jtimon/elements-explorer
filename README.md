@@ -47,7 +47,7 @@ python ./py/__init__.py
 Check the python server is properly running with:
 
 ```
-curl  --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:5000/bitcoind
+curl  --data-binary '{"chain": "betaregtest", "jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:5000/rpcexplorerrest
 ```
 
 Run `grunt` for building and `grunt serve` for preview.
