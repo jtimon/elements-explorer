@@ -14,12 +14,15 @@
 </div> <!-- container -->
 
 <div ng-show="error" class="alert alert-danger" border="1">
-  <strong>Error:</strong> {{error.message}}
-  <div ng-show="error && !error.message" class="alert alert-error" border="1">
+  <strong>Error:</strong>
+  <nobr ng-show="error.message">{{error.message}}</nobr>
+  <!-- <nobr ng-show="!error.message">{{ error }}</nobr> -->
+  <nobr ng-show="!error.message">
+    <p></p>
     <pre>
       {{ error }}
     </pre>
-  </div>
+  </nobr>
 </div>
 <p></p>
 

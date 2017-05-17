@@ -35,6 +35,7 @@ Run the daemon, examples:
 ./betad -daemon -testnet -conf=betatestnet3.conf
 ./betad -daemon -conf=liquid.conf
 ./bitcoind -daemon -testnet -conf=testnet3.conf
+./bitcoind -daemon -conf=explorer.conf -datadir=$BTCTXINDEX_DATADIR
 ```
 
 Run the http server:
@@ -71,10 +72,3 @@ Running `grunt test` will run the unit tests with karma.
 - [ ] Hide non interesting things for bitcoind chains
 - [ ] Adapt to elementsd chains (both show/hide)
 - [ ] Make sure we're not missing data from differences in chains
-- [ ] TODO Fix/Test these:
-```
-./bitcoind -daemon -conf=explorer.conf -datadir=$BTCTXINDEX_DATADIR
-./bitcoind -daemon -regstest -conf=regtest.conf
-./elementsd -daemon -server=1 -txindex=1 -rpcuser=user1 -rpcpassword=password1 validatepegout=0
-./elementsd -daemon -conf=elements.conf
-```

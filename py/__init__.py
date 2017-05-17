@@ -21,7 +21,7 @@ frontend = Blueprint('frontend', __name__)
 # uncomment, clean up
 AVAILABLE_CHAINS = {
     "main": "8332",
-    # "testnet3": "18332",
+    "testnet3": "18332",
     # "regtest": "18332",
     # "elements": "9042",
     # "elementsregtest": "7041",
