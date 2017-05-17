@@ -10,6 +10,7 @@
 angular.module('rpcExplorerApp')
     .controller('MainCtrl', function ($scope, $http) {
 
+        var BACKEND_URL = 'http://127.0.0.1:5000/rpcexplorerrest';
         $scope.verbose = true;
 
         function safeCallback(callback) {
@@ -29,9 +30,8 @@ angular.module('rpcExplorerApp')
         };
 
         function rpcCall(rpcMethod, vRpcParams, successCallback) {
-            var backendUrl = 'http://127.0.0.1:5000/bitcoind';
             var requestData = {"method": rpcMethod, "params": vRpcParams, "jsonrpc": "1.0", "id": "curltest"};
-            $http.post(backendUrl, requestData).then(safeCallback(successCallback), errorCallback);
+            $http.post(BACKEND_URL, requestData).then(safeCallback(successCallback), errorCallback);
         };
 
         function successCallbackInfo(data) {
