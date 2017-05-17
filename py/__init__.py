@@ -1,9 +1,13 @@
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, send_from_directory
 import requests
 import json
+import os
 
 import crossdomain
+
+CLIENT_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'app')
+BOWER_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'bower_components')
 
 DEFAULT_DEAMONS_HOST = 'http://127.0.0.1'
 DEFAULT_DEAMONS_PORT = '7041'
@@ -68,6 +72,24 @@ from flask import Flask
 app = Flask(__name__)
 
 app.register_blueprint(frontend)
+
+app.static_url_path = ''
+app.static_folder   = CLIENT_DIRECTORY
+app.add_url_rule('/<path:filename>',
+    endpoint  = 'static',
+    view_func = app.send_static_file)
+
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
+
+@app.route('/bower_components/<path:filename>')
+def send_bower_file(filename):
+    return send_from_directory(BOWER_DIRECTORY, filename)
+
+@app.route('/<path:filename>')
+def send_file(filename):
+    return send_from_directory(CLIENT_DIRECTORY, filename)
 
 if __name__ == '__main__':
     app.debug = True
