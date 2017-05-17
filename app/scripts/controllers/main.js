@@ -11,7 +11,7 @@ angular.module('rpcExplorerApp')
     .controller('MainCtrl', function ($scope, $http) {
 
         var BACKEND_URL = 'http://127.0.0.1:5000/rpcexplorerrest';
-        $scope.verbose = true;
+        $scope.verbose = false;
         $scope.available_chains = [
             "betaregtest",
             "liquid",
@@ -104,5 +104,9 @@ angular.module('rpcExplorerApp')
             $scope.blockid = $scope.chaininfo["bestblockhash"];
             $scope.searchBlock();
         };
-        rpcCall("getblockchaininfo", [], initCallback);
+        $scope.InitForSelectedChain = function() {
+            rpcCall("getblockchaininfo", [], initCallback);
+        };
+
+        $scope.InitForSelectedChain();
     });

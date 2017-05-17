@@ -1,16 +1,27 @@
 
 <div class="container">
-  Verbose:
-  <input type="checkbox" ng-model="verbose">
-
-  <nobr ng-show="verbose">
+  <nobr>
     Chain:
-    <select ng-model="selected_chain" ng-change="getBlockchainInfo();"
+    <select ng-model="selected_chain" ng-change="InitForSelectedChain();"
             ng-options="chainpetname as chainpetname for chainpetname in available_chains">
     </select>
   </nobr>
 
+  Verbose:
+  <input type="checkbox" ng-model="verbose">
+
   <p></p>
+  <div>
+    Block Height: <input ng-model="blockheight" ng-change="searchBlockByHeight()">
+    Block Hash: <input ng-model="blockid" ng-change="searchBlock()">
+    <p></p>
+    <div>
+      Tx Id: <input ng-model="txid" ng-change="searchTx()">
+    </div>
+    <p></p>
+
+  </div>
+
 </div> <!-- container -->
 
 <div ng-show="error" class="alert alert-danger" border="1">
@@ -38,13 +49,13 @@
     </tr>
 
     <tr>
-      <td>Blocks:</td>
-      <td>{{ chaininfo.blocks }}</td>
+      <td>Best block hash:</td>
+      <td><a href ng-click="goToBlock(chaininfo.bestblockhash);">{{ chaininfo.bestblockhash }}</a></td>
     </tr>
 
     <tr>
-      <td>Best block hash:</td>
-      <td><a href ng-click="goToBlock(chaininfo.bestblockhash);">{{ chaininfo.bestblockhash }}</a></td>
+      <td>Blocks:</td>
+      <td>{{ chaininfo.blocks }}</td>
     </tr>
 
     <tr>
@@ -57,11 +68,6 @@
 </div>
 
 <div class="container">
-  <div>
-    Block Height: <input ng-model="blockheight" ng-change="searchBlockByHeight()">
-    Block Hash: <input ng-model="blockid" ng-change="searchBlock()">
-    <p></p>
-  </div>
 
   <div ng-show="block" border="1">
     Block Data:
@@ -77,6 +83,11 @@
       <tr>
         <td>Hash:</td>
         <td>{{ block.hash }}</td>
+      </tr>
+
+      <tr>
+        <td>Previous block hash:</td>
+        <td><a href ng-click="goToBlock(block.previousblockhash);">{{ block.previousblockhash }}</a></td>
       </tr>
 
       <tr>
@@ -119,11 +130,6 @@
         <td>{{ block.mediantime }}</td>
       </tr>
 
-      <tr>
-        <td>Previous block hash:</td>
-        <td><a href ng-click="goToBlock(block.previousblockhash);">{{ block.previousblockhash }}</a></td>
-      </tr>
-
     </table>
     <p></p>
 
@@ -143,10 +149,6 @@
 </div> <!-- block-container -->
 
 <div class="container">
-  <div>
-    Tx Hash: <input ng-model="txid" ng-change="searchTx()">
-  </div>
-  <p></p>
 
   <div ng-show="transaction" border="1">
     Transaction Data:
