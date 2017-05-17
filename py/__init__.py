@@ -8,19 +8,32 @@ import crossdomain
 DEFAULT_DEAMONS_HOST = 'http://127.0.0.1'
 DEFAULT_DEAMONS_PORT = '7041'
 
+ALLOWED_CALLS = [
+    "getblockchaininfo",
+    "getblock",
+    "getblockhash",
+    "getrawtransaction",
+]
+
 frontend = Blueprint('frontend', __name__)
 
 @frontend.route('/rpcexplorerrest', methods = ['POST'])
 @crossdomain.crossdomain(origin='*')
 def rpcexplorerrest():
-    response = requests.request('post',
-                                DEFAULT_DEAMONS_HOST + ':' + DEFAULT_DEAMONS_PORT, 
-                                data=request.data,
-                                auth=('user1', 'password1'), 
-                                headers = {'content-type': 'application/json'})
+    rpcUrl = DEFAULT_DEAMONS_HOST + ':' + DEFAULT_DEAMONS_PORT
+    rpcAuth = ('user1', 'password1')
+    rpcHeaders = {'content-type': 'application/json'}
+    requestData = json.loads(request.data)
+
+    if 'method' in requestData and (not requestData['method'] in ALLOWED_CALLS):
+        return jsonify( {'error': {'message': 'Method "%s" not supported.' % requestData['method']}} ), 200
+
+    strRequestData = json.dumps(requestData)
+    print(requestData, strRequestData)
+    response = requests.request('post', rpcUrl, data=strRequestData, auth=rpcAuth, headers = rpcHeaders)
     # response.raise_for_status()
     return jsonify( response.json() ), 200
-    
+
 @frontend.route('/rpcexplorerrest', methods = ['OPTIONS'])
 @crossdomain.crossdomain(origin='*', headers='Content-Type')
 def options():

@@ -57,6 +57,7 @@ Running `grunt test` will run the unit tests with karma.
 
 ## TODO
 
+- [x] Whitelist rpc calls from python server (only the few needed ones)
 - [ ] Select chain
 - [ ] Cleanup error display
 - [ ] Hide non interesting things for coinbase inputs and their complement
@@ -65,7 +66,6 @@ Running `grunt test` will run the unit tests with karma.
 - [ ] Show -signblockscript and block.scriptSig
 - [ ] Show -fedpegscript
 - [ ] Angular directive for both scriptSig and scriptPubKey
-- [ ] Whitelist rpc calls from python server (only the few needed ones)
 - [ ] Not hardcoded rpcuser/rpcpassword:
 - [ ] Deploy in blockstream servers
 - [ ] Hide non interesting things for bitcoind chains
