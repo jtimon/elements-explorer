@@ -227,27 +227,27 @@
           <td>{{ input.sequence }}</td>
         </tr>
 
-        <tr>
+        <tr ng-show="input.coinbase">
           <td>Coinbase:</td>
           <td>{{ input.coinbase }}</td>
         </tr>
 
-        <tr>
+        <tr ng-show="!input.coinbase">
           <td>Txid:</td>
           <td>{{ input.txid }}</td>
         </tr>
 
-        <tr>
+        <tr ng-show="!input.coinbase">
           <td>vout:</td>
           <td>{{ input.vout }}</td>
         </tr>
 
-        <tr>
+        <tr ng-show="!input.coinbase">
           <td>scriptSig.asm:</td>
           <td>{{ input.scriptSig.asm }}</td>
         </tr>
 
-        <tr>
+        <tr ng-show="!input.coinbase">
           <td>scriptSig.hex:</td>
           <td>{{ input.scriptSig.hex }}</td>
         </tr>
