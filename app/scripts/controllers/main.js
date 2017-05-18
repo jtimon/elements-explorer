@@ -11,6 +11,7 @@ angular.module('rpcExplorerApp')
     .controller('MainCtrl', function ($scope, $http) {
 
         var BACKEND_URL = 'http://127.0.0.1:5000/rpcexplorerrest';
+        $scope.CTverbose = false;
         $scope.verbose = false;
         $scope.available_chains = [
             "betaregtest",
@@ -98,6 +99,10 @@ angular.module('rpcExplorerApp')
             $scope.searchTx();
         };
 
+        $scope.IsCTOut = function(output) {
+            return !output["value"] && output["value"] != 0;
+        };
+        
         function initCallback(data) {
             successCallbackInfo(data);
             $scope.blockheight = $scope.chaininfo["blocks"];
