@@ -116,11 +116,6 @@
       </tr>
 
       <tr>
-        <td>Merkle root:</td>
-        <td>{{ block.merkleroot }}</td>
-      </tr>
-
-      <tr>
         <td>Time:</td>
         <td>{{ block.time }}</td>
       </tr>
@@ -128,6 +123,11 @@
       <tr>
         <td>Median time:</td>
         <td>{{ block.mediantime }}</td>
+      </tr>
+
+      <tr>
+        <td>Merkle root:</td>
+        <td>{{ block.merkleroot }}</td>
       </tr>
 
     </table>
@@ -156,11 +156,6 @@
     <table ng-show="transaction" border="1">
 
       <tr>
-        <td>Hex:</td>
-        <td>{{ transaction.hex }}</td>
-      </tr>
-
-      <tr>
         <td>Txid:</td>
         <td><a href ng-click="goToTx(transaction.txid);">{{ transaction.txid }}</a></td>
       </tr>
@@ -168,6 +163,16 @@
       <tr>
         <td>Hash:</td>
         <td>{{ transaction.hash }}</td>
+      </tr>
+
+      <tr>
+        <td>Blockhash:</td>
+        <td><a href ng-click="goToBlock(transaction.blockhash);">{{ transaction.blockhash }}</a></td>
+      </tr>
+
+      <tr>
+        <td>Version:</td>
+        <td>{{ transaction.version }}</td>
       </tr>
 
       <tr>
@@ -181,28 +186,18 @@
       </tr>
 
       <tr>
-        <td>Version:</td>
-        <td>{{ transaction.version }}</td>
-      </tr>
-
-      <tr>
-        <td>Locktime:</td>
-        <td>{{ transaction.locktime }}</td>
-      </tr>
-
-      <tr>
         <td>Fee:</td>
         <td>{{ transaction.fee }}</td>
       </tr>
 
       <tr>
-        <td>Blockhash:</td>
-        <td><a href ng-click="goToBlock(transaction.blockhash);">{{ transaction.blockhash }}</a></td>
+        <td>Confirmations:</td>
+        <td>{{ transaction.confirmations }}</td>
       </tr>
 
       <tr>
-        <td>Confirmations:</td>
-        <td>{{ transaction.confirmations }}</td>
+        <td>Locktime:</td>
+        <td>{{ transaction.locktime }}</td>
       </tr>
 
       <tr>
@@ -213,6 +208,11 @@
       <tr>
         <td>Blocktime:</td>
         <td>{{ transaction.blocktime }}</td>
+      </tr>
+
+      <tr>
+        <td>Hex:</td>
+        <td>{{ transaction.hex }}</td>
       </tr>
 
     </table>
