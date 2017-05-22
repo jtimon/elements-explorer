@@ -8,7 +8,7 @@
  * Controller of the rpcExplorerApp
  */
 angular.module('rpcExplorerApp')
-    .controller('MainCtrl', function ($scope, $http) {
+    .controller('MainCtrl', function ($scope, $routeParams, $http) {
 
         var BACKEND_URL = 'http://127.0.0.1:5000/rpcexplorerrest';
         $scope.CTverbose = false;
@@ -102,7 +102,7 @@ angular.module('rpcExplorerApp')
         $scope.IsCTOut = function(output) {
             return !output["value"] && output["value"] != 0;
         };
-        
+
         function initCallback(data) {
             successCallbackInfo(data);
             $scope.blockheight = $scope.chaininfo["blocks"];
@@ -113,5 +113,15 @@ angular.module('rpcExplorerApp')
             rpcCall("getblockchaininfo", [], initCallback);
         };
 
-        $scope.InitForSelectedChain();
+        // Init from $routeParams
+        if ($routeParams.chain) {
+            $scope.selected_chain = $routeParams.chain;
+        }
+        if ($routeParams.block) {
+            $scope.goToBlock($routeParams.block);
+        } else if ($routeParams.txid) {
+            $scope.goToTx($routeParams.txid);
+        } else {
+            $scope.InitForSelectedChain();
+        }
     });

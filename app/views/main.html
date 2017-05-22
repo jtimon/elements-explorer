@@ -55,7 +55,7 @@
 
     <tr>
       <td>Best block hash:</td>
-      <td><a href ng-click="goToBlock(chaininfo.bestblockhash);">{{ chaininfo.bestblockhash }}</a></td>
+      <td><a ng-href="#!/chain/{{selected_chain}}/block/{{chaininfo.bestblockhash}}">{{ chaininfo.bestblockhash }}</a></td>
     </tr>
 
     <tr>
@@ -87,12 +87,12 @@
 
       <tr>
         <td>Hash:</td>
-        <td><a href ng-click="goToBlock(block.hash);">{{ block.hash }}</a></td>
+        <td><a ng-href="#!/chain/{{selected_chain}}/block/{{block.hash}}">{{ block.hash }}</a></td>
       </tr>
 
       <tr>
         <td>Previous block hash:</td>
-        <td><a href ng-click="goToBlock(block.previousblockhash);">{{ block.previousblockhash }}</a></td>
+        <td><a ng-href="#!/chain/{{selected_chain}}/block/{{block.previousblockhash}}">{{ block.previousblockhash }}</a></td>
       </tr>
 
       <tr>
@@ -143,7 +143,7 @@
 
     <table border="1">
       <tr ng-repeat="txhash in block.tx">
-        <td><a href ng-click="goToTx(txhash);">{{txhash}}</a></td>
+        <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{txhash}}">{{ txhash }}</a></td>
       </tr>
     </table>
 
@@ -162,7 +162,7 @@
 
       <tr>
         <td>Txid:</td>
-        <td><a href ng-click="goToTx(transaction.txid);">{{ transaction.txid }}</a></td>
+        <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{transaction.txid}}">{{ transaction.txid }}</a></td>
       </tr>
 
       <tr>
@@ -172,7 +172,7 @@
 
       <tr>
         <td>Blockhash:</td>
-        <td><a href ng-click="goToBlock(transaction.blockhash);">{{ transaction.blockhash }}</a></td>
+        <td><a ng-href="#!/chain/{{selected_chain}}/block/{{block.hash}}">{{ block.hash }}</a></td>
       </tr>
 
       <tr>
@@ -240,7 +240,7 @@
 
         <tr ng-show="!input.coinbase">
           <td>Txid:</td>
-          <td><a href ng-click="goToTx(input.txid);">{{ input.txid }}</a></td>
+          <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{input.txid}}">{{ input.txid }}</a></td>
         </tr>
 
         <tr ng-show="!input.coinbase">

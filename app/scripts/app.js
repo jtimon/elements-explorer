@@ -24,7 +24,18 @@ angular
       .when('/', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
-        controllerAs: 'main'
+      })
+      .when('/chain/:chain', {
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl',
+      })
+      .when('/chain/:chain/block/:block', {
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl',
+      })
+      .when('/chain/:chain/tx/:txid', {
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl',
       })
       .when('/about', {
         templateUrl: 'views/about.html',
