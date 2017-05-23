@@ -64,9 +64,9 @@ Running `grunt test` will run the unit tests with karma.
 - [x] Whitelist rpc calls from python server (only the few needed ones)
 - [x] Select chain
 - [x] Hide non interesting things for coinbase inputs and their complement
+- [x] Hide or show CT/non-CT values in a more beauty way
 - [ ] Cleanup error display
 - [ ] Hide non interesting things for betad chains
-- [ ] Hide or show CT/non-CT values in a more beauty way
 - [ ] Show -signblockscript and block.scriptSig
 - [ ] Show -fedpegscript
 - [ ] Angular directive for both scriptSig and scriptPubKey
