@@ -2,12 +2,22 @@
 
 A simple block explorer based on deamon's rpc calls.
 
+# Dependencies:
+
+## Fundamental dependencies:
+
+Dependent on the OS distribution:
+
+```
+make, python, pip, virtualenv
+```
+
 ## Installation
 
 To install the python server:
 
 ```
-pip install -r requirements.txt
+make
 ```
 
 To install the javascript requirements:
@@ -41,7 +51,7 @@ Run the daemon, examples:
 Run the http server:
 
 ```
-python ./py/__init__.py
+make run
 ```
 
 Check the python server is properly running with:
@@ -52,10 +62,10 @@ curl  --data-binary '{"chain": "betaregtest", "jsonrpc": "1.0", "id":"curltest",
 
 Run `grunt` for building and `grunt serve` for preview.
 
-Once the bower components have been installed (run grunt once), you can also test the web 
+Once the bower components have been installed (run grunt once), you can also test the web
 without grunt just going to http://127.0.0.1:5000 (as noted by the python server).
 
-## Testing
+## TODO Angular/Karma/Protractor/e2e Testing
 
 Running `grunt test` will run the unit tests with karma.
 
@@ -65,8 +75,8 @@ Running `grunt test` will run the unit tests with karma.
 - [x] Select chain
 - [x] Hide non interesting things for coinbase inputs and their complement
 - [x] Hide or show CT/non-CT values in a more beauty way
+- [x] Hide non interesting things for betad chains (pow vs signblock, covered above besides the fields hidden in verbose)
 - [ ] Cleanup error display
-- [ ] Hide non interesting things for betad chains
 - [ ] Show -signblockscript and block.scriptSig
 - [ ] Show -fedpegscript
 - [ ] Angular directive for both scriptSig and scriptPubKey
@@ -75,3 +85,8 @@ Running `grunt test` will run the unit tests with karma.
 - [ ] Hide non interesting things for bitcoind chains
 - [ ] Adapt to elementsd chains (both show/hide)
 - [ ] Make sure we're not missing data from differences in chains
+- [ ] Make sure there's nothing to rescue from 'verbose' even after supporting some other elements chain
+
+# License
+
+MIT, see COPYRIGHT.md
