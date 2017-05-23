@@ -76,6 +76,11 @@ Running `grunt test` will run the unit tests with karma.
 - [x] Hide non interesting things for coinbase inputs and their complement
 - [x] Hide or show CT/non-CT values in a more beauty way
 - [x] Hide non interesting things for betad chains (pow vs signblock, covered above besides the fields hidden in verbose)
+- [ ] Move from bower to webpack
+- [ ] Move from npm to webpack
+- [ ] Fix Grunt
+- [ ] Move from grunt to gulp
+- [ ] Move from angular to React + redux
 - [ ] Cleanup error display
 - [ ] Show -signblockscript and block.scriptSig
 - [ ] Show -fedpegscript
