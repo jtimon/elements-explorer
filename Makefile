@@ -52,7 +52,8 @@ clean-js: clean-npm
 clean: clean-npm clean-js
 
 $(JSENV)/.stamp-npm-install-h: package.json $(JSENV)/.stamp-h
-	npm i
+	cp package.json $(JSENV)/package.json
+	npm i --prefix $(JSENV)
 	touch "$@"
 
 $(JSENV)/.stamp-h:

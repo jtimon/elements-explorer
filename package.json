@@ -1,5 +1,6 @@
 {
   "name": "rpcexplorer",
+  "version": "0.0.0",
   "private": true,
   "devDependencies": {
     "autoprefixer-core": "^5.2.1",
