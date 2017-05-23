@@ -6,6 +6,7 @@ SHELL = /bin/sh
 ROOT=$(shell pwd)
 BUILD_DIR=${ROOT}/.build
 PYENV=${BUILD_DIR}/.virtualenv
+JSENV=${BUILD_DIR}/js
 
 # easier move to python3
 PYTHON=python2
@@ -40,6 +41,25 @@ $(PYENV)/.stamp-h:
 	mkdir -p $(PYENV)
 	virtualenv $(PYENV)
 	touch "$@"
+
+
+.PHONY: requirements-js clean-js clean-npm freeze-npm
+requirements : requirements-js
+requirements-js: requirements-base $(JSENV)/.stamp-h $(JSENV)/.stamp-npm-install-h
+clean-npm: clean-base
+clean-js: clean-npm
+	rm -rf $(JSENV)
+clean: clean-npm clean-js
+
+$(JSENV)/.stamp-npm-install-h: package.json $(JSENV)/.stamp-h
+	npm i
+	touch "$@"
+
+$(JSENV)/.stamp-h:
+	rm -rf $(JSENV)
+	mkdir -p $(JSENV)
+	touch "$@"
+
 
 $(BUILD_DIR):
 	mkdir -p $@
