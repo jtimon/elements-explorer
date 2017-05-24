@@ -7,6 +7,7 @@ ROOT=$(shell pwd)
 BUILD_DIR=${ROOT}/.build
 PYENV=${BUILD_DIR}/.virtualenv
 JSENV=${BUILD_DIR}/js
+BOWERENV=${ROOT}/app/bower_components
 
 # easier move to python3
 PYTHON=python2
@@ -43,11 +44,27 @@ $(PYENV)/.stamp-h:
 	touch "$@"
 
 
+.PHONY: requirements-bower clean-bower
+requirements : requirements-bower
+requirements-bower: requirements-js $(BOWERENV)/.stamp-h $(BOWERENV)/.stamp-bower-install-h
+clean-bower: clean-base
+	rm -rf $(BOWERENV)
+clean: clean-bower
+
+$(BOWERENV)/.stamp-bower-install-h: bower.json $(BOWERENV)/.stamp-h
+	bower install
+	touch "$@"
+
+$(BOWERENV)/.stamp-h:
+	rm -rf $(BOWERENV)
+	mkdir -p $(BOWERENV)
+	touch "$@"
+
 .PHONY: requirements-js clean-js clean-npm freeze-npm
 requirements : requirements-js
 requirements-js: requirements-base $(JSENV)/.stamp-h $(JSENV)/.stamp-npm-install-h
 clean-npm: clean-base
-clean-js: clean-npm
+clean-js: clean-npm clean-bower
 	rm -rf $(JSENV)
 clean: clean-npm clean-js
 

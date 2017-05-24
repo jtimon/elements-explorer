@@ -7,7 +7,6 @@ import os
 import crossdomain
 
 CLIENT_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'app')
-BOWER_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'bower_components')
 
 DEFAULT_DEAMONS_HOST = 'http://127.0.0.1'
 DEFAULT_DEAMONS_PORT = '7041'
@@ -82,10 +81,6 @@ app.add_url_rule('/<path:filename>',
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
-
-@app.route('/bower_components/<path:filename>')
-def send_bower_file(filename):
-    return send_from_directory(BOWER_DIRECTORY, filename)
 
 @app.route('/<path:filename>')
 def send_file(filename):
