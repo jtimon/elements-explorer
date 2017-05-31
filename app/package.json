@@ -1,5 +1,8 @@
 {
   "name": "rpc-explorer",
+  "description": "a simple web interface for a explorer based on bitcoind, elementsd and betad (liquid) as backends.",
+  "license": "MIT",
+  "repository": "bsgit:liquid/rpc-explorer.git",
   "version": "0.0.0",
   "dependencies": {
     "angular": "^1.4.0",
