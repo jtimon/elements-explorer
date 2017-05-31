@@ -1,6 +1,5 @@
-/node_modules
 /dist
 /.tmp
-/app/bower_components
+/app/node_modules
 *.pyc
 /.build

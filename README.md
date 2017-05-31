@@ -9,21 +9,13 @@ A simple block explorer based on deamon's rpc calls.
 Dependent on the OS distribution:
 
 ```
-make, python, pip, virtualenv
+make, python, pip, virtualenv, nodejs, npm
 ```
 
 ## Installation
 
-To install the python server:
-
 ```
 make
-```
-
-To install the javascript requirements:
-
-```
-npm install
 ```
 
 ## Build & development
@@ -60,10 +52,7 @@ Check the python server is properly running with:
 curl  --data-binary '{"chain": "betaregtest", "jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:5000/rpcexplorerrest
 ```
 
-Run `grunt` for building and `grunt serve` for preview.
-
-Once the bower components have been installed (run grunt once), you can also test the web
-without grunt just going to http://127.0.0.1:5000 (as noted by the python server).
+Visit the web going to http://127.0.0.1:5000 (as noted by the python server).
 
 ## TODO Angular/Karma/Protractor/e2e Testing
 
@@ -76,10 +65,9 @@ Running `grunt test` will run the unit tests with karma.
 - [x] Hide non interesting things for coinbase inputs and their complement
 - [x] Hide or show CT/non-CT values in a more beauty way
 - [x] Hide non interesting things for betad chains (pow vs signblock, covered above besides the fields hidden in verbose)
-- [ ] Move from bower to webpack
-- [ ] Move from npm to webpack
-- [ ] Fix Grunt
-- [ ] Move from grunt to gulp
+- [x] Remove bower and grunt
+- [ ] Add some dev tool to watch changes (gulp?)
+- [ ] Use webpack ?
 - [ ] Move from angular to React + redux
 - [ ] Cleanup error display
 - [ ] Show -signblockscript and block.scriptSig
