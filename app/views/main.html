@@ -101,12 +101,12 @@
       </tr>
 
       <tr>
-        <td>Stripped size:</td>
+        <td>Stripped size (bytes):</td>
         <td>{{ block.strippedsize }}</td>
       </tr>
 
       <tr>
-        <td>Size:</td>
+        <td>Size (bytes):</td>
         <td>{{ block.size }}</td>
       </tr>
 
@@ -138,7 +138,7 @@
     </table>
     <p></p>
 
-    Block Transactions:
+    Block Transactions aaa ( {{ block.tx.length }} ):
     <p></p>
 
     <table border="1">
@@ -181,7 +181,7 @@
       </tr>
 
       <tr>
-        <td>Size:</td>
+        <td>Size (bytes):</td>
         <td>{{ transaction.size }}</td>
       </tr>
 
@@ -223,7 +223,7 @@
     </table>
     <p></p>
 
-    Transaction Inputs:
+    Transaction Inputs ( {{ transaction.vin.length }} ):
     <p></p>
 
     <div ng-repeat="input in transaction.vin">
@@ -268,7 +268,7 @@
       <p></p>
     </div>
 
-    Transaction Outputs:
+    Transaction Outputs ( {{ transaction.vout.length }} ):
     <p></p>
 
     <div ng-repeat="output in transaction.vout">
@@ -283,7 +283,7 @@
 
         <tr ng-show="CTverbose || !IsCTOut(output);">
           <td>value:</td>
-          <td>{{ output.value }} <nobr ng-show="IsCTOut(output);">CT</nobr></td>
+          <td>{{ output.value }} <nobr ng-show="IsCTOut(output);">Hidden by CT</nobr></td>
         </tr>
 
         <tr>
