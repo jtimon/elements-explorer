@@ -16,6 +16,7 @@ ALLOWED_CALLS = [
     "getblock",
     "getblockhash",
     "getrawtransaction",
+    "getperblockstats",
 ]
 
 frontend = Blueprint('frontend', __name__)

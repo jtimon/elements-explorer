@@ -1,0 +1,37 @@
+<div class="container">
+
+  Start Height:
+  <input ng-model="start_height">
+  End Height:
+  <input ng-model="end_height">
+
+  <button ng-click="doPlot();">Plot</button>
+
+  Verbose Stats:
+  <input type="checkbox" ng-model="verbose_stats">
+</div>
+<p></p>
+
+<div ng-show="error" class="alert alert-danger" border="1">
+  <strong>Error:</strong>
+  <nobr ng-show="error.message">{{error.message}}</nobr>
+  <!-- <nobr ng-show="!error.message">{{ error }}</nobr> -->
+  <nobr ng-show="!error.message">
+    <p></p>
+    <pre>
+      {{ error }}
+    </pre>
+  </nobr>
+</div>
+<p></p>
+
+<!-- This is where we are going to put our custom directive -->
+<line-plot graph-plots=graphPlots></line-plot>
+
+<div class="container" ng-show="verbose_stats">
+
+  Last getperblockstats call result:
+  <pre>
+    {{ plot_data }}
+  </pre>
+</div>

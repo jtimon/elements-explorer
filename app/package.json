@@ -15,7 +15,8 @@
     "angular-sanitize": "^1.4.0",
     "angular-touch": "^1.4.0",
     "bootstrap": "^3.2.0",
-    "jquery": "^3.2.1"
+    "jquery": "^3.2.1",
+    "plotly.js": "^1.28.3"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.0"
