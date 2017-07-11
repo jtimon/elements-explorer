@@ -13,14 +13,8 @@ angular.module('rpcExplorerApp')
         var BACKEND_URL = 'http://127.0.0.1:5000/rpcexplorerrest';
         $scope.CTverbose = false;
         $scope.verbose = false;
-        $scope.available_chains = [
-            "bitcoin",
-            "elementsregtest",
-            "testnet3",
-            "regtest",
-            // "elements",
-        ];
-        $scope.selected_chain = "elementsregtest";
+        $scope.selected_chain = "bitcoin";
+        $scope.available_chains = ["bitcoin"];
 
         function safeCallback(callback) {
             return function(data) {
@@ -49,6 +43,13 @@ angular.module('rpcExplorerApp')
             $http.post(BACKEND_URL, requestData).then(safeCallback(successCallback), errorCallback);
         };
 
+        function successAvailableChains(data) {
+            $scope.available_chains = data["data"]["available_chains"];
+        }
+        function GetAvailableChains() {
+            $http.get(BACKEND_URL + '/available_chains').then(safeCallback(successAvailableChains), errorCallback);
+        }
+        
         function successCallbackInfo(data) {
             $scope.chaininfo = data["data"]["result"];
         };
@@ -113,6 +114,7 @@ angular.module('rpcExplorerApp')
             rpcCall("getblockchaininfo", [], initCallback);
         };
 
+        GetAvailableChains();
         // Init from $routeParams
         if ($routeParams.chain) {
             $scope.selected_chain = $routeParams.chain;

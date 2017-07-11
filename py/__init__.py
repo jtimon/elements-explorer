@@ -13,7 +13,7 @@ ALLOWED_CALLS = [
     "getblock",
     "getblockhash",
     "getrawtransaction",
-    "getperblockstats",
+    "getblockstats",
 ]
 
 frontend = Blueprint('frontend', __name__)
@@ -31,8 +31,13 @@ AVAILABLE_CHAINS = {
 def urlForChain(chain):
     return 'http://' + AVAILABLE_CHAINS[chain]
 
+@frontend.route('/rpcexplorerrest/available_chains', methods = ['GET'])
+@crossdomain.crossdomain(origin='*')
+def available_chains():
+    return jsonify( {'available_chains': AVAILABLE_CHAINS.keys()} ), 200
+
 def rpcCall(rpcUrl, requestData, rpcAuth, rpcHeaders):
-    print(rpcUrl, requestData, rpcAuth, rpcHeaders) # TODO move to logs
+    # print(rpcUrl, requestData, rpcAuth, rpcHeaders) # TODO move to logs
     response = requests.request('post', rpcUrl, data=requestData, auth=rpcAuth, headers=rpcHeaders)
     # response.raise_for_status()
     return jsonify( response.json() ), 200

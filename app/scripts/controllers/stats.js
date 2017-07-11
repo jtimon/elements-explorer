@@ -11,17 +11,11 @@ angular.module('rpcExplorerApp')
     .controller('StatsCtrl', function ($scope, $http) {
 
         var BACKEND_URL = 'http://127.0.0.1:5000/rpcexplorerrest';
-        $scope.start_height = 100;
-        $scope.end_height = 103;
+        $scope.start_height = 1;
+        $scope.end_height = 1;
         $scope.verbose_stats = false;
-        $scope.available_chains = [
-            "bitcoin",
-            "elementsregtest",
-            "testnet3",
-            "regtest",
-            // "elements",
-        ];
-        $scope.selected_chain = "elementsregtest";
+        $scope.selected_chain = "bitcoin";
+        $scope.available_chains = ["bitcoin"];
 
         function safeCallback(callback) {
             return function(data) {
@@ -50,6 +44,22 @@ angular.module('rpcExplorerApp')
             $http.post(BACKEND_URL, requestData).then(safeCallback(successCallback), errorCallback);
         };
 
+        function successAvailableChains(data) {
+            $scope.available_chains = data["data"]["available_chains"];
+        }
+        function GetAvailableChains() {
+            $http.get(BACKEND_URL + '/available_chains').then(safeCallback(successAvailableChains), errorCallback);
+        }
+        
+        function successCallbackInfo(data) {
+            $scope.chaininfo = data["data"]["result"];
+            $scope.end_height = $scope.chaininfo.blocks;
+
+        };
+        $scope.getBlockchainInfo = function() {
+            rpcCall("getblockchaininfo", [], successCallbackInfo);
+        };
+
         function successCallbackPerBlockStats(data) {
 
             $scope.plot_data = data["data"]["result"];
@@ -57,7 +67,7 @@ angular.module('rpcExplorerApp')
 
             for (var key in $scope.plot_data) {
                 // skip loop if the property is from prototype
-                if (!$scope.plot_data.hasOwnProperty(key) || key == 'time' || key == 'height') {
+                if (!$scope.plot_data.hasOwnProperty(key) || key == 'time' || key == 'height' || key == 'mediantime') {
                     continue;
                 }
 
@@ -72,10 +82,10 @@ angular.module('rpcExplorerApp')
         };
 
         $scope.doPlot = function() {
-            rpcCall("getperblockstats",
+            rpcCall("getblockstats",
                     [parseInt($scope.start_height), parseInt($scope.end_height)],
                     successCallbackPerBlockStats);
         };
 
-        // $scope.doPlot();
+        $scope.getBlockchainInfo();
     });
