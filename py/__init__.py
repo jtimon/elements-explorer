@@ -8,9 +8,6 @@ import crossdomain
 
 CLIENT_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'app')
 
-DEFAULT_DEAMONS_HOST = 'http://127.0.0.1'
-DEFAULT_DEAMONS_PORT = '7041'
-
 ALLOWED_CALLS = [
     "getblockchaininfo",
     "getblock",
@@ -24,18 +21,15 @@ frontend = Blueprint('frontend', __name__)
 # TODO duplicated default ports, adapt to elements (with CA),
 # uncomment, clean up
 AVAILABLE_CHAINS = {
-    "main": "8332",
-    "testnet3": "18332",
-    # "regtest": "18332",
-    # "elements": "9042",
-    # "elementsregtest": "7041",
-    "betatestnet3": "9041",
-    "betaregtest": "7041",
-    "liquid": "10098",
+    "bitcoin": "bitcoin:8332",
+    "elementsregtest": "elements:7041",
+    "testnet3": "bitcoin:18332",
+    "regtest": "bitcoin:18332",
+    # "elements": "elements:9042",
 }
 
 def urlForChain(chain):
-    return DEFAULT_DEAMONS_HOST + ":" + AVAILABLE_CHAINS[chain]
+    return 'http://' + AVAILABLE_CHAINS[chain]
 
 def rpcCall(rpcUrl, requestData, rpcAuth, rpcHeaders):
     print(rpcUrl, requestData, rpcAuth, rpcHeaders) # TODO move to logs
@@ -89,4 +83,4 @@ def send_file(filename):
 
 if __name__ == '__main__':
     app.debug = True
-    app.run()
+    app.run(host='0.0.0.0')

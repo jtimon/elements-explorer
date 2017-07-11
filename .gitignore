@@ -3,3 +3,5 @@
 /app/node_modules
 *.pyc
 /.build
+.bitcoin_data
+.elements_data

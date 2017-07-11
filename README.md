@@ -2,14 +2,69 @@
 
 A simple block explorer based on deamon's rpc calls.
 
-# Dependencies:
+# Using Docker:
 
-## Fundamental dependencies:
+## Dependencies:
 
 Dependent on the OS distribution:
 
 ```
-make, python, pip, virtualenv, nodejs, npm
+make python docker-ce docker-compose
+```
+
+Add your user to the docker group:
+
+```
+sudo usermod -a -G docker $USER
+```
+
+Restart for the last command to take effect.
+
+Test docker installation:
+
+```
+docker run hello-world
+```
+
+## Build & development
+
+To build and run:
+
+```
+make docker-up
+```
+
+Visit the web going to http://127.0.0.1:5000
+
+Before closing down the whole docker project, close the bitcoin daemon manually:
+
+```
+docker ps
+docker attach docker_bitcoin_1
+Ctrl-c, Ctrl-c
+```
+Or just mind .bitcoin_data/lock if exiting improperly.
+
+To detach without killing the container use Ctrl-p, Ctrl-q.
+
+```
+make docker-down
+```
+
+For a full docker clean:
+
+```
+make docker-clean
+```
+
+# Local, without docker (currently not working)
+
+## Dependencies:
+
+Dependent on the OS distribution:
+
+```
+make python pip virtualenv nodejs npm
 ```
 
 ## Installation
@@ -54,9 +109,6 @@ curl  --data-binary '{"chain": "betaregtest", "jsonrpc": "1.0", "id":"curltest",
 
 Visit the web going to http://127.0.0.1:5000 (as noted by the python server).
 
-## TODO Angular/Karma/Protractor/e2e Testing
-
-Running `grunt test` will run the unit tests with karma.
 
 ## TODO
 

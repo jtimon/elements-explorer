@@ -14,13 +14,13 @@ angular.module('rpcExplorerApp')
         $scope.CTverbose = false;
         $scope.verbose = false;
         $scope.available_chains = [
-            "betaregtest",
-            "liquid",
-            "betatestnet3",
+            "bitcoin",
+            "elementsregtest",
             "testnet3",
-            "main",
+            "regtest",
+            // "elements",
         ];
-        $scope.selected_chain = "betaregtest";
+        $scope.selected_chain = "elementsregtest";
 
         function safeCallback(callback) {
             return function(data) {

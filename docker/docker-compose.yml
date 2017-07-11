@@ -1,0 +1,53 @@
+version: '2'
+
+services:
+
+  explorer:
+    image: ubuntu:16.04
+    build:
+      context: ../
+      dockerfile: docker/explorer/Dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      main:
+        ipv4_address: 10.5.0.5
+        aliases:
+          - explorer
+
+  # elements:
+  #   build:
+  #     context: ../
+  #     dockerfile: docker/elements/Dockerfile
+  #   volumes:
+  #     - ../.elements_data:/root/.bitcoin
+  #   expose:
+  #     - "7041"
+  #   ports:
+  #     - "7041:7041"
+  #   networks:
+  #     main:
+  #       aliases:
+  #         - elements
+
+  bitcoin:
+    build:
+      context: ../
+      dockerfile: docker/bitcoin/Dockerfile
+    volumes:
+      - ../.bitcoin_data:/root/.bitcoin
+    expose:
+      - "8332"
+    ports:
+      - "8332:8332"
+    networks:
+      main:
+        aliases:
+          - bitcoin
+
+networks:
+  main:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 10.5.0.0/16
