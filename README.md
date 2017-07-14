@@ -118,19 +118,19 @@ Visit the web going to http://127.0.0.1:5000 (as noted by the python server).
 - [x] Hide or show CT/non-CT values in a more beauty way
 - [x] Hide non interesting things for betad chains (pow vs signblock, covered above besides the fields hidden in verbose)
 - [x] Remove bower and grunt
-- [ ] Add some dev tool to watch changes (gulp?)
-- [ ] Use webpack ?
-- [ ] Move from angular to React + redux
-- [ ] Cleanup error display
-- [ ] Show -signblockscript and block.scriptSig
-- [ ] Show -fedpegscript
-- [ ] Angular directive for both scriptSig and scriptPubKey
 - [ ] Not hardcoded rpcuser/rpcpassword:
-- [ ] Deploy in blockstream servers
 - [ ] Hide non interesting things for bitcoind chains
+- [ ] elements: Show -signblockscript and block.scriptSig
+- [ ] elements: Show -fedpegscript
 - [ ] Adapt to elementsd chains (both show/hide)
 - [ ] Make sure we're not missing data from differences in chains
 - [ ] Make sure there's nothing to rescue from 'verbose' even after supporting some other elements chain
+- [ ] js: Cleanup error display
+- [ ] Angular directive for both scriptSig and scriptPubKey
+- [ ] Move from angular to React + redux, angular4, inferno.js or something ?
+- [ ] Add some dev tool to watch changes (gulp?)
+- [ ] Angular/Karma/Protractor/e2e Testing
+- [ ] Use webpack ?
 
 # License
 
