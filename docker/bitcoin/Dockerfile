@@ -13,19 +13,16 @@ RUN apt-get install -y libdb4.8-dev libdb4.8++-dev
 
 # Set the working directory to /build_docker
 WORKDIR /build_docker
-
 # Copy the current directory contents into the container at /build_docker
 ADD . /build_docker
 
 # Install bitcoind with getperblockstats
-RUN git clone https://github.com/jtimon/bitcoin.git --single-branch --branch b15-rpc-plotter
+RUN git clone https://github.com/jtimon/bitcoin.git --single-branch --branch b15-rpc-explorer
 ADD . /build_docker
 
 # TODO --disable-wallet ?
 RUN cd bitcoin && ./autogen.sh ;
 RUN cd bitcoin && ./configure --without-gui --with-incompatible-bdb ;
-# TODO --disable-wallet ?
-ADD . /build_docker
 
 RUN cd bitcoin && make -j56 ;
 ADD . /build_docker
