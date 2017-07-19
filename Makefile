@@ -59,9 +59,9 @@ docker-build:
 .PHONY: docker-clean docker-down docker-prune
 docker-down:
 	cd docker && docker-compose --project-name $(DOCKERPROJECT) down
-docker-prune: docker-down
+docker-prune:
 	docker system prune -a
-docker-clean: docker-down docker-prune
+docker-clean: docker-prune
 # docker rm $(docker ps -a -q)
 # docker rmi $(docker images -q)
 clean: docker-clean
