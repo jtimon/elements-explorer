@@ -8,9 +8,8 @@
  * Controller of the rpcExplorerApp
  */
 angular.module('rpcExplorerApp')
-    .controller('StatsCtrl', function ($scope, $http) {
+    .controller('StatsCtrl', function ($scope, $http, SrvBackend) {
 
-        var BACKEND_URL = 'http://127.0.0.1:5000/rpcexplorerrest';
         $scope.start_height = 1;
         $scope.end_height = 1;
         $scope.verbose_stats = false;
@@ -33,24 +32,10 @@ angular.module('rpcExplorerApp')
             $scope.error = JSON.stringify(data, null, 4);
         };
 
-        function rpcCall(rpcMethod, vRpcParams, successCallback) {
-            var requestData = {
-                "chain": $scope.selected_chain,
-                "method": rpcMethod,
-                "params": vRpcParams,
-                "jsonrpc": "1.0",
-                "id": "curltest",
-            };
-            $http.post(BACKEND_URL, requestData).then(safeCallback(successCallback), errorCallback);
-        };
-
         function successAvailableChains(data) {
             $scope.available_chains = data["data"]["available_chains"];
         }
-        function GetAvailableChains() {
-            $http.get(BACKEND_URL + '/available_chains').then(safeCallback(successAvailableChains), errorCallback);
-        }
-        
+
         function successCallbackInfo(data) {
             $scope.chaininfo = data["data"]["result"];
             // TODO write test for start_height=0 in the gui 
@@ -59,7 +44,7 @@ angular.module('rpcExplorerApp')
 
         };
         $scope.getBlockchainInfo = function() {
-            rpcCall("getblockchaininfo", [], successCallbackInfo);
+            SrvBackend.rpcCall($scope.selected_chain, "getblockchaininfo", [], safeCallback(successCallbackInfo), errorCallback);
         };
 
         function successCallbackPerBlockStats(data) {
@@ -84,10 +69,12 @@ angular.module('rpcExplorerApp')
         };
 
         $scope.doPlot = function() {
-            rpcCall("getblockstats",
-                    [parseInt($scope.start_height), parseInt($scope.end_height)],
-                    successCallbackPerBlockStats);
+            SrvBackend.rpcCall($scope.selected_chain, "getblockstats",
+                               [parseInt($scope.start_height), parseInt($scope.end_height)],
+                               safeCallback(successCallbackPerBlockStats),
+                               errorCallback);
         };
 
+        SrvBackend.GetAvailableChains(safeCallback(successAvailableChains), errorCallback);
         $scope.getBlockchainInfo();
     });
