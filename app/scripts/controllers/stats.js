@@ -53,6 +53,8 @@ angular.module('rpcExplorerApp')
         
         function successCallbackInfo(data) {
             $scope.chaininfo = data["data"]["result"];
+            // TODO write test for start_height=0 in the gui 
+            $scope.start_height = $scope.chaininfo.blocks - 1;
             $scope.end_height = $scope.chaininfo.blocks;
 
         };
