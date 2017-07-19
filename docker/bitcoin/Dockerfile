@@ -20,11 +20,7 @@ ADD . /build_docker
 RUN git clone https://github.com/jtimon/bitcoin.git --single-branch --branch b15-rpc-explorer
 ADD . /build_docker
 
-# TODO --disable-wallet ?
-RUN cd bitcoin && ./autogen.sh ;
-RUN cd bitcoin && ./configure --without-gui --with-incompatible-bdb ;
-
-RUN cd bitcoin && make -j56 ;
+RUN cd bitcoin && sh ./../docker/build-daemon.sh
 ADD . /build_docker
 
 EXPOSE 8332
