@@ -27,7 +27,7 @@ RUN cd elements && ./configure --without-gui --with-incompatible-bdb ;
 # TODO --disable-wallet ?
 ADD . /build_docker
 
-RUN cd elements && make -j56 ;
+RUN cd bitcoin && sh ./../docker/build-daemon.sh src/elementsd
 ADD . /build_docker
 
 EXPOSE 7041

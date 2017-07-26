@@ -13,7 +13,7 @@ ADD . /build_docker
 RUN git clone https://github.com/jtimon/bitcoin.git --single-branch --branch b15-rpc-explorer
 ADD . /build_docker
 
-RUN cd bitcoin && sh ./../docker/build-daemon.sh
+RUN cd bitcoin && sh ./../docker/build-daemon.sh src/bitcoind
 ADD . /build_docker
 
 EXPOSE 8332
