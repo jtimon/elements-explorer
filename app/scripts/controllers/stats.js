@@ -16,20 +16,12 @@ angular.module('rpcExplorerApp')
         $scope.selected_chain = "bitcoin";
         $scope.available_chains = ["bitcoin"];
 
-        function safeCallback(callback) {
-            return function(data) {
-                if (data["data"]["error"]) {
-                    $scope.error = data["data"]["error"];
-                }
-                else if (callback){
-                    $scope.error = null;
-                    callback(data);
-                }
-            };
-        };
-
         function errorCallback(data) {
-            $scope.error = JSON.stringify(data, null, 4);
+            if (data["data"] && data["data"]["error"]) {
+                $scope.error = data["data"]["error"];
+            } else {
+                $scope.error = JSON.stringify(data, null, 4);
+            }
         };
 
         function successAvailableChains(data) {
@@ -44,7 +36,7 @@ angular.module('rpcExplorerApp')
 
         };
         $scope.getBlockchainInfo = function() {
-            SrvBackend.rpcCall($scope.selected_chain, "getblockchaininfo", [], safeCallback(successCallbackInfo), errorCallback);
+            SrvBackend.rpcCall($scope.selected_chain, "getblockchaininfo", [], successCallbackInfo, errorCallback);
         };
 
         function successCallbackPerBlockStats(data) {
@@ -71,10 +63,10 @@ angular.module('rpcExplorerApp')
         $scope.doPlot = function() {
             SrvBackend.rpcCall($scope.selected_chain, "getblockstats",
                                [parseInt($scope.start_height), parseInt($scope.end_height)],
-                               safeCallback(successCallbackPerBlockStats),
+                               successCallbackPerBlockStats,
                                errorCallback);
         };
 
-        SrvBackend.GetAvailableChains(safeCallback(successAvailableChains), errorCallback);
+        SrvBackend.GetAvailableChains(successAvailableChains, errorCallback);
         $scope.getBlockchainInfo();
     });

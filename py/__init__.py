@@ -40,7 +40,7 @@ def rpcCall(rpcUrl, requestData, rpcAuth, rpcHeaders):
     # print(rpcUrl, requestData, rpcAuth, rpcHeaders) # TODO move to logs
     response = requests.request('post', rpcUrl, data=requestData, auth=rpcAuth, headers=rpcHeaders)
     # response.raise_for_status()
-    return jsonify( response.json() ), 200
+    return response.json()
 
 @frontend.route('/rpcexplorerrest', methods = ['POST'])
 @crossdomain.crossdomain(origin='*')
@@ -50,17 +50,20 @@ def rpcexplorerrest():
     requestData = json.loads(request.data)
 
     if 'method' in requestData and (not requestData['method'] in ALLOWED_CALLS):
-        return jsonify( {'error': {'message': 'Method "%s" not supported.' % requestData['method']}} ), 200
+        return jsonify( {'error': {'message': 'Method "%s" not supported.' % requestData['method']}} ), 400
 
-    if not "chain" in requestData:
-        return jsonify({"error": {"message": "No chain specified."} }), 200
+    if not 'chain' in requestData or not requestData['chain']:
+        return jsonify({"error": {"message": "No chain specified."} }), 400
     chain = requestData["chain"]
     del requestData["chain"]
     if not chain in AVAILABLE_CHAINS:
-        return jsonify( {'error': {'message': 'Chain "%s" not supported.' % chain}} ), 200
+        return jsonify( {'error': {'message': 'Chain "%s" not supported.' % chain}} ), 400
 
     strRequestData = json.dumps(requestData)
-    return rpcCall(urlForChain(chain), strRequestData, rpcAuth, rpcHeaders)
+    json_result = rpcCall(urlForChain(chain), strRequestData, rpcAuth, rpcHeaders)
+    if 'error' in json_result and json_result['error']:
+        return jsonify({'error': json_result['error']}), 400
+    return jsonify(json_result), 200
 
 @frontend.route('/rpcexplorerrest', methods = ['OPTIONS'])
 @crossdomain.crossdomain(origin='*', headers='Content-Type')
