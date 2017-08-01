@@ -28,7 +28,9 @@ AVAILABLE_CHAINS = {
     # "elements": "elements:9042",
 }
 
-@frontend.route('/rpcexplorerrest/available_chains', methods = ['GET'])
+API_URL = '/api/v0'
+
+@frontend.route(API_URL + '/available_chains', methods = ['GET'])
 @crossdomain.crossdomain(origin='*')
 def available_chains():
     return jsonify( {'available_chains': AVAILABLE_CHAINS.keys()} ), 200
@@ -42,7 +44,7 @@ def rpcCall(chain, requestData):
     # response.raise_for_status()
     return response.json()
 
-@frontend.route('/rpcexplorerrest', methods = ['POST'])
+@frontend.route(API_URL, methods = ['POST'])
 @crossdomain.crossdomain(origin='*')
 def rpcexplorerrest():
     requestData = json.loads(request.data)
@@ -62,7 +64,7 @@ def rpcexplorerrest():
         return jsonify({'error': json_result['error']}), 400
     return jsonify(json_result), 200
 
-@frontend.route('/rpcexplorerrest', methods = ['OPTIONS'])
+@frontend.route(API_URL, methods = ['OPTIONS'])
 @crossdomain.crossdomain(origin='*', headers='Content-Type')
 def options():
     return jsonify({'Allow' : 'GET,POST,PUT' }), 200

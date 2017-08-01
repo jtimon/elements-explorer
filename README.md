@@ -104,7 +104,7 @@ make run
 Check the python server is properly running with:
 
 ```
-curl  --data-binary '{"chain": "betaregtest", "jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:5000/rpcexplorerrest
+curl  --data-binary '{"chain": "betaregtest", "jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:5000/api/v0/rpc
 ```
 
 Visit the web going to http://127.0.0.1:5000 (as noted by the python server).
