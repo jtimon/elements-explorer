@@ -26,8 +26,6 @@ angular.module('rpcExplorerApp')
                 "chain": chain,
                 "method": rpcMethod,
                 "params": vRpcParams,
-                "jsonrpc": "1.0",
-                "id": "curltest",
             };
             $http.post(BACKEND_URL, requestData)
                 .then(safeCallback(callback), safeCallback(errorCallback));
