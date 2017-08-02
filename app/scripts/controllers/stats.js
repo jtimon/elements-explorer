@@ -29,7 +29,7 @@ angular.module('rpcExplorerApp')
         };
         $scope.getBlockchainInfo = function() {
             SrvChain.set($scope.selected_chain);
-            SrvBackend.rpcCall("getblockchaininfo", [], successCallbackInfo, SrvUtil.errorCallbackScoped($scope));
+            SrvBackend.rpcCall("getblockchaininfo", {}, successCallbackInfo, SrvUtil.errorCallbackScoped($scope));
         };
 
         function successCallbackPerBlockStats(data) {
@@ -54,10 +54,11 @@ angular.module('rpcExplorerApp')
         };
 
         $scope.doPlot = function() {
-            SrvBackend.rpcCall("getblockstats",
-                               [parseInt($scope.start_height), parseInt($scope.end_height)],
-                               successCallbackPerBlockStats,
-                               SrvUtil.errorCallbackScoped($scope));
+            var params = {
+                "start": parseInt($scope.start_height),
+                "end": parseInt($scope.end_height),
+            };
+            SrvBackend.rpcCall("getblockstats", params, successCallbackPerBlockStats, SrvUtil.errorCallbackScoped($scope));
         };
 
         SrvBackend.GetAvailableChains(successAvailableChains, SrvUtil.errorCallbackScoped($scope));

@@ -25,7 +25,7 @@ angular.module('rpcExplorerApp')
             $scope.chaininfo = data["data"]["result"];
         };
         $scope.getBlockchainInfo = function() {
-            SrvBackend.rpcCall("getblockchaininfo", [], successCallbackInfo, SrvUtil.errorCallbackScoped($scope));
+            SrvBackend.rpcCall("getblockchaininfo", {}, successCallbackInfo, SrvUtil.errorCallbackScoped($scope));
         };
 
         $scope.searchBlock = function() {
@@ -45,8 +45,8 @@ angular.module('rpcExplorerApp')
             };
             $scope.txid = "";
             $scope.transaction = null;
-            var height = parseInt($scope.blockheight);
-            SrvBackend.rpcCall("getblockhash", [height], successCallbackBlockHeight, SrvUtil.errorCallbackScoped($scope));
+            var params = {"height": parseInt($scope.blockheight)};
+            SrvBackend.rpcCall("getblockhash", params, successCallbackBlockHeight, SrvUtil.errorCallbackScoped($scope));
         };
 
         $scope.searchTx = function() {
@@ -83,7 +83,7 @@ angular.module('rpcExplorerApp')
         };
         $scope.InitForSelectedChain = function() {
             SrvChain.set($scope.selected_chain);
-            SrvBackend.rpcCall("getblockchaininfo", [], initCallback, SrvUtil.errorCallbackScoped($scope));
+            SrvBackend.rpcCall("getblockchaininfo", {}, initCallback, SrvUtil.errorCallbackScoped($scope));
         };
 
         SrvBackend.GetAvailableChains(successAvailableChains, SrvUtil.errorCallbackScoped($scope));
