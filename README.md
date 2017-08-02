@@ -57,7 +57,7 @@ For a full docker clean:
 make docker-clean
 ```
 
-# Local, without docker (currently not working)
+# Local, without docker
 
 ## Dependencies:
 
@@ -75,9 +75,17 @@ make
 
 ## Build & development
 
+Add the following to /etc/hosts:
+
+```
+# for running rpc-explorer locally
+127.0.0.1	bitcoin
+127.0.0.1	elements
+```
+
 This needs a Bitcoin, Elements or compatible deamon running alongside
 it in the same machine with at least the following in its
-configuration file:
+configuration file (or set by command line):
 
 ```
 server=1
@@ -88,11 +96,16 @@ rpcpassword=password1
 
 Run the daemon, examples:
 ```
-./betad -daemon -regtest -conf=betaregtest.conf
-./betad -daemon -testnet -conf=betatestnet3.conf
-./betad -daemon -conf=liquid.conf
-./bitcoind -daemon -testnet -conf=testnet3.conf
-./bitcoind -daemon -conf=explorer.conf -datadir=$BTCTXINDEX_DATADIR
+./elementsd -regtest -datadir=/home/jt/code/rpc-explorer/.elements_data/ -server=1 -txindex=1 -rpcuser=user1 -rpcpassword=password1
+./bitcoind -datadir=/home/jt/code/rpc-explorer/.bitcoin_data/ -server=1 -txindex=1 -rpcuser=user1 -rpcpassword=password1
+./bitcoind -testnet -datadir=/home/jt/code/rpc-explorer/.testnet3_data/ -server=1 -txindex=1 -rpcuser=user1 -rpcpassword=password1
+```
+
+Check the daemons:
+
+```
+./bitcoin-cli -datadir=/home/jt/code/rpc-explorer/.bitcoin_data -rpcuser=user1 -rpcpassword=password1 getblockchaininfo
+./elements-cli -regtest -datadir=/home/jt/code/rpc-explorer/.elements_data -rpcuser=user1 -rpcpassword=password1 getblockchaininfo
 ```
 
 Run the http server:
@@ -104,7 +117,8 @@ make run
 Check the python server is properly running with:
 
 ```
-curl  --data-binary '{"chain": "betaregtest", "jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:5000/api/v0/rpc
+curl  -H 'content-type: text/plain;' http://127.0.0.1:5000/api/v0/available_chains
+curl  --data-binary '{}' -H 'content-type: text/plain;' http://127.0.0.1:5000/api/v0/chain/bitcoin/getblockchaininfo
 ```
 
 Visit the web going to http://127.0.0.1:5000 (as noted by the python server).

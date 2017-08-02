@@ -21,4 +21,4 @@ RUN pip install -r requirements.txt
 EXPOSE 5000
 
 # Run app.py when the container launches
-CMD ["python", "py/__init__.py"]
+CMD ["sh", "docker/explorer/start.sh"]
