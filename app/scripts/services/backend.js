@@ -2,7 +2,7 @@
 /*global $:false */
 
 angular.module('rpcExplorerApp')
-    .service('SrvBackend', function SrvBackend($http) {
+    .service('SrvBackend', function SrvBackend($http, SrvChain) {
 
         var BACKEND_URL = 'http://127.0.0.1:5000/api/v0';
         var srv = {};
@@ -21,9 +21,9 @@ angular.module('rpcExplorerApp')
                 .then(safeCallback(callback), safeCallback(errorCallback));
         }
 
-        srv.rpcCall = function(chain, rpcMethod, vRpcParams, callback, errorCallback) {
+        srv.rpcCall = function(rpcMethod, vRpcParams, callback, errorCallback) {
             var requestData = {
-                "chain": chain,
+                "chain": SrvChain.get(),
                 "method": rpcMethod,
                 "params": vRpcParams,
             };
@@ -31,7 +31,8 @@ angular.module('rpcExplorerApp')
                 .then(safeCallback(callback), safeCallback(errorCallback));
         };
 
-        srv.get = function(chain, resource, id, callback, errorCallback) {
+        srv.get = function(resource, id, callback, errorCallback) {
+            var chain = SrvChain.get();
             if (!cache[chain] || !cache[chain][resource] || !cache[chain][resource][id]) {
                 var params = [id];
                 if (resource == 'getrawtransaction') {
@@ -47,7 +48,7 @@ angular.module('rpcExplorerApp')
                     cache[chain][resource][id] = data;
                     safeCallback(callback)(data);
                 }
-                srv.rpcCall(chain, resource, params, cache_callback, errorCallback);
+                srv.rpcCall(resource, params, cache_callback, errorCallback);
             } else {
                 safeCallback(callback)(cache[chain][resource][id]);
             }

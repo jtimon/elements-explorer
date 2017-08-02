@@ -8,13 +8,13 @@
  * Controller of the rpcExplorerApp
  */
 angular.module('rpcExplorerApp')
-    .controller('StatsCtrl', function ($scope, $http, SrvUtil, SrvBackend) {
+    .controller('StatsCtrl', function ($scope, $http, SrvUtil, SrvChain, SrvBackend) {
 
         $scope.start_height = 1;
         $scope.end_height = 1;
         $scope.verbose_stats = false;
-        $scope.selected_chain = "bitcoin";
-        $scope.available_chains = ["bitcoin"];
+        $scope.selected_chain = SrvChain.get();
+        $scope.available_chains = [$scope.selected_chain];
 
         function successAvailableChains(data) {
             $scope.available_chains = data["data"]["available_chains"];
@@ -28,7 +28,8 @@ angular.module('rpcExplorerApp')
 
         };
         $scope.getBlockchainInfo = function() {
-            SrvBackend.rpcCall($scope.selected_chain, "getblockchaininfo", [], successCallbackInfo, SrvUtil.errorCallbackScoped($scope));
+            SrvChain.set($scope.selected_chain);
+            SrvBackend.rpcCall("getblockchaininfo", [], successCallbackInfo, SrvUtil.errorCallbackScoped($scope));
         };
 
         function successCallbackPerBlockStats(data) {
@@ -53,7 +54,7 @@ angular.module('rpcExplorerApp')
         };
 
         $scope.doPlot = function() {
-            SrvBackend.rpcCall($scope.selected_chain, "getblockstats",
+            SrvBackend.rpcCall("getblockstats",
                                [parseInt($scope.start_height), parseInt($scope.end_height)],
                                successCallbackPerBlockStats,
                                SrvUtil.errorCallbackScoped($scope));
