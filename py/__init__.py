@@ -35,38 +35,36 @@ API_URL = '/api/v0'
 def available_chains():
     return jsonify( {'available_chains': AVAILABLE_CHAINS.keys()} ), 200
 
-def rpcCall(chain, requestData):
-    requestData["jsonrpc"] = "1.0"
-    requestData["id"] = "curltest"
+def rpcCall(chain, method, params):
+    requestData = {
+        'method': method,
+        'params': params,
+        'jsonrpc': '2.0',
+        'id': chain + '_' + method,
+    }
     rpcAuth = ('user1', 'password1')
     rpcHeaders = {'content-type': 'application/json'}
     response = requests.request('post', 'http://' + AVAILABLE_CHAINS[chain], data=json.dumps(requestData), auth=rpcAuth, headers=rpcHeaders)
     # response.raise_for_status()
-    return response.json()
-
-@frontend.route(API_URL, methods = ['POST'])
-@crossdomain.crossdomain(origin='*')
-def rpcexplorerrest():
-    requestData = json.loads(request.data)
-
-    if 'method' in requestData and (not requestData['method'] in ALLOWED_CALLS):
-        return jsonify( {'error': {'message': 'Method "%s" not supported.' % requestData['method']}} ), 400
-
-    if not 'chain' in requestData or not requestData['chain']:
-        return jsonify({"error": {"message": "No chain specified."} }), 400
-    chain = requestData["chain"]
-    del requestData["chain"]
-    if not chain in AVAILABLE_CHAINS:
-        return jsonify( {'error': {'message': 'Chain "%s" not supported.' % chain}} ), 400
-
-    json_result = rpcCall(chain, requestData)
+    json_result = response.json()
     if 'error' in json_result and json_result['error']:
         return jsonify({'error': json_result['error']}), 400
     return jsonify(json_result), 200
 
-@frontend.route(API_URL, methods = ['OPTIONS'])
+@frontend.route(API_URL + '/chain/<string:chain>/<string:resource>', methods = ['POST'])
+@crossdomain.crossdomain(origin='*')
+def rpcexplorerrest(chain, resource):
+    if not resource in ALLOWED_CALLS:
+        return jsonify( {'error': {'message': 'Resource "%s" not supported.' % resource}} ), 400
+
+    if not chain in AVAILABLE_CHAINS:
+        return jsonify( {'error': {'message': 'Chain "%s" not supported.' % chain}} ), 400
+
+    return rpcCall(chain, resource, json.loads(request.data))
+
+@frontend.route(API_URL + '/chain/<string:chain>/<string:resource>', methods = ['OPTIONS'])
 @crossdomain.crossdomain(origin='*', headers='Content-Type')
-def options():
+def options(chain, resource):
     return jsonify({'Allow' : 'GET,POST,PUT' }), 200
 
 from flask import Flask

@@ -18,7 +18,6 @@ angular.module('rpcExplorerApp')
         function successAvailableChains(data) {
             $scope.available_chains = data["data"]["available_chains"];
             $scope.available_chains.push("forbiddenchain");
-            $scope.available_chains.push("");
         }
 
         function successCallbackInfo(data) {

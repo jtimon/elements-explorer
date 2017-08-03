@@ -22,12 +22,7 @@ angular.module('rpcExplorerApp')
         }
 
         srv.rpcCall = function(rpcMethod, vRpcParams, callback, errorCallback) {
-            var requestData = {
-                "chain": SrvChain.get(),
-                "method": rpcMethod,
-                "params": vRpcParams,
-            };
-            $http.post(BACKEND_URL, requestData)
+            $http.post(BACKEND_URL + '/chain/' + SrvChain.get() + '/' + rpcMethod, vRpcParams)
                 .then(safeCallback(callback), safeCallback(errorCallback));
         };
 
