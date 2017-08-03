@@ -29,18 +29,6 @@ angular.module('rpcExplorerApp')
         srv.get = function(resource, id, callback, errorCallback) {
             var chain = SrvChain.get();
             if (!cache[chain] || !cache[chain][resource] || !cache[chain][resource][id]) {
-                var params = {};
-                if (resource == 'getblock') {
-                    params = {"blockhash": id};
-                } else if (resource == 'getrawtransaction') {
-                    params = {
-                        "txid": id,
-                        "verbose": 1,
-                    };
-                } else {
-                    var error_msg = 'Resource ' + resource + ' not supported for SrvBackend.get';
-                    safeCallback(errorCallback)({'data': {'error': {'message': error_msg}}});
-                }
                 function cache_callback(data) {
                     if (!cache[chain]) {
                         cache[chain] = {};
@@ -51,7 +39,7 @@ angular.module('rpcExplorerApp')
                     cache[chain][resource][id] = data;
                     safeCallback(callback)(data);
                 }
-                srv.rpcCall(resource, params, cache_callback, errorCallback);
+                srv.rpcCall(resource, {'id': id}, cache_callback, errorCallback);
             } else {
                 safeCallback(callback)(cache[chain][resource][id]);
             }

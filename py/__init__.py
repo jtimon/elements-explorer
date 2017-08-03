@@ -16,6 +16,11 @@ ALLOWED_CALLS = [
     "getblockstats",
 ]
 
+RESOURCES_FOR_GET_BY_ID = [
+    'block',
+    'tx',
+]
+
 frontend = Blueprint('frontend', __name__)
 
 # TODO duplicated default ports, adapt to elements (with CA),
@@ -36,6 +41,9 @@ def available_chains():
     return jsonify( {'available_chains': AVAILABLE_CHAINS.keys()} ), 200
 
 def rpcCall(chain, method, params):
+    if not method in ALLOWED_CALLS:
+        return jsonify( {'error': {'message': 'Method "%s" not supported.' % method}} ), 400
+
     requestData = {
         'method': method,
         'params': params,
@@ -54,13 +62,25 @@ def rpcCall(chain, method, params):
 @frontend.route(API_URL + '/chain/<string:chain>/<string:resource>', methods = ['POST'])
 @crossdomain.crossdomain(origin='*')
 def rpcexplorerrest(chain, resource):
-    if not resource in ALLOWED_CALLS:
-        return jsonify( {'error': {'message': 'Resource "%s" not supported.' % resource}} ), 400
-
     if not chain in AVAILABLE_CHAINS:
         return jsonify( {'error': {'message': 'Chain "%s" not supported.' % chain}} ), 400
 
-    return rpcCall(chain, resource, json.loads(request.data))
+    request_data = json.loads(request.data)
+    if not 'id' in request_data and resource in RESOURCES_FOR_GET_BY_ID:
+        return jsonify({'error': {'message': 'No id specified to get %s by id.' % resource}}), 400
+
+    rpc_request_data = {}
+    if resource == 'block':
+        method = 'getblock'
+        rpc_request_data['blockhash'] = request_data['id']
+    elif resource == 'tx':
+        method = 'getrawtransaction'
+        rpc_request_data['txid'] = request_data['id']
+        rpc_request_data['verbose'] = 1
+    else:
+        method = resource
+        rpc_request_data.update(request_data)
+    return rpcCall(chain, method, rpc_request_data)
 
 @frontend.route(API_URL + '/chain/<string:chain>/<string:resource>', methods = ['OPTIONS'])
 @crossdomain.crossdomain(origin='*', headers='Content-Type')

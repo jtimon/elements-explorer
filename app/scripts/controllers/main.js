@@ -34,7 +34,7 @@ angular.module('rpcExplorerApp')
                 $scope.blockheight = $scope.block["height"];
                 $scope.getBlockchainInfo();
             };
-            SrvBackend.get("getblock", $scope.blockid, successCallbackBlock, SrvUtil.errorCallbackScoped($scope));
+            SrvBackend.get("block", $scope.blockid, successCallbackBlock, SrvUtil.errorCallbackScoped($scope));
         };
 
         $scope.searchBlockByHeight = function() {
@@ -55,7 +55,7 @@ angular.module('rpcExplorerApp')
                 $scope.blockid = $scope.transaction["blockhash"];
                 $scope.searchBlock();
             };
-            SrvBackend.get("getrawtransaction", $scope.txid, successCallbackTx, SrvUtil.errorCallbackScoped($scope));
+            SrvBackend.get("tx", $scope.txid, successCallbackTx, SrvUtil.errorCallbackScoped($scope));
         };
 
         $scope.goToBlock = function(blockhash) {
