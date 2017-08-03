@@ -17,5 +17,6 @@ RUN cd bitcoin && sh ./../docker/build-daemon.sh src/bitcoind
 ADD . /build_docker
 
 EXPOSE 8332
+EXPOSE 18332
 
-CMD ["./bitcoin/src/bitcoind", "-printtoconsole", "-debug", "-logips", "-logtimestamps", "-server", "-txindex", "-rpcuser=user1", "-rpcpassword=password1", "-rpcallowip=10.5.0.5", "-rpcbind=0.0.0.0:8332", "-listen", "-discover"]
+CMD ["sh", "docker/bitcoin/start.sh"]

@@ -36,10 +36,13 @@ services:
       dockerfile: docker/bitcoin/Dockerfile
     volumes:
       - ../.bitcoin_data:/root/.bitcoin
+      - ../.testnet3_data:/root/.testnet3
     expose:
       - "8332"
+      - "18332"
     ports:
       - "8332:8332"
+      - "18332:18332"
     networks:
       main:
         aliases:
