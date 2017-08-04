@@ -9,10 +9,7 @@ RUN sh docker/daemon-deps.sh
 
 # Install bitcoind with getperblockstats
 RUN curl -L https://github.com/jtimon/bitcoin/archive/b15-rpc-explorer.tar.gz | tar xz
-ADD . /build_docker
-
 RUN cd bitcoin-b15-rpc-explorer && sh ./../docker/build-daemon.sh src/bitcoind
-ADD . /build_docker
 
 EXPOSE 8332
 EXPOSE 18332
