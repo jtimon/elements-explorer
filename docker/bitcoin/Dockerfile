@@ -1,13 +1,11 @@
 FROM ubuntu:16.04
 
-RUN apt-get update
-RUN apt-get install -y git
-RUN apt-get install -y make build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev libminiupnpc-dev libzmq3-dev
-
 # Set the working directory to /build_docker
 WORKDIR /build_docker
 # Copy the current directory contents into the container at /build_docker
 ADD . /build_docker
+
+RUN sh docker/daemon-deps.sh
 
 # Install bitcoind with getperblockstats
 RUN git clone https://github.com/jtimon/bitcoin.git --single-branch --branch b15-rpc-explorer
