@@ -1,0 +1,2 @@
+# update script
+* * * * *               root       /bs/rpc-explorer/bs/bin/cibuild-cron >/tmp/update.out 2>&1

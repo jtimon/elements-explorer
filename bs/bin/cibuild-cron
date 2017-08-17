@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# script/cibuild
+# ============================================================================ #
+# script/cibuild is used for your continuous integration server. This script 
+# is typically only called from your CI server.
+#
+# You should set up any specific things for your environment here before your 
+# tests are run. Your test are run simply by calling script/test.
+# ============================================================================ #
+
+MODULE="rpc-explorer"
+
+echo "I've been called from the Continuous Ingegration service."
+
+OUTDIR=$(mktemp -d /tmp/cibuild-cron-XXXXXXXX)
+
+/bs/${MODULE}/bs/bin/update.sh &> $OUTDIR/update.out
+if [ $? -gt 0 ]; then
+    echo "FAILURE"
+    cat $OUTDIR/update.out
+fi
+
+# this is just to see if it actually updates by itself.
+# TODO: upload update log to the logs bucket.
+
+rm -rf $OUTDIR
