@@ -4,7 +4,7 @@
 angular.module('rpcExplorerApp')
     .service('SrvBackend', function SrvBackend($http, SrvChain) {
 
-        var BACKEND_URL = 'http://127.0.0.1:5000/api/v0';
+        var BACKEND_URL = '/api/v0';
         var srv = {};
         var cache = {};
 
