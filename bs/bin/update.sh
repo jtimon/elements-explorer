@@ -65,6 +65,7 @@ echo -n "Checking for changes in config: ";
 CHANGES=0;
 
 cd ${SCAFFOLD}/MASTER;
+mkdir -p ${SCAFFOLD}/release_logs
 
 B=0
 
@@ -90,8 +91,8 @@ elif [ $B -eq 2 ]; then
 
     rm ${BSD}
     ln -s ${SCAFFOLD}/releases/${MODULE}-${DS} ${BSD}
-    T=$OUTDIR/update.txt
     for F in ${BSD}/bs/update/*; do
+            T=$OUTDIR/$(basename $F).out
             echo -n "Running $F: ";
             $F > $T 2>&1
             if [ $? -gt 0 ]; then
@@ -103,6 +104,7 @@ elif [ $B -eq 2 ]; then
                     echo "OK"
             fi
     done
+    tar -cvzf ${SCAFFOLD}/relase_logs/${MODULE}-${DS}.tgz $OUTDIR
 else
     echo "ERROR"
     RETURN=1
