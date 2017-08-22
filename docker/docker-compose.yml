@@ -38,8 +38,8 @@ services:
       - ../../explorer-data/bitcoin:/root/.bitcoin
       - ../../explorer-data/testnet3:/root/.testnet3
     expose:
-      - "8332"
-      - "18332"
+      - "8532"
+      - "18532"
     ports:
       - "8532:8532"
       - "18532:18532"
