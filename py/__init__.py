@@ -27,7 +27,7 @@ frontend = Blueprint('frontend', __name__)
 # uncomment, clean up
 AVAILABLE_CHAINS = {
     "bitcoin": "bitcoin:8332",
-    "testnet3": "bitcoin:18332",
+    # "testnet3": "bitcoin:18332",
     "elementsregtest": "elements:7041",
     # "elements": "elements:9042",
 }
