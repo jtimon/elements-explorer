@@ -11,7 +11,7 @@ RUN sh docker/daemon-deps.sh
 RUN curl -L https://github.com/jtimon/bitcoin/archive/b15-rpc-explorer.tar.gz | tar xz
 RUN cd bitcoin-b15-rpc-explorer && sh ./../docker/build-daemon.sh src/bitcoind
 
-EXPOSE 8332
-EXPOSE 18332
+EXPOSE 8532
+EXPOSE 18532
 
 CMD ["sh", "docker/bitcoin/start.sh"]
