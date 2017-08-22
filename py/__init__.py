@@ -26,8 +26,8 @@ frontend = Blueprint('frontend', __name__)
 # TODO duplicated default ports, adapt to elements (with CA),
 # uncomment, clean up
 AVAILABLE_CHAINS = {
-    "bitcoin": "bitcoin:8332",
-    # "testnet3": "bitcoin:18332",
+    "bitcoin": "bitcoin:8532",
+    "testnet3": "bitcoin:18532",
     "elementsregtest": "elements:7041",
     # "elements": "elements:9042",
 }
