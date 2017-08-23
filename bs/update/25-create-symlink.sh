@@ -6,7 +6,7 @@
 [ ! -d ${DATDIR} ] && echo "DATDIR dir (${DATDIR}) doesn't exist" >&2 && exit 1;
 
 DATDIR="/extra/explorer-data"
-DATLINK=${BSD}/.explorer-dat
+DATLINK=${BSD}/.explorer-data
 
 rm -f ${DATLINK}
 [ -L ${DATLINK} ] && echo "Could not remove ${DATLINK}" >&2 && exit 1

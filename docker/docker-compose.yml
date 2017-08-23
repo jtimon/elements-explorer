@@ -20,7 +20,7 @@ services:
       context: ../
       dockerfile: docker/elements/Dockerfile
     volumes:
-      - ../../explorer-data/.elementsregtest:/root/.elements
+      - ../.explorer-data/elementsregtest:/root/.elements
     expose:
       - "7041"
     ports:
@@ -35,8 +35,8 @@ services:
       context: ../
       dockerfile: docker/bitcoin/Dockerfile
     volumes:
-      - ../../explorer-data/bitcoin:/root/.bitcoin
-      - ../../explorer-data/testnet3:/root/.testnet3
+      - ../.explorer-data/bitcoin:/root/.bitcoin
+      - ../.explorer-data/testnet3:/root/.testnet3
     expose:
       - "8532"
       - "18532"
