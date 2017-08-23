@@ -5,10 +5,10 @@
 # to deoploy.
 # =--------------------------------------------------------------------------= #
 echo "Hello, I'm the gitlab update script."
-MODULE="rpc-explorer"
-BASEDIR="/bs"
-BSD="${BASEDIR}/${MODULE}"
-SCAFFOLD="${BASEDIR}/.scaffold/${MODULE}"
+export MODULE="rpc-explorer"
+export BASEDIR="/bs"
+export BSD="${BASEDIR}/${MODULE}"
+export SCAFFOLD="${BASEDIR}/.scaffold/${MODULE}"
 
 # start with an assumption of success...
 
@@ -21,10 +21,10 @@ export PATH=$PATH:/usr/local/bin
 # =--------------------------------------------------------------------------= #
 
 # initally, this is just set here.
-ROLE="prod"
-CLASS="gitlab"
+export ROLE="prod"
+export CLASS="rpc-explorer"
 
-OUTDIR=$(mktemp -d /tmp/update-XXXXXXXX)
+export OUTDIR=$(mktemp -d /tmp/update-XXXXXXXX)
 
 # exec > >(tee $OUTDIR/update.log|logger -t user-data -s 2>/dev/console) 2>&1
 
