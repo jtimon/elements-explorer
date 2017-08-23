@@ -96,9 +96,9 @@ rpcpassword=password1
 
 Run the daemon, examples:
 ```
-./elementsd -regtest -datadir=/home/jt/code/rpc-explorer/.elements_data/ -server=1 -txindex=1 -rpcuser=user1 -rpcpassword=password1
-./bitcoind -datadir=/home/jt/code/rpc-explorer/.bitcoin_data/ -server=1 -txindex=1 -rpcuser=user1 -rpcpassword=password1
-./bitcoind -testnet -datadir=/home/jt/code/rpc-explorer/.testnet3_data/ -server=1 -txindex=1 -rpcuser=user1 -rpcpassword=password1
+./elementsd -regtest -datadir=/home/jt/code/explorer-data/elementsregtest/ -server=1 -txindex=1 -rpcuser=user1 -rpcpassword=password1
+./bitcoind -datadir=/home/jt/code/explorer-data/bitcoin/ -server=1 -txindex=1 -rpcuser=user1 -rpcpassword=password1
+./bitcoind -testnet -datadir=/home/jt/code/explorer-data/testnet3/ -server=1 -txindex=1 -rpcuser=user1 -rpcpassword=password1
 ```
 
 Check the daemons:

@@ -91,6 +91,7 @@ elif [ $B -eq 2 ]; then
 
     rm ${BSD}
     ln -s ${SCAFFOLD}/releases/${MODULE}-${DS} ${BSD}
+    cd ${BSD}
     for F in ${BSD}/bs/update/*; do
             T=$OUTDIR/$(basename $F).out
             echo -n "Running $F: ";
