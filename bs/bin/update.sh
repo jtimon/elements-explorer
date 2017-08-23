@@ -104,7 +104,7 @@ elif [ $B -eq 2 ]; then
                     echo "OK"
             fi
     done
-    tar -cvzf ${SCAFFOLD}/relase_logs/${MODULE}-${DS}.tgz $OUTDIR
+    tar -cvzf ${SCAFFOLD}/release_logs/${MODULE}-${DS}.tgz $OUTDIR
 else
     echo "ERROR"
     RETURN=1
