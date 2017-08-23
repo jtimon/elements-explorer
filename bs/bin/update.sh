@@ -10,6 +10,27 @@ export BASEDIR="/bs"
 export BSD="${BASEDIR}/${MODULE}"
 export SCAFFOLD="${BASEDIR}/.scaffold/${MODULE}"
 
+LOCKDIR="${SCAFFOLD}/locks"
+mkdir -p ${LOCKDIR}
+
+LOCKFILE=${LOCKDIR}/$(basename $0).lock
+
+cleanup() {
+    rv=$?
+    rm -f ${LOCKFILE}
+    rm -rf $OUTDIR
+    exit $rv
+}
+
+trap "cleanup" INT TERM EXIT
+
+if [ -f ${LOCKFILE} ]; then
+	echo "Process is locked, please wait until the previous update completes."
+	exit
+else
+	touch ${LOCKFILE}
+fi
+
 # start with an assumption of success...
 
 RETURN=0
@@ -23,6 +44,7 @@ export PATH=$PATH:/usr/local/bin
 # initally, this is just set here.
 export ROLE="prod"
 export CLASS="rpc-explorer"
+
 
 export OUTDIR=$(mktemp -d /tmp/update-XXXXXXXX)
 
@@ -111,7 +133,7 @@ else
     RETURN=1
 fi
 
-rm -rf $OUTDIR
 
+cleanup
 exit
 
