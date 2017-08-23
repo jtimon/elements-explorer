@@ -8,7 +8,10 @@
 DATDIR="/extra/explorer-data"
 DATLINK=${BSD}/.explorer-data
 
-rm -f ${DATLINK}
+rm -rf ${DATLINK}
 [ -L ${DATLINK} ] && echo "Could not remove ${DATLINK}" >&2 && exit 1
+mkdir ${DATLINK}
 
-ln -s ${DATDIR} ${DATLINK}
+ln -s ${DATDIR}/bitcoin ${DATLINK}/bitcoin
+ln -s ${DATDIR}/testnet3 ${DATLINK}/testnet3
+ln -s ${DATDIR}/elementsregtest ${DATLINK}/elementsregtest
