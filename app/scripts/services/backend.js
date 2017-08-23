@@ -16,6 +16,15 @@ angular.module('rpcExplorerApp')
             };
         }
 
+        function CreateCacheForChainAndRsrc(chain, resource) {
+            if (!cache[chain]) {
+                cache[chain] = {};
+            }
+            if (!cache[chain][resource]) {
+                cache[chain][resource] = {};
+            }
+        }
+
         srv.GetAvailableChains = function(callback, errorCallback) {
             $http.get(BACKEND_URL + '/available_chains')
                 .then(safeCallback(callback), safeCallback(errorCallback));
@@ -28,14 +37,9 @@ angular.module('rpcExplorerApp')
 
         srv.get = function(resource, id, callback, errorCallback) {
             var chain = SrvChain.get();
-            if (!cache[chain] || !cache[chain][resource] || !cache[chain][resource][id]) {
+            CreateCacheForChainAndRsrc(chain, resource);
+            if (!cache[chain][resource][id]) {
                 function cache_callback(data) {
-                    if (!cache[chain]) {
-                        cache[chain] = {};
-                    }
-                    if (!cache[chain][resource]) {
-                        cache[chain][resource] = {};
-                    }
                     cache[chain][resource][id] = data;
                     safeCallback(callback)(data);
                 }
