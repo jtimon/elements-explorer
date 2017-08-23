@@ -84,7 +84,7 @@ elif [ $B -eq 2 ]; then
 
     cd ${SCAFFOLD}/releases
 
-    DS=$(date +%Y%m%y%H%M%S)
+    DS=$(date +%Y%m%d%H%M%S)
 
     cd ${SCAFFOLD}/releases
     git clone ${SCAFFOLD}/MASTER ${MODULE}-${DS} &>/dev/null
