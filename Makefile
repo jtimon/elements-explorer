@@ -71,3 +71,4 @@ $(BUILD_DIR):
 
 run: all
 	bash -c "source $(PYENV)/bin/activate && $(PYTHON) ./py/__init__.py"
+
