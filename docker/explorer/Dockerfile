@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 
 RUN apt-get update
-RUN apt-get install -y nodejs npm python-pip
+RUN apt-get install -y nodejs npm python-pip git
 
 # Set the working directory to /build_docker
 WORKDIR /build_docker
