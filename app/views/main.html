@@ -288,7 +288,7 @@
           <td>{{ output.value }} <nobr ng-show="IsCTOut(output);">Hidden by CT</nobr></td>
         </tr>
 
-        <tr>
+        <tr ng-show="CTverbose || IsCTOut(output);">
           <td>serValue:</td>
           <td>{{ output.serValue }}</td>
         </tr>
