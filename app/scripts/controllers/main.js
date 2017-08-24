@@ -12,6 +12,7 @@ angular.module('rpcExplorerApp')
 
         $scope.CTverbose = false;
         $scope.verbose = false;
+        $scope.rawhex_limit = 100;
         $scope.selected_chain = SrvChain.get();
         $scope.available_chains = [$scope.selected_chain];
 

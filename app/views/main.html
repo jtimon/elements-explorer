@@ -12,6 +12,11 @@
 
   Verbose RPC:
   <input type="checkbox" ng-model="verbose">
+
+  <label>
+    Limit Raw hexadecimal strings to:
+    <input type="number" step="1" ng-model="rawhex_limit">
+  </label>
 </div>
 <p></p>
 
@@ -219,7 +224,7 @@
 
       <tr>
         <td>Hex:</td>
-        <td>{{ transaction.hex }}</td>
+        <td><pre>{{ transaction.hex | limitTo:rawhex_limit }}</pre></td>
       </tr>
 
     </table>
@@ -237,7 +242,7 @@
 
         <tr ng-show="input.coinbase">
           <td>Coinbase:</td>
-          <td>{{ input.coinbase }}</td>
+          <td><pre>{{ input.coinbase | limitTo:rawhex_limit }}</pre></td>
         </tr>
 
         <tr ng-show="!input.coinbase">
@@ -252,12 +257,12 @@
 
         <tr ng-show="!input.coinbase">
           <td>scriptSig.asm:</td>
-          <td>{{ input.scriptSig.asm }}</td>
+          <td><pre>{{ input.scriptSig.asm | limitTo:rawhex_limit }}</pre></td>
         </tr>
 
         <tr ng-show="!input.coinbase">
           <td>scriptSig.hex:</td>
-          <td>{{ input.scriptSig.hex }}</td>
+          <td><pre>{{ input.scriptSig.hex | limitTo:rawhex_limit }}</pre></td>
         </tr>
 
         <tr>
@@ -265,7 +270,7 @@
           <td>
             <table border="1">
               <tr ng-repeat="wit in input.txinwitness">
-                <td>{{ wit }}</td>
+                <td><pre>{{ wit | limitTo:rawhex_limit }}</pre></td>
               </tr>
             </table>
           </td>
