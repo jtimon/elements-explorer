@@ -138,10 +138,13 @@
     </table>
     <p></p>
 
-    Block Transactions ( {{ block.tx.length }} ):
+    <nobr>
+      Block Transactions ( {{ block.tx.length }} ):
+      <nobr ng-show="!showtxlist">Show</nobr> <nobr ng-show="showtxlist">Hide</nobr> <input type="checkbox" ng-model="showtxlist">
+    </nobr>
     <p></p>
 
-    <table border="1">
+    <table ng-show="showtxlist" border="1">
       <tr ng-repeat="txhash in block.tx">
         <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{txhash}}">{{ txhash }}</a></td>
       </tr>
