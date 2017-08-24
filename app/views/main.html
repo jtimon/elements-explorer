@@ -262,7 +262,13 @@
 
         <tr>
           <td>txinwitness:</td>
-          <td>{{ input.txinwitness }}</td>
+          <td>
+            <table border="1">
+              <tr ng-repeat="wit in input.txinwitness">
+                <td>{{ wit }}</td>
+              </tr>
+            </table>
+          </td>
         </tr>
 
       </table>
