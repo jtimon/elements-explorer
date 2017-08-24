@@ -65,7 +65,7 @@
 
     <tr>
       <td>Median time:</td>
-      <td>{{ chaininfo.mediantime }} ( {{chaininfo.mediantime | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
+      <td>{{ chaininfo.mediantime }} ( {{chaininfo.mediantime * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
     </tr>
 
   </table>
@@ -122,12 +122,12 @@
 
       <tr>
         <td>Time:</td>
-        <td>{{ block.time }}  ( {{block.time | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
+        <td>{{ block.time }}  ( {{block.time * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
       </tr>
 
       <tr>
         <td>Median time:</td>
-        <td>{{ block.mediantime }}  ( {{block.mediantime | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
+        <td>{{ block.mediantime }}  ( {{block.mediantime * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
       </tr>
 
       <tr>
@@ -207,12 +207,12 @@
 
       <tr>
         <td>Time:</td>
-        <td>{{ transaction.time }}  ( {{transaction.time | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
+        <td>{{ transaction.time }}  ( {{transaction.time * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
       </tr>
 
       <tr>
         <td>Blocktime:</td>
-        <td>{{ transaction.blocktime }}  ( {{transaction.blocktime | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
+        <td>{{ transaction.blocktime }}  ( {{transaction.blocktime * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
       </tr>
 
       <tr>
