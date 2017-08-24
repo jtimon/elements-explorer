@@ -50,6 +50,7 @@ angular.module('rpcExplorerApp')
 
         $scope.searchTx = function() {
             function successCallbackTx(data) {
+                $scope.showtxlist = false;
                 $scope.transaction = data["data"]["result"];
                 $scope.txjson = JSON.stringify($scope.transaction, null, 4);
                 $scope.blockid = $scope.transaction["blockhash"];
