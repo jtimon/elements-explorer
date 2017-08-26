@@ -8,10 +8,8 @@ ADD . /build_docker
 RUN sh docker/daemon-deps.sh
 
 # Install elementsd with getperblockstats
-# RUN curl -L https://github.com/jtimon/elements/archive/e14-rpc-plotter.tar.gz | tar xz
-# RUN cd elements-e14-rpc-plotter && sh ./../docker/build-daemon.sh src/elementsd
-RUN curl -L https://github.com/instagibbs/elements/archive/fixtravis.tar.gz | tar xz
-RUN cd elements-fixtravis && sh ./../docker/build-daemon.sh src/elementsd
+RUN curl -L https://github.com/jtimon/elements/archive/e14-rpc-plotter.tar.gz | tar xz
+RUN cd elements-e14-rpc-plotter && sh ./../docker/build-daemon.sh src/elementsd
 
 EXPOSE 7041
 
