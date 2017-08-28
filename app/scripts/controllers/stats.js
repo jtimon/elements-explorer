@@ -55,8 +55,8 @@ angular.module('rpcExplorerApp')
 
         $scope.doPlot = function() {
             var params = {
-                "start": parseInt($scope.start_height),
-                "end": parseInt($scope.end_height),
+                "start": $scope.start_height,
+                "end": $scope.end_height,
             };
             SrvBackend.rpcCall("getblockstats", params, successCallbackPerBlockStats, SrvUtil.errorCallbackScoped($scope));
         };
