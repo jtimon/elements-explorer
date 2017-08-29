@@ -22,7 +22,7 @@
 
 <div class="container">
   <div>
-    Block Height: <input ng-model="blockheight" ng-change="searchBlockByHeight()">
+    Block Height: <input type="number" step="1" ng-model="blockheight" ng-change="searchBlockByHeight()">
     Block Hash: <input ng-model="blockid" ng-change="searchBlock()">
     <p></p>
     <div>

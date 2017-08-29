@@ -45,7 +45,7 @@ angular.module('rpcExplorerApp')
             };
             $scope.txid = "";
             $scope.transaction = null;
-            var params = {"height": parseInt($scope.blockheight)};
+            var params = {"height": $scope.blockheight};
             SrvBackend.rpcCall("getblockhash", params, successCallbackBlockHeight, SrvUtil.errorCallbackScoped($scope));
         };
 
