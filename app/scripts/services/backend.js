@@ -40,8 +40,8 @@ angular.module('rpcExplorerApp')
             CreateCacheForChainAndRsrc(chain, resource);
             if (!cache[chain][resource][id]) {
                 function cache_callback(data) {
-                    cache[chain][resource][id] = data;
                     safeCallback(callback)(data);
+                    cache[chain][resource][id] = data;
                 }
                 srv.rpcCall(resource, {'id': id}, cache_callback, errorCallback);
             } else {
