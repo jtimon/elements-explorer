@@ -49,5 +49,20 @@ angular.module('rpcExplorerApp')
             }
         };
 
+        srv.GetSingleBlockStats = function(id, callback, errorCallback) {
+            var chain = SrvChain.get();
+            var resource = "getblockstats";
+            CreateCacheForChainAndRsrc(chain, resource);
+            if (!cache[chain][resource][id]) {
+                function cache_callback(data) {
+                    safeCallback(callback)(data);
+                    cache[chain][resource][id] = data;
+                }
+                srv.rpcCall(resource, {'start': id, 'end': id}, cache_callback, errorCallback);
+            } else {
+                safeCallback(callback)(cache[chain][resource][id]);
+            }
+        };
+        
         return srv;
     })
