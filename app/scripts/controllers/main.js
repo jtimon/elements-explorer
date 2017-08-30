@@ -24,8 +24,8 @@ angular.module('rpcExplorerApp')
         $scope.searchBlock = function() {
             function successCallbackBlock(data) {
                 $scope.block = data["data"]["result"];
-                $scope.blockjson = JSON.stringify($scope.block, null, 4);
                 $scope.blockheight = $scope.block["height"];
+                $scope.blockjson = JSON.stringify($scope.block, null, 4);
             };
             SrvBackend.get("block", $scope.blockid, successCallbackBlock, SrvUtil.errorCallbackScoped($scope));
         };
@@ -45,9 +45,9 @@ angular.module('rpcExplorerApp')
             function successCallbackTx(data) {
                 $scope.showtxlist = false;
                 $scope.transaction = data["data"]["result"];
-                $scope.txjson = JSON.stringify($scope.transaction, null, 4);
                 $scope.blockid = $scope.transaction["blockhash"];
                 $scope.searchBlock();
+                $scope.txjson = JSON.stringify($scope.transaction, null, 4);
             };
             SrvBackend.get("tx", $scope.txid, successCallbackTx, SrvUtil.errorCallbackScoped($scope));
         };
