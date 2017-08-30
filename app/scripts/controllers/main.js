@@ -21,16 +21,11 @@ angular.module('rpcExplorerApp')
             $scope.available_chains.push("forbiddenchain");
         }
 
-        function successCallbackInfo(data) {
-            $scope.chaininfo = data["data"]["result"];
-        };
-
         $scope.searchBlock = function() {
             function successCallbackBlock(data) {
                 $scope.block = data["data"]["result"];
                 $scope.blockjson = JSON.stringify($scope.block, null, 4);
                 $scope.blockheight = $scope.block["height"];
-                SrvBackend.rpcCall("getblockchaininfo", {}, successCallbackInfo, SrvUtil.errorCallbackScoped($scope));
             };
             SrvBackend.get("block", $scope.blockid, successCallbackBlock, SrvUtil.errorCallbackScoped($scope));
         };
@@ -74,7 +69,7 @@ angular.module('rpcExplorerApp')
         };
 
         function initCallback(data) {
-            successCallbackInfo(data);
+            $scope.chaininfo = data["data"]["result"];
             $scope.blockheight = $scope.chaininfo["blocks"];
             $scope.blockid = $scope.chaininfo["bestblockhash"];
             $scope.searchBlock();
@@ -90,11 +85,11 @@ angular.module('rpcExplorerApp')
             $scope.selected_chain = $routeParams.chain;
             SrvChain.set($scope.selected_chain);
         }
+        $scope.InitForSelectedChain();
+
         if ($routeParams.block) {
             $scope.goToBlock($routeParams.block);
         } else if ($routeParams.txid) {
             $scope.goToTx($routeParams.txid);
-        } else {
-            $scope.InitForSelectedChain();
         }
     });
