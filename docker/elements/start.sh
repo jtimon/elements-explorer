@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BRANCH_DIR=elements-fixtravis
+BRANCH_DIR=elements-e14-rpc-plotter
 DATADIR=/root/.elements/
 PORT=7041
 
