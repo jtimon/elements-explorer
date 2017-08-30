@@ -70,9 +70,6 @@ angular.module('rpcExplorerApp')
 
         function initCallback(data) {
             $scope.chaininfo = data["data"]["result"];
-            $scope.blockheight = $scope.chaininfo["blocks"];
-            $scope.blockid = $scope.chaininfo["bestblockhash"];
-            $scope.searchBlock();
         };
         $scope.InitForSelectedChain = function() {
             SrvChain.set($scope.selected_chain);
