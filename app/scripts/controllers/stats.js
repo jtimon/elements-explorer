@@ -16,10 +16,6 @@ angular.module('rpcExplorerApp')
         $scope.selected_chain = SrvChain.get();
         $scope.available_chains = [$scope.selected_chain];
 
-        function successAvailableChains(data) {
-            $scope.available_chains = data["data"]["available_chains"];
-        }
-
         function successCallbackInfo(data) {
             $scope.chaininfo = data["data"]["result"];
             // TODO write test for start_height=0 in the gui
@@ -61,6 +57,10 @@ angular.module('rpcExplorerApp')
             SrvBackend.rpcCall("getblockstats", params, successCallbackPerBlockStats, SrvUtil.errorCallbackScoped($scope));
         };
 
-        SrvBackend.GetAvailableChains(successAvailableChains, SrvUtil.errorCallbackScoped($scope));
         $scope.getBlockchainInfo();
+
+        function successAvailableChains(data) {
+            $scope.available_chains = data["data"]["available_chains"];
+        }
+        SrvBackend.GetAvailableChains(successAvailableChains, SrvUtil.errorCallbackScoped($scope));
     });
