@@ -24,16 +24,13 @@ angular.module('rpcExplorerApp')
         function successCallbackInfo(data) {
             $scope.chaininfo = data["data"]["result"];
         };
-        $scope.getBlockchainInfo = function() {
-            SrvBackend.rpcCall("getblockchaininfo", {}, successCallbackInfo, SrvUtil.errorCallbackScoped($scope));
-        };
 
         $scope.searchBlock = function() {
             function successCallbackBlock(data) {
                 $scope.block = data["data"]["result"];
                 $scope.blockjson = JSON.stringify($scope.block, null, 4);
                 $scope.blockheight = $scope.block["height"];
-                $scope.getBlockchainInfo();
+                SrvBackend.rpcCall("getblockchaininfo", {}, successCallbackInfo, SrvUtil.errorCallbackScoped($scope));
             };
             SrvBackend.get("block", $scope.blockid, successCallbackBlock, SrvUtil.errorCallbackScoped($scope));
         };
