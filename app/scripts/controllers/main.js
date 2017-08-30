@@ -61,6 +61,7 @@ angular.module('rpcExplorerApp')
                 $scope.searchBlock();
                 $scope.txjson = JSON.stringify($scope.transaction, null, 4);
             };
+            cleanBlock();
             SrvBackend.get("tx", $scope.txid, successCallbackTx, SrvUtil.errorCallbackScoped($scope));
         };
 
