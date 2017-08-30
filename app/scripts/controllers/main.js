@@ -35,12 +35,23 @@ angular.module('rpcExplorerApp')
         }
 
         $scope.searchBlock = function() {
+            
+            function statsCallbackBlock(data) {
+                $scope.blockstats = data["data"]["result"];
+            };
+
             function successCallbackBlock(data) {
                 $scope.block = data["data"]["result"];
                 $scope.blockheight = $scope.block["height"];
+                var params = {
+                    "start": $scope.block["height"],
+                    "end": $scope.block["height"],
+                };
+                SrvBackend.rpcCall("getblockstats", params, statsCallbackBlock, SrvUtil.errorCallbackScoped($scope));
                 $scope.blockjson = JSON.stringify($scope.block, null, 4);
             };
             SrvBackend.get("block", $scope.blockid, successCallbackBlock, SrvUtil.errorCallbackScoped($scope));
+
         };
 
         $scope.searchBlockByHeight = function() {

@@ -143,6 +143,17 @@
     </table>
     <p></p>
 
+    <nobr ng-show="blockstats">
+       Show Block Stats <input type="checkbox" ng-model="showstats">:
+    </nobr>
+    <p></p>
+
+    <table ng-show="showstats && blockstats" border="1">
+      <tr ng-repeat="(key, value) in blockstats">
+        <td>{{key}}</td><td>{{value[0]}}</td>
+      </tr>
+    </table>
+    
     <nobr>
       Block Transactions ( {{ block.tx.length }} ): Show <input type="checkbox" ng-model="showtxlist">
     </nobr>
