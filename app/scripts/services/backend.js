@@ -63,6 +63,6 @@ angular.module('rpcExplorerApp')
                 safeCallback(callback)(cache[chain][resource][id]);
             }
         };
-        
+
         return srv;
     })
