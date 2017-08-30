@@ -80,7 +80,6 @@ angular.module('rpcExplorerApp')
         // Init from $routeParams
         if ($routeParams.chain) {
             $scope.selected_chain = $routeParams.chain;
-            SrvChain.set($scope.selected_chain);
         }
         $scope.InitForSelectedChain();
 
