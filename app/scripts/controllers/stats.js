@@ -30,6 +30,8 @@ angular.module('rpcExplorerApp')
             "utxo_size_inc",
             "total_size",
             "total_weight",
+            "swtotal_size",
+            "swtotal_weight",
             "total_out",
             "minfee",
             "maxfee",
