@@ -85,8 +85,8 @@ angular.module('rpcExplorerApp')
                 if ($scope.xaxis == 'height') {
                     xaxis_data = data[$scope.xaxis];
                 } else {
-                    for (var dat in data[$scope.xaxis]) {
-                        xaxis_data.push(new Date(dat));
+                    for (var i = 0; i <  data[$scope.xaxis].length; i++) {
+                        xaxis_data.push(new Date(data[$scope.xaxis][i] * 1000));
                     }
                 }
                 
