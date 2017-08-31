@@ -31,6 +31,16 @@
 </div>
 <p></p>
 
+<div class="container">
+  <span ng-repeat="name in valid_stats">
+    <input type="checkbox"
+           value="{{name}}"
+           ng-checked="selected_stats.indexOf(name) > -1"
+           ng-click="toggleStat(name)"
+           > {{name}}
+  </span>
+</div>
+
 <!-- This is where we are going to put our custom directive -->
 <line-plot graph-plots=graphPlots></line-plot>
 
