@@ -20,6 +20,7 @@ angular.module('rpcExplorerApp')
             // "time",
             "mediantime",
             "txs",
+            "swtxs",
             "ins",
             "outs",
             "subsidy",
