@@ -15,10 +15,13 @@ angular.module('rpcExplorerApp')
         $scope.verbose_stats = false;
         $scope.selected_chain = SrvChain.get();
         $scope.available_chains = [$scope.selected_chain];
+        $scope.xaxis_list = [
+            "height",
+            "time",
+            "mediantime"
+        ];
+        $scope.xaxis = "height";
         $scope.valid_stats = [
-            // "height",
-            // "time",
-            "mediantime",
             "txs",
             "swtxs",
             "ins",
@@ -78,14 +81,30 @@ angular.module('rpcExplorerApp')
                     continue;
                 }
 
+                var xaxis_data = [];
+                if ($scope.xaxis == 'height') {
+                    xaxis_data = data[$scope.xaxis];
+                } else {
+                    for (var dat in data[$scope.xaxis]) {
+                        xaxis_data.push(new Date(dat));
+                    }
+                }
+                
                 var trace = {
                     name: key,
-                    x: data["height"],
+                    x: xaxis_data,
                     y: data[key],
                     type: 'scatter'
                 };
                 $scope.graphPlots.push(trace);
             }
+        };
+
+        $scope.changeXaxis = function(name) {
+            if ($scope.xaxis_list.indexOf(name) > -1) {
+                $scope.xaxis = name;
+            }
+            StatsToGraph($scope.plot_data);
         };
 
         function successCallbackPerBlockStats(data)

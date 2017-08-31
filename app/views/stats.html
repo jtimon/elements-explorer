@@ -32,6 +32,19 @@
 <p></p>
 
 <div class="container">
+  X axis:
+  <span ng-repeat="name in xaxis_list">
+    <input type="radio"
+           name="xaxis"
+           value="{{name}}"
+           ng-checked="name == xaxis"
+           ng-click="changeXaxis(name)"
+           > {{name}}
+  </span>
+</div>
+<p></p>
+
+<div class="container">
   <span ng-repeat="name in valid_stats">
     <input type="checkbox"
            value="{{name}}"
