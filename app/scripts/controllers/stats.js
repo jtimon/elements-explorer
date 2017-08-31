@@ -47,11 +47,12 @@ angular.module('rpcExplorerApp')
             "avgfeerate_old"
         ];
         $scope.selected_stats = [
+            "txs",
+            "swtxs",
             "total_size",
-            "minfeerate",
-            "medianfeerate",
-            "totalfee",
-            "utxo_size_inc",
+            "total_weight",
+            "swtotal_size",
+            "swtotal_weight",
         ];
 
         function successCallbackInfo(data) {
