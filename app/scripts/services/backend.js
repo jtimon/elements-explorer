@@ -55,17 +55,6 @@ angular.module('rpcExplorerApp')
             }
         };
 
-        srv.GetSingleBlockStats = function(id, callback, errorCallback) {
-            var chain = SrvChain.get();
-            var resource = "getblockstats";
-            CreateCacheForChainAndRsrc(chain, resource);
-            if (!cache[chain][resource][id]) {
-                CacheSingleItem(chain, resource, id, callback, errorCallback);
-            } else {
-                safeCallback(callback)(cache[chain][resource][id]);
-            }
-        };
-
         srv.GetBlockStats = function(start, end, callback, errorCallback) {
             if (end - start > 100) {
                 errorCallback("SrvBackend.GetBlockStats scales poorly and thus only allows 100 blocks at a time.");
