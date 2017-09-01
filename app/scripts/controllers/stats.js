@@ -8,7 +8,7 @@
  * Controller of the rpcExplorerApp
  */
 angular.module('rpcExplorerApp')
-    .controller('StatsCtrl', function ($scope, $http, SrvUtil, SrvChain, SrvBackend) {
+    .controller('StatsCtrl', function ($scope, SrvUtil, SrvChain, SrvBackend) {
 
         $scope.start_height = 1;
         $scope.end_height = 1;

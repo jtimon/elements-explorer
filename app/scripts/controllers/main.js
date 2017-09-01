@@ -8,7 +8,7 @@
  * Controller of the rpcExplorerApp
  */
 angular.module('rpcExplorerApp')
-    .controller('MainCtrl', function ($scope, $routeParams, $http, SrvUtil, SrvChain, SrvBackend) {
+    .controller('MainCtrl', function ($scope, $routeParams, SrvUtil, SrvChain, SrvBackend) {
 
         $scope.CTverbose = false;
         $scope.verbose = false;
