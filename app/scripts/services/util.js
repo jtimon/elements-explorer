@@ -4,7 +4,9 @@
 function errorCallbackScoped(myscope)
 {
     return function (data) {
-        if (data["data"] && data["data"]["error"]) {
+        if (typeof data === 'string') {
+            myscope.error = data;
+        } else if (data["data"] && data["data"]["error"]) {
             myscope.error = data["data"]["error"];
         } else {
             myscope.error = JSON.stringify(data, null, 4);
