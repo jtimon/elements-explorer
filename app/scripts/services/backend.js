@@ -35,30 +35,32 @@ angular.module('rpcExplorerApp')
                 .then(safeCallback(callback), safeCallback(errorCallback));
         };
 
+        // Pre: CreateCacheForChainAndRsrc has been previously called
+        function CacheSingleItem(chain, resource, id, callback, errorCallback)
+        {
+            function cache_callback(data) {
+                safeCallback(callback)(data);
+                cache[chain][resource][id] = data;
+            }
+            srv.rpcCall(resource, {'id': id}, cache_callback, errorCallback);
+        }
+        
         srv.get = function(resource, id, callback, errorCallback) {
             var chain = SrvChain.get();
             CreateCacheForChainAndRsrc(chain, resource);
             if (!cache[chain][resource][id]) {
-                function cache_callback(data) {
-                    safeCallback(callback)(data);
-                    cache[chain][resource][id] = data;
-                }
-                srv.rpcCall(resource, {'id': id}, cache_callback, errorCallback);
+                CacheSingleItem(chain, resource, id, callback, errorCallback);
             } else {
                 safeCallback(callback)(cache[chain][resource][id]);
             }
         };
-
+        
         srv.GetSingleBlockStats = function(id, callback, errorCallback) {
             var chain = SrvChain.get();
             var resource = "getblockstats";
             CreateCacheForChainAndRsrc(chain, resource);
             if (!cache[chain][resource][id]) {
-                function cache_callback(data) {
-                    safeCallback(callback)(data);
-                    cache[chain][resource][id] = data;
-                }
-                srv.rpcCall(resource, {'start': id, 'end': id}, cache_callback, errorCallback);
+                CacheSingleItem(chain, resource, id, callback, errorCallback);
             } else {
                 safeCallback(callback)(cache[chain][resource][id]);
             }
