@@ -42,6 +42,18 @@ angular
         controller: 'StatsCtrl',
         controllerAs: 'stats'
       })
+      .when('/chain/:chain/mempool', {
+        templateUrl: 'views/mempool.html',
+        controller: 'MempoolCtrl',
+      })
+      .when('/chain/:chain/mempool/tx/:txid', {
+        templateUrl: 'views/mempool.html',
+        controller: 'MempoolCtrl',
+      })
+      .when('/mempool', {
+        templateUrl: 'views/mempool.html',
+        controller: 'MempoolCtrl',
+      })
       .when('/about', {
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl',

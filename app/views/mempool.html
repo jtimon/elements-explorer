@@ -1,0 +1,165 @@
+
+<div class="container">
+  <nobr>
+    Chain:
+    <select ng-model="selected_chain" ng-change="InitForSelectedChain();"
+            ng-options="chainpetname as chainpetname for chainpetname in available_chains">
+    </select>
+  </nobr>
+
+</div>
+<p></p>
+
+<div ng-show="error" class="alert alert-danger" border="1">
+  <strong>Error:</strong>
+  <nobr ng-show="error.message">{{error.message}}</nobr>
+  <!-- <nobr ng-show="!error.message">{{ error }}</nobr> -->
+  <nobr ng-show="!error.message">
+    <p></p>
+    <pre>
+      {{ error }}
+    </pre>
+  </nobr>
+</div>
+<p></p>
+
+<div ng-show="mempoolinfo" class="container" border="1">
+  Mempool Info:
+  <p></p>
+
+  <table border="1">
+
+    <tr>
+      <td>Chain:</td>
+      <td><a ng-href="#!/chain/{{selected_chain}}">{{selected_chain}}</a></td>
+    </tr>
+
+    <tr>
+      <td>Size:</td>
+      <td>{{ mempoolinfo.size }}</td>
+    </tr>
+
+    <tr>
+      <td>Virtual bytes (see BIP141):</td>
+      <td>{{ mempoolinfo.bytes }}</td>
+    </tr>
+
+    <tr>
+      <td>Total memory usage:</td>
+      <td>{{ mempoolinfo.usage }}</td>
+    </tr>
+
+    <tr>
+      <td>Maximum memory usage:</td>
+      <td>{{ mempoolinfo.maxmempool }}</td>
+    </tr>
+
+    <tr>
+      <td>Minimum feerate for tx to be accepted:</td>
+      <td>{{ mempoolinfo.mempoolminfee }}</td>
+    </tr>
+
+  </table>
+  <p></p>
+</div>
+
+<div class="container">
+  <div>
+    Tx Id: <input ng-model="txid" ng-change="searchTx()">
+  </div>
+  <p></p>
+</div> <!-- container -->
+
+<div ng-show="mempoolentry" class="container">
+
+  <table border="1">
+
+    <tr>
+      <td>Virtual size (see BIP141):</td>
+      <td>{{ mempoolentry.size }}</td>
+    </tr>
+
+    <tr>
+      <td>Fee:</td>
+      <td>{{ mempoolentry.fee }}</td>
+    </tr>
+
+    <tr>
+      <td>Modified fee:</td>
+      <td>{{ mempoolentry.modifiedfee }}</td>
+    </tr>
+
+    <tr>
+      <td>Time:</td>
+      <td>{{ mempoolentry.time }}</td>
+    </tr>
+
+    <tr>
+      <td>Height:</td>
+      <td>{{ mempoolentry.height }}</td>
+    </tr>
+
+    <tr>
+      <td>Descendant count:</td>
+      <td>{{ mempoolentry.descendantcount }}</td>
+    </tr>
+
+    <tr>
+      <td>Descendant virtual size:</td>
+      <td>{{ mempoolentry.descendantsize }}</td>
+    </tr>
+
+    <tr>
+      <td>Descendant modified fees:</td>
+      <td>{{ mempoolentry.descendantfees }}</td>
+    </tr>
+
+    <tr>
+      <td>Ancestor count:</td>
+      <td>{{ mempoolentry.ancestorcount }}</td>
+    </tr>
+
+    <tr>
+      <td>Ancestor virtual size:</td>
+      <td>{{ mempoolentry.ancestorsize }}</td>
+    </tr>
+
+    <tr>
+      <td>Ancestor modified fees:</td>
+      <td>{{ mempoolentry.ancestorfees }}</td>
+    </tr>
+
+  </table>
+  <p></p>
+
+  <span ng-show="mempoolentry.depends.length" class="container">
+    <nobr>
+      Depends on unconfirmed transactions used as inputs for this transaction ( {{ mempoolentry.depends.length }} ): Show <input type="checkbox" ng-model="showdepends">
+    </nobr>
+    <p></p>
+
+    <table ng-show="showdepends" border="1">
+      <tr ng-repeat="txhash in mempoolentry.depends">
+        <td><a ng-href="#!/chain/{{selected_chain}}/mempool/tx/{{txhash}}">{{ txhash }}</a></td>
+      </tr>
+    </table>
+
+    <p></p>
+  </span>
+
+</div> <!-- container -->
+
+<div ng-show="mempooltxs" class="container">
+  <nobr>
+    Mempool Transactions ( {{ block.tx.length }} ): Show <input type="checkbox" ng-model="showtxlist">
+  </nobr>
+  <p></p>
+
+  <table ng-show="showtxlist" border="1">
+    <tr ng-repeat="txhash in mempooltxs">
+      <td><a ng-href="#!/chain/{{selected_chain}}/mempool/tx/{{txhash}}">{{ txhash }}</a></td>
+    </tr>
+  </table>
+
+  <p></p>
+</div>
