@@ -134,11 +134,11 @@
 
   <span ng-show="mempoolentry.depends.length" class="container">
     <nobr>
-      Depends on unconfirmed transactions used as inputs for this transaction ( {{ mempoolentry.depends.length }} ): Show <input type="checkbox" ng-model="showdepends">
+      Depends on unconfirmed transactions used as inputs for this transaction ( {{ mempoolentry.depends.length }} ):
     </nobr>
     <p></p>
 
-    <table ng-show="showdepends" border="1">
+    <table border="1">
       <tr ng-repeat="txhash in mempoolentry.depends">
         <td><a ng-href="#!/chain/{{selected_chain}}/mempool/tx/{{txhash}}">{{ txhash }}</a></td>
       </tr>
@@ -151,11 +151,11 @@
 
 <div ng-show="mempooltxs" class="container">
   <nobr>
-    Mempool Transactions ( {{ block.tx.length }} ): Show <input type="checkbox" ng-model="showtxlist">
+    Mempool Transactions ( {{ mempooltxs.length }} ):
   </nobr>
   <p></p>
 
-  <table ng-show="showtxlist" border="1">
+  <table border="1">
     <tr ng-repeat="txhash in mempooltxs">
       <td><a ng-href="#!/chain/{{selected_chain}}/mempool/tx/{{txhash}}">{{ txhash }}</a></td>
     </tr>
