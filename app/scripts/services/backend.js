@@ -64,5 +64,9 @@ angular.module('rpcExplorerApp')
             }
         };
 
+        srv.GetBlockStats = function(start, end, callback, errorCallback) {
+            SrvBackend.rpcCall("getblockstats", {"start": start, "end": end}, callback, errorCallback);
+        };
+
         return srv;
     })
