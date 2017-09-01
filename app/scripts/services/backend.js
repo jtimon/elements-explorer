@@ -44,7 +44,7 @@ angular.module('rpcExplorerApp')
             }
             srv.rpcCall(resource, {'id': id}, cache_callback, errorCallback);
         }
-        
+
         srv.get = function(resource, id, callback, errorCallback) {
             var chain = SrvChain.get();
             CreateCacheForChainAndRsrc(chain, resource);
@@ -54,7 +54,7 @@ angular.module('rpcExplorerApp')
                 safeCallback(callback)(cache[chain][resource][id]);
             }
         };
-        
+
         srv.GetSingleBlockStats = function(id, callback, errorCallback) {
             var chain = SrvChain.get();
             var resource = "getblockstats";
