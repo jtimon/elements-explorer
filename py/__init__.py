@@ -14,6 +14,9 @@ ALLOWED_CALLS = [
     "getblockhash",
     "getrawtransaction",
     "getblockstats",
+    "getmempoolinfo",
+    "getrawmempool",
+    "getmempoolentry",
 ]
 
 RESOURCES_FOR_GET_BY_ID = [
