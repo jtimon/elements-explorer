@@ -22,6 +22,7 @@ ALLOWED_CALLS = [
 RESOURCES_FOR_GET_BY_ID = [
     'block',
     'tx',
+    'blockstats',
 ]
 
 frontend = Blueprint('frontend', __name__)
@@ -79,6 +80,10 @@ def rpcexplorerrest(chain, resource):
         method = 'getrawtransaction'
         rpc_request_data['txid'] = request_data['id']
         rpc_request_data['verbose'] = 1
+    elif resource == 'blockstats':
+        method = 'getblockstats'
+        rpc_request_data['start'] = request_data['id']
+        rpc_request_data['end'] = request_data['id']
     else:
         method = resource
         rpc_request_data.update(request_data)
