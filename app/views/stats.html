@@ -20,7 +20,7 @@
 
 <div ng-show="error" class="alert alert-danger" border="1">
   <strong>Error:</strong>
-  <nobr ng-show="typeof error.message === 'string'">{{error.message}}</nobr>
+  <nobr ng-show="IsErrorString()">{{error.message}}</nobr>
   <!-- <nobr ng-show="!error.message">{{ error }}</nobr> -->
   <nobr ng-show="!error.message">
     <p></p>

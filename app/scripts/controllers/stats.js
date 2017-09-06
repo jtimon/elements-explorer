@@ -59,6 +59,10 @@ angular.module('rpcExplorerApp')
             "swtotal_weight",
         ];
 
+        $scope.IsErrorString = function IsErrorString () {
+            return $scope.error && $scope.error.message && typeof $scope.error.message === 'string';
+        };
+
         function successCallbackInfo(data) {
             $scope.chaininfo = data["data"]["result"];
             // TODO write test for start_height=0 in the gui
