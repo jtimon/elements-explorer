@@ -14,20 +14,20 @@ services:
         aliases:
           - explorer
 
-  elements:
-    build:
-      context: ../
-      dockerfile: docker/elements/Dockerfile
-    volumes:
-      - ../.explorer-data/elementsregtest:/root/.elements
-    expose:
-      - "7041"
-    ports:
-      - "7041:7041"
-    networks:
-      main:
-        aliases:
-          - elements
+  # elements:
+  #   build:
+  #     context: ../
+  #     dockerfile: docker/elements/Dockerfile
+  #   volumes:
+  #     - ../.explorer-data/elementsregtest:/root/.elements
+  #   expose:
+  #     - "7041"
+  #   ports:
+  #     - "7041:7041"
+  #   networks:
+  #     main:
+  #       aliases:
+  #         - elements
 
   bitcoin:
     build:
