@@ -40,6 +40,10 @@ angular.module('rpcExplorerApp')
             $scope.mempoolentry = data["data"]["result"];
         };
         $scope.searchTx = function() {
+            if ($scope.txid == "") {
+                $scope.mempoolentry = null;
+                return;
+            }
             SrvBackend.rpcCall("getmempoolentry", {"txid": $scope.txid}, mempoolEntryCallback, SrvUtil.errorCallbackScoped($scope));
         };
         $scope.goToTx = function(txhash) {
