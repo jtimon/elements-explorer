@@ -58,7 +58,7 @@ angular.module('rpcExplorerApp')
             if (end - start > 100) {
                 errorCallback("SrvBackend.GetBlockStats scales poorly and thus only allows 100 blocks at a time.");
             }
-            SrvBackend.rpcCall("getblockstats", {"start": start, "end": end}, callback, errorCallback);
+            srv.rpcCall("getblockstats", {"start": start, "end": end}, callback, errorCallback);
         };
 
         return srv;
