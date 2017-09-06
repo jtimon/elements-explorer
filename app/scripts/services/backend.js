@@ -29,9 +29,14 @@ angular.module('rpcExplorerApp')
             return $http.get(BACKEND_URL + '/available_chains');
         }
 
+        srv.rpcCallProm = function(rpcMethod, vRpcParams) {
+            return $http.post(BACKEND_URL + '/chain/' + SrvChain.get() + '/' + rpcMethod, vRpcParams);
+        };
+
         srv.rpcCall = function(rpcMethod, vRpcParams, callback, errorCallback) {
-            $http.post(BACKEND_URL + '/chain/' + SrvChain.get() + '/' + rpcMethod, vRpcParams)
-                .then(safeCallback(callback), safeCallback(errorCallback));
+            srv.rpcCallProm(rpcMethod, vRpcParams)
+                .then(safeCallback(callback))
+                .catch(safeCallback(errorCallback));
         };
 
         // Pre: CreateCacheForChainAndRsrc has been previously called
