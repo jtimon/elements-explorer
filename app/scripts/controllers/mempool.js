@@ -19,7 +19,9 @@ angular.module('rpcExplorerApp')
         function successAvailableChains(data) {
             $scope.available_chains = data["data"]["available_chains"];
         }
-        SrvBackend.GetAvailableChains(successAvailableChains, SrvUtil.errorCallbackScoped($scope));
+        SrvBackend.GetAvailableChains()
+            .then(SrvUtil.safeCb(successAvailableChains))
+            .catch(SrvUtil.errorCallbackScoped($scope));
 
         function mempoolinfoCallback(data) {
             $scope.mempoolinfo = data["data"]["result"];

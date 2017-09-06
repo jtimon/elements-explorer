@@ -25,9 +25,8 @@ angular.module('rpcExplorerApp')
             }
         }
 
-        srv.GetAvailableChains = function(callback, errorCallback) {
-            $http.get(BACKEND_URL + '/available_chains')
-                .then(safeCallback(callback), safeCallback(errorCallback));
+        srv.GetAvailableChains = function() {
+            return $http.get(BACKEND_URL + '/available_chains');
         }
 
         srv.rpcCall = function(rpcMethod, vRpcParams, callback, errorCallback) {
