@@ -15,6 +15,7 @@ angular.module('rpcExplorerApp')
         $scope.verbose_stats = false;
         $scope.selected_chain = SrvChain.get();
         $scope.available_chains = [$scope.selected_chain];
+        $scope.graphPlots = [];
         $scope.xaxis_list = [
             "height",
             "time",
