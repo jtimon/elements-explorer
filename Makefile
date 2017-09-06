@@ -64,6 +64,7 @@ docker-prune:
 docker-clean: docker-prune
 # docker rm $(docker ps -a -q)
 # docker rmi $(docker images -q)
+# <trippysalmon> just ran: docker images | wc -l
 clean: docker-clean
 
 $(BUILD_DIR):
