@@ -56,6 +56,10 @@ angular.module('rpcExplorerApp')
         };
 
         $scope.searchTx = function() {
+            if ($scope.txid == "") {
+                $scope.transaction = null;
+                return;
+            }
             function successCallbackTx(data) {
                 $scope.showtxlist = false;
                 $scope.transaction = data["data"]["result"];
