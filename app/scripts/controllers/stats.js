@@ -89,7 +89,7 @@ angular.module('rpcExplorerApp')
                         xaxis_data.push(new Date(data[$scope.xaxis][i] * 1000));
                     }
                 }
-                
+
                 var trace = {
                     name: key,
                     x: xaxis_data,
