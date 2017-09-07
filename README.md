@@ -126,25 +126,11 @@ Visit the web going to http://127.0.0.1:5000 (as noted by the python server).
 
 ## TODO
 
-- [x] Whitelist rpc calls from python server (only the few needed ones)
-- [x] Select chain
-- [x] Hide non interesting things for coinbase inputs and their complement
-- [x] Hide or show CT/non-CT values in a more beauty way
-- [x] Hide non interesting things for betad chains (pow vs signblock, covered above besides the fields hidden in verbose)
-- [x] Remove bower and grunt
-- [ ] Not hardcoded rpcuser/rpcpassword:
-- [ ] Hide non interesting things for bitcoind chains
+- [ ] Nodes: Not hardcoded rpcuser/rpcpassword:
 - [ ] elements: Show -signblockscript and block.scriptSig
 - [ ] elements: Show -fedpegscript
-- [ ] Adapt to elementsd chains (both show/hide)
-- [ ] Make sure we're not missing data from differences in chains
-- [ ] Make sure there's nothing to rescue from 'verbose' even after supporting some other elements chain
-- [ ] js: Cleanup error display
-- [ ] Angular directive for both scriptSig and scriptPubKey
-- [ ] Move from angular to React + redux, angular4, inferno.js or something ?
-- [ ] Add some dev tool to watch changes (gulp?)
-- [ ] Angular/Karma/Protractor/e2e Testing
-- [ ] Use webpack ?
+- [ ] Angular: directive for both scriptSig and scriptPubKey
+- [ ] e2e Testing: Karma/Protractor/whatever
 
 # License
 
