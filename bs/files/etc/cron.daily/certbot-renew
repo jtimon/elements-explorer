@@ -1,0 +1,3 @@
+#!/bin/bash
+
+certbot renew --dry-run --noninteractive --renew-hook /bs/rpc-explorer/bs/bin/restart-nginx.sh
