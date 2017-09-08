@@ -2,16 +2,18 @@
   <nobr>
     Chain:
     <select ng-model="selected_chain" ng-change="getBlockchainInfo();"
-            ng-options="chainpetname as chainpetname for chainpetname in available_chains">
+            ng-options="chainpetname as chainpetname for chainpetname in available_chains"
+            ng-disabled="loading_stats"
+            >
     </select>
   </nobr>
 
   Start Height:
-  <input type="number" step="1" ng-model="start_height">
+  <input ng-disabled="loading_stats" type="number" step="1" ng-model="start_height">
   End Height:
-  <input type="number" step="1" ng-model="end_height">
+  <input ng-disabled="loading_stats" type="number" step="1" ng-model="end_height">
 
-  <button ng-click="doPlot();">Plot</button>
+  <button ng-disabled="loading_stats" ng-click="doPlot();">Plot</button>
 
   Verbose Stats:
   <input type="checkbox" ng-model="verbose_stats">
