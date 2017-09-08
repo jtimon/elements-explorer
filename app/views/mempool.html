@@ -75,6 +75,11 @@
   <table border="1">
 
     <tr>
+      <td>See other transaction details:</td>
+      <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{txid}}">{{ txid }}</a></td>
+    </tr>
+
+    <tr>
       <td>Virtual size (see BIP141):</td>
       <td>{{ mempoolentry.size }}</td>
     </tr>

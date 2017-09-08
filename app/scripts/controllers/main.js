@@ -64,7 +64,9 @@ angular.module('rpcExplorerApp')
                 $scope.showtxlist = false;
                 $scope.transaction = data["data"]["result"];
                 $scope.blockid = $scope.transaction["blockhash"];
-                $scope.searchBlock();
+                if ($scope.blockid) {
+                    $scope.searchBlock();
+                }
                 $scope.txjson = JSON.stringify($scope.transaction, null, 4);
             };
             cleanBlock();
