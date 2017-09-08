@@ -111,7 +111,6 @@ angular.module('rpcExplorerApp')
         // TODO Separate to another controller that's not updated every time
         function successAvailableChains(data) {
             $scope.available_chains = data["data"]["available_chains"];
-            $scope.available_chains.push("forbiddenchain");
         }
         SrvBackend.GetAvailableChains()
             .then(SrvUtil.safeCb(successAvailableChains))
