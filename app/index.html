@@ -22,7 +22,7 @@
 
     <!-- Add your site or application content here -->
     <div class="header">
-      <div class="navbar navbar-default" role="navigation">
+      <div class="navbar navbar-inverse navbar-static-top" ng-controller="NavigationCtrl">
         <div class="container">
           <div class="navbar-header">
 
@@ -39,12 +39,12 @@
           <div class="collapse navbar-collapse" id="js-navbar-collapse">
 
             <ul class="nav navbar-nav">
-              <li class="active"><a ng-href="#!/">Chain</a></li>
-              <li><a ng-href="#!/mempool">Mempool</a></li>
-              <li><a ng-href="#!/stats">Stats</a></li>
-              <li><a ng-href="#!/about">About</a></li>
+              <li ng-class="navClass('chain')"><a ng-href="#!/">Chain</a></li>
+              <li ng-class="navClass('mempool')"><a ng-href="#!/mempool">Mempool</a></li>
+              <li ng-class="navClass('stats')"><a ng-href="#!/stats">Stats</a></li>
+              <li ng-class="navClass('about')"><a ng-href="#!/about">About</a></li>
             </ul>
-          </div>
+          </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
@@ -81,6 +81,7 @@
         <script src="scripts/services/backend.js"></script>
         <script src="scripts/services/chain.js"></script>
         <script src="scripts/services/util.js"></script>
+        <script src="scripts/controllers/navigation.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/mempool.js"></script>
         <script src="scripts/controllers/stats.js"></script>
