@@ -31,36 +31,52 @@
 </div>
 <p></p>
 
-<div class="container">
-  X axis:
-  <span ng-repeat="name in xaxis_list">
-    <input type="radio"
-           name="xaxis"
-           value="{{name}}"
-           ng-checked="name == xaxis"
-           ng-click="changeXaxis(name)"
-           > {{name}}
-  </span>
-</div>
-<p></p>
-
-<div class="container">
-  <span ng-repeat="name in valid_stats">
-    <input type="checkbox"
-           value="{{name}}"
-           ng-checked="selected_stats.indexOf(name) > -1"
-           ng-click="toggleStat(name)"
-           > {{name}}
-  </span>
+<div ng-show="!loading_stats && !graphPlots" class="container">
+  No data to plot.
 </div>
 
-<!-- This is where we are going to put our custom directive -->
-<line-plot graph-plots=graphPlots></line-plot>
+<div ng-show="loading_stats" class="container">
+  Please wait...
+</div>
 
-<div class="container" ng-show="verbose_stats">
+<div ng-show="!graphPlots" class="container">
+  <p></p>
+  <p></p>
+</div>
 
-  Last getperblockstats call result:
-  <pre>
-    {{ plot_data }}
-  </pre>
+<div ng-show="!loading_stats && graphPlots" class="container">
+
+  <div class="container">
+    X axis:
+    <span ng-repeat="name in xaxis_list">
+      <input type="radio"
+             name="xaxis"
+             value="{{name}}"
+             ng-checked="name == xaxis"
+             ng-click="changeXaxis(name)"
+             > {{name}}
+    </span>
+  </div>
+  <p></p>
+
+  <divclass="container">
+    <span ng-repeat="name in valid_stats">
+      <input type="checkbox"
+             value="{{name}}"
+             ng-checked="selected_stats.indexOf(name) > -1"
+             ng-click="toggleStat(name)"
+             > {{name}}
+    </span>
+  </div>
+
+  <!-- This is where we are going to put our custom plotly directive -->
+  <line-plot ng-show="!loading_stats && graphPlots" graph-plots=graphPlots></line-plot>
+
+  <div class="container" ng-show="verbose_stats">
+
+    Last getperblockstats call result:
+    <pre>
+      {{ plot_data }}
+    </pre>
+  </div>
 </div>

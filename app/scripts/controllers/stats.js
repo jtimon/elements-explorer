@@ -10,6 +10,7 @@
 angular.module('rpcExplorerApp')
     .controller('StatsCtrl', function ($scope, SrvUtil, SrvChain, SrvBackend) {
 
+        $scope.loading_stats = false;
         $scope.start_height = 1;
         $scope.end_height = 1;
         $scope.verbose_stats = false;
@@ -115,9 +116,11 @@ angular.module('rpcExplorerApp')
         {
             $scope.plot_data = data["data"]["result"];
             StatsToGraph($scope.plot_data);
+            $scope.loading_stats = false;
         };
 
         $scope.doPlot = function() {
+            $scope.loading_stats = true;
             SrvBackend.GetBlockStats($scope.start_height, $scope.end_height,
                                      successCallbackPerBlockStats, SrvUtil.errorCallbackScoped($scope));
         };
