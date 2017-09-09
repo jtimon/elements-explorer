@@ -14,12 +14,16 @@ angular.module('rpcExplorerApp')
         $scope.start_height = 1;
         $scope.end_height = 1;
         $scope.verbose_stats = false;
+        $scope.start_height = SrvChain.getHeight() - 1;
+        $scope.end_height = SrvChain.getHeight();
+
         $scope.xaxis_list = [
             "height",
             "time",
             "mediantime"
         ];
-        $scope.xaxis = "height";
+        $scope.xaxis = $scope.xaxis_list[0];
+
         $scope.valid_stats = [
             "txs",
             "swtxs",
@@ -54,17 +58,6 @@ angular.module('rpcExplorerApp')
 
         $scope.IsErrorString = function IsErrorString () {
             return $scope.error && $scope.error.message && typeof $scope.error.message === 'string';
-        };
-
-        function successCallbackInfo(data) {
-            $scope.chaininfo = data["data"]["result"];
-            // TODO write test for start_height=0 in the gui
-            $scope.start_height = $scope.chaininfo.blocks - 1;
-            $scope.end_height = $scope.chaininfo.blocks;
-
-        };
-        $scope.getBlockchainInfo = function() {
-            SrvBackend.rpcCall("getblockchaininfo", {}, successCallbackInfo, SrvUtil.errorCallbackScoped($scope));
         };
 
         function StatsToGraph(data)
@@ -132,6 +125,4 @@ angular.module('rpcExplorerApp')
                 StatsToGraph($scope.plot_data);
             }
         };
-
-        $scope.getBlockchainInfo();
     });
