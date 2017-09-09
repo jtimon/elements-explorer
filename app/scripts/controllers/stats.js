@@ -29,7 +29,6 @@ angular.module('rpcExplorerApp')
             "outs",
             "subsidy",
             "totalfee",
-            "reward",
             "utxo_increase",
             "utxo_size_inc",
             "total_size",
@@ -45,10 +44,6 @@ angular.module('rpcExplorerApp')
             "maxfeerate",
             "medianfeerate",
             "avgfeerate",
-            "minfeerate_old",
-            "maxfeerate_old",
-            "medianfeerate_old",
-            "avgfeerate_old"
         ];
         $scope.selected_stats = [
             "txs",
