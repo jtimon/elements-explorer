@@ -89,13 +89,9 @@ angular.module('rpcExplorerApp')
             return !output["value"] && output["value"] != 0;
         };
 
-        function initCallback(data) {
-            $scope.chaininfo = data["data"]["result"];
-        };
         $scope.InitForSelectedChain = function() {
             cleanTx();
             cleanBlock();
-            SrvBackend.rpcCall("getblockchaininfo", {}, initCallback, SrvUtil.errorCallbackScoped($scope));
         };
         $scope.InitForSelectedChain();
 

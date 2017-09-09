@@ -64,7 +64,6 @@ angular.module('rpcExplorerApp')
 
         };
         $scope.getBlockchainInfo = function() {
-            $scope.selected_chain = SrvChain.get();
             SrvBackend.rpcCall("getblockchaininfo", {}, successCallbackInfo, SrvUtil.errorCallbackScoped($scope));
         };
 
