@@ -10,10 +10,13 @@
 angular.module('rpcExplorerApp')
     .controller('MainCtrl', function ($scope, $routeParams, SrvUtil, SrvChain, SrvBackend) {
 
+        if ($routeParams.chain) {
+            SrvChain.set($routeParams.chain);
+        }
+        $scope.selected_chain = SrvChain.get();
         $scope.CTverbose = false;
         $scope.verbose = false;
         $scope.rawhex_limit = 100;
-        $scope.selected_chain = SrvChain.get();
 
         function cleanTx() {
             $scope.txid = "";
@@ -35,7 +38,6 @@ angular.module('rpcExplorerApp')
             };
 
             function successCallbackBlock(data) {
-                $scope.selected_chain = SrvChain.get();
                 $scope.block = data["data"]["result"];
                 $scope.blockheight = $scope.block["height"];
                 SrvBackend.get("blockstats", $scope.block["height"], statsCallbackBlock, SrvUtil.errorCallbackScoped($scope));
@@ -61,7 +63,6 @@ angular.module('rpcExplorerApp')
                 return;
             }
             function successCallbackTx(data) {
-                $scope.selected_chain = SrvChain.get();
                 $scope.showtxlist = false;
                 $scope.transaction = data["data"]["result"];
                 $scope.blockid = $scope.transaction["blockhash"];
@@ -89,18 +90,13 @@ angular.module('rpcExplorerApp')
             return !output["value"] && output["value"] != 0;
         };
 
-        $scope.InitForSelectedChain = function() {
-            cleanTx();
-            cleanBlock();
-        };
-        $scope.InitForSelectedChain();
+        // Cleanup before going to block or tx
+        cleanTx();
+        cleanBlock();
 
         if ($routeParams.block) {
             $scope.goToBlock($routeParams.block);
         } else if ($routeParams.txid) {
             $scope.goToTx($routeParams.txid);
-        } else {
-            cleanTx();
-            cleanBlock();
         }
     });

@@ -51,12 +51,14 @@
       </div>
 
       <div class="container" ng-controller="ChainCtrl" ng-cloak>
-        <nobr>
+        <div>
           Chain:
           <select ng-model="selected_chain" ng-change="ChangeChain();"
                   ng-options="chainpetname as chainpetname for chainpetname in available_chains">
           </select>
-        </nobr>
+        </div>
+        <p></p>
+        <p></p>
 
         <div ng-show="chaininfo" class="container" border="1">
           Chain Data:
