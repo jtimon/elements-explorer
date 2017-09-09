@@ -21,10 +21,6 @@ angular
   ])
   .config(function ($routeProvider) {
     $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-      })
       .when('/chain/:chain', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
@@ -59,7 +55,10 @@ angular
         controller: 'AboutCtrl',
         controllerAs: 'about'
       })
+      .when('/', {
+        redirectTo: '/chain/bitcoin'
+      })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/chain/bitcoin'
       });
   });
