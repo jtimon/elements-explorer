@@ -25,9 +25,7 @@ angular.module('rpcExplorerApp')
         };
 
         if ($routeParams.chain) {
-            if ($routeParams.chain) {
-                $scope.selected_chain = $routeParams.chain;
-            }
+            $scope.selected_chain = $routeParams.chain;
         }
         $scope.ChangeChain();
     });
