@@ -15,6 +15,7 @@ angular.module('rpcExplorerApp')
 
         function initChainCallback(data) {
             $scope.chaininfo = data["data"]["result"];
+            SrvChain.setHeight($scope.chaininfo.blocks);
         };
         $scope.ChangeChain = function () {
             if ($scope.selected_chain) {
