@@ -1,15 +1,4 @@
 
-<div class="container">
-  <nobr>
-    Chain:
-    <select ng-model="selected_chain" ng-change="InitForSelectedChain();"
-            ng-options="chainpetname as chainpetname for chainpetname in available_chains">
-    </select>
-  </nobr>
-
-</div>
-<p></p>
-
 <div ng-show="error" class="alert alert-danger" border="1">
   <strong>Error:</strong>
   <nobr ng-show="error.message">{{error.message}}</nobr>

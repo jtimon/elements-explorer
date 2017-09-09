@@ -14,7 +14,6 @@ angular.module('rpcExplorerApp')
         $scope.verbose = false;
         $scope.rawhex_limit = 100;
         $scope.selected_chain = SrvChain.get();
-        $scope.available_chains = [$scope.selected_chain];
 
         function cleanTx() {
             $scope.txid = "";
@@ -36,6 +35,7 @@ angular.module('rpcExplorerApp')
             };
 
             function successCallbackBlock(data) {
+                $scope.selected_chain = SrvChain.get();
                 $scope.block = data["data"]["result"];
                 $scope.blockheight = $scope.block["height"];
                 SrvBackend.get("blockstats", $scope.block["height"], statsCallbackBlock, SrvUtil.errorCallbackScoped($scope));
@@ -61,6 +61,7 @@ angular.module('rpcExplorerApp')
                 return;
             }
             function successCallbackTx(data) {
+                $scope.selected_chain = SrvChain.get();
                 $scope.showtxlist = false;
                 $scope.transaction = data["data"]["result"];
                 $scope.blockid = $scope.transaction["blockhash"];
@@ -92,30 +93,18 @@ angular.module('rpcExplorerApp')
             $scope.chaininfo = data["data"]["result"];
         };
         $scope.InitForSelectedChain = function() {
-            SrvChain.set($scope.selected_chain);
             cleanTx();
             cleanBlock();
             SrvBackend.rpcCall("getblockchaininfo", {}, initCallback, SrvUtil.errorCallbackScoped($scope));
         };
-
-        // Init from $routeParams
-        if ($routeParams.chain) {
-            $scope.selected_chain = $routeParams.chain;
-        }
         $scope.InitForSelectedChain();
 
         if ($routeParams.block) {
             $scope.goToBlock($routeParams.block);
         } else if ($routeParams.txid) {
             $scope.goToTx($routeParams.txid);
+        } else {
+            cleanTx();
+            cleanBlock();
         }
-
-        // TODO Separate to another controller that's not updated every time
-        function successAvailableChains(data) {
-            $scope.available_chains = data["data"]["available_chains"];
-        }
-        SrvBackend.GetAvailableChains()
-            .then(SrvUtil.safeCb(successAvailableChains))
-            .catch(SrvUtil.errorCallbackScoped($scope));
-
     });
