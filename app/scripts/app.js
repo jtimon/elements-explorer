@@ -21,10 +21,6 @@ angular
   ])
   .config(function ($routeProvider) {
     $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-      })
       .when('/chain/:chain', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
