@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('rpcExplorerApp')
-    .controller('ChainCtrl', function ($scope, SrvChain, SrvUtil, SrvBackend) {
+    .controller('ChainCtrl', function ($scope, $rootScope, SrvChain, SrvUtil, SrvBackend) {
 
-        $scope.selected_chain = SrvChain.get();
+        $rootScope.selected_chain = SrvChain.get();
         $scope.available_chains = [$scope.selected_chain];
 
         function successAvailableChains(data) {
@@ -18,7 +18,7 @@ angular.module('rpcExplorerApp')
             SrvChain.setHeight($scope.chaininfo.blocks);
         };
         $scope.ChangeChain = function () {
-            if ($scope.selected_chain) {
+            if ($rootScope.selected_chain) {
                 SrvChain.set($scope.selected_chain);
             }
             SrvBackend.rpcCall("getblockchaininfo", {}, initChainCallback, SrvUtil.errorCallbackScoped($scope));

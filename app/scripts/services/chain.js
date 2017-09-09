@@ -2,7 +2,7 @@
 /*global $:false */
 
 angular.module('rpcExplorerApp')
-    .service('SrvChain', function SrvChain() {
+    .service('SrvChain', function SrvChain($rootScope) {
 
         var srv = {};
         var selected_chain = "bitcoin";
@@ -10,6 +10,7 @@ angular.module('rpcExplorerApp')
 
         srv.set = function(_selected_chain) {
             selected_chain = _selected_chain;
+            $rootScope.selected_chain = selected_chain;
         }
 
         srv.get = function() {

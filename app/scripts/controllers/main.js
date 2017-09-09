@@ -13,7 +13,6 @@ angular.module('rpcExplorerApp')
         if ($routeParams.chain) {
             SrvChain.set($routeParams.chain);
         }
-        $scope.selected_chain = SrvChain.get();
         $scope.CTverbose = false;
         $scope.verbose = false;
         $scope.rawhex_limit = 100;
