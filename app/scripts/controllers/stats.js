@@ -45,13 +45,15 @@ angular.module('rpcExplorerApp')
             "medianfeerate",
             "avgfeerate",
         ];
+
         $scope.selected_stats = [
-            "txs",
+            "utxo_size_inc",
             "swtxs",
-            "total_size",
-            "total_weight",
             "swtotal_size",
-            "swtotal_weight",
+            "maxfeerate",
+            "avgfeerate",
+            "medianfeerate",
+            "minfeerate",
         ];
 
         $scope.IsErrorString = function IsErrorString () {
