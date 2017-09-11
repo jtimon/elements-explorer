@@ -15,7 +15,7 @@ angular.module('rpcExplorerApp')
         }
         $scope.loading_stats = false;
         $scope.verbose_stats = false;
-        $scope.start_height = SrvChain.getHeight() - 1;
+        $scope.start_height = (SrvChain.getHeight() > 0) ? (SrvChain.getHeight() - 1) : 0;
         $scope.end_height = SrvChain.getHeight();
 
         $scope.xaxis_list = [
