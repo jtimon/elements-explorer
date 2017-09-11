@@ -13,7 +13,6 @@ angular.module('rpcExplorerApp')
         if ($routeParams.chain) {
             SrvChain.set($routeParams.chain);
         }
-        $scope.selected_chain = SrvChain.get();
 
         function mempoolinfoCallback(data) {
             $scope.mempoolinfo = data["data"]["result"];
@@ -23,7 +22,6 @@ angular.module('rpcExplorerApp')
             $scope.loading_mempool = false;
         };
         $scope.InitForSelectedChain = function() {
-            $scope.selected_chain = SrvChain.get();
             $scope.loading_mempool = true;
             SrvBackend.rpcCall("getmempoolinfo", {}, mempoolinfoCallback, SrvUtil.errorCallbackScoped($scope));
             SrvBackend.rpcCall("getrawmempool", {}, mempooltxsCallback, SrvUtil.errorCallbackScoped($scope));
