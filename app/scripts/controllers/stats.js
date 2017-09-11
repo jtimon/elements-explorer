@@ -14,8 +14,6 @@ angular.module('rpcExplorerApp')
             SrvChain.set($routeParams.chain);
         }
         $scope.loading_stats = false;
-        $scope.start_height = 1;
-        $scope.end_height = 1;
         $scope.verbose_stats = false;
         $scope.start_height = SrvChain.getHeight() - 1;
         $scope.end_height = SrvChain.getHeight();
