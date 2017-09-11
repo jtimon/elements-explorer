@@ -25,10 +25,14 @@ angular.module('rpcExplorerApp')
         srv.getHeight = function() {
             return height;
         }
-        
+
         srv.GetAvailableChains = function() {
             return $http.get(BACKEND_URL + '/available_chains');
         }
-        
+
+        srv.GetInfo = function() {
+            return $http.post(BACKEND_URL + '/chain/' + srv.get() + '/' + "getblockchaininfo", {});
+        }
+
         return srv;
     })
