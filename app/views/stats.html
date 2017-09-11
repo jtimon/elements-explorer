@@ -1,9 +1,9 @@
 
 <div class="container">
   Start Height:
-  <input ng-disabled="loading_stats" type="number" step="1" ng-model="start_height">
+  <input ng-disabled="loading_stats" type="number" min="0" step="1" ng-model="start_height">
   End Height:
-  <input ng-disabled="loading_stats" type="number" step="1" ng-model="end_height">
+  <input ng-disabled="loading_stats" type="number" min="0" step="1" ng-model="end_height">
 
   <button ng-disabled="loading_stats" ng-click="doPlot();">Plot</button>
 
