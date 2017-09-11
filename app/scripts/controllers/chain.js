@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rpcExplorerApp')
-    .controller('ChainCtrl', function ($scope, $rootScope, $location, SrvChain, SrvUtil, SrvBackend) {
+    .controller('ChainCtrl', function ($scope, $rootScope, $routeParams, $location, SrvChain, SrvUtil, SrvBackend) {
 
         $rootScope.selected_chain = SrvChain.get();
         $scope.available_chains = [$rootScope.selected_chain];
@@ -30,5 +30,7 @@ angular.module('rpcExplorerApp')
             InitChainCtrl();
         };
 
-        InitChainCtrl();
+        $scope.$on('$routeChangeSuccess', function() {
+            $scope.ChangeChain();
+        });
     });
