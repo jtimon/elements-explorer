@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('rpcExplorerApp')
-    .controller('ChainCtrl', function ($scope, $location, SrvChain, SrvUtil, SrvBackend) {
+    .controller('ChainCtrl', function ($scope, $rootScope, $location, SrvChain, SrvUtil, SrvBackend) {
 
-        $scope.selected_chain = SrvChain.get();
-        $scope.available_chains = [$scope.selected_chain];
+        $rootScope.selected_chain = SrvChain.get();
+        $scope.available_chains = [$rootScope.selected_chain];
 
         function successAvailableChains(data) {
             $scope.available_chains = data["data"]["available_chains"];
