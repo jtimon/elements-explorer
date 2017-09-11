@@ -33,7 +33,7 @@ angular
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
       })
-      .when('/stats', {
+      .when('/chain/:chain/stats', {
         templateUrl: 'views/stats.html',
         controller: 'StatsCtrl',
         controllerAs: 'stats'
@@ -43,10 +43,6 @@ angular
         controller: 'MempoolCtrl',
       })
       .when('/chain/:chain/mempool/tx/:txid', {
-        templateUrl: 'views/mempool.html',
-        controller: 'MempoolCtrl',
-      })
-      .when('/mempool', {
         templateUrl: 'views/mempool.html',
         controller: 'MempoolCtrl',
       })

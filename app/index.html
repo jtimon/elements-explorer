@@ -42,8 +42,8 @@
 
             <ul class="nav navbar-nav">
               <li ng-class="navClass('chain')"><a ng-href="#!/chain/{{selected_chain}}/">Chain</a></li>
-              <li ng-class="navClass('mempool')"><a ng-href="#!/mempool">Mempool</a></li>
-              <li ng-class="navClass('stats')"><a ng-href="#!/stats">Stats</a></li>
+              <li ng-class="navClass('mempool')"><a ng-href="#!/chain/{{selected_chain}}/mempool">Mempool</a></li>
+              <li ng-class="navClass('stats')"><a ng-href="#!/chain/{{selected_chain}}/stats">Stats</a></li>
               <li ng-class="navClass('about')"><a ng-href="#!/about">About</a></li>
             </ul>
           </div><!--/.nav-collapse -->
