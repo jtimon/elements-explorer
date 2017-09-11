@@ -2,8 +2,9 @@
 /*global $:false */
 
 angular.module('rpcExplorerApp')
-    .service('SrvChain', function SrvChain($rootScope) {
+    .service('SrvChain', function SrvChain($http, $rootScope) {
 
+        var BACKEND_URL = '/api/v0';
         var srv = {};
         var selected_chain = "bitcoin";
         var height = 0;
@@ -23,6 +24,10 @@ angular.module('rpcExplorerApp')
 
         srv.getHeight = function() {
             return height;
+        }
+        
+        srv.GetAvailableChains = function() {
+            return $http.get(BACKEND_URL + '/available_chains');
         }
         
         return srv;
