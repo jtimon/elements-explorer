@@ -8,8 +8,11 @@
  * Controller of the rpcExplorerApp
  */
 angular.module('rpcExplorerApp')
-    .controller('StatsCtrl', function ($scope, SrvUtil, SrvChain, SrvBackend) {
+    .controller('StatsCtrl', function ($scope, $routeParams, SrvUtil, SrvChain, SrvBackend) {
 
+        if ($routeParams.chain) {
+            SrvChain.set($routeParams.chain);
+        }
         $scope.loading_stats = false;
         $scope.start_height = 1;
         $scope.end_height = 1;
