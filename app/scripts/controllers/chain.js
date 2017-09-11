@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('rpcExplorerApp')
-    .controller('ChainCtrl', function ($scope, $rootScope, $routeParams, $location, SrvChain, SrvUtil) {
+    .controller('ChainCtrl', function ($scope, $rootScope, SrvChain, SrvUtil) {
 
         $rootScope.selected_chain = SrvChain.get();
         $scope.available_chains = [$rootScope.selected_chain];
@@ -21,7 +21,6 @@ angular.module('rpcExplorerApp')
         $scope.ChangeChain = function () {
             if ($scope.selected_chain) {
                 SrvChain.set($scope.selected_chain);
-                $location.path($location.path().replace(/chain\/(.+?)\/(.*)/g,"chain/" + $scope.selected_chain + "/$2"));
             }
             SrvChain.GetInfo()
                 .then(safeCallback(initChainCallback))
