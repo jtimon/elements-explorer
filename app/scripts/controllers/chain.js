@@ -18,16 +18,12 @@ angular.module('rpcExplorerApp')
             SrvChain.setHeight($scope.chaininfo.blocks);
         };
 
-        function InitChainCtrl() {
-            SrvBackend.rpcCall("getblockchaininfo", {}, initChainCallback, SrvUtil.errorCallbackScoped($scope));
-        };
-
         $scope.ChangeChain = function () {
             if ($scope.selected_chain) {
                 SrvChain.set($scope.selected_chain);
                 $location.path($location.path().replace(/chain\/(.+?)\/(.*)/g,"chain/" + $scope.selected_chain + "/$2"));
             }
-            InitChainCtrl();
+            SrvBackend.rpcCall("getblockchaininfo", {}, initChainCallback, SrvUtil.errorCallbackScoped($scope));
         };
 
         $scope.$on('$routeChangeSuccess', function() {
