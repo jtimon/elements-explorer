@@ -18,10 +18,10 @@ angular.module('rpcExplorerApp')
         $scope.ChangeChain = function () {
             if ($scope.selected_chain) {
                 SrvChain.set($scope.selected_chain);
+                SrvChain.GetInfo($scope.selected_chain)
+                    .then(safeCallback(initChainCallback))
+                    .catch(safeCallback(SrvUtil.errorCallbackScoped($scope)));
             }
-            SrvChain.GetInfo()
-                .then(safeCallback(initChainCallback))
-                .catch(safeCallback(SrvUtil.errorCallbackScoped($scope)));
         };
 
         $scope.$on('$routeChangeSuccess', function() {
