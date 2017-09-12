@@ -98,7 +98,7 @@ angular.module('rpcExplorerApp')
 
         function successCallbackPerBlockStats(data)
         {
-            $scope.plot_data = data["data"]["result"];
+            $scope.plot_data = data;
             StatsToGraph($scope.plot_data);
             $scope.loading_stats = false;
         };

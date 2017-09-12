@@ -2,7 +2,7 @@
 /*global $:false */
 
 angular.module('rpcExplorerApp')
-    .service('SrvBackend', function SrvBackend($http, SrvChain) {
+    .service('SrvBackend', function SrvBackend($q, $http, SrvChain) {
 
         var BACKEND_URL = '/api/v0';
         var srv = {};
@@ -59,7 +59,29 @@ angular.module('rpcExplorerApp')
             if (end - start > 100) {
                 errorCallback("SrvBackend.GetBlockStats scales poorly and thus only allows 100 blocks at a time.");
             }
-            srv.rpcCall("getblockstats", {"start": start, "end": end}, callback, errorCallback);
+
+            var promises = [];
+            for (var i = start; i <= end; i++) {
+                promises.push(srv.rpcCallProm("getblockstats", {"start": i, "end": i}));
+            }
+            function AccumulateStats(data){
+                var formatted_data = {};
+                for (var i = 0; i < data.length; i++) {
+                    var result = data[i].data['result'];
+                    for (var key in result) {
+                        if (result.hasOwnProperty(key)) {
+                            if (!formatted_data[key]) {
+                                formatted_data[key] = [];
+                            }
+                            formatted_data[key].push(result[key][0]);
+                        }
+                    }
+                }
+                callback(formatted_data);
+            }
+            $q.all(promises)
+                .then(AccumulateStats)
+                .catch(errorCallback);
         };
 
         return srv;
