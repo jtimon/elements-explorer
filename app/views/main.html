@@ -157,7 +157,7 @@
         <td>Blockhash:</td>
         <td>
           <a ng-show="transaction.blockhash" ng-href="#!/chain/{{selected_chain}}/block/{{transaction.blockhash}}">{{ transaction.blockhash }}</a>
-          <a ng-show="!transaction.blockhash">Mempool transaction (not confirmed)</a>
+          <a ng-show="!transaction.blockhash" ng-href="#!/chain/{{selected_chain}}/mempool/tx/{{transaction.txid}}">Mempool transaction (not confirmed)</a>
         </td>
       </tr>
 
