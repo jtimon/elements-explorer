@@ -31,8 +31,8 @@ angular.module('rpcExplorerApp')
             return $http.get(BACKEND_URL + '/available_chains');
         }
 
-        srv.GetInfo = function(chain) {
-            return $http.post(BACKEND_URL + '/chain/' + chain + '/' + "getblockchaininfo", {});
+        srv.GetInfo = function() {
+            return $http.post(BACKEND_URL + '/chain/' + srv.get() + '/' + "getblockchaininfo", {});
         }
 
         return srv;
