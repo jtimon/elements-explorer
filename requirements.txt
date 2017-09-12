@@ -4,3 +4,4 @@ gunicorn==18.0
 python-gflags==2.0
 requests==2.2.1
 gevent==1.2.2
+virtualenv==15.0.2

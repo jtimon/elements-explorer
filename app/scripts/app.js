@@ -21,11 +21,7 @@ angular
   ])
   .config(function ($routeProvider) {
     $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-      })
-      .when('/chain/:chain', {
+      .when('/chain/:chain/', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
       })
@@ -37,7 +33,7 @@ angular
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
       })
-      .when('/stats', {
+      .when('/chain/:chain/stats', {
         templateUrl: 'views/stats.html',
         controller: 'StatsCtrl',
         controllerAs: 'stats'
@@ -50,16 +46,12 @@ angular
         templateUrl: 'views/mempool.html',
         controller: 'MempoolCtrl',
       })
-      .when('/mempool', {
-        templateUrl: 'views/mempool.html',
-        controller: 'MempoolCtrl',
-      })
       .when('/about', {
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl',
         controllerAs: 'about'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/chain/bitcoin'
       });
   });

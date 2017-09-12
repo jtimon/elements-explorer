@@ -8,19 +8,21 @@
  * Controller of the rpcExplorerApp
  */
 angular.module('rpcExplorerApp')
-    .controller('StatsCtrl', function ($scope, SrvUtil, SrvChain, SrvBackend) {
+    .controller('StatsCtrl', function ($scope, $routeParams, SrvUtil, SrvChain, SrvBackend) {
 
-        $scope.start_height = 1;
-        $scope.end_height = 1;
+        if ($routeParams.chain) {
+            SrvChain.set($routeParams.chain);
+        }
+        $scope.loading_stats = false;
         $scope.verbose_stats = false;
-        $scope.selected_chain = SrvChain.get();
-        $scope.available_chains = [$scope.selected_chain];
+
         $scope.xaxis_list = [
             "height",
             "time",
             "mediantime"
         ];
-        $scope.xaxis = "height";
+        $scope.xaxis = $scope.xaxis_list[0];
+
         $scope.valid_stats = [
             "txs",
             "swtxs",
@@ -28,7 +30,6 @@ angular.module('rpcExplorerApp')
             "outs",
             "subsidy",
             "totalfee",
-            "reward",
             "utxo_increase",
             "utxo_size_inc",
             "total_size",
@@ -44,34 +45,18 @@ angular.module('rpcExplorerApp')
             "maxfeerate",
             "medianfeerate",
             "avgfeerate",
-            "minfeerate_old",
-            "maxfeerate_old",
-            "medianfeerate_old",
-            "avgfeerate_old"
         ];
+
         $scope.selected_stats = [
-            "txs",
+            "utxo_size_inc",
             "swtxs",
-            "total_size",
-            "total_weight",
-            "swtotal_size",
-            "swtotal_weight",
+            "avgfeerate",
+            "medianfeerate",
+            "minfeerate",
         ];
 
         $scope.IsErrorString = function IsErrorString () {
             return $scope.error && $scope.error.message && typeof $scope.error.message === 'string';
-        };
-
-        function successCallbackInfo(data) {
-            $scope.chaininfo = data["data"]["result"];
-            // TODO write test for start_height=0 in the gui
-            $scope.start_height = $scope.chaininfo.blocks - 1;
-            $scope.end_height = $scope.chaininfo.blocks;
-
-        };
-        $scope.getBlockchainInfo = function() {
-            SrvChain.set($scope.selected_chain);
-            SrvBackend.rpcCall("getblockchaininfo", {}, successCallbackInfo, SrvUtil.errorCallbackScoped($scope));
         };
 
         function StatsToGraph(data)
@@ -115,9 +100,11 @@ angular.module('rpcExplorerApp')
         {
             $scope.plot_data = data["data"]["result"];
             StatsToGraph($scope.plot_data);
+            $scope.loading_stats = false;
         };
 
         $scope.doPlot = function() {
+            $scope.loading_stats = true;
             SrvBackend.GetBlockStats($scope.start_height, $scope.end_height,
                                      successCallbackPerBlockStats, SrvUtil.errorCallbackScoped($scope));
         };
@@ -138,12 +125,12 @@ angular.module('rpcExplorerApp')
             }
         };
 
-        $scope.getBlockchainInfo();
-
-        function successAvailableChains(data) {
-            $scope.available_chains = data["data"]["available_chains"];
-        }
-        SrvBackend.GetAvailableChains()
-            .then(SrvUtil.safeCb(successAvailableChains))
-            .catch(SrvUtil.errorCallbackScoped($scope));
+        function initChainCallback(data) {
+            var current_height = data["data"]["result"].blocks;
+            $scope.start_height = (current_height > 0) ? (current_height - 1) : 0;
+            $scope.end_height = current_height;
+        };
+        SrvChain.GetInfo()
+            .then(safeCallback(initChainCallback))
+            .catch(safeCallback(SrvUtil.errorCallbackScoped($scope)));
     });

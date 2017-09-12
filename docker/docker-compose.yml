@@ -29,23 +29,23 @@ services:
   #       aliases:
   #         - elements
 
-  bitcoin:
-    build:
-      context: ../
-      dockerfile: docker/bitcoin/Dockerfile
-    volumes:
-      - ../.explorer-data/bitcoin:/root/.bitcoin
-      - ../.explorer-data/testnet3:/root/.testnet3
-    expose:
-      - "8532"
-      - "18532"
-    ports:
-      - "8532:8532"
-      - "18532:18532"
-    networks:
-      main:
-        aliases:
-          - bitcoin
+  # bitcoin:
+  #   build:
+  #     context: ../
+  #     dockerfile: docker/bitcoin/Dockerfile
+  #   volumes:
+  #     - ../.explorer-data/bitcoin:/root/.bitcoin
+  #     - ../.explorer-data/testnet3:/root/.testnet3
+  #   expose:
+  #     - "8532"
+  #     - "18532"
+  #   ports:
+  #     - "8532:8532"
+  #     - "18532:18532"
+  #   networks:
+  #     main:
+  #       aliases:
+  #         - bitcoin
 
 networks:
   main:

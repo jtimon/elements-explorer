@@ -10,11 +10,12 @@
 angular.module('rpcExplorerApp')
     .controller('MainCtrl', function ($scope, $routeParams, SrvUtil, SrvChain, SrvBackend) {
 
+        if ($routeParams.chain) {
+            SrvChain.set($routeParams.chain);
+        }
         $scope.CTverbose = false;
         $scope.verbose = false;
         $scope.rawhex_limit = 100;
-        $scope.selected_chain = SrvChain.get();
-        $scope.available_chains = [$scope.selected_chain];
 
         function cleanTx() {
             $scope.txid = "";
@@ -64,7 +65,9 @@ angular.module('rpcExplorerApp')
                 $scope.showtxlist = false;
                 $scope.transaction = data["data"]["result"];
                 $scope.blockid = $scope.transaction["blockhash"];
-                $scope.searchBlock();
+                if ($scope.blockid) {
+                    $scope.searchBlock();
+                }
                 $scope.txjson = JSON.stringify($scope.transaction, null, 4);
             };
             cleanBlock();
@@ -86,35 +89,13 @@ angular.module('rpcExplorerApp')
             return !output["value"] && output["value"] != 0;
         };
 
-        function initCallback(data) {
-            $scope.chaininfo = data["data"]["result"];
-        };
-        $scope.InitForSelectedChain = function() {
-            SrvChain.set($scope.selected_chain);
-            cleanTx();
-            cleanBlock();
-            SrvBackend.rpcCall("getblockchaininfo", {}, initCallback, SrvUtil.errorCallbackScoped($scope));
-        };
-
-        // Init from $routeParams
-        if ($routeParams.chain) {
-            $scope.selected_chain = $routeParams.chain;
-        }
-        $scope.InitForSelectedChain();
+        // Cleanup before going to block or tx
+        cleanTx();
+        cleanBlock();
 
         if ($routeParams.block) {
             $scope.goToBlock($routeParams.block);
         } else if ($routeParams.txid) {
             $scope.goToTx($routeParams.txid);
         }
-
-        // TODO Separate to another controller that's not updated every time
-        function successAvailableChains(data) {
-            $scope.available_chains = data["data"]["available_chains"];
-            $scope.available_chains.push("forbiddenchain");
-        }
-        SrvBackend.GetAvailableChains()
-            .then(SrvUtil.safeCb(successAvailableChains))
-            .catch(SrvUtil.errorCallbackScoped($scope));
-
     });

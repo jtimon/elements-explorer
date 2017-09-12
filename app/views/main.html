@@ -1,12 +1,5 @@
 
 <div class="container">
-  <nobr>
-    Chain:
-    <select ng-model="selected_chain" ng-change="InitForSelectedChain();"
-            ng-options="chainpetname as chainpetname for chainpetname in available_chains">
-    </select>
-  </nobr>
-
   Verbose CT:
   <input type="checkbox" ng-model="CTverbose">
 
@@ -22,7 +15,7 @@
 
 <div class="container">
   <div>
-    Block Height: <input type="number" step="1" ng-model="blockheight" ng-change="searchBlockByHeight()">
+    Block Height: <input type="number" step="1" min="0" ng-model="blockheight" ng-change="searchBlockByHeight()">
     Block Hash: <input ng-model="blockid" ng-change="searchBlock()">
     <p></p>
     <div>
@@ -46,36 +39,6 @@
   </nobr>
 </div>
 <p></p>
-
-<div ng-show="chaininfo" class="container" border="1">
-  Chain Data:
-  <p></p>
-
-  <table border="1">
-
-    <tr>
-      <td>Chain:</td>
-      <td><a ng-href="#!/chain/{{selected_chain}}">{{selected_chain}}</a></td>
-    </tr>
-
-    <tr>
-      <td>Best block hash:</td>
-      <td><a ng-href="#!/chain/{{selected_chain}}/block/{{chaininfo.bestblockhash}}">{{ chaininfo.bestblockhash }}</a></td>
-    </tr>
-
-    <tr>
-      <td>Blocks:</td>
-      <td>{{ chaininfo.blocks }}</td>
-    </tr>
-
-    <tr>
-      <td>Median time:</td>
-      <td>{{ chaininfo.mediantime }} ( {{chaininfo.mediantime * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
-    </tr>
-
-  </table>
-  <p></p>
-</div>
 
 <div class="container">
 
@@ -192,7 +155,25 @@
 
       <tr>
         <td>Blockhash:</td>
-        <td><a ng-href="#!/chain/{{selected_chain}}/block/{{block.hash}}">{{ block.hash }}</a></td>
+        <td>
+          <a ng-show="transaction.blockhash" ng-href="#!/chain/{{selected_chain}}/block/{{transaction.blockhash}}">{{ transaction.blockhash }}</a>
+          <a ng-show="!transaction.blockhash" ng-href="#!/chain/{{selected_chain}}/mempool/tx/{{transaction.txid}}">Mempool transaction (not confirmed)</a>
+        </td>
+      </tr>
+
+      <tr ng-show="transaction.blockhash">
+        <td>Confirmations:</td>
+        <td>{{ transaction.confirmations }}</td>
+      </tr>
+
+      <tr ng-show="transaction.blockhash">
+        <td>Time:</td>
+        <td>{{ transaction.time }}  ( {{transaction.time * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
+      </tr>
+
+      <tr ng-show="transaction.blockhash">
+        <td>Blocktime:</td>
+        <td>{{ transaction.blocktime }}  ( {{transaction.blocktime * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
       </tr>
 
       <tr>
@@ -216,23 +197,8 @@
       </tr>
 
       <tr>
-        <td>Confirmations:</td>
-        <td>{{ transaction.confirmations }}</td>
-      </tr>
-
-      <tr>
         <td>Locktime:</td>
         <td>{{ transaction.locktime }}</td>
-      </tr>
-
-      <tr>
-        <td>Time:</td>
-        <td>{{ transaction.time }}  ( {{transaction.time * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
-      </tr>
-
-      <tr>
-        <td>Blocktime:</td>
-        <td>{{ transaction.blocktime }}  ( {{transaction.blocktime * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
       </tr>
 
       <tr>

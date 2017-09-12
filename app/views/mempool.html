@@ -1,15 +1,4 @@
 
-<div class="container">
-  <nobr>
-    Chain:
-    <select ng-model="selected_chain" ng-change="InitForSelectedChain();"
-            ng-options="chainpetname as chainpetname for chainpetname in available_chains">
-    </select>
-  </nobr>
-
-</div>
-<p></p>
-
 <div ng-show="error" class="alert alert-danger" border="1">
   <strong>Error:</strong>
   <nobr ng-show="error.message">{{error.message}}</nobr>
@@ -25,6 +14,7 @@
 
 <div ng-show="mempoolinfo" class="container" border="1">
   Mempool Info:
+  <button ng-disabled="loading_mempool" ng-click="InitForSelectedChain();">Reload</button>
   <p></p>
 
   <table border="1">
@@ -73,6 +63,11 @@
 <div ng-show="mempoolentry" class="container">
 
   <table border="1">
+
+    <tr>
+      <td>See other transaction details:</td>
+      <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{txid}}">{{ txid }}</a></td>
+    </tr>
 
     <tr>
       <td>Virtual size (see BIP141):</td>

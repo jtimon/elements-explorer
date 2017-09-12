@@ -25,10 +25,6 @@ angular.module('rpcExplorerApp')
             }
         }
 
-        srv.GetAvailableChains = function() {
-            return $http.get(BACKEND_URL + '/available_chains');
-        }
-
         srv.rpcCallProm = function(rpcMethod, vRpcParams) {
             return $http.post(BACKEND_URL + '/chain/' + SrvChain.get() + '/' + rpcMethod, vRpcParams);
         };

@@ -20,10 +20,13 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <!-- Add your site or application content here -->
+    <!-- Common header -->
     <div class="header">
-      <div class="navbar navbar-default" role="navigation">
+      <div class="navbar navbar-inverse navbar-static-top" ng-controller="NavigationCtrl">
         <div class="container">
+
+          <a class="navbar-brand" href="#!/chain/{{selected_chain}}/">Rpc-Explorer</a>
+
           <div class="navbar-header">
 
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
@@ -33,20 +36,63 @@
               <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="#/">rpcExplorer</a>
           </div>
 
           <div class="collapse navbar-collapse" id="js-navbar-collapse">
 
             <ul class="nav navbar-nav">
-              <li class="active"><a ng-href="#!/">Chain</a></li>
-              <li><a ng-href="#!/mempool">Mempool</a></li>
-              <li><a ng-href="#!/stats">Stats</a></li>
-              <li><a ng-href="#!/about">About</a></li>
+              <li ng-class="navClass('chain')"><a ng-href="#!/chain/{{selected_chain}}/">Chain</a></li>
+              <li ng-class="navClass('mempool')"><a ng-href="#!/chain/{{selected_chain}}/mempool">Mempool</a></li>
+              <li ng-class="navClass('stats')"><a ng-href="#!/chain/{{selected_chain}}/stats">Stats</a></li>
+              <li ng-class="navClass('about')"><a ng-href="#!/about">About</a></li>
             </ul>
-          </div>
+          </div><!--/.nav-collapse -->
         </div>
       </div>
+
+      <div class="container" ng-controller="ChainCtrl" ng-cloak>
+        <div>
+          Chain:
+          <select ng-model="selected_chain" ng-change="ChangeChain();"
+                  ng-options="chainpetname as chainpetname for chainpetname in available_chains">
+          </select>
+        </div>
+        <p></p>
+        <p></p>
+
+        <div ng-show="chaininfo" class="container" border="1">
+          Chain Data:
+          <p></p>
+
+          <table border="1">
+
+            <tr>
+              <td>Chain:</td>
+              <td>{{chaininfo.chain}}</td>
+            </tr>
+
+            <tr>
+              <td>Best block hash:</td>
+              <td><a ng-href="#!/chain/{{selected_chain}}/block/{{chaininfo.bestblockhash}}">{{ chaininfo.bestblockhash }}</a></td>
+            </tr>
+
+            <tr>
+              <td>Blocks:</td>
+              <td>{{ chaininfo.blocks }}</td>
+            </tr>
+
+            <tr>
+              <td>Median time:</td>
+              <td>{{ chaininfo.mediantime }} ( {{chaininfo.mediantime * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
+            </tr>
+
+          </table>
+          <p></p>
+        </div>
+
+      </div>
+      <p></p>
+      
     </div>
 
     <div class="container">
@@ -81,6 +127,8 @@
         <script src="scripts/services/backend.js"></script>
         <script src="scripts/services/chain.js"></script>
         <script src="scripts/services/util.js"></script>
+        <script src="scripts/controllers/chain.js"></script>
+        <script src="scripts/controllers/navigation.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/mempool.js"></script>
         <script src="scripts/controllers/stats.js"></script>
