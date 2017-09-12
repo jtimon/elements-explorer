@@ -15,8 +15,6 @@ angular.module('rpcExplorerApp')
         }
         $scope.loading_stats = false;
         $scope.verbose_stats = false;
-        $scope.start_height = (SrvChain.getHeight() > 0) ? (SrvChain.getHeight() - 1) : 0;
-        $scope.end_height = SrvChain.getHeight();
 
         $scope.xaxis_list = [
             "height",
@@ -126,4 +124,13 @@ angular.module('rpcExplorerApp')
                 StatsToGraph($scope.plot_data);
             }
         };
+
+        function initChainCallback(data) {
+            var current_height = data["data"]["result"].blocks;
+            $scope.start_height = (current_height > 0) ? (current_height - 1) : 0;
+            $scope.end_height = current_height;
+        };
+        SrvChain.GetInfo()
+            .then(safeCallback(initChainCallback))
+            .catch(safeCallback(SrvUtil.errorCallbackScoped($scope)));
     });
