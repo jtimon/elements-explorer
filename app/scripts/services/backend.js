@@ -63,10 +63,6 @@ angular.module('rpcExplorerApp')
         };
 
         srv.GetBlockStats = function(start, end, callback, errorCallback) {
-            if (end - start > 100) {
-                errorCallback("SrvBackend.GetBlockStats scales poorly and thus only allows 100 blocks at a time.");
-            }
-
             var chain = SrvChain.get();
             var resource = 'getblockstats';
             CreateCacheForChainAndRsrc(chain, resource);
