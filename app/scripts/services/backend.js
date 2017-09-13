@@ -25,6 +25,13 @@ angular.module('rpcExplorerApp')
             }
         }
 
+        function cache_callback_params(chain, resource, id) {
+            function cache_callback(data) {
+                cache[chain][resource][id] = data.data['result'];
+            }
+            return cache_callback;
+        }
+
         srv.rpcCallProm = function(rpcMethod, vRpcParams) {
             return $http.post(BACKEND_URL + '/chain/' + SrvChain.get() + '/' + rpcMethod, vRpcParams);
         };
@@ -60,14 +67,21 @@ angular.module('rpcExplorerApp')
                 errorCallback("SrvBackend.GetBlockStats scales poorly and thus only allows 100 blocks at a time.");
             }
 
+            var chain = SrvChain.get();
+            var resource = 'getblockstats';
+            CreateCacheForChainAndRsrc(chain, resource);
             var promises = [];
+
             for (var i = start; i <= end; i++) {
-                promises.push(srv.rpcCallProm("getblockstats", {"start": i, "end": i}));
+                if (!cache[chain][resource][i]) {
+                    promises.push(srv.rpcCallProm(resource, {"start": i, "end": i}).then(cache_callback_params(chain, resource, i)));
+                }
             }
+
             function AccumulateStats(data){
                 var formatted_data = {};
-                for (var i = 0; i < data.length; i++) {
-                    var result = data[i].data['result'];
+                for (var it_height = start; it_height <= end; it_height++) {
+                    var result = cache[chain][resource][it_height];
                     for (var key in result) {
                         if (result.hasOwnProperty(key)) {
                             if (!formatted_data[key]) {
