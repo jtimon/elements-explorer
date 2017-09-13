@@ -78,12 +78,14 @@ angular.module('rpcExplorerApp')
                 var formatted_data = {};
                 for (var it_height = start; it_height <= end; it_height++) {
                     var result = cache[chain][resource][it_height];
-                    for (var key in result) {
-                        if (result.hasOwnProperty(key)) {
-                            if (!formatted_data[key]) {
-                                formatted_data[key] = [];
+                    if (result) {
+                        for (var key in result) {
+                            if (result.hasOwnProperty(key)) {
+                                if (!formatted_data[key]) {
+                                    formatted_data[key] = [];
+                                }
+                                formatted_data[key].push(result[key][0]);
                             }
-                            formatted_data[key].push(result[key][0]);
                         }
                     }
                 }
