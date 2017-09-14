@@ -144,13 +144,14 @@
 
 </div> <!-- container -->
 
-<div ng-show="mempooltxs" class="container">
+<div class="container">
   <nobr>
     Mempool Transactions ( {{ mempooltxs.length }} ):
+    <button ng-disabled="loading_mempool || loading_mempool_txs" ng-click="LoadMempoolTxs();">Load</button>
   </nobr>
   <p></p>
 
-  <table border="1">
+  <table ng-show="mempooltxs" border="1">
     <tr ng-repeat="txhash in mempooltxs">
       <td><a ng-href="#!/chain/{{selected_chain}}/mempool/entry/{{txhash}}">{{ txhash }}</a></td>
     </tr>

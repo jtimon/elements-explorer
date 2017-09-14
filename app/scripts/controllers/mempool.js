@@ -16,17 +16,22 @@ angular.module('rpcExplorerApp')
 
         function mempoolinfoCallback(data) {
             $scope.mempoolinfo = data["data"]["result"];
-        };
-        function mempooltxsCallback(data) {
-            $scope.mempooltxs = data["data"]["result"];
             $scope.loading_mempool = false;
         };
         $scope.InitForSelectedChain = function() {
             $scope.loading_mempool = true;
             SrvBackend.rpcCall("getmempoolinfo", {}, mempoolinfoCallback, SrvUtil.errorCallbackScoped($scope));
-            SrvBackend.rpcCall("getrawmempool", {}, mempooltxsCallback, SrvUtil.errorCallbackScoped($scope));
         };
         $scope.InitForSelectedChain();
+
+        function mempooltxsCallback(data) {
+            $scope.mempooltxs = data["data"]["result"];
+            $scope.loading_mempool_txs = false;
+        };
+        $scope.LoadMempoolTxs = function() {
+            $scope.loading_mempool_txs = true;
+            SrvBackend.rpcCall("getrawmempool", {}, mempooltxsCallback, SrvUtil.errorCallbackScoped($scope));
+        };
 
         function mempoolEntryCallback(data) {
             $scope.mempoolentry = data["data"]["result"];
