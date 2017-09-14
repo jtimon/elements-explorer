@@ -42,11 +42,11 @@ angular
         templateUrl: 'views/mempool.html',
         controller: 'MempoolCtrl',
       })
-      .when('/chain/:chain/mempool/tx/:txid', {
+      .when('/chain/:chain/mempool/entry/:txid', {
         templateUrl: 'views/mempool.html',
         controller: 'MempoolCtrl',
       })
-      .when('/about', {
+      .when('/chain/:chain/about', {
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl',
         controllerAs: 'about'

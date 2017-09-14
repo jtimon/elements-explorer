@@ -135,7 +135,7 @@
 
     <table border="1">
       <tr ng-repeat="txhash in mempoolentry.depends">
-        <td><a ng-href="#!/chain/{{selected_chain}}/mempool/tx/{{txhash}}">{{ txhash }}</a></td>
+        <td><a ng-href="#!/chain/{{selected_chain}}/mempool/entry/{{txhash}}">{{ txhash }}</a></td>
       </tr>
     </table>
 
@@ -152,7 +152,7 @@
 
   <table border="1">
     <tr ng-repeat="txhash in mempooltxs">
-      <td><a ng-href="#!/chain/{{selected_chain}}/mempool/tx/{{txhash}}">{{ txhash }}</a></td>
+      <td><a ng-href="#!/chain/{{selected_chain}}/mempool/entry/{{txhash}}">{{ txhash }}</a></td>
     </tr>
   </table>
 
