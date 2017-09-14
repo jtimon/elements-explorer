@@ -73,11 +73,6 @@ angular.module('rpcExplorerApp')
                     promises.push(srv.rpcCallProm(resource, {"start": i, "end": i}).then(cache_callback_params(chain, resource, i)));
                 }
             }
-            if (promises.length > 100) {
-                errorCallback("This GUI is not programmed to make more than 100 promises at a time.");
-                return;
-            }
-
             function AccumulateStats(data){
                 var formatted_data = {};
                 for (var it_height = start; it_height <= end; it_height++) {
