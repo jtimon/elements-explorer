@@ -45,9 +45,10 @@ angular.module('rpcExplorerApp')
         // Pre: CreateCacheForChainAndRsrc has been previously called
         function CacheSingleItem(chain, resource, id, callback, errorCallback)
         {
-            function cache_callback(data) {
-                safeCallback(callback)(data);
-                cache[chain][resource][id] = data;
+            function cache_callback(response) {
+                var result = response.data['result'];
+                safeCallback(callback)(result);
+                cache[chain][resource][id] = result;
             }
             srv.rpcCall(resource, {'id': id}, cache_callback, errorCallback);
         }
