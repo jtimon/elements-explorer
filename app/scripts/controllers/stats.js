@@ -48,10 +48,7 @@ angular.module('rpcExplorerApp')
         ];
 
         $scope.selected_stats = [
-            "utxo_size_inc",
             "swtxs",
-            "avgfeerate",
-            "medianfeerate",
             "minfeerate",
         ];
 
