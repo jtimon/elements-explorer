@@ -65,7 +65,7 @@ angular.module('rpcExplorerApp')
 
         srv.GetBlockStats = function(start, end) {
             var chain = SrvChain.get();
-            var resource = 'getblockstats';
+            var resource = 'blockstats';
             CreateCacheForChainAndRsrc(chain, resource);
             var prevPromise;
 
@@ -73,7 +73,7 @@ angular.module('rpcExplorerApp')
                 if (!cache[chain][resource][i]) {
                     function task(index) {
                         return function task_func() {
-                            return srv.rpcCallProm(resource, {"start": index, "end": index});
+                            return srv.rpcCallProm(resource, {"id": index});
                         }
                     }
                     if (!prevPromise) {
