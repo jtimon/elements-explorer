@@ -66,14 +66,25 @@ angular.module('rpcExplorerApp')
             var chain = SrvChain.get();
             var resource = 'getblockstats';
             CreateCacheForChainAndRsrc(chain, resource);
-            var promises = [];
+            var prevPromise;
 
             for (var i = start; i <= end; i++) {
                 if (!cache[chain][resource][i]) {
-                    promises.push(srv.rpcCallProm(resource, {"start": i, "end": i}).then(cache_callback_params(chain, resource, i)));
+                    function task(index) {
+                        return function task_func() {
+                            return srv.rpcCallProm(resource, {"start": index, "end": index});
+                        }
+                    }
+                    if (!prevPromise) {
+                        prevPromise = task(i)();
+                    } else {
+                        prevPromise = prevPromise.then(task(i));
+                    }
+                    prevPromise = prevPromise.then(cache_callback_params(chain, resource, i));
                 }
             }
-            function AccumulateStats(data){
+
+            function AccumulateStats(){
                 var formatted_data = {};
                 for (var it_height = start; it_height <= end; it_height++) {
                     var result = cache[chain][resource][it_height];
@@ -90,9 +101,12 @@ angular.module('rpcExplorerApp')
                 }
                 callback(formatted_data);
             }
-            $q.all(promises)
-                .then(AccumulateStats)
-                .catch(errorCallback);
+
+            if (prevPromise) {
+                prevPromise.then(AccumulateStats).catch(errorCallback);
+            } else {
+                AccumulateStats();
+            }
         };
 
         return srv;
