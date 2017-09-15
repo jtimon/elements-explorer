@@ -105,8 +105,9 @@ angular.module('rpcExplorerApp')
 
         $scope.doPlot = function() {
             $scope.loading_stats = true;
-            SrvBackend.GetBlockStats($scope.start_height, $scope.end_height,
-                                     successCallbackPerBlockStats, SrvUtil.errorCallbackScoped($scope));
+            SrvBackend.GetBlockStats($scope.start_height, $scope.end_height)
+                .then(successCallbackPerBlockStats)
+                .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
         $scope.toggleStat = function(name) {

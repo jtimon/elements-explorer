@@ -62,7 +62,7 @@ angular.module('rpcExplorerApp')
             }
         };
 
-        srv.GetBlockStats = function(start, end, callback, errorCallback) {
+        srv.GetBlockStats = function(start, end) {
             var chain = SrvChain.get();
             var resource = 'getblockstats';
             CreateCacheForChainAndRsrc(chain, resource);
@@ -99,14 +99,17 @@ angular.module('rpcExplorerApp')
                         }
                     }
                 }
-                callback(formatted_data);
+                return formatted_data;
             }
 
             if (prevPromise) {
-                prevPromise.then(AccumulateStats).catch(errorCallback);
+                prevPromise = prevPromise.then(AccumulateStats);
             } else {
-                AccumulateStats();
+                prevPromise = $q(function(resolve) {
+                    resolve(AccumulateStats());
+                });
             }
+            return prevPromise;
         };
 
         return srv;
