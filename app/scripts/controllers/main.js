@@ -71,6 +71,7 @@ angular.module('rpcExplorerApp')
                 $scope.transaction = null;
                 return;
             }
+            cleanBlock();
 
             function successCallbackTx(data) {
                 $scope.showtxlist = false;
@@ -78,7 +79,6 @@ angular.module('rpcExplorerApp')
                 $scope.blockid = $scope.transaction["blockhash"];
                 $scope.txjson = JSON.stringify($scope.transaction, null, 4);
             };
-            cleanBlock();
             SrvBackend.get("tx", $scope.txid)
                 .then(successCallbackTx)
                 .then($scope.searchBlock)
