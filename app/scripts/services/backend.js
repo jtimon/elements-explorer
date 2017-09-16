@@ -26,8 +26,8 @@ angular.module('rpcExplorerApp')
         }
 
         function cache_callback_params(chain, resource, id) {
-            function cache_callback(data) {
-                cache[chain][resource][id] = data.data['result'];
+            function cache_callback(response) {
+                cache[chain][resource][id] = response.data['result'];
             }
             return cache_callback;
         }
