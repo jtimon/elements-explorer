@@ -31,7 +31,7 @@ angular.module('rpcExplorerApp')
         }
 
         $scope.searchBlock = function() {
-            
+
             function statsCallbackBlock(data) {
                 $scope.blockstats = data;
             };
@@ -39,11 +39,14 @@ angular.module('rpcExplorerApp')
             function successCallbackBlock(data) {
                 $scope.block = data;
                 $scope.blockheight = $scope.block["height"];
-                SrvBackend.get("blockstats", $scope.block["height"], statsCallbackBlock, SrvUtil.errorCallbackScoped($scope));
+                SrvBackend.get("blockstats", $scope.block["height"])
+                    .then(statsCallbackBlock)
+                    .catch(SrvUtil.errorCallbackScoped($scope));
                 $scope.blockjson = JSON.stringify($scope.block, null, 4);
             };
-            SrvBackend.get("block", $scope.blockid, successCallbackBlock, SrvUtil.errorCallbackScoped($scope));
-
+            SrvBackend.get("block", $scope.blockid)
+                    .then(successCallbackBlock)
+                    .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
         $scope.searchBlockByHeight = function() {
@@ -73,7 +76,9 @@ angular.module('rpcExplorerApp')
                 $scope.txjson = JSON.stringify($scope.transaction, null, 4);
             };
             cleanBlock();
-            SrvBackend.get("tx", $scope.txid, successCallbackTx, SrvUtil.errorCallbackScoped($scope));
+            SrvBackend.get("tx", $scope.txid)
+                .then(successCallbackTx)
+                .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
         $scope.goToBlock = function(blockhash) {

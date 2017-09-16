@@ -8,14 +8,6 @@ angular.module('rpcExplorerApp')
         var srv = {};
         var cache = {};
 
-        function safeCallback(callback) {
-            return function(data) {
-                if (callback){
-                    callback(data);
-                }
-            };
-        }
-
         function CreateCacheForChainAndRsrc(chain, resource) {
             if (!cache[chain]) {
                 cache[chain] = {};
@@ -28,6 +20,7 @@ angular.module('rpcExplorerApp')
         function cache_callback_params(chain, resource, id) {
             function cache_callback(response) {
                 cache[chain][resource][id] = response.data['result'];
+                return cache[chain][resource][id];
             }
             return cache_callback;
         }
@@ -36,27 +29,20 @@ angular.module('rpcExplorerApp')
             return $http.post(BACKEND_URL + '/chain/' + SrvChain.get() + '/' + rpcMethod, vRpcParams);
         };
 
-        // Pre: CreateCacheForChainAndRsrc has been previously called
-        function CacheSingleItem(chain, resource, id, callback, errorCallback)
-        {
-            function cache_callback(response) {
-                var result = response.data['result'];
-                safeCallback(callback)(result);
-                cache[chain][resource][id] = result;
-            }
-            srv.RpcCall(resource, {'id': id})
-                .then(cache_callback)
-                .catch(errorCallback);
-        }
-
-        srv.get = function(resource, id, callback, errorCallback) {
+        srv.get = function(resource, id) {
             var chain = SrvChain.get();
             CreateCacheForChainAndRsrc(chain, resource);
-            if (!cache[chain][resource][id]) {
-                CacheSingleItem(chain, resource, id, callback, errorCallback);
+
+            var retPromise;
+            if (cache[chain][resource][id]) {
+                retPromise = $q(function(resolve) {
+                    resolve(cache[chain][resource][id]);
+                });
             } else {
-                safeCallback(callback)(cache[chain][resource][id]);
+                retPromise = srv.RpcCall(resource, {'id': id})
+                    .then(cache_callback_params(chain, resource, id))
             }
+            return retPromise;
         };
 
         var MAX_PARALLEL_IT = 3; // Number of parallel calls - 1
@@ -67,7 +53,7 @@ angular.module('rpcExplorerApp')
             CreateCacheForChainAndRsrc(chain, resource);
             var promises = [];
             var it_parallel = 0;
-            
+
             for (var i = start; i <= end; i++) {
                 if (!cache[chain][resource][i]) {
                     function task(index) {
