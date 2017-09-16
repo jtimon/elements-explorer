@@ -39,25 +39,31 @@ angular.module('rpcExplorerApp')
             function successCallbackBlock(data) {
                 $scope.block = data;
                 $scope.blockheight = $scope.block["height"];
-                SrvBackend.get("blockstats", $scope.block["height"])
-                    .then(statsCallbackBlock)
-                    .catch(SrvUtil.errorCallbackScoped($scope));
                 $scope.blockjson = JSON.stringify($scope.block, null, 4);
+
+                return $scope.block["height"];
             };
+
+            function PromBlockstats(height) {
+                return SrvBackend.get("blockstats", height);
+            };
+
             SrvBackend.get("block", $scope.blockid)
-                    .then(successCallbackBlock)
-                    .catch(SrvUtil.errorCallbackScoped($scope));
+                .then(successCallbackBlock)
+                .then(PromBlockstats)
+                .then(statsCallbackBlock)
+                .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
         $scope.searchBlockByHeight = function() {
             function successCallbackBlockHeight(data) {
                 $scope.blockid = data["data"]["result"];
-                $scope.searchBlock();
             };
             cleanTx();
             var params = {"height": $scope.blockheight};
             SrvBackend.RpcCall("getblockhash", params)
                 .then(successCallbackBlockHeight)
+                .then($scope.searchBlock)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
@@ -66,18 +72,17 @@ angular.module('rpcExplorerApp')
                 $scope.transaction = null;
                 return;
             }
+
             function successCallbackTx(data) {
                 $scope.showtxlist = false;
                 $scope.transaction = data;
                 $scope.blockid = $scope.transaction["blockhash"];
-                if ($scope.blockid) {
-                    $scope.searchBlock();
-                }
                 $scope.txjson = JSON.stringify($scope.transaction, null, 4);
             };
             cleanBlock();
             SrvBackend.get("tx", $scope.txid)
                 .then(successCallbackTx)
+                .then($scope.searchBlock)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
