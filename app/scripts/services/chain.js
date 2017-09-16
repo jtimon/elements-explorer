@@ -9,6 +9,10 @@ angular.module('rpcExplorerApp')
         var selected_chain = "bitcoin";
         var height = 0;
 
+        srv.GetInfo = function() {
+            return $http.post(BACKEND_URL + '/chain/' + srv.get() + '/' + "getblockchaininfo", {});
+        }
+
         srv.set = function(_selected_chain) {
             selected_chain = _selected_chain;
             $rootScope.selected_chain = selected_chain;
@@ -29,10 +33,6 @@ angular.module('rpcExplorerApp')
 
         srv.GetAvailableChains = function() {
             return $http.get(BACKEND_URL + '/available_chains');
-        }
-
-        srv.GetInfo = function() {
-            return $http.post(BACKEND_URL + '/chain/' + srv.get() + '/' + "getblockchaininfo", {});
         }
 
         return srv;
