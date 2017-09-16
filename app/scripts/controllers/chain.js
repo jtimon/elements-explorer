@@ -16,8 +16,7 @@ angular.module('rpcExplorerApp')
 
         $scope.ChangeChain = function () {
             if ($scope.selected_chain) {
-                SrvChain.set($scope.selected_chain);
-                SrvChain.GetInfo()
+                SrvChain.set($scope.selected_chain)
                     .then(initChainCallback)
                     .catch(SrvUtil.errorCallbackScoped($scope));
             }

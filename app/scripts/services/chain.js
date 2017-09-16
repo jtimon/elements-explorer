@@ -8,14 +8,12 @@ angular.module('rpcExplorerApp')
         var srv = {};
         var selected_chain = "bitcoin";
 
-        srv.GetInfo = function() {
-            return $http.post(BACKEND_URL + '/chain/' + srv.get() + '/' + "getblockchaininfo", {});
-        }
-
         srv.set = function(_selected_chain) {
             selected_chain = _selected_chain;
             $rootScope.selected_chain = selected_chain;
             $location.path($location.path().replace(/chain\/(.+?)\/(.*)/g,"chain/" + selected_chain + "/$2"));
+
+            return $http.post(BACKEND_URL + '/chain/' + srv.get() + '/' + "getblockchaininfo", {});
         }
 
         srv.get = function() {

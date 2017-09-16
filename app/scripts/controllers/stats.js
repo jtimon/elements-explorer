@@ -10,8 +10,16 @@
 angular.module('rpcExplorerApp')
     .controller('StatsCtrl', function ($scope, $routeParams, SrvUtil, SrvChain, SrvBackend) {
 
+        function initChainCallback(data) {
+            var current_height = data["data"]["result"].blocks;
+            $scope.start_height = (current_height > 0) ? (current_height - 1) : 0;
+            $scope.end_height = current_height;
+        };
         if ($routeParams.chain) {
-            SrvChain.set($routeParams.chain);
+            SrvChain.set($routeParams.chain)
+                .then(initChainCallback)
+                .catch(SrvUtil.errorCallbackScoped($scope));
+            
         }
         $scope.loading_stats = false;
         $scope.verbose_stats = false;
@@ -122,13 +130,4 @@ angular.module('rpcExplorerApp')
                 StatsToGraph($scope.plot_data);
             }
         };
-
-        function initChainCallback(data) {
-            var current_height = data["data"]["result"].blocks;
-            $scope.start_height = (current_height > 0) ? (current_height - 1) : 0;
-            $scope.end_height = current_height;
-        };
-        SrvChain.GetInfo()
-            .then(initChainCallback)
-            .catch(SrvUtil.errorCallbackScoped($scope));
     });
