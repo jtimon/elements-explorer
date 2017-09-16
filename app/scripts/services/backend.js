@@ -63,12 +63,15 @@ angular.module('rpcExplorerApp')
             }
         };
 
+        var MAX_PARALLEL_IT = 3; // Number of parallel calls - 1
+
         srv.GetBlockStats = function(start, end) {
             var chain = SrvChain.get();
             var resource = 'blockstats';
             CreateCacheForChainAndRsrc(chain, resource);
-            var prevPromise;
-
+            var promises = [];
+            var it_parallel = 0;
+            
             for (var i = start; i <= end; i++) {
                 if (!cache[chain][resource][i]) {
                     function task(index) {
@@ -76,12 +79,17 @@ angular.module('rpcExplorerApp')
                             return srv.rpcCallProm(resource, {"id": index});
                         }
                     }
-                    if (!prevPromise) {
-                        prevPromise = task(i)();
+                    if (!promises[it_parallel]) {
+                        promises[it_parallel] = task(i)();
                     } else {
-                        prevPromise = prevPromise.then(task(i));
+                        promises[it_parallel] = promises[it_parallel].then(task(i));
                     }
-                    prevPromise = prevPromise.then(cache_callback_params(chain, resource, i));
+                    promises[it_parallel] = promises[it_parallel].then(cache_callback_params(chain, resource, i));
+                    if (it_parallel == MAX_PARALLEL_IT) {
+                        it_parallel = 0;
+                    } else {
+                        ++it_parallel;
+                    }
                 }
             }
 
@@ -103,14 +111,15 @@ angular.module('rpcExplorerApp')
                 return formatted_data;
             }
 
-            if (prevPromise) {
-                prevPromise = prevPromise.then(AccumulateStats);
+            var retPromise;
+            if (promises.length > 0) {
+                retPromise = $q.all(promises).then(AccumulateStats);
             } else {
-                prevPromise = $q(function(resolve) {
+                retPromise = $q(function(resolve) {
                     resolve(AccumulateStats());
                 });
             }
-            return prevPromise;
+            return retPromise;
         };
 
         return srv;
