@@ -32,10 +32,6 @@ angular.module('rpcExplorerApp')
 
         $scope.searchBlock = function() {
 
-            function statsCallbackBlock(data) {
-                $scope.blockstats = data;
-            };
-
             function successCallbackBlock(data) {
                 $scope.block = data;
                 $scope.blockheight = $scope.block["height"];
@@ -44,14 +40,17 @@ angular.module('rpcExplorerApp')
                 return $scope.block["height"];
             };
 
+            function statsCallbackBlock(data) {
+                $scope.blockstats = data;
+            };
             function PromBlockstats(height) {
-                return SrvBackend.get("blockstats", height);
+                return SrvBackend.get("blockstats", height)
+                    .then(statsCallbackBlock);
             };
 
             SrvBackend.get("block", $scope.blockid)
                 .then(successCallbackBlock)
                 .then(PromBlockstats)
-                .then(statsCallbackBlock)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
