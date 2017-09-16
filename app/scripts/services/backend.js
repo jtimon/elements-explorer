@@ -32,14 +32,8 @@ angular.module('rpcExplorerApp')
             return cache_callback;
         }
 
-        srv.rpcCallProm = function(rpcMethod, vRpcParams) {
+        srv.RpcCall = function(rpcMethod, vRpcParams) {
             return $http.post(BACKEND_URL + '/chain/' + SrvChain.get() + '/' + rpcMethod, vRpcParams);
-        };
-
-        srv.rpcCall = function(rpcMethod, vRpcParams, callback, errorCallback) {
-            srv.rpcCallProm(rpcMethod, vRpcParams)
-                .then(safeCallback(callback))
-                .catch(safeCallback(errorCallback));
         };
 
         // Pre: CreateCacheForChainAndRsrc has been previously called
@@ -50,7 +44,7 @@ angular.module('rpcExplorerApp')
                 safeCallback(callback)(result);
                 cache[chain][resource][id] = result;
             }
-            srv.rpcCallProm(resource, {'id': id})
+            srv.RpcCall(resource, {'id': id})
                 .then(cache_callback)
                 .catch(errorCallback);
         }
@@ -78,7 +72,7 @@ angular.module('rpcExplorerApp')
                 if (!cache[chain][resource][i]) {
                     function task(index) {
                         return function task_func() {
-                            return srv.rpcCallProm(resource, {"id": index});
+                            return srv.RpcCall(resource, {"id": index});
                         }
                     }
                     if (!promises[it_parallel]) {
