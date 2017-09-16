@@ -78,10 +78,12 @@ angular.module('rpcExplorerApp')
                 $scope.transaction = data;
                 $scope.blockid = $scope.transaction["blockhash"];
                 $scope.txjson = JSON.stringify($scope.transaction, null, 4);
+                if ($scope.blockid) {
+                    $scope.searchBlock();
+                }
             };
             SrvBackend.get("tx", $scope.txid)
                 .then(successCallbackTx)
-                .then($scope.searchBlock)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
