@@ -8,14 +8,6 @@ angular.module('rpcExplorerApp')
         var srv = {};
         var cache = {};
 
-        function cache_callback_params(chain, resource, id) {
-            function cache_callback(response) {
-                cache[chain][resource][id] = response.data['result'];
-                return cache[chain][resource][id];
-            }
-            return cache_callback;
-        }
-
         srv.RpcCall = function(rpcMethod, vRpcParams) {
             return $http.post(BACKEND_URL + '/chain/' + SrvChain.get() + '/' + rpcMethod, vRpcParams);
         };
@@ -31,7 +23,7 @@ angular.module('rpcExplorerApp')
                 });
             } else {
                 retPromise = srv.RpcCall(resource, {'id': id})
-                    .then(cache_callback_params(chain, resource, id))
+                    .then(SrvUtil.CacheElem(cache, chain, resource, id))
             }
             return retPromise;
         };
@@ -58,7 +50,7 @@ angular.module('rpcExplorerApp')
                     } else {
                         promises[it_parallel] = promises[it_parallel].then(task(i));
                     }
-                    promises[it_parallel] = promises[it_parallel].then(cache_callback_params(chain, resource, i));
+                    promises[it_parallel] = promises[it_parallel].then(SrvUtil.CacheElem(cache, chain, resource, i));
                     if (it_parallel == MAX_PARALLEL_IT) {
                         it_parallel = 0;
                     } else {

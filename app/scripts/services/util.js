@@ -23,11 +23,20 @@ function PreCache(cache, chain, resource) {
     }
 }
 
+function CacheElem(cache, chain, resource, id) {
+    function cache_callback(response) {
+        cache[chain][resource][id] = response.data['result'];
+        return cache[chain][resource][id];
+    }
+    return cache_callback;
+}
+
 angular.module('rpcExplorerApp')
     .service('SrvUtil', function SrvUtil() {
 
         var srv = {};
         srv.errorCallbackScoped = errorCallbackScoped;
         srv.PreCache = PreCache;
+        srv.CacheElem = CacheElem;
         return srv;
     });
