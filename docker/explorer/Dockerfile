@@ -1,22 +1,19 @@
 FROM ubuntu:16.04
 
-RUN apt-get update
-RUN apt-get install -y nodejs npm python-pip git virtualenv
-
-# Set the working directory to /build_docker
-WORKDIR /build_docker
-
-# Copy the current directory contents into the container at /app
-ADD . /build_docker
-
-# Install gui js dependencies
-RUN cd app && npm i
-
-# Install any needed packages specified in requirements.txt
-RUN make requirements-py
-
-# Make port 80 available to the world outside this container
 EXPOSE 5000
 
-# Run app.py when the container launches
+RUN apt-get update
+RUN apt-get install -y nodejs npm python-pip git
+
+WORKDIR /build_docker
+
+ADD app/package.json /build_docker/app/package.json
+RUN cd app && npm i
+
+ADD requirements.txt /build_docker/requirements.txt
+RUN pip install -r requirements.txt
+
+ADD py /build_docker/py
+ADD app /build_docker/app
+ADD docker/explorer/start.sh /build_docker/docker/explorer/start.sh
 CMD ["sh", "docker/explorer/start.sh"]
