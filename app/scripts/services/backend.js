@@ -50,7 +50,9 @@ angular.module('rpcExplorerApp')
                 safeCallback(callback)(result);
                 cache[chain][resource][id] = result;
             }
-            srv.rpcCall(resource, {'id': id}, cache_callback, errorCallback);
+            srv.rpcCallProm(resource, {'id': id})
+                .then(cache_callback)
+                .catch(errorCallback);
         }
 
         srv.get = function(resource, id, callback, errorCallback) {

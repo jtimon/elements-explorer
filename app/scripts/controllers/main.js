@@ -53,7 +53,9 @@ angular.module('rpcExplorerApp')
             };
             cleanTx();
             var params = {"height": $scope.blockheight};
-            SrvBackend.rpcCall("getblockhash", params, successCallbackBlockHeight, SrvUtil.errorCallbackScoped($scope));
+            SrvBackend.rpcCallProm("getblockhash", params)
+                .then(successCallbackBlockHeight)
+                .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
         $scope.searchTx = function() {
