@@ -14,10 +14,20 @@ function errorCallbackScoped(myscope)
     };
 }
 
+function PreCache(cache, chain, resource) {
+    if (!cache[chain]) {
+        cache[chain] = {};
+    }
+    if (!cache[chain][resource]) {
+        cache[chain][resource] = {};
+    }
+}
+
 angular.module('rpcExplorerApp')
     .service('SrvUtil', function SrvUtil() {
 
         var srv = {};
         srv.errorCallbackScoped = errorCallbackScoped;
+        srv.PreCache = PreCache;
         return srv;
     });

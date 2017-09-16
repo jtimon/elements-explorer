@@ -2,20 +2,11 @@
 /*global $:false */
 
 angular.module('rpcExplorerApp')
-    .service('SrvBackend', function SrvBackend($q, $http, SrvChain) {
+    .service('SrvBackend', function SrvBackend($q, $http, SrvChain, SrvUtil) {
 
         var BACKEND_URL = '/api/v0';
         var srv = {};
         var cache = {};
-
-        function CreateCacheForChainAndRsrc(chain, resource) {
-            if (!cache[chain]) {
-                cache[chain] = {};
-            }
-            if (!cache[chain][resource]) {
-                cache[chain][resource] = {};
-            }
-        }
 
         function cache_callback_params(chain, resource, id) {
             function cache_callback(response) {
@@ -31,7 +22,7 @@ angular.module('rpcExplorerApp')
 
         srv.get = function(resource, id) {
             var chain = SrvChain.get();
-            CreateCacheForChainAndRsrc(chain, resource);
+            SrvUtil.PreCache(cache, chain, resource);
 
             var retPromise;
             if (cache[chain][resource][id]) {
@@ -50,7 +41,8 @@ angular.module('rpcExplorerApp')
         srv.GetBlockStats = function(start, end) {
             var chain = SrvChain.get();
             var resource = 'blockstats';
-            CreateCacheForChainAndRsrc(chain, resource);
+            SrvUtil.PreCache(cache, chain, resource);
+
             var promises = [];
             var it_parallel = 0;
 
