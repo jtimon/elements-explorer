@@ -4,7 +4,7 @@ angular.module('rpcExplorerApp')
     .controller('ChainCtrl', function ($scope, $rootScope, SrvChain, SrvUtil) {
 
         function successAvailableChains(data) {
-            $scope.available_chains = data["data"]["available_chains"];
+            $scope.available_chains = data;
         }
         SrvChain.GetAvailableChains()
             .then(successAvailableChains)

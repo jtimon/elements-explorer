@@ -21,7 +21,10 @@ angular.module('rpcExplorerApp')
         }
 
         srv.GetAvailableChains = function() {
-            return $http.get(BACKEND_URL + '/available_chains');
+            return $http.get(BACKEND_URL + '/available_chains')
+                .then(function (response) {
+                    return response["data"]["available_chains"]
+                });
         }
 
         return srv;
