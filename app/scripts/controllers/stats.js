@@ -129,6 +129,6 @@ angular.module('rpcExplorerApp')
             $scope.end_height = current_height;
         };
         SrvChain.GetInfo()
-            .then(safeCallback(initChainCallback))
-            .catch(safeCallback(SrvUtil.errorCallbackScoped($scope)));
+            .then(initChainCallback)
+            .catch(SrvUtil.errorCallbackScoped($scope));
     });

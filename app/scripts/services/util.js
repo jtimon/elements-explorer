@@ -1,14 +1,6 @@
 'use strict';
 /*global $:false */
 
-function safeCallback(callback) {
-    return function(data) {
-        if (callback){
-            callback(data);
-        }
-    };
-}
-
 function errorCallbackScoped(myscope)
 {
     return function (data) {
@@ -26,7 +18,6 @@ angular.module('rpcExplorerApp')
     .service('SrvUtil', function SrvUtil() {
 
         var srv = {};
-        srv.safeCb = safeCallback;
         srv.errorCallbackScoped = errorCallbackScoped;
         return srv;
     });

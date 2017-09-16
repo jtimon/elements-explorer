@@ -7,7 +7,7 @@ angular.module('rpcExplorerApp')
             $scope.available_chains = data["data"]["available_chains"];
         }
         SrvChain.GetAvailableChains()
-            .then(SrvUtil.safeCb(successAvailableChains))
+            .then(successAvailableChains)
             .catch(SrvUtil.errorCallbackScoped($scope));
 
         function initChainCallback(data) {
@@ -19,8 +19,8 @@ angular.module('rpcExplorerApp')
             if ($scope.selected_chain) {
                 SrvChain.set($scope.selected_chain);
                 SrvChain.GetInfo()
-                    .then(safeCallback(initChainCallback))
-                    .catch(safeCallback(SrvUtil.errorCallbackScoped($scope)));
+                    .then(initChainCallback)
+                    .catch(SrvUtil.errorCallbackScoped($scope));
             }
         };
 
