@@ -2,7 +2,7 @@
 /*global $:false */
 
 angular.module('rpcExplorerApp')
-    .service('SrvChain', function SrvChain($http, $rootScope, $location) {
+    .service('SrvChain', function SrvChain($http, $rootScope) {
 
         var BACKEND_URL = '/api/v0';
         var srv = {};
@@ -11,7 +11,6 @@ angular.module('rpcExplorerApp')
         srv.set = function(_selected_chain) {
             selected_chain = _selected_chain;
             $rootScope.selected_chain = selected_chain;
-            $location.path($location.path().replace(/chain\/(.+?)\/(.*)/g,"chain/" + selected_chain + "/$2"));
         }
 
         srv.get = function() {
