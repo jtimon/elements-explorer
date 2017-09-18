@@ -11,15 +11,15 @@ angular.module('rpcExplorerApp')
     .controller('StatsCtrl', function ($scope, $routeParams, SrvUtil, SrvChain, SrvBackend) {
 
         function initChainCallback(data) {
-            var current_height = data["data"]["result"].blocks;
+            var current_height = data.blocks;
             $scope.start_height = (current_height > 0) ? (current_height - 1) : 0;
             $scope.end_height = current_height;
         };
         if ($routeParams.chain) {
-            SrvChain.set($routeParams.chain)
+            SrvChain.set($routeParams.chain);
+            SrvChain.GetChainInfo()
                 .then(initChainCallback)
                 .catch(SrvUtil.errorCallbackScoped($scope));
-            
         }
         $scope.loading_stats = false;
         $scope.verbose_stats = false;

@@ -12,8 +12,6 @@ angular.module('rpcExplorerApp')
             selected_chain = _selected_chain;
             $rootScope.selected_chain = selected_chain;
             $location.path($location.path().replace(/chain\/(.+?)\/(.*)/g,"chain/" + selected_chain + "/$2"));
-
-            return $http.post(BACKEND_URL + '/chain/' + srv.get() + '/' + "getblockchaininfo", {});
         }
 
         srv.get = function() {
@@ -24,6 +22,13 @@ angular.module('rpcExplorerApp')
             return $http.get(BACKEND_URL + '/available_chains')
                 .then(function (response) {
                     return response["data"]["available_chains"]
+                });
+        }
+
+        srv.GetChainInfo = function() {
+            return $http.post(BACKEND_URL + '/chain/' + srv.get() + '/' + "getblockchaininfo", {})
+                .then(function (response) {
+                    return response["data"]["result"];
                 });
         }
 

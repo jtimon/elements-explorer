@@ -11,12 +11,13 @@ angular.module('rpcExplorerApp')
             .catch(SrvUtil.errorCallbackScoped($scope));
 
         function initChainCallback(data) {
-            $scope.chaininfo = data["data"]["result"];
+            $scope.chaininfo = data;
         };
 
         $scope.ChangeChain = function () {
             if ($scope.selected_chain) {
-                SrvChain.set($scope.selected_chain)
+                SrvChain.set($scope.selected_chain);
+                SrvChain.GetChainInfo()
                     .then(initChainCallback)
                     .catch(SrvUtil.errorCallbackScoped($scope));
             }
