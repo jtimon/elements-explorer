@@ -12,5 +12,5 @@ RUN cd elements-e14-rpc-plotter && sh ./../docker/build-daemon.sh src/elementsd
 
 EXPOSE 7041
 
-ADD docker/bitcoin/start.sh /build_docker/docker/bitcoin/start.sh
+ADD docker/elements/start.sh /build_docker/docker/elements/start.sh
 CMD ["sh", "docker/elements/start.sh"]
