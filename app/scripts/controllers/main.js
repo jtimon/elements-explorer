@@ -10,6 +10,7 @@
 angular.module('rpcExplorerApp')
     .controller('MainCtrl', function ($scope, $routeParams, SrvUtil, SrvChain, SrvBackend) {
 
+        $scope.loading = true;
         if ($routeParams.chain) {
             SrvChain.set($routeParams.chain);
         }
@@ -101,17 +102,25 @@ angular.module('rpcExplorerApp')
                 cleanBlock();
                 return;
             }
+            $scope.loading = true;
             cleanTx();
             goToBlock($scope.blockid)
                 .then(PromBlockstats)
+                .then(function() {
+                    $scope.loading = false;
+                })
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
         $scope.searchBlockByHeight = function() {
+            $scope.loading = true;
             cleanBlockBase();
             $scope.blockid = "";
             cleanTx();
             goToHeight($scope.blockheight)
+                .then(function() {
+                    $scope.loading = false;
+                })
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
@@ -120,8 +129,12 @@ angular.module('rpcExplorerApp')
                 cleanTx();
                 return;
             }
+            $scope.loading = true;
             cleanBlock();
             goToTx($scope.txid)
+                .then(function() {
+                    $scope.loading = false;
+                })
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
@@ -129,10 +142,18 @@ angular.module('rpcExplorerApp')
             $scope.blockid = $routeParams.block;
             goToBlock($routeParams.block)
                 .then(PromBlockstats)
+                .then(function() {
+                    $scope.loading = false;
+                })
                 .catch(SrvUtil.errorCallbackScoped($scope));
         } else if ($routeParams.txid) {
             $scope.txid = $routeParams.txid;
             goToTx($routeParams.txid)
+                .then(function() {
+                    $scope.loading = false;
+                })
                 .catch(SrvUtil.errorCallbackScoped($scope));
+        } else {
+            $scope.loading = false;
         }
     });

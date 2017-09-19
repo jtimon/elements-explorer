@@ -15,11 +15,14 @@
 
 <div class="container">
   <div>
-    Block Height: <input type="number" step="1" min="0" ng-model="blockheight" ng-change="searchBlockByHeight()">
-    Block Hash: <input ng-model="blockid" ng-change="searchBlock()">
+    Block Height:
+    <input ng-disabled="loading" type="number" step="1" min="0" ng-model="blockheight" ng-change="searchBlockByHeight()">
+    Block Hash:
+    <input ng-disabled="loading" ng-model="blockid" ng-change="searchBlock()">
     <p></p>
     <div>
-      Tx Id: <input ng-model="txid" ng-change="searchTx()">
+      Tx Id:
+      <input ng-disabled="loading" ng-model="txid" ng-change="searchTx()">
     </div>
     <p></p>
 
