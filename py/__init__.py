@@ -57,9 +57,13 @@ def rpcCall(chain, method, params):
     rpcHeaders = {'content-type': 'application/json'}
     response = requests.request('post', 'http://' + AVAILABLE_CHAINS[chain], data=json.dumps(requestData), auth=rpcAuth, headers=rpcHeaders)
     # response.raise_for_status()
+
     json_result = response.json()
     if 'error' in json_result and json_result['error']:
         return jsonify({'error': json_result['error']}), 400
+    # TODO remove spacial case for getrawmempool and getblockhash
+    if ('result' in json_result and method != 'getrawmempool' and method != 'getblockhash'):
+        json_result = json_result['result']
     return jsonify(json_result), 200
 
 @frontend.route(API_URL + '/chain/<string:chain>/<string:resource>', methods = ['POST'])

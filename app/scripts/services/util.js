@@ -2,7 +2,12 @@
 /*global $:false */
 
 function GetResult(response) {
-    return response['data']['result'];
+    if (response['data']['result']) {
+        // TODO remove spacial case for getrawmempool and getblockhash
+        return response['data']['result'];
+    } else {
+        return response['data'];
+    }
 }
 
 function errorCallbackScoped(myscope)
