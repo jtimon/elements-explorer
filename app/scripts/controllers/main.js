@@ -71,19 +71,20 @@ angular.module('rpcExplorerApp')
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
+        function successCallbackTx(data) {
+            $scope.showtxlist = false;
+            $scope.transaction = data;
+            $scope.blockid = $scope.transaction["blockhash"];
+            $scope.txjson = JSON.stringify($scope.transaction, null, 4);
+            if ($scope.blockid) {
+                goToBlock($scope.blockid)
+                    .catch(SrvUtil.errorCallbackScoped($scope));
+            }
+        };
+
         $scope.goToTx = function(txhash) {
             $scope.txid = txhash;
 
-            function successCallbackTx(data) {
-                $scope.showtxlist = false;
-                $scope.transaction = data;
-                $scope.blockid = $scope.transaction["blockhash"];
-                $scope.txjson = JSON.stringify($scope.transaction, null, 4);
-                if ($scope.blockid) {
-                    goToBlock($scope.blockid)
-                        .catch(SrvUtil.errorCallbackScoped($scope));
-                }
-            };
             SrvBackend.get("tx", txhash)
                 .then(successCallbackTx)
                 .catch(SrvUtil.errorCallbackScoped($scope));
