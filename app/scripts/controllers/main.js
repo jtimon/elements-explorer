@@ -56,7 +56,7 @@ angular.module('rpcExplorerApp')
 
         $scope.searchBlockByHeight = function() {
             function successCallbackBlockHeight(data) {
-                $scope.blockid = data["data"]["result"];
+                $scope.blockid = SrvUtil.GetResult(data);
             };
             cleanTx();
             var params = {"height": $scope.blockheight};

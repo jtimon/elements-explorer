@@ -31,6 +31,10 @@ function CacheElem(cache, chain, resource, id) {
     return cache_callback;
 }
 
+function GetResult(response) {
+    return response['data']['result'];
+}
+
 angular.module('rpcExplorerApp')
     .service('SrvUtil', function SrvUtil() {
 
@@ -38,5 +42,6 @@ angular.module('rpcExplorerApp')
         srv.errorCallbackScoped = errorCallbackScoped;
         srv.PreCache = PreCache;
         srv.CacheElem = CacheElem;
+        srv.GetResult = GetResult;
         return srv;
     });
