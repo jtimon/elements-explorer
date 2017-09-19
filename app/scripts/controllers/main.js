@@ -27,6 +27,7 @@ angular.module('rpcExplorerApp')
             $scope.blockid = "";
             $scope.blockheight = null;
             $scope.block = null;
+            $scope.blockstats = null;
             $scope.blockjson = null;
         }
 
@@ -60,12 +61,19 @@ angular.module('rpcExplorerApp')
             return $scope.blockid;
         };
 
-        $scope.searchBlockByHeight = function() {
-            var params = {"height": $scope.blockheight};
-            SrvBackend.RpcCall("getblockhash", params)
+        var goToHeight = function(height) {
+            return SrvBackend.RpcCall("getblockhash", {"height": height})
                 .then(successCallbackBlockHeight)
                 .then(goToBlock)
-                .then(PromBlockstats)
+                .then(PromBlockstats);
+        };
+
+        $scope.searchBlockByHeight = function() {
+            if ($scope.blockheight == "") {
+                cleanBlock();
+                return;
+            }
+            goToHeight($scope.blockheight)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
