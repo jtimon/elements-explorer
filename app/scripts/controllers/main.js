@@ -52,8 +52,7 @@ angular.module('rpcExplorerApp')
 
         var goToBlock = function(blockhash) {
             return SrvBackend.get("block", blockhash)
-                .then(successCallbackBlock)
-                .then(PromBlockstats);
+                .then(successCallbackBlock);
         };
 
         $scope.searchBlockByHeight = function() {
@@ -65,6 +64,7 @@ angular.module('rpcExplorerApp')
             SrvBackend.RpcCall("getblockhash", params)
                 .then(successCallbackBlockHeight)
                 .then(goToBlock)
+                .then(PromBlockstats)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
@@ -80,7 +80,8 @@ angular.module('rpcExplorerApp')
         var goToTx = function(txhash) {
             return SrvBackend.get("tx", txhash)
                 .then(successCallbackTx)
-                .then(goToBlock);
+                .then(goToBlock)
+                .then(PromBlockstats);
         };
 
         $scope.IsCTOut = function(output) {
@@ -90,6 +91,7 @@ angular.module('rpcExplorerApp')
         $scope.searchBlock = function() {
             cleanTx();
             goToBlock($scope.blockid)
+                .then(PromBlockstats)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
@@ -106,6 +108,7 @@ angular.module('rpcExplorerApp')
         if ($routeParams.block) {
             $scope.blockid = $routeParams.block;
             goToBlock($routeParams.block)
+                .then(PromBlockstats)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         } else if ($routeParams.txid) {
             $scope.txid = $routeParams.txid;
