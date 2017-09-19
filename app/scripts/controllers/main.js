@@ -51,30 +51,9 @@ angular.module('rpcExplorerApp')
                 .then(statsCallbackBlock);
         };
 
-        var goToBlock = function(blockhash) {
-            return SrvBackend.get("block", blockhash)
-                .then(successCallbackBlock);
-        };
-
         function successCallbackBlockHeight(data) {
             $scope.blockid = SrvUtil.GetResult(data);
             return $scope.blockid;
-        };
-
-        var goToHeight = function(height) {
-            return SrvBackend.RpcCall("getblockhash", {"height": height})
-                .then(successCallbackBlockHeight)
-                .then(goToBlock)
-                .then(PromBlockstats);
-        };
-
-        $scope.searchBlockByHeight = function() {
-            if ($scope.blockheight == "") {
-                cleanBlock();
-                return;
-            }
-            goToHeight($scope.blockheight)
-                .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
         function successCallbackTx(data) {
@@ -84,6 +63,18 @@ angular.module('rpcExplorerApp')
             $scope.txjson = JSON.stringify($scope.transaction, null, 4);
 
             return $scope.blockid;
+        };
+
+        var goToBlock = function(blockhash) {
+            return SrvBackend.get("block", blockhash)
+                .then(successCallbackBlock);
+        };
+
+        var goToHeight = function(height) {
+            return SrvBackend.RpcCall("getblockhash", {"height": height})
+                .then(successCallbackBlockHeight)
+                .then(goToBlock)
+                .then(PromBlockstats);
         };
 
         var goToTx = function(txhash) {
@@ -101,6 +92,15 @@ angular.module('rpcExplorerApp')
             cleanTx();
             goToBlock($scope.blockid)
                 .then(PromBlockstats)
+                .catch(SrvUtil.errorCallbackScoped($scope));
+        };
+
+        $scope.searchBlockByHeight = function() {
+            if ($scope.blockheight == "") {
+                cleanBlock();
+                return;
+            }
+            goToHeight($scope.blockheight)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
