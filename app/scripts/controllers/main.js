@@ -63,10 +63,14 @@ angular.module('rpcExplorerApp')
         function successCallbackTx(data) {
             $scope.showtxlist = false;
             $scope.transaction = data;
-            $scope.blockid = $scope.transaction["blockhash"];
             $scope.txjson = JSON.stringify($scope.transaction, null, 4);
-
-            return $scope.blockid;
+            if ($scope.transaction["blockhash"]) {
+                $scope.blockid = $scope.transaction["blockhash"];
+                return goToBlock($scope.blockid)
+                    .then(PromBlockstats);
+            } else {
+                cleanBlock();
+            }
         };
 
         var goToBlock = function(blockhash) {
@@ -83,9 +87,7 @@ angular.module('rpcExplorerApp')
 
         var goToTx = function(txhash) {
             return SrvBackend.get("tx", txhash)
-                .then(successCallbackTx)
-                .then(goToBlock)
-                .then(PromBlockstats);
+                .then(successCallbackTx);
         };
 
         $scope.IsCTOut = function(output) {
