@@ -106,7 +106,7 @@ angular.module('rpcExplorerApp')
 
         $scope.searchTx = function() {
             if ($scope.txid == "") {
-                $scope.transaction = null;
+                cleanTx();
                 return;
             }
             cleanBlock();
