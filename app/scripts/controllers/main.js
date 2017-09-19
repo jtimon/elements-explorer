@@ -30,6 +30,9 @@ angular.module('rpcExplorerApp')
             $scope.blockjson = null;
         }
 
+        cleanTx();
+        cleanBlock();
+
         function successCallbackBlock(data) {
             $scope.block = data;
             $scope.blockheight = $scope.block["height"];
@@ -51,12 +54,6 @@ angular.module('rpcExplorerApp')
             return SrvBackend.get("block", blockhash)
                 .then(successCallbackBlock)
                 .then(PromBlockstats);
-        };
-
-        $scope.searchBlock = function() {
-            cleanTx();
-            goToBlock($scope.blockid)
-                .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
         $scope.searchBlockByHeight = function() {
@@ -87,6 +84,16 @@ angular.module('rpcExplorerApp')
                 .then(successCallbackTx)
         };
 
+        $scope.IsCTOut = function(output) {
+            return !output["value"] && output["value"] != 0;
+        };
+
+        $scope.searchBlock = function() {
+            cleanTx();
+            goToBlock($scope.blockid)
+                .catch(SrvUtil.errorCallbackScoped($scope));
+        };
+
         $scope.searchTx = function() {
             if ($scope.txid == "") {
                 $scope.transaction = null;
@@ -96,14 +103,6 @@ angular.module('rpcExplorerApp')
             goToTx($scope.txid)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
-
-        $scope.IsCTOut = function(output) {
-            return !output["value"] && output["value"] != 0;
-        };
-
-        // Cleanup before going to block or tx
-        cleanTx();
-        cleanBlock();
 
         if ($routeParams.block) {
             $scope.blockid = $routeParams.block;
