@@ -30,33 +30,32 @@ angular.module('rpcExplorerApp')
             $scope.blockjson = null;
         }
 
-        $scope.goToBlock = function(blockhash) {
-            $scope.blockid = blockhash;
+        function successCallbackBlock(data) {
+            $scope.block = data;
+            $scope.blockheight = $scope.block["height"];
+            $scope.blockjson = JSON.stringify($scope.block, null, 4);
 
-            function successCallbackBlock(data) {
-                $scope.block = data;
-                $scope.blockheight = $scope.block["height"];
-                $scope.blockjson = JSON.stringify($scope.block, null, 4);
+            return $scope.block["height"];
+        };
 
-                return $scope.block["height"];
-            };
+        function statsCallbackBlock(data) {
+            $scope.blockstats = data;
+        };
 
-            function statsCallbackBlock(data) {
-                $scope.blockstats = data;
-            };
-            function PromBlockstats(height) {
-                return SrvBackend.get("blockstats", height)
-                    .then(statsCallbackBlock);
-            };
+        function PromBlockstats(height) {
+            return SrvBackend.get("blockstats", height)
+                .then(statsCallbackBlock);
+        };
 
-            SrvBackend.get("block", $scope.blockid)
+        var goToBlock = function(blockhash) {
+            return SrvBackend.get("block", blockhash)
                 .then(successCallbackBlock)
                 .then(PromBlockstats)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
         $scope.searchBlock = function() {
-            $scope.goToBlock($scope.blockid);
+            goToBlock($scope.blockid);
             cleanTx();
         };
 
@@ -68,7 +67,7 @@ angular.module('rpcExplorerApp')
             var params = {"height": $scope.blockheight};
             SrvBackend.RpcCall("getblockhash", params)
                 .then(successCallbackBlockHeight)
-                .then($scope.goToBlock)
+                .then(goToBlock)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
@@ -81,7 +80,7 @@ angular.module('rpcExplorerApp')
                 $scope.blockid = $scope.transaction["blockhash"];
                 $scope.txjson = JSON.stringify($scope.transaction, null, 4);
                 if ($scope.blockid) {
-                    $scope.goToBlock($scope.blockid);
+                    goToBlock($scope.blockid);
                 }
             };
             SrvBackend.get("tx", txhash)
@@ -107,7 +106,8 @@ angular.module('rpcExplorerApp')
         cleanBlock();
 
         if ($routeParams.block) {
-            $scope.goToBlock($routeParams.block);
+            $scope.blockid = $routeParams.block;
+            goToBlock($routeParams.block);
         } else if ($routeParams.txid) {
             $scope.goToTx($routeParams.txid);
         }
