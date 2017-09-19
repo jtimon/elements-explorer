@@ -14,7 +14,7 @@
 
 <div ng-show="mempoolinfo" class="container" border="1">
   Mempool Info:
-  <button ng-disabled="loading_mempool" ng-click="InitForSelectedChain();">Reload</button>
+  <button ng-disabled="loading" ng-click="InitForSelectedChain();">Reload</button>
   <p></p>
 
   <table border="1">
@@ -55,7 +55,7 @@
 
 <div class="container">
   <div>
-    Tx Id: <input ng-model="txid" ng-change="searchTx()">
+    Tx Id: <input ng-disabled="loading" ng-model="txid" ng-change="searchTx()">
   </div>
   <p></p>
 </div> <!-- container -->
@@ -147,7 +147,7 @@
 <div class="container">
   <nobr>
     Mempool Transactions ( {{ mempooltxs.length }} ):
-    <button ng-disabled="loading_mempool || loading_mempool_txs" ng-click="LoadMempoolTxs();">Load</button>
+    <button ng-disabled="loading" ng-click="LoadMempoolTxs();">Load</button>
   </nobr>
   <p></p>
 

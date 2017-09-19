@@ -10,30 +10,30 @@
 angular.module('rpcExplorerApp')
     .controller('MempoolCtrl', function ($scope, $routeParams, SrvUtil, SrvChain, SrvBackend) {
 
+        $scope.loading = true;
         if ($routeParams.chain) {
             SrvChain.set($routeParams.chain);
         }
 
         function mempoolinfoCallback(data) {
             $scope.mempoolinfo = SrvUtil.GetResult(data);
-            $scope.loading_mempool = false;
         };
         $scope.InitForSelectedChain = function() {
-            $scope.loading_mempool = true;
             SrvBackend.RpcCall("getmempoolinfo", {})
                 .then(mempoolinfoCallback)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
-        $scope.InitForSelectedChain();
 
         function mempooltxsCallback(data) {
             $scope.mempooltxs = SrvUtil.GetResult(data);
-            $scope.loading_mempool_txs = false;
         };
         $scope.LoadMempoolTxs = function() {
-            $scope.loading_mempool_txs = true;
+            $scope.loading = true;
             SrvBackend.RpcCall("getrawmempool", {})
                 .then(mempooltxsCallback)
+                .then(function() {
+                    $scope.loading = false;
+                })
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
@@ -49,13 +49,23 @@ angular.module('rpcExplorerApp')
                 $scope.mempoolentry = null;
                 return;
             }
+            $scope.loading = true;
             $scope.goToEntry($scope.txid)
+                .then(function() {
+                    $scope.loading = false;
+                })
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
+        $scope.InitForSelectedChain();
         if ($routeParams.txid) {
             $scope.txid = $routeParams.txid;
             $scope.goToEntry($routeParams.txid)
+                .then(function() {
+                    $scope.loading = false;
+                })
                 .catch(SrvUtil.errorCallbackScoped($scope));
+        } else {
+            $scope.loading = false;
         }
     });
