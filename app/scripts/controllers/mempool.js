@@ -40,20 +40,22 @@ angular.module('rpcExplorerApp')
         function mempoolEntryCallback(data) {
             $scope.mempoolentry = SrvUtil.GetResult(data);
         };
+        $scope.goToEntry = function(txhash) {
+            return SrvBackend.RpcCall("getmempoolentry", {"txid": $scope.txid})
+                .then(mempoolEntryCallback);
+        };
         $scope.searchTx = function() {
             if ($scope.txid == "") {
                 $scope.mempoolentry = null;
                 return;
             }
-            SrvBackend.RpcCall("getmempoolentry", {"txid": $scope.txid})
-                .then(mempoolEntryCallback)
+            $scope.goToEntry($scope.txid)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
-        $scope.goToTx = function(txhash) {
-            $scope.txid = txhash;
-            $scope.searchTx();
-        };
+
         if ($routeParams.txid) {
-            $scope.goToTx($routeParams.txid);
+            $scope.txid = $routeParams.txid;
+            $scope.goToEntry($routeParams.txid)
+                .catch(SrvUtil.errorCallbackScoped($scope));
         }
     });
