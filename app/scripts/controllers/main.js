@@ -82,12 +82,9 @@ angular.module('rpcExplorerApp')
             }
         };
 
-        $scope.goToTx = function(txhash) {
-            $scope.txid = txhash;
-
-            SrvBackend.get("tx", txhash)
+        var goToTx = function(txhash) {
+            return SrvBackend.get("tx", txhash)
                 .then(successCallbackTx)
-                .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
         $scope.searchTx = function() {
@@ -96,7 +93,8 @@ angular.module('rpcExplorerApp')
                 return;
             }
             cleanBlock();
-            $scope.goToTx($scope.txid);
+            goToTx($scope.txid)
+                .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
         $scope.IsCTOut = function(output) {
@@ -112,6 +110,8 @@ angular.module('rpcExplorerApp')
             goToBlock($routeParams.block)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         } else if ($routeParams.txid) {
-            $scope.goToTx($routeParams.txid);
+            $scope.txid = $routeParams.txid;
+            goToTx($routeParams.txid)
+                .catch(SrvUtil.errorCallbackScoped($scope));
         }
     });
