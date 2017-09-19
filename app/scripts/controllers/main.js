@@ -23,12 +23,16 @@ angular.module('rpcExplorerApp')
             $scope.txjson = null;
         }
 
-        function cleanBlock() {
-            $scope.blockid = "";
-            $scope.blockheight = null;
+        function cleanBlockBase() {
             $scope.block = null;
             $scope.blockstats = null;
             $scope.blockjson = null;
+        }
+
+        function cleanBlock() {
+            cleanBlockBase();
+            $scope.blockid = "";
+            $scope.blockheight = null;
         }
 
         cleanTx();
@@ -89,6 +93,8 @@ angular.module('rpcExplorerApp')
         };
 
         $scope.searchBlock = function() {
+            cleanBlockBase();
+            $scope.blockheight = null;
             if ($scope.blockid == "") {
                 cleanBlock();
                 return;
@@ -100,6 +106,8 @@ angular.module('rpcExplorerApp')
         };
 
         $scope.searchBlockByHeight = function() {
+            cleanBlockBase();
+            $scope.blockid = "";
             cleanTx();
             goToHeight($scope.blockheight)
                 .catch(SrvUtil.errorCallbackScoped($scope));
