@@ -73,15 +73,14 @@ angular.module('rpcExplorerApp')
             $scope.transaction = data;
             $scope.blockid = $scope.transaction["blockhash"];
             $scope.txjson = JSON.stringify($scope.transaction, null, 4);
-            if ($scope.blockid) {
-                goToBlock($scope.blockid)
-                    .catch(SrvUtil.errorCallbackScoped($scope));
-            }
+
+            return $scope.blockid;
         };
 
         var goToTx = function(txhash) {
             return SrvBackend.get("tx", txhash)
                 .then(successCallbackTx)
+                .then(goToBlock);
         };
 
         $scope.IsCTOut = function(output) {
