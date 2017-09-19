@@ -30,7 +30,8 @@ angular.module('rpcExplorerApp')
             $scope.blockjson = null;
         }
 
-        $scope.searchBlock = function() {
+        $scope.goToBlock = function(blockhash) {
+            $scope.blockid = blockhash;
 
             function successCallbackBlock(data) {
                 $scope.block = data;
@@ -54,11 +55,15 @@ angular.module('rpcExplorerApp')
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
+        $scope.searchBlock = function() {
+            $scope.goToBlock($scope.blockid);
+            cleanTx();
+        };
+
         $scope.searchBlockByHeight = function() {
             function successCallbackBlockHeight(data) {
                 $scope.blockid = SrvUtil.GetResult(data);
             };
-            cleanTx();
             var params = {"height": $scope.blockheight};
             SrvBackend.RpcCall("getblockhash", params)
                 .then(successCallbackBlockHeight)
@@ -90,12 +95,6 @@ angular.module('rpcExplorerApp')
             }
             cleanBlock();
             $scope.goToTx($scope.txid);
-        };
-
-        $scope.goToBlock = function(blockhash) {
-            $scope.blockid = blockhash;
-            $scope.searchBlock();
-            cleanTx();
         };
 
         $scope.IsCTOut = function(output) {
