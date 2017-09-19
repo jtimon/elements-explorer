@@ -55,11 +55,12 @@ angular.module('rpcExplorerApp')
                 .then(successCallbackBlock);
         };
 
+        function successCallbackBlockHeight(data) {
+            $scope.blockid = SrvUtil.GetResult(data);
+            return $scope.blockid;
+        };
+
         $scope.searchBlockByHeight = function() {
-            function successCallbackBlockHeight(data) {
-                $scope.blockid = SrvUtil.GetResult(data);
-                return $scope.blockid;
-            };
             var params = {"height": $scope.blockheight};
             SrvBackend.RpcCall("getblockhash", params)
                 .then(successCallbackBlockHeight)
