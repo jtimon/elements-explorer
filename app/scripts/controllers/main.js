@@ -50,13 +50,13 @@ angular.module('rpcExplorerApp')
         var goToBlock = function(blockhash) {
             return SrvBackend.get("block", blockhash)
                 .then(successCallbackBlock)
-                .then(PromBlockstats)
-                .catch(SrvUtil.errorCallbackScoped($scope));
+                .then(PromBlockstats);
         };
 
         $scope.searchBlock = function() {
-            goToBlock($scope.blockid);
             cleanTx();
+            goToBlock($scope.blockid)
+                .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
         $scope.searchBlockByHeight = function() {
@@ -80,7 +80,8 @@ angular.module('rpcExplorerApp')
                 $scope.blockid = $scope.transaction["blockhash"];
                 $scope.txjson = JSON.stringify($scope.transaction, null, 4);
                 if ($scope.blockid) {
-                    goToBlock($scope.blockid);
+                    goToBlock($scope.blockid)
+                        .catch(SrvUtil.errorCallbackScoped($scope));
                 }
             };
             SrvBackend.get("tx", txhash)
@@ -107,7 +108,8 @@ angular.module('rpcExplorerApp')
 
         if ($routeParams.block) {
             $scope.blockid = $routeParams.block;
-            goToBlock($routeParams.block);
+            goToBlock($routeParams.block)
+                .catch(SrvUtil.errorCallbackScoped($scope));
         } else if ($routeParams.txid) {
             $scope.goToTx($routeParams.txid);
         }
