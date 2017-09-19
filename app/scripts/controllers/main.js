@@ -89,6 +89,10 @@ angular.module('rpcExplorerApp')
         };
 
         $scope.searchBlock = function() {
+            if ($scope.blockid == "") {
+                cleanBlock();
+                return;
+            }
             cleanTx();
             goToBlock($scope.blockid)
                 .then(PromBlockstats)
@@ -96,10 +100,7 @@ angular.module('rpcExplorerApp')
         };
 
         $scope.searchBlockByHeight = function() {
-            if ($scope.blockheight == "") {
-                cleanBlock();
-                return;
-            }
+            cleanTx();
             goToHeight($scope.blockheight)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
