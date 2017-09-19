@@ -63,11 +63,12 @@ angular.module('rpcExplorerApp')
         $scope.searchBlockByHeight = function() {
             function successCallbackBlockHeight(data) {
                 $scope.blockid = SrvUtil.GetResult(data);
+                return $scope.blockid;
             };
             var params = {"height": $scope.blockheight};
             SrvBackend.RpcCall("getblockhash", params)
                 .then(successCallbackBlockHeight)
-                .then($scope.searchBlock)
+                .then($scope.goToBlock)
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
@@ -80,7 +81,7 @@ angular.module('rpcExplorerApp')
                 $scope.blockid = $scope.transaction["blockhash"];
                 $scope.txjson = JSON.stringify($scope.transaction, null, 4);
                 if ($scope.blockid) {
-                    $scope.searchBlock();
+                    $scope.goToBlock($scope.blockid);
                 }
             };
             SrvBackend.get("tx", txhash)
