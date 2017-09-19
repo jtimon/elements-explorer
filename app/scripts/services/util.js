@@ -1,6 +1,10 @@
 'use strict';
 /*global $:false */
 
+function GetResult(response) {
+    return response['data']['result'];
+}
+
 function errorCallbackScoped(myscope)
 {
     return function (data) {
@@ -25,14 +29,10 @@ function PreCache(cache, chain, resource) {
 
 function CacheElem(cache, chain, resource, id) {
     function cache_callback(response) {
-        cache[chain][resource][id] = response.data['result'];
+        cache[chain][resource][id] = GetResult(response);
         return cache[chain][resource][id];
     }
     return cache_callback;
-}
-
-function GetResult(response) {
-    return response['data']['result'];
 }
 
 angular.module('rpcExplorerApp')
