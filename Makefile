@@ -6,7 +6,6 @@ SHELL = /bin/sh
 ROOT=$(shell pwd)
 BUILD_DIR=${ROOT}/.build
 PYENV=${BUILD_DIR}/.virtualenv
-DOCKERPROJECT=rpcexplorer
 
 # easier move to python3
 PYTHON=python2
@@ -52,13 +51,15 @@ clean: clean-app-js
 
 .PHONY: docker-build docker-up
 docker-up:
-	cd docker && docker-compose --project-name $(DOCKERPROJECT) up -d
+	cd docker && docker-compose up -d
 docker-build:
-	cd docker && docker-compose --project-name $(DOCKERPROJECT) up -d --build
+	cd docker && docker-compose up -d --build
 
 .PHONY: docker-clean docker-down docker-prune
 docker-down:
-	cd docker && docker-compose --project-name $(DOCKERPROJECT) down
+	cd docker && docker-compose stop
+# docker-compose rm -f
+# cd docker && docker-compose down
 docker-prune:
 	docker system prune -a
 docker-clean: docker-prune
