@@ -11,7 +11,7 @@ ADD app/package.json /build_docker/app/package.json
 RUN cd app && npm i
 
 ADD requirements.txt /build_docker/requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt --require-hashes
 
 ADD py /build_docker/py
 ADD app /build_docker/app
