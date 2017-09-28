@@ -15,5 +15,6 @@ RUN pip install -r requirements.txt --require-hashes
 
 ADD py /build_docker/py
 ADD app /build_docker/app
-ADD docker/explorer/start.sh /build_docker/docker/explorer/start.sh
-CMD ["sh", "docker/explorer/start.sh"]
+ADD docker/explorer/Procfile /build_docker/docker/explorer/Procfile
+ADD docker/explorer/.env /build_docker/docker/explorer/.env
+CMD honcho start -e docker/explorer/.env -f docker/explorer/Procfile
