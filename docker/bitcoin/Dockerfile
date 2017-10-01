@@ -2,6 +2,10 @@ FROM ubuntu:16.04
 
 WORKDIR /build_docker
 
+RUN apt-get update
+RUN apt-get install -y python-pip
+RUN pip install honcho
+
 ADD docker/daemon-deps.sh /build_docker/docker/daemon-deps.sh
 RUN sh docker/daemon-deps.sh
 
@@ -13,5 +17,6 @@ RUN cd bitcoin-b15-rpc-explorer && sh ./../docker/build-daemon.sh src/bitcoind
 EXPOSE 8532
 EXPOSE 18532
 
-ADD docker/bitcoin/start.sh /build_docker/docker/bitcoin/start.sh
-CMD ["sh", "docker/bitcoin/start.sh"]
+ADD docker/bitcoin/.env /build_docker/docker/bitcoin/.env
+ADD docker/bitcoin/Procfile /build_docker/docker/bitcoin/Procfile
+CMD honcho start -e docker/bitcoin/.env -f docker/bitcoin/Procfile
