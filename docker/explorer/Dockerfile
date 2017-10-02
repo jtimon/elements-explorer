@@ -13,6 +13,9 @@ RUN cd app && npm i
 ADD requirements.txt /build_docker/requirements.txt
 RUN pip install -r requirements.txt --require-hashes
 
+ADD setup.py /build_docker/setup.py
+ADD lib /build_docker/lib
+RUN python /build_docker/setup.py develop
 ADD py /build_docker/py
 ADD app /build_docker/app
 ADD docker/explorer/Procfile /build_docker/docker/explorer/Procfile
