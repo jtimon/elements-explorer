@@ -35,6 +35,23 @@ def RpcCall(chain, method, params):
         json_result = json_result['result']
     return json_result
 
+def GetById(chain, resource, req_id):
+    rpc_request_data = {}
+
+    if resource == 'block':
+        method = 'getblock'
+        rpc_request_data['blockhash'] = req_id
+    elif resource == 'tx':
+        method = 'getrawtransaction'
+        rpc_request_data['txid'] = req_id
+        rpc_request_data['verbose'] = 1
+    elif resource == 'blockstats':
+        method = 'getblockstats'
+        rpc_request_data['start'] = req_id
+        rpc_request_data['end'] = req_id
+
+    return RpcCall(chain, method, rpc_request_data)
+
 @frontend.route(API_URL + '/chain/<string:chain>/<string:resource>', methods = ['POST'])
 @crossdomain.crossdomain(origin='*')
 def rpcexplorerrest(chain, resource):
@@ -45,27 +62,14 @@ def rpcexplorerrest(chain, resource):
         return jsonify( {'error': {'message': 'Resource "%s" not supported.' % method}} ), 400
 
     request_data = json.loads(request.data)
-    if not 'id' in request_data and resource in RESOURCES_FOR_GET_BY_ID:
-        return jsonify({'error': {'message': 'No id specified to get %s by id.' % resource}}), 400
+    if resource in RESOURCES_FOR_GET_BY_ID:
+        if not 'id' in request_data:
+            return jsonify({'error': {'message': 'No id specified to get %s by id.' % resource}}), 400
 
-    rpc_request_data = {}
-    if resource == 'block':
-        method = 'getblock'
-        rpc_request_data['blockhash'] = request_data['id']
-    elif resource == 'tx':
-        method = 'getrawtransaction'
-        rpc_request_data['txid'] = request_data['id']
-        rpc_request_data['verbose'] = 1
-    elif resource == 'blockstats':
-        method = 'getblockstats'
-        rpc_request_data['start'] = request_data['id']
-        rpc_request_data['end'] = request_data['id']
+        json_result = GetById(chain, resource, request_data['id'])
     else:
-        method = resource
-        rpc_request_data.update(request_data)
+        json_result = RpcCall(chain, resource, request_data)
 
-    json_result = RpcCall(chain, method, rpc_request_data)
-    
     if 'error' in json_result and json_result['error']:
         return jsonify({'error': json_result['error']}), 400
     return jsonify(json_result), 200
