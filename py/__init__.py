@@ -4,7 +4,7 @@ import requests
 import json
 
 import crossdomain
-from settings import CLIENT_DIRECTORY, AVAILABLE_CHAINS, ALLOWED_CALLS, RESOURCES_FOR_GET_BY_ID
+from settings import *
 
 frontend = Blueprint('frontend', __name__)
 API_URL = '/api/v0'
@@ -14,7 +14,10 @@ API_URL = '/api/v0'
 def available_chains():
     return jsonify( {'available_chains': AVAILABLE_CHAINS.keys()} ), 200
 
-def rpcCall(chain, method, params):
+def RpcCall(chain, method, params):
+    if not method in RPC_ALLOWED_CALLS:
+        return {'error': {'message': 'Method "%s" not supported.' % method}}
+
     requestData = {
         'method': method,
         'params': params,
@@ -38,6 +41,9 @@ def rpcexplorerrest(chain, resource):
     if not chain in AVAILABLE_CHAINS:
         return jsonify( {'error': {'message': 'Chain "%s" not supported.' % chain}} ), 400
 
+    if not resource in WEB_ALLOWED_CALLS:
+        return jsonify( {'error': {'message': 'Resource "%s" not supported.' % method}} ), 400
+
     request_data = json.loads(request.data)
     if not 'id' in request_data and resource in RESOURCES_FOR_GET_BY_ID:
         return jsonify({'error': {'message': 'No id specified to get %s by id.' % resource}}), 400
@@ -58,10 +64,7 @@ def rpcexplorerrest(chain, resource):
         method = resource
         rpc_request_data.update(request_data)
 
-    if not method in ALLOWED_CALLS:
-        return jsonify( {'error': {'message': 'Method "%s" not supported.' % method}} ), 400
-
-    json_result = rpcCall(chain, method, rpc_request_data)
+    json_result = RpcCall(chain, method, rpc_request_data)
     
     if 'error' in json_result and json_result['error']:
         return jsonify({'error': json_result['error']}), 400

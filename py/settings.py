@@ -11,7 +11,18 @@ AVAILABLE_CHAINS = {
     # "elements": "elements:9042",
 }
 
-ALLOWED_CALLS = [
+WEB_ALLOWED_CALLS = [
+    'block',
+    'tx',
+    'blockstats',
+    "getblockchaininfo",
+    "getblockhash",
+    "getmempoolinfo",
+    "getrawmempool",
+    "getmempoolentry",
+]
+
+RPC_ALLOWED_CALLS = [
     "getblockchaininfo",
     "getblock",
     "getblockhash",
