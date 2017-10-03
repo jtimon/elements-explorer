@@ -15,9 +15,6 @@ def available_chains():
     return jsonify( {'available_chains': AVAILABLE_CHAINS.keys()} ), 200
 
 def rpcCall(chain, method, params):
-    if not method in ALLOWED_CALLS:
-        return jsonify( {'error': {'message': 'Method "%s" not supported.' % method}} ), 400
-
     requestData = {
         'method': method,
         'params': params,
@@ -30,12 +27,10 @@ def rpcCall(chain, method, params):
     # response.raise_for_status()
 
     json_result = response.json()
-    if 'error' in json_result and json_result['error']:
-        return jsonify({'error': json_result['error']}), 400
     # TODO remove spacial case for getrawmempool and getblockhash
     if ('result' in json_result and method != 'getrawmempool' and method != 'getblockhash'):
         json_result = json_result['result']
-    return jsonify(json_result), 200
+    return json_result
 
 @frontend.route(API_URL + '/chain/<string:chain>/<string:resource>', methods = ['POST'])
 @crossdomain.crossdomain(origin='*')
@@ -62,7 +57,15 @@ def rpcexplorerrest(chain, resource):
     else:
         method = resource
         rpc_request_data.update(request_data)
-    return rpcCall(chain, method, rpc_request_data)
+
+    if not method in ALLOWED_CALLS:
+        return jsonify( {'error': {'message': 'Method "%s" not supported.' % method}} ), 400
+
+    json_result = rpcCall(chain, method, rpc_request_data)
+    
+    if 'error' in json_result and json_result['error']:
+        return jsonify({'error': json_result['error']}), 400
+    return jsonify(json_result), 200
 
 @frontend.route(API_URL + '/chain/<string:chain>/<string:resource>', methods = ['OPTIONS'])
 @crossdomain.crossdomain(origin='*', headers='Content-Type')
