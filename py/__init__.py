@@ -30,7 +30,7 @@ def RpcCall(chain, method, params):
     # response.raise_for_status()
 
     json_result = response.json()
-    # TODO remove spacial case for getrawmempool and getblockhash
+    # TODO remove special case for getrawmempool and getblockhash
     if ('result' in json_result and method != 'getrawmempool' and method != 'getblockhash'):
         json_result = json_result['result']
     return json_result
