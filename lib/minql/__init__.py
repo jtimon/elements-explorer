@@ -12,22 +12,25 @@ class AlreadyExistsError(BaseException):
         self.errors = {'Error:':'The %s %s already exists.' % (table_name, id)}
         super(AlreadyExistsError, self).__init__(*args, **kwargs)
 
-def MinqlClient(db, address):
+def MinqlClientFactory(db):
 
     if db == 'zmq':
         from .impl.zmq import ZmqMinqlClient
-        return ZmqMinqlClient(address)
+        return ZmqMinqlClient
     elif db == 'dummy':
         from .impl.dummy import DummyMinqlClient
-        return DummyMinqlClient(address)
+        return DummyMinqlClient
     elif db == 'hyperdex':
         from .impl.hyperdex import HyperdexMinqlClient
-        return HyperdexMinqlClient(address)
+        return HyperdexMinqlClient
     elif db == 'postgres':
         from .impl.postgresql import PostgresqlMinqlClient
-        return PostgresqlMinqlClient(address)
+        return PostgresqlMinqlClient
     else:
         raise NotImplementedError
+
+def MinqlClient(db, address):
+    return MinqlClientFactory(db)(address)
 
 import json
 def read_json(path):
