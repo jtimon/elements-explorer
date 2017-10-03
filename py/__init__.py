@@ -35,6 +35,10 @@ def RpcCall(chain, method, params):
         json_result = json_result['result']
     return json_result
 
+def GetStatById(chain, req_id):
+    json_result = RpcCall(chain, 'getblockstats', {'start': req_id, 'end': req_id})
+    return json_result
+
 def GetById(chain, resource, req_id):
     rpc_request_data = {}
 
@@ -46,11 +50,11 @@ def GetById(chain, resource, req_id):
         rpc_request_data['txid'] = req_id
         rpc_request_data['verbose'] = 1
     elif resource == 'blockstats':
-        method = 'getblockstats'
-        rpc_request_data['start'] = req_id
-        rpc_request_data['end'] = req_id
+        json_result = GetStatById(chain, req_id)
+        return json_result
 
-    return RpcCall(chain, method, rpc_request_data)
+    json_result = RpcCall(chain, method, rpc_request_data)
+    return json_result
 
 @frontend.route(API_URL + '/chain/<string:chain>/<string:resource>', methods = ['POST'])
 @crossdomain.crossdomain(origin='*')
