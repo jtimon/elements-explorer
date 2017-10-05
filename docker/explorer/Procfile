@@ -1,1 +1,1 @@
-web: gunicorn py:app -b "$WEB_HOST:$WEB_PORT" -w $WEB_WORKERS -k gevent
+web: gunicorn py:app -b "$WEB_HOST:$WEB_PORT" -w $WEB_WORKERS -k gevent --log-config py/config/logging.conf
