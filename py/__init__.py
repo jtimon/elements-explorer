@@ -48,7 +48,7 @@ def GetStatById(chain, req_id):
     except:
         json_result = RpcCall(chain, resource, {'start': req_id, 'end': req_id})
         json_result = RemoveListFromSingle(json_result)
-        json_result['id'] = json_result['height']
+        json_result['id'] = req_id
         DB_CLIENT.put(resource, json_result)
         
     return json_result
