@@ -35,13 +35,20 @@ def RpcCall(chain, method, params):
         json_result = json_result['result']
     return json_result
 
+def RemoveListFromSingle(stat_result):
+    result = {}
+    for key in stat_result:
+        result[key] = stat_result[key][0]
+    return result
+
 def GetStatById(chain, req_id):
     resource = 'getblockstats'
     try:
         json_result = DB_CLIENT.get(resource, req_id)
     except:
         json_result = RpcCall(chain, resource, {'start': req_id, 'end': req_id})
-        json_result['id'] = json_result['height'][0]
+        json_result = RemoveListFromSingle(json_result)
+        json_result['id'] = json_result['height']
         DB_CLIENT.put(resource, json_result)
         
     return json_result
