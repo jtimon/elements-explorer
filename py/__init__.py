@@ -36,7 +36,14 @@ def RpcCall(chain, method, params):
     return json_result
 
 def GetStatById(chain, req_id):
-    json_result = RpcCall(chain, 'getblockstats', {'start': req_id, 'end': req_id})
+    resource = 'getblockstats'
+    try:
+        json_result = DB_CLIENT.get(resource, req_id)
+    except:
+        json_result = RpcCall(chain, resource, {'start': req_id, 'end': req_id})
+        json_result['id'] = json_result['height'][0]
+        DB_CLIENT.put(resource, json_result)
+        
     return json_result
 
 def GetById(chain, resource, req_id):

@@ -1,6 +1,10 @@
 import os
 
+from lib import minql
+
 CLIENT_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'app')
+
+DB_CLIENT = minql.MinqlClientFactory(os.environ.get('DB_TYPE'))(os.environ.get('DB_ADR'))
 
 # TODO duplicated default ports, adapt to elements (with CA),
 # uncomment, clean up
