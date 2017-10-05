@@ -46,12 +46,13 @@ def GetStatById(chain, req_id):
     try:
         json_result = DB_CLIENT.get(resource, req_id)
     except:
-        json_result = RpcCall(chain, resource, {'start': req_id, 'end': req_id})
-        json_result = RemoveListFromSingle(json_result)
+        rpc_result = RpcCall(chain, resource, {'start': req_id, 'end': req_id})
+        json_result = {}
         json_result['id'] = req_id
+        json_result['blob'] = RemoveListFromSingle(rpc_result)
         DB_CLIENT.put(resource, json_result)
         
-    return json_result
+    return json_result['blob']
 
 def GetById(chain, resource, req_id):
     rpc_request_data = {}
