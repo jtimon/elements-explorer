@@ -28,7 +28,7 @@ angular.module('rpcExplorerApp')
             return retPromise;
         };
 
-        var MAX_PARALLEL_IT = 7; // (8) Number of parallel calls - 1 
+        var MAX_PARALLEL_IT = 3; // (4) Number of parallel calls - 1 
 
         srv.GetBlockStats = function(start, end) {
             var chain = SrvChain.get();
