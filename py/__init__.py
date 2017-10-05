@@ -45,6 +45,10 @@ def RpcFromId(chain, resource, req_id):
     if resource == 'blockstats':
         rpc_result = RpcCall(chain, 'getblockstats', {'start': req_id, 'end': req_id})
         rpc_result = RemoveListFromSingle(rpc_result)
+    elif resource == 'block':
+        rpc_result = RpcCall(chain, 'getblock', {'blockhash': req_id})
+    elif resource == 'tx':
+        rpc_result = RpcCall(chain, 'getrawtransaction', {'txid': req_id, 'verbose': 1})
 
     return rpc_result
 
@@ -62,20 +66,7 @@ def GetBlobById(chain, resource, req_id):
     return json_result
 
 def GetById(chain, resource, req_id):
-    rpc_request_data = {}
-
-    if resource == 'block':
-        method = 'getblock'
-        rpc_request_data['blockhash'] = req_id
-    elif resource == 'tx':
-        method = 'getrawtransaction'
-        rpc_request_data['txid'] = req_id
-        rpc_request_data['verbose'] = 1
-    elif resource == 'blockstats':
-        json_result = GetBlobById(chain, resource, req_id)
-        return json_result
-
-    json_result = RpcCall(chain, method, rpc_request_data)
+    json_result = GetBlobById(chain, resource, req_id)
     return json_result
 
 @frontend.route(API_URL + '/chain/<string:chain>/<string:resource>', methods = ['POST'])
