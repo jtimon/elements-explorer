@@ -22,6 +22,12 @@ gflags.RegisterValidator('workers',
     lambda workers: 1 <= workers <= 50,
     message=u"Number of workers must be between 1 and 50.")
 
+gflags.DEFINE_string('schema', u"",
+    u"Schema for MinQL server")
+
+gflags.DEFINE_string('dataset', u"",
+    u"Dataset for MinQL server")
+
 try:
     import sys
     argv = gflags.FLAGS(sys.argv)
@@ -58,3 +64,9 @@ for server_id in range(FLAGS.workers):
 if not single:
     request_queue = zmqmin.Queue(FLAGS.address, FLAGS.proxyaddress)
     request_queue.start()
+
+if FLAGS.schema:
+    c = minql.MinqlClient('zmq', FLAGS.address)
+    c.put_schema_from_file(FLAGS.schema)
+    if FLAGS.dataset:
+        c.put_dataset_from_file(FLAGS.dataset)
