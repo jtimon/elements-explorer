@@ -44,15 +44,17 @@ def RemoveListFromSingle(stat_result):
 def GetStatById(chain, req_id):
     resource = 'getblockstats'
     try:
-        json_result = DB_CLIENT.get(resource, req_id)
+        db_result = DB_CLIENT.get(resource, req_id)
+        json_result = json.loads(db_result['blob'])
     except:
         rpc_result = RpcCall(chain, resource, {'start': req_id, 'end': req_id})
-        json_result = {}
-        json_result['id'] = req_id
-        json_result['blob'] = RemoveListFromSingle(rpc_result)
-        DB_CLIENT.put(resource, json_result)
+        json_result = RemoveListFromSingle(rpc_result)
+        db_cache = {}
+        db_cache['id'] = req_id
+        db_cache['blob'] = json.dumps(json_result)
+        DB_CLIENT.put(resource, db_cache)
         
-    return json_result['blob']
+    return json_result
 
 def GetById(chain, resource, req_id):
     rpc_request_data = {}
