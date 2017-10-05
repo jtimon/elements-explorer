@@ -57,6 +57,8 @@ angular.module('rpcExplorerApp')
 
         $scope.selected_stats = [
             "swtxs",
+            "total_size",
+            "swtotal_size",
             "minfeerate",
         ];
 
