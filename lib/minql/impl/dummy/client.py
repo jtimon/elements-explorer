@@ -11,6 +11,7 @@ class DummyMinqlClient(MinqlBaseClient):
         super(DummyMinqlClient, self).__init__(*args, **kwargs)
 
     def create_table(self, table_name, schema):
+        print('Creating table %s' % table_name)
         assert table_name not in self.tables, "Table '%s' already exists." % table_name
 
         self.tables[ table_name ] = {}
