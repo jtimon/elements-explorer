@@ -1,8 +1,20 @@
 {
-  "block": {
+  "bitcoin_block": {
   },
-  "tx": {
+  "bitcoin_tx": {
   },
-  "blockstats": {
+  "bitcoin_blockstats": {
+  },
+  "testnet3_block": {
+  },
+  "testnet3_tx": {
+  },
+  "testnet3_blockstats": {
+  },
+  "elementsregtest_block": {
+  },
+  "elementsregtest_tx": {
+  },
+  "elementsregtest_blockstats": {
   }
 }

@@ -54,14 +54,14 @@ def RpcFromId(chain, resource, req_id):
 
 def GetBlobById(chain, resource, req_id):
     try:
-        db_result = DB_CLIENT.get(resource, req_id)
+        db_result = DB_CLIENT.get(chain + "_" + resource, req_id)
         json_result = json.loads(db_result['blob'])
     except:
         json_result = RpcFromId(chain, resource, req_id)
         db_cache = {}
         db_cache['id'] = req_id
         db_cache['blob'] = json.dumps(json_result)
-        DB_CLIENT.put(resource, db_cache)
+        DB_CLIENT.put(chain + "_" + resource, db_cache)
 
     return json_result
 
