@@ -1,20 +1,65 @@
 {
   "bitcoin_block": {
+    "blob": {
+      "index": false, 
+      "required": true, 
+      "type": "text"
+    }
   },
   "bitcoin_tx": {
+    "blob": {
+      "index": false, 
+      "required": true, 
+      "type": "text"
+    }
   },
   "bitcoin_blockstats": {
+    "blob": {
+      "index": false, 
+      "required": true, 
+      "type": "text"
+    }
   },
   "testnet3_block": {
+    "blob": {
+      "index": false, 
+      "required": true, 
+      "type": "text"
+    }
   },
   "testnet3_tx": {
+    "blob": {
+      "index": false, 
+      "required": true, 
+      "type": "text"
+    }
   },
   "testnet3_blockstats": {
+    "blob": {
+      "index": false, 
+      "required": true, 
+      "type": "text"
+    }
   },
   "elementsregtest_block": {
+    "blob": {
+      "index": false, 
+      "required": true, 
+      "type": "text"
+    }
   },
   "elementsregtest_tx": {
+    "blob": {
+      "index": false, 
+      "required": true, 
+      "type": "text"
+    } 
   },
   "elementsregtest_blockstats": {
+    "blob": {
+      "index": false, 
+      "required": true, 
+      "type": "text"
+    }
   }
 }
