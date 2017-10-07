@@ -10,10 +10,9 @@
 angular.module('rpcExplorerApp')
     .controller('MempoolCtrl', function ($scope, $routeParams, SrvUtil, SrvChain, SrvBackend) {
 
+        SrvChain.set($routeParams.chain);
+
         $scope.loading = true;
-        if ($routeParams.chain) {
-            SrvChain.set($routeParams.chain);
-        }
 
         function mempoolinfoCallback(data) {
             $scope.mempoolinfo = SrvUtil.GetResult(data);

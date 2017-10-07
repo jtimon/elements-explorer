@@ -10,10 +10,9 @@
 angular.module('rpcExplorerApp')
     .controller('MainCtrl', function ($scope, $routeParams, SrvUtil, SrvChain, SrvBackend) {
 
+        SrvChain.set($routeParams.chain);
+
         $scope.loading = true;
-        if ($routeParams.chain) {
-            SrvChain.set($routeParams.chain);
-        }
         $scope.CTverbose = false;
         $scope.verbose = false;
         $scope.rawhex_limit = 100;
