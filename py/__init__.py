@@ -35,16 +35,9 @@ def RpcCall(chain, method, params):
         json_result = json_result['result']
     return json_result
 
-def RemoveListFromSingle(stat_result):
-    result = {}
-    for key in stat_result:
-        result[key] = stat_result[key][0]
-    return result
-
 def RpcFromId(chain, resource, req_id):
     if resource == 'blockstats':
         rpc_result = RpcCall(chain, 'getblockstats', {'start': req_id, 'end': req_id})
-        rpc_result = RemoveListFromSingle(rpc_result)
     elif resource == 'block':
         rpc_result = RpcCall(chain, 'getblock', {'blockhash': req_id})
     elif resource == 'tx':

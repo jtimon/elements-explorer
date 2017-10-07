@@ -69,7 +69,7 @@ angular.module('rpcExplorerApp')
                                 if (!formatted_data[key]) {
                                     formatted_data[key] = [];
                                 }
-                                formatted_data[key].push(result[key]);
+                                formatted_data[key].push(result[key][0]);
                             }
                         }
                     }
