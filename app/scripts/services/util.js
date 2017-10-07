@@ -1,6 +1,14 @@
 'use strict';
 /*global $:false */
 
+function NumToPositive(num) {
+    return (num > 0) ? (num) : 0;
+}
+        
+function ParseIntToPositive(num) {
+    return NumToPositive(parseInt(num));
+}
+
 function GetResult(response) {
     if (response['data']['result']) {
         // TODO remove spacial case for getrawmempool and getblockhash
@@ -48,5 +56,7 @@ angular.module('rpcExplorerApp')
         srv.PreCache = PreCache;
         srv.CacheElem = CacheElem;
         srv.GetResult = GetResult;
+        srv.NumToPositive = NumToPositive;
+        srv.ParseIntToPositive = ParseIntToPositive;
         return srv;
     });
