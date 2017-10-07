@@ -33,7 +33,7 @@ angular
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
       })
-      .when('/chain/:chain/stats', {
+      .when('/chain/:chain/stats/start/:start_height/end/:end_height', {
         templateUrl: 'views/stats.html',
         controller: 'StatsCtrl',
         controllerAs: 'stats'

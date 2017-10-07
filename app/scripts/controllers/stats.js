@@ -8,18 +8,21 @@
  * Controller of the rpcExplorerApp
  */
 angular.module('rpcExplorerApp')
-    .controller('StatsCtrl', function ($scope, $routeParams, SrvUtil, SrvChain, SrvBackend) {
+    .controller('StatsCtrl', function ($scope, $routeParams, $location, SrvUtil, SrvChain, SrvBackend) {
 
         SrvChain.set($routeParams.chain);
 
-        function initChainCallback(data) {
-            var current_height = data.blocks;
-            $scope.start_height = (current_height > 0) ? (current_height - 1) : 0;
-            $scope.end_height = current_height;
-        };
-        SrvChain.GetChainInfo()
-            .then(initChainCallback)
-            .catch(SrvUtil.errorCallbackScoped($scope));
+        function UpdatePath(start, end) {
+            var future_path = $location.path().replace(/(.*)\/start\/(.+)\/(.*)/g, "$1/start/" + start + "/end/$3");
+            future_path = future_path.replace(/(.*)\/end\/(.+)/g, "$1/end/" + end);
+            $location.path(future_path);
+        }
+        
+        $scope.start_height = SrvUtil.ParseIntToPositive($routeParams.start_height);
+        $scope.end_height = SrvUtil.ParseIntToPositive($routeParams.end_height);
+        if ($scope.start_height > $scope.end_height) {
+            $scope.start_height = $scope.end_height;
+        }
 
         $scope.loading_stats = false;
         $scope.verbose_stats = false;
@@ -115,6 +118,7 @@ angular.module('rpcExplorerApp')
             SrvBackend.GetBlockStats($scope.start_height, $scope.end_height)
                 .then(successCallbackPerBlockStats)
                 .catch(SrvUtil.errorCallbackScoped($scope));
+            UpdatePath($scope.start_height, $scope.end_height);
         };
 
         $scope.toggleStat = function(name) {
@@ -132,4 +136,6 @@ angular.module('rpcExplorerApp')
                 StatsToGraph($scope.plot_data);
             }
         };
+
+        $scope.doPlot();
     });
