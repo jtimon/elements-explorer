@@ -56,6 +56,12 @@ angular.module('rpcExplorerApp')
                 .then(statsCallbackBlock);
         };
 
+        function CreatePromBlockstats(height) {
+            return function () {
+                return PromBlockstats(height);
+            }
+        };
+
         function successCallbackBlockHeight(data) {
             $scope.blockid = SrvUtil.GetResult(data);
             return $scope.blockid;
@@ -83,7 +89,7 @@ angular.module('rpcExplorerApp')
             return SrvBackend.RpcCall("getblockhash", {"height": height})
                 .then(successCallbackBlockHeight)
                 .then(goToBlock)
-                .then(PromBlockstats);
+                .then(CreatePromBlockstats(height))
         };
 
         var goToTx = function(txhash) {
