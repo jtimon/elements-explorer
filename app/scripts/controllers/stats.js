@@ -12,14 +12,8 @@ angular.module('rpcExplorerApp')
 
         SrvChain.set($routeParams.chain);
 
-        function UpdatePath(start, end) {
-            var future_path = $location.path().replace(/(.*)\/start\/(.+)\/(.*)/g, "$1/start/" + start + "/end/$3");
-            future_path = future_path.replace(/(.*)\/end\/(.+)/g, "$1/end/" + end);
-            $location.path(future_path);
-        }
-        
-        $scope.start_height = SrvUtil.ParseIntToPositive($routeParams.start_height);
-        $scope.end_height = SrvUtil.ParseIntToPositive($routeParams.end_height);
+        $scope.start_height = SrvUtil.ParseIntToPositive($location.search().start);
+        $scope.end_height = SrvUtil.ParseIntToPositive($location.search().end);
         if ($scope.start_height > $scope.end_height) {
             $scope.start_height = $scope.end_height;
         }
@@ -118,7 +112,8 @@ angular.module('rpcExplorerApp')
             SrvBackend.GetBlockStats($scope.start_height, $scope.end_height)
                 .then(successCallbackPerBlockStats)
                 .catch(SrvUtil.errorCallbackScoped($scope));
-            UpdatePath($scope.start_height, $scope.end_height);
+            $location.search('start', $scope.start_height);
+            $location.search('end', $scope.end_height);
         };
 
         $scope.toggleStat = function(name) {

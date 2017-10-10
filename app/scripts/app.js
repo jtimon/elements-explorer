@@ -33,10 +33,11 @@ angular
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
       })
-      .when('/chain/:chain/stats/start/:start_height/end/:end_height', {
+      .when('/chain/:chain/stats', {
         templateUrl: 'views/stats.html',
         controller: 'StatsCtrl',
-        controllerAs: 'stats'
+        controllerAs: 'stats',
+        reloadOnSearch: false
       })
       .when('/chain/:chain/mempool', {
         templateUrl: 'views/mempool.html',

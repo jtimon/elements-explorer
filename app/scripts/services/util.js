@@ -4,7 +4,7 @@
 function NumToPositive(num) {
     return (num > 0) ? (num) : 0;
 }
-        
+
 function ParseIntToPositive(num) {
     return NumToPositive(parseInt(num));
 }
