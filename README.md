@@ -12,6 +12,13 @@ Dependent on the OS distribution:
 make python docker-ce docker-compose
 ```
 
+Docker-compose should be installed with pip: 
+
+```
+sudo pip uninstall docker-compose
+sudo pip install -U docker-compose
+```
+
 Add your user to the docker group:
 
 ```
