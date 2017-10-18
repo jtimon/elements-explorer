@@ -2,8 +2,7 @@ FROM ubuntu:16.04
 
 WORKDIR /build_docker
 
-RUN apt-get update
-RUN apt-get install -y python-pip
+RUN apt-get update && apt-get install -y python-pip
 RUN pip install honcho
 
 ADD docker/daemon-deps.sh /build_docker/docker/daemon-deps.sh

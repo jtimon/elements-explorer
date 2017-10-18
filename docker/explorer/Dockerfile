@@ -2,8 +2,11 @@ FROM ubuntu:16.04
 
 EXPOSE 5000
 
-RUN apt-get update
-RUN apt-get install -y nodejs npm python-pip git
+RUN apt-get update && apt-get install -y \
+    nodejs \
+    npm \
+    python-pip \
+    git
 
 WORKDIR /build_docker
 
