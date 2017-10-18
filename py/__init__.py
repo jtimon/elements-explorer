@@ -80,6 +80,8 @@ def rpcexplorerrest(chain, resource):
     else:
         json_result = RpcCall(chain, resource, request_data)
 
+    if not json_result:
+        return jsonify({'error': {'message': 'No result for %s.' % resource}}), 400
     if 'error' in json_result and json_result['error']:
         return jsonify({'error': json_result['error']}), 400
     return jsonify(json_result), 200
