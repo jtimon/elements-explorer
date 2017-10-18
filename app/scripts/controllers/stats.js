@@ -50,6 +50,10 @@ angular.module('rpcExplorerApp')
             "maxfeerate",
             "medianfeerate",
             "avgfeerate",
+            "mintxsize",
+            "maxtxsize",
+            "mediantxsize",
+            "avgtxsize",
         ];
 
         $scope.selected_stats = [
