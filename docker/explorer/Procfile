@@ -1,3 +1,1 @@
 web: gunicorn py:app -b "$WEB_HOST:$WEB_PORT" -w $WEB_WORKERS -k gevent --log-config py/config/logging.conf
-
-proxydb: python lib/minql/bin/proxy_db.py --address $DB_ADR --proxyaddress $DB_PROXY_AUX_ADR --dbaddress $DB_BACKEND_ADR --dbtype $DB_PROXY_TYPE --workers $DB_PROXY_WORKERS --schema $MINQL_SCHEMA
