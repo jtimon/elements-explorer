@@ -16,14 +16,14 @@ AVAILABLE_CHAINS = {
 }
 
 WEB_ALLOWED_CALLS = [
-    'block',
-    'tx',
-    'blockstats',
-    "getblockchaininfo",
-    "getblockhash",
-    "getmempoolinfo",
-    "getrawmempool",
-    "getmempoolentry",
+    'block', # cached in server and gui
+    'tx', # cached in server and gui
+    'blockstats', # cached in server and gui
+    "getblockchaininfo", # cached in gui (TODO subscribe from gui)
+    "getblockhash", # never cached, always hits the node
+    "getmempoolinfo", # never cached, always hits the node
+    "getrawmempool", # never cached, always hits the node
+    "getmempoolentry", # never cached, always hits the node
 ]
 
 RPC_ALLOWED_CALLS = [
