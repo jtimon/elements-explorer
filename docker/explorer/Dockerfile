@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /build_docker
 
-ADD app/package.json /build_docker/app/package.json
+ADD docker/explorer/package.json /build_docker/app/package.json
 RUN cd app && npm i
 
 ADD requirements.txt /build_docker/requirements.txt
