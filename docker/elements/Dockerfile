@@ -13,8 +13,6 @@ ADD docker/build-daemon.sh /build_docker/docker/build-daemon.sh
 RUN curl -L https://github.com/jtimon/elements/archive/17613070a059aa6b9001af518f4de64ff6edcc2d.tar.gz | tar xz
 RUN cd elements-17613070a059aa6b9001af518f4de64ff6edcc2d && sh ./../docker/build-daemon.sh src/elementsd
 
-EXPOSE 7041
-
 ADD docker/elements/.env /build_docker/docker/elements/.env
 ADD docker/elements/Procfile /build_docker/docker/elements/Procfile
 CMD honcho start -e docker/elements/.env -f docker/elements/Procfile
