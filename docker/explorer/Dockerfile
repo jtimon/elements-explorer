@@ -13,7 +13,7 @@ WORKDIR /build_docker
 ADD docker/explorer/package.json /build_docker/app/package.json
 RUN cd app && npm i
 
-ADD requirements.txt /build_docker/requirements.txt
+ADD docker/explorer/requirements.txt /build_docker/requirements.txt
 RUN pip install -r requirements.txt --require-hashes
 
 ADD setup.py /build_docker/setup.py
