@@ -10,7 +10,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
 
         url, port = address.split(':')
         # TODO remove the hardcoded params
-        params = "dbname='tradecraft' user='tradecraft' password='password' host='%s' port='%s'" % (url, port)
+        params = "dbname='postgres' user='postgres' password='password' host='%s' port='%s'" % (url, port)
         self.connection = psycopg2.connect(params)
 
         super(PostgresqlMinqlClient, self).__init__(*args, **kwargs)
