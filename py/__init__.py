@@ -48,9 +48,15 @@ def RpcFromId(chain, resource, req_id):
 def GetBlobById(chain, resource, req_id):
     try:
         db_result = DB_CLIENT.get(chain + "_" + resource, req_id)
+        if not db_result:
+            return {'error': {'message': 'No result db for %s.' % resource}}
+        if not 'blob' in db_result:
+            return {'error': {'message': 'No blob result db for %s.' % resource}}
         json_result = json.loads(db_result['blob'])
     except:
         json_result = RpcFromId(chain, resource, req_id)
+        if not json_result:
+            return {'error': {'message': 'No result for %s.' % resource}}
         db_cache = {}
         db_cache['id'] = req_id
         db_cache['blob'] = json.dumps(json_result)
