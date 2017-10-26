@@ -40,7 +40,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
             elif value['type'] == 'int':
                 attr += 'INT'
             elif value['type'] == 'text':
-                raise NotImplementedError
+                attr += 'TEXT'
             else:
                 raise NotImplementedError
             
