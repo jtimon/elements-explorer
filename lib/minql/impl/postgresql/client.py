@@ -76,7 +76,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
         print 'postgres drop table', table_name
         cur = self.connection.cursor()
         self.connection.set_isolation_level(0)
-        cur.execute('DROP DATABASE "%s"' % table_name)
+        cur.execute('DROP TABLE IF EXISTS "%s"' % table_name)
         # cur.execute('ALTER TABLE "%s" DROP CONSTRAINT  "%s"' % (
         #     table_name, table_name))
         # cur.execute('DROP DATABASE IF EXISTS "%s"' % table_name)
