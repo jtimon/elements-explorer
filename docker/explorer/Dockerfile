@@ -3,10 +3,13 @@ FROM ubuntu:16.04
 EXPOSE 5000
 
 RUN apt-get update && apt-get install -y \
+    git \
     nodejs \
     npm \
     python-pip \
-    git
+    python-dev \
+    libpq-dev \
+    postgresql-server-dev-all
 
 WORKDIR /build_docker
 
