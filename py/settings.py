@@ -6,7 +6,8 @@ from rpcdaemon import RpcCaller
 
 CLIENT_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'app')
 
-DB_CLIENT = minql.MinqlClientFactory(os.environ.get('DB_TYPE'))(os.environ.get('DB_ADR'))
+DB_CLIENT = minql.MinqlClientFactory(os.environ.get('DB_TYPE'))(
+    os.environ.get('DB_ADR'), os.environ.get('DB_NAME'), os.environ.get('DB_USER'), os.environ.get('DB_PASS'))
 
 WEB_ALLOWED_CALLS = [
     'block', # cached in server and gui
