@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify
 import json
 
 import crossdomain
-from rpcdaemon import RpcCall
+from rpcdaemon import RpcCaller
 from settings import *
 
 api_blueprint = Blueprint('api_blueprint', __name__)
@@ -14,13 +14,13 @@ API_URL = '/api/v0'
 def available_chains():
     return jsonify( {'available_chains': AVAILABLE_CHAINS.keys()} ), 200
 
-def RpcFromId(chain, resource, req_id):
+def RpcFromId(rpccaller, resource, req_id):
     if resource == 'blockstats':
-        rpc_result = RpcCall(chain, 'getblockstats', {'start': req_id, 'end': req_id})
+        rpc_result = rpccaller.RpcCall('getblockstats', {'start': req_id, 'end': req_id})
     elif resource == 'block':
-        rpc_result = RpcCall(chain, 'getblock', {'blockhash': req_id})
+        rpc_result = rpccaller.RpcCall('getblock', {'blockhash': req_id})
     elif resource == 'tx':
-        rpc_result = RpcCall(chain, 'getrawtransaction', {'txid': req_id, 'verbose': 1})
+        rpc_result = rpccaller.RpcCall('getrawtransaction', {'txid': req_id, 'verbose': 1})
 
     return rpc_result
 
@@ -33,7 +33,8 @@ def GetBlobById(chain, resource, req_id):
             return {'error': {'message': 'No blob result db for %s.' % resource}}
         json_result = json.loads(db_result['blob'])
     except:
-        json_result = RpcFromId(chain, resource, req_id)
+        rpccaller = RpcCaller(AVAILABLE_CHAINS[chain])
+        json_result = RpcFromId(rpccaller, resource, req_id)
         if not json_result:
             return {'error': {'message': 'No result for %s.' % resource}}
         db_cache = {}
@@ -63,7 +64,8 @@ def rpcexplorerrest(chain, resource):
 
         json_result = GetById(chain, resource, request_data['id'])
     else:
-        json_result = RpcCall(chain, resource, request_data)
+        rpccaller = RpcCaller(AVAILABLE_CHAINS[chain])
+        json_result = rpccaller.RpcCall(resource, request_data)
 
     if not json_result:
         return jsonify({'error': {'message': 'No result for %s.' % resource}}), 400
