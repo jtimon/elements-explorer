@@ -7,8 +7,8 @@ RUN sh docker/daemon-deps.sh
 
 ADD docker/build-daemon.sh /build_docker/docker/build-daemon.sh
 # Install bitcoind with getperblockstats
-RUN curl -L https://github.com/jtimon/bitcoin/archive/caeaf86de426f9b71c0828be23253827dd0149fb.tar.gz | tar xz
-RUN cd bitcoin-caeaf86de426f9b71c0828be23253827dd0149fb && sh ./../docker/build-daemon.sh src/bitcoind
+RUN curl -L https://github.com/jtimon/bitcoin/archive/624dfc78b18ea9089ba198c016fe36310a6a10a4.tar.gz | tar xz
+RUN cd bitcoin-624dfc78b18ea9089ba198c016fe36310a6a10a4 && sh ./../docker/build-daemon.sh src/bitcoind
 
 RUN apt-get update && apt-get install -y python-pip
 
