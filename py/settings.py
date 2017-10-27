@@ -37,7 +37,7 @@ RESOURCES_FOR_GET_BY_ID = [
 ]
 
 AVAILABLE_CHAINS = {
-    "bitcoin": RpcCaller("bitcoin:8532", RPC_ALLOWED_CALLS),
-    "testnet3": RpcCaller("bitcoin:18532", RPC_ALLOWED_CALLS),
-    "elementsregtest": RpcCaller("elements:7041", RPC_ALLOWED_CALLS),
+    "bitcoin": RpcCaller("bitcoin:8532", 'user1', 'password1', RPC_ALLOWED_CALLS),
+    "testnet3": RpcCaller("bitcoin:18532", 'user1', 'password1', RPC_ALLOWED_CALLS),
+    "elementsregtest": RpcCaller("elements:7041", 'user1', 'password1', RPC_ALLOWED_CALLS),
 }
