@@ -2,19 +2,18 @@
 import requests
 import json
 
-from settings import RPC_ALLOWED_CALLS
-
 class RpcCaller(object):
 
-    def __init__(self, address, 
+    def __init__(self, address, RPC_ALLOWED_CALLS,
                  **kwargs):
 
         self.address = address
+        self.RPC_ALLOWED_CALLS = RPC_ALLOWED_CALLS
 
         super(FunctionResource, self).__init__(**kwargs)
 
     def RpcCall(method, params):
-        if not method in RPC_ALLOWED_CALLS:
+        if not method in self.RPC_ALLOWED_CALLS:
             return {'error': {'message': 'Method "%s" not supported.' % method}}
 
         requestData = {

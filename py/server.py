@@ -33,7 +33,7 @@ def GetBlobById(chain, resource, req_id):
             return {'error': {'message': 'No blob result db for %s.' % resource}}
         json_result = json.loads(db_result['blob'])
     except:
-        rpccaller = RpcCaller(AVAILABLE_CHAINS[chain])
+        rpccaller = RpcCaller(AVAILABLE_CHAINS[chain], RPC_ALLOWED_CALLS)
         json_result = RpcFromId(rpccaller, resource, req_id)
         if not json_result:
             return {'error': {'message': 'No result for %s.' % resource}}
@@ -64,7 +64,7 @@ def rpcexplorerrest(chain, resource):
 
         json_result = GetById(chain, resource, request_data['id'])
     else:
-        rpccaller = RpcCaller(AVAILABLE_CHAINS[chain])
+        rpccaller = RpcCaller(AVAILABLE_CHAINS[chain], RPC_ALLOWED_CALLS)
         json_result = rpccaller.RpcCall(resource, request_data)
 
     if not json_result:
