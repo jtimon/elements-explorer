@@ -6,11 +6,10 @@ from ..sql import SqlMinqlClient
 
 class PostgresqlMinqlClient(SqlMinqlClient):
 
-    def __init__(self, address, *args, **kwargs):
+    def __init__(self, address, name, user, password, *args, **kwargs):
 
         url, port = address.split(':')
-        # TODO remove the hardcoded params
-        params = "dbname='postgres' user='postgres' password='password' host='%s' port='%s'" % (url, port)
+        params = "dbname='%s' user='%s' password='%s' host='%s' port='%s'" % (name, user, password, url, port)
         self.connection = psycopg2.connect(params)
 
         super(PostgresqlMinqlClient, self).__init__(*args, **kwargs)
