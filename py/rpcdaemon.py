@@ -10,9 +10,9 @@ class RpcCaller(object):
         self.address = address
         self.RPC_ALLOWED_CALLS = RPC_ALLOWED_CALLS
 
-        super(FunctionResource, self).__init__(**kwargs)
+        super(RpcCaller, self).__init__(**kwargs)
 
-    def RpcCall(method, params):
+    def RpcCall(self, method, params):
         if not method in self.RPC_ALLOWED_CALLS:
             return {'error': {'message': 'Method "%s" not supported.' % method}}
 
