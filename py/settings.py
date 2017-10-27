@@ -2,18 +2,11 @@ import os
 
 from lib import minql
 
+from rpcdaemon import RpcCaller
+
 CLIENT_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'app')
 
 DB_CLIENT = minql.MinqlClientFactory(os.environ.get('DB_TYPE'))(os.environ.get('DB_ADR'))
-
-# TODO duplicated default ports, adapt to elements (with CA),
-# uncomment, clean up
-AVAILABLE_CHAINS = {
-    "bitcoin": "bitcoin:8532",
-    "testnet3": "bitcoin:18532",
-    "elementsregtest": "elements:7041",
-    # "elements": "elements:9042",
-}
 
 WEB_ALLOWED_CALLS = [
     'block', # cached in server and gui
@@ -42,3 +35,9 @@ RESOURCES_FOR_GET_BY_ID = [
     'tx',
     'blockstats',
 ]
+
+AVAILABLE_CHAINS = {
+    "bitcoin": RpcCaller("bitcoin:8532", RPC_ALLOWED_CALLS),
+    "testnet3": RpcCaller("bitcoin:18532", RPC_ALLOWED_CALLS),
+    "elementsregtest": RpcCaller("elements:7041", RPC_ALLOWED_CALLS),
+}
