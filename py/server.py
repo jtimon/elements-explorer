@@ -15,7 +15,7 @@ def available_chains():
 
 def RpcFromId(rpccaller, resource, req_id):
     if resource == 'blockstats':
-        rpc_result = rpccaller.RpcCall('getblockstats', {'start': req_id, 'end': req_id})
+        rpc_result = rpccaller.RpcCall('getblockstats', {'height': req_id})
     elif resource == 'block':
         rpc_result = rpccaller.RpcCall('getblock', {'blockhash': req_id})
     elif resource == 'tx':
