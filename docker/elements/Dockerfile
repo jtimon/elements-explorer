@@ -11,14 +11,12 @@ RUN pip install -r requirements.txt --require-hashes
 
 # Install elementsd with getperblockstats
 ENV BRANCH_COMMIT=17613070a059aa6b9001af518f4de64ff6edcc2d
+ENV REPO_HOST=https://github.com/jtimon
 ENV DAEMON_NAME=elements
-ENV DAEMON_D=src/elementsd
-ENV BRANCH_URL=https://github.com/jtimon/$DAEMON_NAME/archive/$BRANCH_COMMIT.tar.gz
-ENV BRANCH_DIR=$DAEMON_NAME-$BRANCH_COMMIT
+ENV MAKE_TARGET=src/elementsd
 
 ADD docker/build-daemon.sh /build_docker/docker/build-daemon.sh
-RUN curl -L $BRANCH_URL | tar xz
-RUN cd $BRANCH_DIR && sh ./../docker/build-daemon.sh $DAEMON_D
+RUN sh /build_docker/docker/build-daemon.sh $REPO_HOST $DAEMON_NAME $BRANCH_COMMIT $MAKE_TARGET
 
 ADD docker/$DAEMON_NAME/.env /build_docker/docker/$DAEMON_NAME/.env
 ADD docker/$DAEMON_NAME/Procfile /build_docker/docker/$DAEMON_NAME/Procfile
