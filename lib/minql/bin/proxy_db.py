@@ -15,6 +15,15 @@ gflags.DEFINE_string('dbaddress', u"localhost:1984",
 gflags.DEFINE_string('dbtype', u"dummy",
     u"Backend type for MinQL server")
 
+gflags.DEFINE_string('dbname', u"dbname",
+    u"Backend db name for MinQL server")
+
+gflags.DEFINE_string('dbuser', u"dbuser",
+    u"Backend db user for MinQL server")
+
+gflags.DEFINE_string('dbpass', u"dbpass",
+    u"Backend db password for MinQL server")
+
 gflags.DEFINE_integer('workers', 10,
     u"Number of proxy Workers",
     short_name='w')
@@ -58,6 +67,9 @@ for server_id in range(FLAGS.workers):
         single=single, 
         address=address,
         db_address=FLAGS.dbaddress,
+        db_name=FLAGS.dbname,
+        db_user=FLAGS.dbuser,
+        db_pass=FLAGS.dbpass,
         worker_id='ZmqServer_%s' % server_id)
     ddb.start()
 
@@ -66,7 +78,7 @@ if not single:
     request_queue.start()
 
 if FLAGS.schema:
-    c = minql.MinqlClient('zmq', FLAGS.address)
+    c = minql.MinqlClientFactory('zmq')(FLAGS.address)
     c.put_schema_from_file(FLAGS.schema)
     if FLAGS.dataset:
         c.put_dataset_from_file(FLAGS.dataset)
