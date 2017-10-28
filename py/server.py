@@ -35,7 +35,7 @@ def GetBlobById(chain, resource, req_id):
         rpccaller = AVAILABLE_CHAINS[chain]
         json_result = RpcFromId(rpccaller, resource, req_id)
         if not json_result:
-            return {'error': {'message': 'No result for %s.' % resource}}
+            return {'error': {'message': 'No rpc result for %s.' % resource}}
         db_cache = {}
         db_cache['id'] = req_id
         db_cache['blob'] = json.dumps(json_result)
