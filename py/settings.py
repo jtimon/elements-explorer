@@ -38,7 +38,16 @@ RESOURCES_FOR_GET_BY_ID = [
 ]
 
 AVAILABLE_CHAINS = {
-    "bitcoin": RpcCaller("bitcoin:8532", os.environ.get('BITCOIN_RPCUSER'), os.environ.get('BITCOIN_RPCPASSWORD'), RPC_ALLOWED_CALLS),
-    "testnet3": RpcCaller("bitcoin:18532", os.environ.get('TESTNET3_RPCUSER'), os.environ.get('TESTNET3_RPCPASSWORD'), RPC_ALLOWED_CALLS),
-    "elementsregtest": RpcCaller("elements:7041", os.environ.get('ELEMENTS_RPCUSER'), os.environ.get('ELEMENTS_RPCPASSWORD'), RPC_ALLOWED_CALLS),
+    "bitcoin": RpcCaller(os.environ.get('BITCOIN_ADR'),
+                         os.environ.get('BITCOIN_RPCUSER'),
+                         os.environ.get('BITCOIN_RPCPASSWORD'),
+                         RPC_ALLOWED_CALLS),
+    "testnet3": RpcCaller(os.environ.get('TESTNET3_ADR'),
+                          os.environ.get('TESTNET3_RPCUSER'),
+                          os.environ.get('TESTNET3_RPCPASSWORD'),
+                          RPC_ALLOWED_CALLS),
+    "elementsregtest": RpcCaller(os.environ.get('ELEMENTSREGTEST_ADR'),
+                                 os.environ.get('ELEMENTS_RPCUSER'),
+                                 os.environ.get('ELEMENTS_RPCPASSWORD'),
+                                 RPC_ALLOWED_CALLS),
 }
