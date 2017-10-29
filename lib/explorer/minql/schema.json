@@ -1,4 +1,21 @@
 {
+  "chaininfo": {
+    "bestblockhash": {
+      "index": false, 
+      "required": true, 
+      "type": "string"
+    },
+    "blocks": {
+      "index": false, 
+      "required": true, 
+      "type": "int"
+    },
+    "mediantime": {
+      "index": false, 
+      "required": true, 
+      "type": "int"
+    }
+  },
   "bitcoin_block": {
     "blob": {
       "index": false, 
