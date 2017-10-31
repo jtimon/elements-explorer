@@ -2,7 +2,7 @@ import os
 
 from lib import minql
 
-from rpcdaemon import RpcCaller
+from lib.explorer.rpcdaemon import RpcCaller
 
 CLIENT_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'app')
 
