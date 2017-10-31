@@ -23,28 +23,23 @@ def RpcFromId(rpccaller, resource, req_id):
 
     return rpc_result
 
-def GetBlobById(chain, resource, req_id):
+def GetById(db_client, rpccaller, chain, resource, req_id):
     try:
-        db_result = DB_CLIENT.get(chain + "_" + resource, req_id)
+        db_result = db_client.get(chain + "_" + resource, req_id)
         if not db_result:
             return {'error': {'message': 'No result db for %s.' % resource}}
         if not 'blob' in db_result:
             return {'error': {'message': 'No blob result db for %s.' % resource}}
         json_result = json.loads(db_result['blob'])
     except:
-        rpccaller = AVAILABLE_CHAINS[chain]
         json_result = RpcFromId(rpccaller, resource, req_id)
         if not json_result:
             return {'error': {'message': 'No rpc result for %s.' % resource}}
         db_cache = {}
         db_cache['id'] = req_id
         db_cache['blob'] = json.dumps(json_result)
-        DB_CLIENT.put(chain + "_" + resource, db_cache)
+        db_client.put(chain + "_" + resource, db_cache)
 
-    return json_result
-
-def GetById(chain, resource, req_id):
-    json_result = GetBlobById(chain, resource, req_id)
     return json_result
 
 @api_blueprint.route(API_URL + '/chain/<string:chain>/<string:resource>', methods = ['POST'])
@@ -57,13 +52,13 @@ def rpcexplorerrest(chain, resource):
         return jsonify( {'error': {'message': 'Resource "%s" not supported.' % method}} ), 400
 
     request_data = json.loads(request.data)
+    rpccaller = AVAILABLE_CHAINS[chain]
     if resource in RESOURCES_FOR_GET_BY_ID:
         if not 'id' in request_data:
             return jsonify({'error': {'message': 'No id specified to get %s by id.' % resource}}), 400
 
-        json_result = GetById(chain, resource, request_data['id'])
+        json_result = GetById(DB_CLIENT, rpccaller, chain, resource, request_data['id'])
     else:
-        rpccaller = AVAILABLE_CHAINS[chain]
         json_result = rpccaller.RpcCall(resource, request_data)
 
     if not json_result:
