@@ -55,7 +55,7 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
             entry['mediantime'] = json_result['mediantime']
             print('put entry', self.chain, self.resource, entry)
             try:
-                db_result = self.db_client.put(self.resource, entry)
+                db_result = self.db_client.put(self.chain + "_" + self.resource, entry)
             except:
                 print('FAILED ENTRY', self.chain, self.resource, entry)
                 continue

@@ -1,5 +1,5 @@
 {
-  "chaininfo": {
+  "bitcoin_chaininfo": {
     "bestblockhash": {
       "index": false, 
       "required": true, 
@@ -37,6 +37,23 @@
       "type": "text"
     }
   },
+  "testnet3_chaininfo": {
+    "bestblockhash": {
+      "index": false, 
+      "required": true, 
+      "type": "string"
+    },
+    "blocks": {
+      "index": false, 
+      "required": true, 
+      "type": "int"
+    },
+    "mediantime": {
+      "index": false, 
+      "required": true, 
+      "type": "int"
+    }
+  },
   "testnet3_block": {
     "blob": {
       "index": false, 
@@ -56,6 +73,23 @@
       "index": false, 
       "required": true, 
       "type": "text"
+    }
+  },
+  "elementsregtest_chaininfo": {
+    "bestblockhash": {
+      "index": false, 
+      "required": true, 
+      "type": "string"
+    },
+    "blocks": {
+      "index": false, 
+      "required": true, 
+      "type": "int"
+    },
+    "mediantime": {
+      "index": false, 
+      "required": true, 
+      "type": "int"
     }
   },
   "elementsregtest_block": {
