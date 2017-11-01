@@ -3,11 +3,12 @@ import os
 from lib import minql
 
 from lib.explorer.rpcdaemon import RpcCaller
+from lib.explorer.env_config import CONFIG
 
 CLIENT_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'app')
 
-DB_CLIENT = minql.MinqlClientFactory(os.environ.get('DB_TYPE'))(
-    os.environ.get('DB_ADR'), os.environ.get('DB_NAME'), os.environ.get('DB_USER'), os.environ.get('DB_PASS'))
+DB_CLIENT = minql.MinqlClientFactory(CONFIG['DB_TYPE'])(
+    CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'])
 
 WEB_ALLOWED_CALLS = [
     'block', # cached in server and gui
