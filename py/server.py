@@ -22,7 +22,8 @@ def rpcexplorerrest(chain, resource):
     if not chain in AVAILABLE_CHAINS:
         return jsonify( {'error': {'message': 'Chain "%s" not supported.' % chain}} ), 400
     if not resource in WEB_ALLOWED_CALLS:
-        return jsonify( {'error': {'message': 'Resource "%s" not supported.' % method}} ), 400
+        return jsonify( {'error': {'message': 'Resource "%s" not supported.' % resource}} ), 400
+
     request_data = json.loads(request.data)
 
     json_result = BetterNameResource(DB_CLIENT, AVAILABLE_CHAINS[chain], chain, resource).resolve_request(request_data)

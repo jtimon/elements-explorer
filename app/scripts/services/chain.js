@@ -27,14 +27,14 @@ angular.module('rpcExplorerApp')
         }
 
         srv.GetChainInfo = function() {
-            var resource = 'getblockchaininfo';
+            var resource = 'chaininfo';
             SrvUtil.PreCache(cache, selected_chain, resource);
             if (cache[selected_chain][resource][selected_chain]) {
                 return $q(function(resolve) {
                     resolve(cache[selected_chain][resource][selected_chain]);
                 });
             } else {
-                return $http.post(BACKEND_URL + '/chain/' + selected_chain + '/' + resource, {})
+                return $http.post(BACKEND_URL + '/chain/' + selected_chain + '/' + resource, {'id': selected_chain})
                     .then(SrvUtil.CacheElem(cache, selected_chain, resource, selected_chain));
             }
         }
