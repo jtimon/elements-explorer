@@ -31,12 +31,6 @@ RPC_ALLOWED_CALLS = [
     "getmempoolentry",
 ]
 
-RESOURCES_FOR_GET_BY_ID = [
-    'block',
-    'tx',
-    'blockstats',
-]
-
 AVAILABLE_CHAINS = {
     "bitcoin": RpcCaller(os.environ.get('BITCOIN_ADR'),
                          os.environ.get('BITCOIN_RPCUSER'),

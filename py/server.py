@@ -2,7 +2,7 @@
 from flask import Blueprint, request, jsonify
 import json
 
-from lib.explorer.explorer_server import GetById
+from lib.explorer.explorer_server import BetterNameResource
 
 import crossdomain
 from settings import *
@@ -20,19 +20,11 @@ def available_chains():
 def rpcexplorerrest(chain, resource):
     if not chain in AVAILABLE_CHAINS:
         return jsonify( {'error': {'message': 'Chain "%s" not supported.' % chain}} ), 400
-
     if not resource in WEB_ALLOWED_CALLS:
         return jsonify( {'error': {'message': 'Resource "%s" not supported.' % method}} ), 400
-
     request_data = json.loads(request.data)
-    rpccaller = AVAILABLE_CHAINS[chain]
-    if resource in RESOURCES_FOR_GET_BY_ID:
-        if not 'id' in request_data:
-            return jsonify({'error': {'message': 'No id specified to get %s by id.' % resource}}), 400
 
-        json_result = GetById(DB_CLIENT, rpccaller, chain, resource, request_data['id'])
-    else:
-        json_result = rpccaller.RpcCall(resource, request_data)
+    json_result = BetterNameResource(DB_CLIENT, AVAILABLE_CHAINS[chain], chain, resource).resolve_request(request_data)
 
     if not json_result:
         return jsonify({'error': {'message': 'No result for %s.' % resource}}), 400
