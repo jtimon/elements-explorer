@@ -3,9 +3,10 @@ from flask import Blueprint, request, jsonify
 import json
 
 from lib.explorer.explorer_server import BetterNameResource
+from lib.explorer.env_config import CONFIG, DB_CLIENT, AVAILABLE_CHAINS
 
 import crossdomain
-from settings import *
+from settings import WEB_ALLOWED_CALLS
 
 api_blueprint = Blueprint('api_blueprint', __name__)
 API_URL = '/api/v0'

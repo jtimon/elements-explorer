@@ -3,7 +3,7 @@ from flask import send_from_directory
 
 import crossdomain
 from server import api_blueprint
-from settings import *
+from settings import CLIENT_DIRECTORY
 
 from flask import Flask
 app = Flask(__name__)
