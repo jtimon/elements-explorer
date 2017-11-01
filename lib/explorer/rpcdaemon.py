@@ -2,20 +2,30 @@
 import requests
 import json
 
+RPC_ALLOWED_CALLS = [
+    "getblockchaininfo",
+    "getblock",
+    "getblockhash",
+    "getrawtransaction",
+    "getblockstats",
+    "getmempoolinfo",
+    "getrawmempool",
+    "getmempoolentry",
+]
+
 class RpcCaller(object):
 
-    def __init__(self, address, user, password, RPC_ALLOWED_CALLS,
+    def __init__(self, address, user, password,
                  **kwargs):
 
         self.address = address
-        self.RPC_ALLOWED_CALLS = RPC_ALLOWED_CALLS
         self.user = user
         self.password = password
 
         super(RpcCaller, self).__init__(**kwargs)
 
     def RpcCall(self, method, params):
-        if not method in self.RPC_ALLOWED_CALLS:
+        if not method in RPC_ALLOWED_CALLS:
             return {'error': {'message': 'Method "%s" not supported.' % method}}
 
         requestData = {

@@ -8,30 +8,19 @@ from lib.explorer.daemon_subscriber import DaemonSubscriber
 from lib.explorer.rpcdaemon import RpcCaller
 
 # TODO unify with settings
-RPC_ALLOWED_CALLS = [
-    "getblockchaininfo",
-    "getblock",
-    "getblockhash",
-    "getrawtransaction",
-    "getblockstats",
-    "getmempoolinfo",
-    "getrawmempool",
-    "getmempoolentry",
-]
-
 AVAILABLE_CHAINS = {
     "bitcoin": RpcCaller(os.environ.get('BITCOIN_ADR'),
                          os.environ.get('BITCOIN_RPCUSER'),
-                         os.environ.get('BITCOIN_RPCPASSWORD'),
-                         RPC_ALLOWED_CALLS),
+                         os.environ.get('BITCOIN_RPCPASSWORD')
+    ),
     "testnet3": RpcCaller(os.environ.get('TESTNET3_ADR'),
                           os.environ.get('TESTNET3_RPCUSER'),
-                          os.environ.get('TESTNET3_RPCPASSWORD'),
-                          RPC_ALLOWED_CALLS),
+                          os.environ.get('TESTNET3_RPCPASSWORD')
+    ),
     "elementsregtest": RpcCaller(os.environ.get('ELEMENTSREGTEST_ADR'),
                                  os.environ.get('ELEMENTS_RPCUSER'),
-                                 os.environ.get('ELEMENTS_RPCPASSWORD'),
-                                 RPC_ALLOWED_CALLS),
+                                 os.environ.get('ELEMENTS_RPCPASSWORD')
+    ),
 }
 
 daemon_subscriber = DaemonSubscriber(os.environ.get('BITCOIN_ZMQ'), os.environ.get('DB_TYPE'), os.environ.get('DB_ADR'), os.environ.get('DB_NAME'), os.environ.get('DB_USER'), os.environ.get('DB_PASS'), 'bitcoin', AVAILABLE_CHAINS['bitcoin'])
