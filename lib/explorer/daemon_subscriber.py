@@ -62,3 +62,12 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
             if not db_result:
                 print('FAILED ENTRY: No db result', self.chain, self.resource, entry)
                 continue
+
+            try:
+                json_result = GetById(self.db_client, self.rpccaller, self.chain, 'blockstats', entry['blocks'])
+            except:
+                print('FAILED ENTRY STATS', self.chain, self.resource, entry)
+                continue
+            if not db_result:
+                print('FAILED ENTRY STATS: No db result', self.chain, self.resource, entry)
+                continue
