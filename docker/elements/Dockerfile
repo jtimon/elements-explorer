@@ -15,8 +15,8 @@ ENV REPO_HOST=https://github.com/jtimon
 ENV DAEMON_NAME=elements
 ENV MAKE_TARGET=src/elementsd
 
-ADD docker/build-daemon.sh /build_docker/docker/build-daemon.sh
-RUN sh /build_docker/docker/build-daemon.sh $REPO_HOST $DAEMON_NAME $BRANCH_COMMIT $MAKE_TARGET
+ADD docker/daemon/build.sh /build_docker/docker/daemon/build.sh
+RUN sh /build_docker/docker/daemon/build.sh $REPO_HOST $DAEMON_NAME $BRANCH_COMMIT $MAKE_TARGET
 
 ADD docker/$DAEMON_NAME/.env /build_docker/docker/$DAEMON_NAME/.env
 ADD docker/$DAEMON_NAME/Procfile /build_docker/docker/$DAEMON_NAME/Procfile
