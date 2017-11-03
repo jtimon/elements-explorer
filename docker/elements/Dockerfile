@@ -2,8 +2,8 @@ FROM ubuntu:16.04
 
 WORKDIR /build_docker
 
-ADD docker/daemon-deps.sh /build_docker/docker/daemon-deps.sh
-RUN sh docker/daemon-deps.sh
+ADD docker/daemon/deps.sh /build_docker/docker/daemon/deps.sh
+RUN sh docker/daemon/deps.sh
 
 RUN apt-get update && apt-get install -y python-pip
 ADD docker/daemon-requirements.txt /build_docker/requirements.txt
