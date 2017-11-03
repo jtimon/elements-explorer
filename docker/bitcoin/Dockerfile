@@ -6,7 +6,7 @@ ADD docker/daemon/deps.sh /build_docker/docker/daemon/deps.sh
 RUN sh docker/daemon/deps.sh
 
 RUN apt-get update && apt-get install -y python-pip
-ADD docker/daemon-requirements.txt /build_docker/requirements.txt
+ADD docker/daemon/requirements.txt /build_docker/requirements.txt
 RUN pip install -r requirements.txt --require-hashes
 
 # Install bitcoind with getperblockstats
