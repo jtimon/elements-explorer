@@ -16,7 +16,7 @@ ENV DAEMON_NAME=bitcoin
 ENV MAKE_TARGET=src/bitcoind
 
 ADD docker/daemon/build.sh /build_docker/docker/daemon/build.sh
-RUN sh /build_docker/docker/daemon/build.sh $REPO_HOST $DAEMON_NAME $BRANCH_COMMIT $MAKE_TARGET
+RUN sh /build_docker/docker/daemon/build.sh $REPO_HOST $DAEMON_NAME
 
 ADD docker/$DAEMON_NAME/.env /build_docker/docker/$DAEMON_NAME/.env
 ADD docker/$DAEMON_NAME/Procfile /build_docker/docker/$DAEMON_NAME/Procfile
