@@ -32,7 +32,7 @@ services:
   elements:
     build:
       context: ../
-      dockerfile: docker/elements/Dockerfile
+      dockerfile: docker/daemon/dockerfile/elements.dock
     volumes:
       - ../../explorer-data/elementsregtest:/root/.elements
     ports:
@@ -45,7 +45,7 @@ services:
   bitcoin:
     build:
       context: ../
-      dockerfile: docker/bitcoin/Dockerfile
+      dockerfile: docker/daemon/dockerfile/bitcoin.dock
     volumes:
       - ../../explorer-data/bitcoin:/root/.bitcoin
       - ../../explorer-data/testnet3:/root/.testnet3
