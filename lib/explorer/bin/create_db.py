@@ -7,8 +7,6 @@ import gflags
 gflags.DEFINE_string('address', u"localhost:1984", 
                      u"Address clients will connect to")
 
-gflags.DEFINE_string('proxyaddress', u"2000", u"")
-
 gflags.DEFINE_string('dbaddress', u"localhost:1984",
     u"Network address backend database")
 
@@ -23,13 +21,6 @@ gflags.DEFINE_string('dbuser', u"dbuser",
 
 gflags.DEFINE_string('dbpass', u"dbpass",
     u"Backend db password for MinQL server")
-
-gflags.DEFINE_integer('workers', 10,
-    u"Number of proxy Workers",
-    short_name='w')
-gflags.RegisterValidator('workers',
-    lambda workers: 1 <= workers <= 50,
-    message=u"Number of workers must be between 1 and 50.")
 
 gflags.DEFINE_string('schema', u"",
     u"Schema for MinQL server")
@@ -53,29 +44,16 @@ from lib import minql
 import time
 time.sleep(1)
 
-if FLAGS.workers > 1:
-    single=False
-    address=FLAGS.proxyaddress
-else:
-    single=True
-    address=FLAGS.address
-
-# FIX flags.w = 1 case, flags -> params mapping wrong
-for server_id in range(FLAGS.workers):
-    ddb = minql.ZmqMinqlServer(
-        FLAGS.dbtype, 
-        single=single, 
-        address=address,
-        db_address=FLAGS.dbaddress,
-        db_name=FLAGS.dbname,
-        db_user=FLAGS.dbuser,
-        db_pass=FLAGS.dbpass,
-        worker_id='ZmqServer_%s' % server_id)
-    ddb.start()
-
-if not single:
-    request_queue = zmqmin.Queue(FLAGS.address, FLAGS.proxyaddress)
-    request_queue.start()
+ddb = minql.ZmqMinqlServer(
+    FLAGS.dbtype, 
+    single=True, 
+    address=FLAGS.address,
+    db_address=FLAGS.dbaddress,
+    db_name=FLAGS.dbname,
+    db_user=FLAGS.dbuser,
+    db_pass=FLAGS.dbpass,
+    worker_id='ZmqServer')
+ddb.start()
 
 if FLAGS.schema:
     c = minql.MinqlClientFactory('zmq')(FLAGS.address)
