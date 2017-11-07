@@ -13,7 +13,6 @@ RUN pip install -r requirements.txt --require-hashes
 ENV BRANCH_COMMIT=44dcea038b44890e5f49c71ff26cfcb4ecf0da15
 ENV REPO_HOST=https://github.com/jtimon
 ENV DAEMON_NAME=bitcoin
-ENV MAKE_TARGET=src/bitcoind
 
 ADD docker/daemon/build.sh /build_docker/docker/daemon/build.sh
 RUN sh /build_docker/docker/daemon/build.sh $REPO_HOST $DAEMON_NAME

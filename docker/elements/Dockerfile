@@ -13,7 +13,6 @@ RUN pip install -r requirements.txt --require-hashes
 ENV BRANCH_COMMIT=17613070a059aa6b9001af518f4de64ff6edcc2d
 ENV REPO_HOST=https://github.com/jtimon
 ENV DAEMON_NAME=elements
-ENV MAKE_TARGET=src/elementsd
 
 ADD docker/daemon/build.sh /build_docker/docker/daemon/build.sh
 RUN sh /build_docker/docker/daemon/build.sh $REPO_HOST $DAEMON_NAME

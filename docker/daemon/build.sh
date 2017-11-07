@@ -5,7 +5,6 @@ set -e
 
 REPO_HOST=${1}
 REPO_NAME=${2}
-MAKE_TARGET=${MAKE_TARGET}
 BRANCH_DIR=$REPO_NAME-$BRANCH_COMMIT
 BRANCH_URL=$REPO_HOST/$REPO_NAME/archive/$BRANCH_COMMIT.tar.gz
 NUM_JOBS=4
@@ -17,4 +16,4 @@ curl -L $BRANCH_URL | tar xz
 cd $BRANCH_DIR
 ./autogen.sh
 ./configure --disable-wallet --without-gui --with-incompatible-bdb
-make $MAKE_TARGET -j$NUM_JOBS
+make "src/"$REPO_NAME"d" -j$NUM_JOBS
