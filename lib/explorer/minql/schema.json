@@ -1,5 +1,5 @@
 {
-  "bitcoin_chaininfo": {
+  "chaininfo": {
     "bestblockhash": {
       "index": false, 
       "required": true, 
@@ -16,97 +16,21 @@
       "type": "int"
     }
   },
-  "bitcoin_block": {
+  "block": {
     "blob": {
       "index": false, 
       "required": true, 
       "type": "text"
     }
   },
-  "bitcoin_tx": {
+  "tx": {
     "blob": {
       "index": false, 
       "required": true, 
       "type": "text"
     }
   },
-  "bitcoin_blockstats": {
-    "blob": {
-      "index": false, 
-      "required": true, 
-      "type": "text"
-    }
-  },
-  "testnet3_chaininfo": {
-    "bestblockhash": {
-      "index": false, 
-      "required": true, 
-      "type": "string"
-    },
-    "blocks": {
-      "index": false, 
-      "required": true, 
-      "type": "int"
-    },
-    "mediantime": {
-      "index": false, 
-      "required": true, 
-      "type": "int"
-    }
-  },
-  "testnet3_block": {
-    "blob": {
-      "index": false, 
-      "required": true, 
-      "type": "text"
-    }
-  },
-  "testnet3_tx": {
-    "blob": {
-      "index": false, 
-      "required": true, 
-      "type": "text"
-    }
-  },
-  "testnet3_blockstats": {
-    "blob": {
-      "index": false, 
-      "required": true, 
-      "type": "text"
-    }
-  },
-  "elementsregtest_chaininfo": {
-    "bestblockhash": {
-      "index": false, 
-      "required": true, 
-      "type": "string"
-    },
-    "blocks": {
-      "index": false, 
-      "required": true, 
-      "type": "int"
-    },
-    "mediantime": {
-      "index": false, 
-      "required": true, 
-      "type": "int"
-    }
-  },
-  "elementsregtest_block": {
-    "blob": {
-      "index": false, 
-      "required": true, 
-      "type": "text"
-    }
-  },
-  "elementsregtest_tx": {
-    "blob": {
-      "index": false, 
-      "required": true, 
-      "type": "text"
-    } 
-  },
-  "elementsregtest_blockstats": {
+  "blockstats": {
     "blob": {
       "index": false, 
       "required": true, 

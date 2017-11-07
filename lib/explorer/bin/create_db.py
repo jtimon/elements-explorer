@@ -55,8 +55,17 @@ ddb = minql.ZmqMinqlServer(
     worker_id='ZmqServer')
 ddb.start()
 
+CHAINS = ["bitcoin", "testnet3", "elementsregtest"]
+
 if FLAGS.schema:
+    schema = minql.read_json(FLAGS.schema)
+    per_chain_schema = {}
+    for table_name in schema:
+        table_schema = schema[table_name]
+        for chain in CHAINS:
+            per_chain_schema[chain + "_" + table_name] = table_schema
+
     c = minql.MinqlClientFactory('zmq')(FLAGS.address)
-    c.put_schema_from_file(FLAGS.schema)
+    c.put_schema(per_chain_schema)
     if FLAGS.dataset:
         c.put_dataset_from_file(FLAGS.dataset)
