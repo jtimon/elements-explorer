@@ -30,3 +30,10 @@ AVAILABLE_CHAINS = {
                                  os.environ.get('ELEMENTS_RPCPASSWORD')
     ),
 }
+
+SUBSCRIBER_PARAMS = {
+    'bitcoin': [os.environ.get('BITCOIN_ZMQ'), CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'], 'bitcoin', AVAILABLE_CHAINS['bitcoin']],
+    'testnet3': [os.environ.get('TESTNET3_ZMQ'), CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'], 'testnet3', AVAILABLE_CHAINS['testnet3']],
+    'elementsregtest': [os.environ.get('ELEMENTSREGTEST_ZMQ'), CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'], 'elementsregtest', AVAILABLE_CHAINS['elementsregtest']],
+}
+
