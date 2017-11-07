@@ -15,7 +15,7 @@ ENV REPO_HOST=https://github.com/jtimon
 ENV DAEMON_NAME=elements
 
 ADD docker/daemon/build.sh /build_docker/docker/daemon/build.sh
-RUN sh /build_docker/docker/daemon/build.sh $REPO_HOST $DAEMON_NAME
+RUN sh /build_docker/docker/daemon/build.sh
 
 ADD docker/$DAEMON_NAME/.env /build_docker/docker/$DAEMON_NAME/.env
 ADD docker/$DAEMON_NAME/Procfile /build_docker/docker/$DAEMON_NAME/Procfile
