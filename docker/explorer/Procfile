@@ -2,4 +2,6 @@ web: gunicorn py:app -b "$WEB_HOST:$WEB_PORT" -w $WEB_WORKERS -k gevent --log-co
 
 proxydb: python lib/minql/bin/proxy_db.py --address $DB_PROXY_ADR --proxyaddress $DB_PROXY_AUX_ADR --dbaddress $DB_BACKEND_ADR --dbtype $DB_PROXY_TYPE --workers $DB_PROXY_WORKERS --schema $MINQL_SCHEMA --dbname $DB_NAME --dbuser $DB_USER --dbpass $DB_PASS
 
-daemon_subscriber: python py/bin/daemon_subscriber.py
+subscriber_bitcoin: python py/bin/daemon_subscriber.py --chain bitcoin
+subscriber_testnet3: python py/bin/daemon_subscriber.py --chain testnet3
+subscriber_elementsregtest: python py/bin/daemon_subscriber.py --chain elementsregtest
