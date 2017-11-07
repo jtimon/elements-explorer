@@ -17,6 +17,6 @@ ENV DAEMON_NAME=bitcoin
 ADD docker/daemon/build.sh /build_docker/docker/daemon/build.sh
 RUN sh /build_docker/docker/daemon/build.sh
 
-ADD docker/$DAEMON_NAME/.env /build_docker/docker/$DAEMON_NAME/.env
-ADD docker/$DAEMON_NAME/Procfile /build_docker/docker/$DAEMON_NAME/Procfile
-CMD honcho start -e docker/$DAEMON_NAME/.env -f docker/$DAEMON_NAME/Procfile
+ADD docker/daemon/honcho/$DAEMON_NAME/.env /build_docker/docker/daemon/honcho/$DAEMON_NAME/.env
+ADD docker/daemon/honcho/$DAEMON_NAME/Procfile /build_docker/docker/daemon/honcho/$DAEMON_NAME/Procfile
+CMD honcho start -e docker/daemon/honcho/$DAEMON_NAME/.env -f docker/daemon/honcho/$DAEMON_NAME/Procfile
