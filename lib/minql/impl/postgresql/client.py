@@ -111,6 +111,14 @@ class PostgresqlMinqlClient(SqlMinqlClient):
         cur.execute(query)
         return cur.fetchall()
 
+    def delete(self, table_name, criteria):
+        cur = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        query = 'DELETE FROM "%s"' % table_name
+        query += self.get_criteria_string(criteria)
+
+        print(query)
+        cur.execute(query)
+
     def update(self, table_name, row):
         assert 'id' in row and row['id'], 'The row needs an id field.'
 
