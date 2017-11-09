@@ -61,6 +61,16 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
                 continue
 
             try:
+                entry_blockhash = {
+                    'id': block_hash,
+                    'height': block_height,
+                }
+                db_result = self.db_client.put(self.chain + "_" + 'blockhash', entry_blockhash)
+            except:
+                print('FAILED GREEDY CACHE %s in chain %s' % ('blockstats', self.chain), entry_blockhash)
+                continue
+
+            try:
                 json_result = GetById(self.db_client, self.rpccaller, self.chain, 'blockstats', block_height)
             except:
                 print('FAILED GREEDY CACHE %s in chain %s for height %s' % ('blockstats', self.chain, block_height))
