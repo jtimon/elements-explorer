@@ -16,6 +16,13 @@
       "type": "int"
     }
   },
+  "blockhash": {
+    "height": {
+      "index": true, 
+      "required": true, 
+      "type": "int"
+    }
+  },
   "block": {
     "blob": {
       "index": false, 
