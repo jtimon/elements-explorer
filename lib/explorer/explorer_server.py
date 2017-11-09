@@ -72,6 +72,7 @@ class BetterNameResource(object):
         super(BetterNameResource, self).__init__(**kwargs)
 
     def resolve_request(self, request):
+        print('request', request)
         if self.resource in RESOURCES_FOR_GET_BY_ID:
             if not 'id' in request:
                 return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}
