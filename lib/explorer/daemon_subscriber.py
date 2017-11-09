@@ -61,6 +61,15 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
                 continue
 
             try:
+                criteria = {'height': {'ge': block_height}}
+                to_delete = self.db_client.search(self.chain + "_" + 'blockhash', criteria)
+                print('to_delete', to_delete)
+                self.db_client.delete(self.chain + "_" + 'blockhash', criteria)
+            except:
+                print('FAILED HANDLING REORG WITH %s in chain %s' % ('blockstats', self.chain), criteria)
+                continue
+
+            try:
                 entry_blockhash = {
                     'id': block_hash,
                     'height': block_height,
