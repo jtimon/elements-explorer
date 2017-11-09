@@ -14,7 +14,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
 
         super(PostgresqlMinqlClient, self).__init__(*args, **kwargs)
 
-    # TODO find out how to do the same in hyperdex 
+    # TODO find out how to do the same in hyperdex
     # and add it to the interface?
     def get_tables():
         cur = self.connection.cursor()
@@ -93,6 +93,10 @@ class PostgresqlMinqlClient(SqlMinqlClient):
                         criterion = '%s >= %s' % (attr, str(value['ge']))
                     if 'le' in value:
                         criterion = '%s <= %s' % (attr, str(value['le']))
+                    if 'gt' in value:
+                        criterion = '%s > %s' % (attr, str(value['gt']))
+                    if 'lt' in value:
+                        criterion = '%s < %s' % (attr, str(value['lt']))
                 elif isinstance(value, basestring):
                     criterion = "%s = '%s'" % (attr, value)
                 else:

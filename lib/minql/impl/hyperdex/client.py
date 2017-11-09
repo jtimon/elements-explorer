@@ -56,6 +56,7 @@ class HyperdexMinqlClient(MinqlBaseClient):
                 crit[ attr ] = hyperdex.client.GreaterEqual(float(value['ge']))
             elif type(value) is dict and 'le' in value:
                 crit[ attr ] = hyperdex.client.LessEqual(float(value['le']))
+            # TODO implement gt and lt
             else:
                 raise TypeError
 
