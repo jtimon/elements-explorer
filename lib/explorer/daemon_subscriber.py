@@ -26,7 +26,6 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
         self.db_pass = db_pass
         self.chain = chain
         self.rpccaller = rpccaller
-        self.resource = 'chaininfo'
 
         super(DaemonSubscriber, self).__init__(
             address=address,
@@ -47,27 +46,21 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
             block_hash = binascii.hexlify(msg_parts[1])
 
             json_result = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
+            block_height = json_result['height']
+            block_mediantime = json_result['mediantime']
 
             entry = {}
             entry['id'] = self.chain
             entry['bestblockhash'] = block_hash
-            entry['blocks'] = json_result['height']
-            entry['mediantime'] = json_result['mediantime']
-            print('put entry', self.chain, self.resource, entry)
+            entry['blocks'] = block_height
+            entry['mediantime'] = block_mediantime
             try:
-                db_result = self.db_client.put(self.chain + "_" + self.resource, entry)
+                db_result = self.db_client.put(self.chain + "_" + 'chaininfo', entry)
             except:
-                print('FAILED ENTRY', self.chain, self.resource, entry)
-                continue
-            if not db_result:
-                print('FAILED ENTRY: No db result', self.chain, self.resource, entry)
+                print('FAILED GREEDY CACHE %s in chain %s' % ('chaininfo', self.chain), entry)
                 continue
 
             try:
-                json_result = GetById(self.db_client, self.rpccaller, self.chain, 'blockstats', entry['blocks'])
+                json_result = GetById(self.db_client, self.rpccaller, self.chain, 'blockstats', block_height)
             except:
-                print('FAILED ENTRY STATS', self.chain, self.resource, entry)
-                continue
-            if not db_result:
-                print('FAILED ENTRY STATS: No db result', self.chain, self.resource, entry)
-                continue
+                print('FAILED GREEDY CACHE %s in chain %s for height %s' % ('blockstats', self.chain, block_height))
