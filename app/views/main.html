@@ -16,7 +16,7 @@
 <div class="container">
   <div>
     Block Height:
-    <button ng-disabled="loading" ng-click="prevHeight()"> {{blockheight - 1}}<<< </button>
+    <button ng-show="blockheight" ng-disabled="loading" ng-click="prevHeight()"> {{blockheight - 1}}<<< </button>
     <input ng-disabled="loading" type="number" step="1" min="0" ng-model="blockheight" ng-change="searchBlockByHeight()">
     <button ng-disabled="loading" ng-click="nextHeight()"> >>>{{blockheight + 1}} </button>
     Block Hash:
