@@ -18,6 +18,9 @@ class MinqlBaseClient(object):
     def search(self, table_name, criteria={}):
         raise NotImplementedError
 
+    def delete(self, table_name, criteria):
+        raise NotImplementedError
+
     def _get(self, table_name, id):
         raise NotImplementedError
 
@@ -29,6 +32,12 @@ class MinqlBaseClient(object):
         if obj is None:
             raise NotFoundError(table_name, id)
         return obj
+
+    def delete_single(self, table_name, id):
+        obj = self._get(table_name, id)
+        if obj is None:
+            raise NotFoundError(table_name, id)
+        self.delete(table_name, {'id': id})
 
     def update(self, table_name, row):
         obj = self.get(table_name, row['id'])
