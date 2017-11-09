@@ -15,7 +15,7 @@ class HyperdexMinqlClient(MinqlBaseClient):
         super(HyperdexMinqlClient, self).__init__(*args, **kwargs)
 
     def create_table(self, table_name, schema):
-        print 'Creating hyperdex space %s' % table_name
+        print('Creating hyperdex space %s' % table_name)
 
         attrs = []
         indexes = []

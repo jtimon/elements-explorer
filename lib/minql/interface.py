@@ -13,7 +13,7 @@ class MinqlBaseClient(object):
         try:
             self._drop_table(table_name)
         except:
-            print 'WARNING: trying to drop unkown table %s' % table_name
+            print('WARNING: trying to drop unkown table %s' % table_name)
 
     def search(self, table_name, criteria={}):
         raise NotImplementedError
@@ -46,26 +46,26 @@ class MinqlBaseClient(object):
         self.create_table(table_name, schema)
 
     def put_schema(self, schema={}):
-        print 'put_schema...'
+        print('put_schema...')
         for table_name, s in schema.iteritems():
             self.put_table(table_name, s)
 
     def put_schema_from_file(self, path):
-        print 'put_schema_from_file...'
+        print('put_schema_from_file...')
         self.put_schema(read_json(path))
 
     def put_table_data(self, table_name, rows):
-        print 'put_table_data %s' % table_name
+        print('put_table_data %s' % table_name)
         for row in rows:
             self.put(table_name, row)
 
     def put_dataset(self, dataset):
-        print 'put_dataset...'
+        print('put_dataset...')
         for table_name, rows in dataset.iteritems():
             self.put_table_data(table_name, rows)
 
     def put_dataset_from_file(self, path):
-        print 'put_dataset_from_file...'
+        print('put_dataset_from_file...')
         self.put_dataset(read_json(path))
 
     def reset_db(self, table_names=[]):

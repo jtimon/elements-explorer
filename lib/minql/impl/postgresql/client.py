@@ -26,7 +26,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
         return tables
 
     def create_table(self, table_name, schema):
-        print 'Creating PostgreSQL table %s' % table_name
+        print('Creating PostgreSQL table %s' % table_name)
 
         attrs = []
         for key, value in schema.iteritems():
@@ -56,7 +56,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
         table += ');'
 
         cur = self.connection.cursor()
-        print table
+        print(table)
         cur.execute(table)
         self.connection.commit()
 
@@ -66,20 +66,20 @@ class PostgresqlMinqlClient(SqlMinqlClient):
                 index = 'CREATE INDEX "%s_%s_index" ON "%s" ("%s");' % (
                     table_name, key, table_name, key)
                 cur = self.connection.cursor()
-                print index
+                print(index)
                 cur.execute(index)
                 self.connection.commit()
 
     # TODO postgres doesn't drop tables
     def _drop_table(self, table_name):
-        print 'postgres drop table', table_name
+        print('postgres drop table', table_name)
         cur = self.connection.cursor()
         self.connection.set_isolation_level(0)
         cur.execute('DROP TABLE IF EXISTS "%s"' % table_name)
         # cur.execute('ALTER TABLE "%s" DROP CONSTRAINT  "%s"' % (
         #     table_name, table_name))
         # cur.execute('DROP DATABASE IF EXISTS "%s"' % table_name)
-        # print 'DROP DATABASE IF EXISTS "%s"' % table_name
+        # print('DROP DATABASE IF EXISTS "%s"' % table_name)
         # self.connection.commit()
 
     def search(self, table_name, criteria={}):
@@ -144,7 +144,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
             ', '.join(row.keys()), 
             ', '.join(values)
         )
-        print query
+        print(query)
         cur.execute(query)
         self.connection.commit()
         return row
@@ -153,6 +153,6 @@ class PostgresqlMinqlClient(SqlMinqlClient):
         cur = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = 'SELECT * from "%s"' % table_name
         query += " where id = '%s'" % id
-        print query
+        print(query)
         cur.execute(query)
         return cur.fetchone()
