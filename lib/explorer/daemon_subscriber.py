@@ -16,6 +16,7 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
                  db_pass,
                  chain,
                  rpccaller,
+                 silent=True,
                  worker_id='DaemonSubscriber',
                  *args, **kwargs):
 
@@ -27,6 +28,11 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
         self.chain = chain
         self.rpccaller = rpccaller
 
+        if (silent):
+            import sys
+            import os
+            sys.stdout = open(os.devnull, 'w')
+        
         super(DaemonSubscriber, self).__init__(
             address=address,
             context=None, single=False,
