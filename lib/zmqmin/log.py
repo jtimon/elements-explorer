@@ -11,7 +11,7 @@ def json_sub_logger(ports):
     socket = context.socket(pyzmq.SUB)
 
     for port in ports:
-        print "Log subscribed to port %s" % port
+        print("Log subscribed to port %s" % port)
         socket.connect("tcp://localhost:%s" % port)
 
     # topicfilter blank to get all messages

@@ -27,10 +27,11 @@ class Device(multiprocessing.Process):
         self.frontend.bind(self.frontend_address)
         self._create_backend()
         self.backend.bind(self.backend_address)
-        print "%s connecting %s to %s" % (
+        print("%s connecting %s to %s" % (
             self.__class__.__name__, 
             self.frontend_address, 
-            self.backend_address)
+            self.backend_address
+        ))
 
         pyzmq.device(self.device_type, self.frontend, self.backend, self.gevent)
 

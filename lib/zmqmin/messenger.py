@@ -35,7 +35,7 @@ class Messenger(object):
             self.socket.bind(self.address)
         else:
             self.socket.connect(self.address)
-        print '%s connected to %s' % (self.worker_id, self.address)
+        print('%s connected to %s' % (self.worker_id, self.address))
 
     def send_message(self, message):
         if self.json:
