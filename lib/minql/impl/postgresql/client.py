@@ -42,7 +42,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
                 attr += 'TEXT'
             else:
                 raise NotImplementedError
-            
+
             if value['required']:
                 attr += ' NOT NULL'
 
@@ -82,18 +82,13 @@ class PostgresqlMinqlClient(SqlMinqlClient):
         cur.execute(query)
         # self.connection.commit()
 
-    def search(self, table_name, criteria={}):
-
-        cur = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        query = 'SELECT * from "%s"' % table_name
-
-        if criteria:
-
+    def get_criteria_string(self, criteria):
+         if criteria:
             crit = []
             for attr, value in criteria.iteritems():
 
                 if type(value) is dict:
-                    # TODO replace 'ge' with '>=' everywhere 
+                    # TODO replace 'ge' with '>=' everywhere
                     if 'ge' in value:
                         criterion = '%s >= %s' % (attr, str(value['ge']))
                     if 'le' in value:
@@ -103,7 +98,14 @@ class PostgresqlMinqlClient(SqlMinqlClient):
                 else:
                     criterion = '%s = %s' % (attr, str(value))
                 crit.append(criterion)
-            query += ' where ' + ' and '.join(crit)
+            return ' where ' + ' and '.join(crit)
+         else:
+             return ''
+
+    def search(self, table_name, criteria={}):
+        cur = self.connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        query = 'SELECT * from "%s"' % table_name
+        query += self.get_criteria_string(criteria)
 
         print(query)
         cur.execute(query)
@@ -142,8 +144,8 @@ class PostgresqlMinqlClient(SqlMinqlClient):
                 values.append( str(value) )
 
         query = 'INSERT INTO "%s" (%s) VALUES (%s)' % (
-            table_name, 
-            ', '.join(row.keys()), 
+            table_name,
+            ', '.join(row.keys()),
             ', '.join(values)
         )
         print(query)
