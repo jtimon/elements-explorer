@@ -29,6 +29,10 @@ angular
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
       })
+      .when('/chain/:chain/block-height/:block_height', {
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl',
+      })
       .when('/chain/:chain/tx/:txid', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',

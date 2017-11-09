@@ -159,6 +159,9 @@ angular.module('rpcExplorerApp')
                     $scope.loading = false;
                 })
                 .catch(SrvUtil.errorCallbackScoped($scope));
+        } else if ($routeParams.block_height) {
+            $scope.blockheight = parseInt($routeParams.block_height);
+            $scope.searchBlockByHeight()
         } else if ($routeParams.txid) {
             $scope.txid = $routeParams.txid;
             goToTx($routeParams.txid)
