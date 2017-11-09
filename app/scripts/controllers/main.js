@@ -128,6 +128,14 @@ angular.module('rpcExplorerApp')
                 })
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
+        $scope.prevHeight = function() {
+            $scope.blockheight = $scope.blockheight - 1;
+            $scope.searchBlockByHeight();
+        };
+        $scope.nextHeight = function() {
+            $scope.blockheight = $scope.blockheight + 1;
+            $scope.searchBlockByHeight();
+        };
 
         $scope.searchTx = function() {
             if ($scope.txid == "") {
