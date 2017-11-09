@@ -48,26 +48,26 @@ class PostgresqlMinqlClient(SqlMinqlClient):
 
             attrs.append(attr)
 
-        table = '''
+        query = '''
         CREATE TABLE "%s" (
             id VARCHAR(100) PRIMARY KEY NOT NULL''' % table_name
         if attrs:
-            table += ', \n' + ', \n'.join(attrs)
-        table += ');'
+            query += ', \n' + ', \n'.join(attrs)
+        query += ');'
 
         cur = self.connection.cursor()
-        print(table)
-        cur.execute(table)
+        print(query)
+        cur.execute(query)
         self.connection.commit()
 
         for key, value in schema.iteritems():
 
             if 'index' in value and value['index']:
-                index = 'CREATE INDEX "%s_%s_index" ON "%s" ("%s");' % (
+                query = 'CREATE INDEX "%s_%s_index" ON "%s" ("%s");' % (
                     table_name, key, table_name, key)
                 cur = self.connection.cursor()
-                print(index)
-                cur.execute(index)
+                print(query)
+                cur.execute(query)
                 self.connection.commit()
 
     # TODO postgres doesn't drop tables
@@ -75,11 +75,11 @@ class PostgresqlMinqlClient(SqlMinqlClient):
         print('postgres drop table', table_name)
         cur = self.connection.cursor()
         self.connection.set_isolation_level(0)
-        cur.execute('DROP TABLE IF EXISTS "%s"' % table_name)
+        query = 'DROP TABLE IF EXISTS "%s"' % table_name
+        print(query)
         # cur.execute('ALTER TABLE "%s" DROP CONSTRAINT  "%s"' % (
         #     table_name, table_name))
-        # cur.execute('DROP DATABASE IF EXISTS "%s"' % table_name)
-        # print('DROP DATABASE IF EXISTS "%s"' % table_name)
+        cur.execute(query)
         # self.connection.commit()
 
     def search(self, table_name, criteria={}):
@@ -105,6 +105,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
                 crit.append(criterion)
             query += ' where ' + ' and '.join(crit)
 
+        print(query)
         cur.execute(query)
         return cur.fetchall()
 
@@ -125,6 +126,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
             table_name, ', '.join(updates))
         query += " where id = '%s'" % row['id']
 
+        print(query)
         cur.execute(query)
         self.connection.commit()
         return row
