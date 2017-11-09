@@ -33,7 +33,7 @@ class Domain(Resource):
 
     def resolve_request(self, request):
 
-        print 'Request:'
+        print('Request:')
         pprint.pprint(request)
 
         response = {}
@@ -43,7 +43,7 @@ class Domain(Resource):
         if resource_name in self.domain:
             resource = self.domain[ resource_name ]
             # response['json']  = resource.resolve_request(request)
-            # print response
+            # print(response)
             response['json'], response['status'] = resource.resolve_request(request)
         else:
             response['errors'] = {'Error:':'Unkown resource %s.' % resource_name}
@@ -54,6 +54,6 @@ class Domain(Resource):
             del response['json']['errors']
         if 'status' not in response and 'errors' in response:
             response['status'] = 400
-        print 'Response:'
+        print('Response:')
         pprint.pprint(response)
         return response
