@@ -7,8 +7,9 @@ WEB_ALLOWED_CALLS = [
     'block', # cached in server and gui
     'tx', # cached in server and gui
     'blockstats', # cached in server and gui
-    'chaininfo', # cached in server and gui (TODO subscribe from gui)
-    "getblockhash", # never cached, always hits the node
+    # cached in gui (TODO handle reorgs from gui)
+    'chaininfo', # cached in server, reorgs handled with zmq subscription to node
+    "blockhash", # cached in server, reorgs handled with zmq subscription to node
     "getmempoolinfo", # never cached, always hits the node
     "getrawmempool", # never cached, always hits the node
     "getmempoolentry", # never cached, always hits the node

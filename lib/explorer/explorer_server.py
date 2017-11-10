@@ -6,6 +6,7 @@ RESOURCES_FOR_GET_BY_ID = [
     'tx',
     'blockstats',
     'chaininfo',
+    'blockhash',
 ]
 
 def RpcFromId(rpccaller, resource, req_id):
@@ -17,6 +18,10 @@ def RpcFromId(rpccaller, resource, req_id):
         rpc_result = rpccaller.RpcCall('getrawtransaction', {'txid': req_id, 'verbose': 1})
     elif resource == 'chaininfo':
         rpc_result = rpccaller.RpcCall('getblockchaininfo', {})
+    elif resource == 'blockhash':
+        rpc_result = rpccaller.RpcCall('getblockhash', {'height': req_id})
+    else:
+        raise NotImplementedError
 
     return rpc_result
 
@@ -26,6 +31,12 @@ def CacheChainInfoResult(db_client, chain, resource, json_result, req_id):
     db_cache['bestblockhash'] = json_result['bestblockhash']
     db_cache['blocks'] = json_result['blocks']
     db_cache['mediantime'] = json_result['mediantime']
+    db_client.put(chain + "_" + resource, db_cache)
+
+def CacheBlockhashResult(db_client, chain, resource, json_result, req_id):
+    db_cache = {}
+    db_cache['id'] = json_result['result']
+    db_cache['height'] = req_id
     db_client.put(chain + "_" + resource, db_cache)
 
 def CacheResultAsBlob(db_client, chain, resource, json_result, req_id):
@@ -52,6 +63,8 @@ def GetById(db_client, rpccaller, chain, resource, req_id):
             return {'error': json_result['error']}
         if resource == 'chaininfo':
             CacheChainInfoResult(db_client, chain, resource, json_result, req_id)
+        elif resource == 'blockhash':
+            CacheBlockhashResult(db_client, chain, resource, json_result, req_id)
         else:
             CacheResultAsBlob(db_client, chain, resource, json_result, req_id)
 

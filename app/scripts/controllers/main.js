@@ -85,7 +85,7 @@ angular.module('rpcExplorerApp')
         };
 
         var goToHeight = function(height) {
-            return SrvBackend.RpcCall("getblockhash", {"height": height})
+            return SrvBackend.RpcCall("blockhash", {"id": height})
                 .then(successCallbackBlockHeight)
                 .then(goToBlock)
                 .then(CreatePromBlockstats(height))
