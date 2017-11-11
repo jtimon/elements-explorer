@@ -48,6 +48,8 @@ def GetById(db_client, rpccaller, chain, resource, req_id):
         json_result = RpcFromId(rpccaller, resource, req_id)
         if not json_result:
             return {'error': {'message': 'No rpc result for %s.' % resource}}
+        if 'error' in json_result and json_result['error']:
+            return {'error': json_result['error']}
         if resource == 'chaininfo':
             CacheChainInfoResult(db_client, chain, resource, json_result, req_id)
         else:
@@ -81,4 +83,6 @@ class BetterNameResource(object):
         else:
             json_result = self.rpccaller.RpcCall(self.resource, request)
 
+        if 'error' in json_result and json_result['error']:
+            return {'error': json_result['error']}
         return json_result
