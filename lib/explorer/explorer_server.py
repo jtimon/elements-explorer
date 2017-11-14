@@ -39,6 +39,13 @@ def CacheBlockhashResult(db_client, chain, resource, json_result, req_id):
     db_cache['height'] = req_id
     db_client.put(chain + "_" + resource, db_cache)
 
+def CacheBlockResult(db_client, chain, resource, json_result, req_id):
+    db_cache = {}
+    db_cache['id'] = req_id
+    db_cache['height'] = json_result['height']
+    db_cache['blob'] = json.dumps(json_result)
+    db_client.put(chain + "_" + resource, db_cache)
+
 def CacheResultAsBlob(db_client, chain, resource, json_result, req_id):
     db_cache = {}
     db_cache['id'] = req_id
@@ -65,6 +72,8 @@ def GetById(db_client, rpccaller, chain, resource, req_id):
             CacheChainInfoResult(db_client, chain, resource, json_result, req_id)
         elif resource == 'blockhash':
             CacheBlockhashResult(db_client, chain, resource, json_result, req_id)
+        elif resource == 'block':
+            CacheBlockResult(db_client, chain, resource, json_result, req_id)
         else:
             CacheResultAsBlob(db_client, chain, resource, json_result, req_id)
 

@@ -16,7 +16,7 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
                  db_pass,
                  chain,
                  rpccaller,
-                 silent=True,
+                 silent=False,
                  worker_id='DaemonSubscriber',
                  *args, **kwargs):
 
@@ -71,6 +71,7 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
                 to_delete = self.db_client.search(self.chain + "_" + 'blockhash', criteria)
                 print('to_delete', to_delete)
                 self.db_client.delete(self.chain + "_" + 'blockhash', criteria)
+                self.db_client.delete(self.chain + "_" + 'block', criteria)
             except:
                 print('FAILED HANDLING REORG WITH %s in chain %s' % ('blockstats', self.chain), criteria)
                 continue
