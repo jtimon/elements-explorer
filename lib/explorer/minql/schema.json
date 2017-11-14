@@ -43,6 +43,11 @@
     }
   },
   "blockstats": {
+    "height": {
+      "index": true, 
+      "required": true, 
+      "type": "int"
+    },
     "blob": {
       "index": false, 
       "required": true, 

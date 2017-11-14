@@ -74,6 +74,8 @@ def GetById(db_client, rpccaller, chain, resource, req_id):
             CacheBlockhashResult(db_client, chain, resource, json_result, req_id)
         elif resource == 'block':
             CacheBlockResult(db_client, chain, resource, json_result, req_id)
+        elif resource == 'blockstats':
+            CacheBlockResult(db_client, chain, resource, json_result, req_id)
         else:
             CacheResultAsBlob(db_client, chain, resource, json_result, req_id)
 
