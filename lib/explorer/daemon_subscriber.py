@@ -68,23 +68,12 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
 
             try:
                 criteria = {'height': {'ge': block_height}}
-                to_delete = self.db_client.search(self.chain + "_" + 'blockhash', criteria)
+                to_delete = self.db_client.search(self.chain + "_" + 'block', criteria)
                 print('to_delete', to_delete)
-                self.db_client.delete(self.chain + "_" + 'blockhash', criteria)
                 self.db_client.delete(self.chain + "_" + 'block', criteria)
                 self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
             except:
                 print('FAILED HANDLING REORG WITH %s in chain %s' % ('blockstats', self.chain), criteria)
-                continue
-
-            try:
-                entry_blockhash = {
-                    'id': block_hash,
-                    'height': block_height,
-                }
-                db_result = self.db_client.put(self.chain + "_" + 'blockhash', entry_blockhash)
-            except:
-                print('FAILED GREEDY CACHE %s in chain %s' % ('blockstats', self.chain), entry_blockhash)
                 continue
 
             try:

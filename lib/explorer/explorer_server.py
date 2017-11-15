@@ -33,12 +33,6 @@ def CacheChainInfoResult(db_client, chain, resource, json_result, req_id):
     db_cache['mediantime'] = json_result['mediantime']
     db_client.put(chain + "_" + resource, db_cache)
 
-def CacheBlockhashResult(db_client, chain, resource, json_result, req_id):
-    db_cache = {}
-    db_cache['id'] = json_result['result']
-    db_cache['height'] = req_id
-    db_client.put(chain + "_" + resource, db_cache)
-
 def CacheBlockResult(db_client, chain, resource, json_result, req_id):
     db_cache = {}
     db_cache['id'] = req_id
@@ -52,7 +46,7 @@ def CacheResultAsBlob(db_client, chain, resource, json_result, req_id):
     db_cache['blob'] = json.dumps(json_result)
     db_client.put(chain + "_" + resource, db_cache)
 
-def GetById(db_client, rpccaller, chain, resource, req_id):
+def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
     try:
         db_result = db_client.get(chain + "_" + resource, req_id)
         if not db_result:
@@ -70,8 +64,6 @@ def GetById(db_client, rpccaller, chain, resource, req_id):
             return {'error': json_result['error']}
         if resource == 'chaininfo':
             CacheChainInfoResult(db_client, chain, resource, json_result, req_id)
-        elif resource == 'blockhash':
-            CacheBlockhashResult(db_client, chain, resource, json_result, req_id)
         elif resource == 'block':
             CacheBlockResult(db_client, chain, resource, json_result, req_id)
         elif resource == 'blockstats':
@@ -80,6 +72,27 @@ def GetById(db_client, rpccaller, chain, resource, req_id):
             CacheResultAsBlob(db_client, chain, resource, json_result, req_id)
 
     return json_result
+
+def GetById(db_client, rpccaller, chain, resource, req_id):
+    if resource == 'blockhash':
+        criteria = {'height': req_id}
+        count_by_height = db_client.search(chain + "_" + 'block', criteria)
+        if len(count_by_height) > 1:
+            return {'error': {'message': 'More than one block cached for height %s' % req_id}}
+        if len(count_by_height) == 1:
+            print('count_by_height', count_by_height)
+            CacheBlockResult(db_client, chain, 'block', json.loads(count_by_height[0]['blob']), count_by_height[0]['id'])
+            return {'result': count_by_height[0]['id']}
+
+        json_result = RpcFromId(rpccaller, resource, req_id)
+        if not json_result:
+            return {'error': {'message': 'No rpc result for %s.' % resource}}
+        if 'error' in json_result and json_result['error']:
+            return {'error': json_result['error']}
+        json_result = GetByIdBase(db_client, rpccaller, chain, 'block', json_result['result'])
+        return {'result': json_result['hash']}
+
+    return GetByIdBase(db_client, rpccaller, chain, resource, req_id)
 
 class BetterNameResource(object):
 
