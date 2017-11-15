@@ -50,6 +50,24 @@ def CacheResultAsBlob(db_client, chain, resource, json_result, req_id):
     db_cache['blob'] = json.dumps(json_result)
     db_client.put(chain + "_" + resource, db_cache)
 
+def TryRpcAndCacheFromId(db_client, rpccaller, chain, resource, req_id):
+    json_result = RpcFromId(rpccaller, resource, req_id)
+    if 'error' in json_result:
+        return json_result
+
+    if resource == 'chaininfo':
+        CacheChainInfoResult(db_client, chain, resource, json_result, req_id)
+    elif resource == 'blockhash':
+        CacheBlockhashResult(db_client, chain, resource, json_result, req_id)
+    elif resource == 'block':
+        CacheBlockResult(db_client, chain, resource, json_result, req_id)
+    elif resource == 'blockstats':
+        CacheBlockResult(db_client, chain, resource, json_result, req_id)
+    else:
+        CacheResultAsBlob(db_client, chain, resource, json_result, req_id)
+
+    return json_result
+    
 def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
     try:
         db_result = db_client.get(chain + "_" + resource, req_id)
@@ -61,17 +79,7 @@ def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
             return {'error': {'message': 'No blob result db for %s.' % resource}}
         json_result = json.loads(db_result['blob'])
     except minql.NotFoundError:
-        json_result = RpcFromId(rpccaller, resource, req_id)
-        if 'error' in json_result:
-            return json_result
-        if resource == 'chaininfo':
-            CacheChainInfoResult(db_client, chain, resource, json_result, req_id)
-        elif resource == 'block':
-            CacheBlockResult(db_client, chain, resource, json_result, req_id)
-        elif resource == 'blockstats':
-            CacheBlockResult(db_client, chain, resource, json_result, req_id)
-        else:
-            CacheResultAsBlob(db_client, chain, resource, json_result, req_id)
+        json_result = TryRpcAndCacheFromId(db_client, rpccaller, chain, resource, req_id)
     except:
         return {'error': {'message': 'Error getting %s from db by id %s.' % (resource, req_id)}}
 
