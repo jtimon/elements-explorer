@@ -1,6 +1,8 @@
 
 import json
 
+from lib import minql
+
 RESOURCES_FOR_GET_BY_ID = [
     'block',
     'tx',
@@ -58,7 +60,7 @@ def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
         if not 'blob' in db_result:
             return {'error': {'message': 'No blob result db for %s.' % resource}}
         json_result = json.loads(db_result['blob'])
-    except:
+    except minql.NotFoundError:
         json_result = RpcFromId(rpccaller, resource, req_id)
         if 'error' in json_result:
             return json_result
@@ -70,6 +72,8 @@ def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
             CacheBlockResult(db_client, chain, resource, json_result, req_id)
         else:
             CacheResultAsBlob(db_client, chain, resource, json_result, req_id)
+    except:
+        return {'error': {'message': 'Error getting %s from db by id %s.' % (resource, req_id)}}
 
     return json_result
 
