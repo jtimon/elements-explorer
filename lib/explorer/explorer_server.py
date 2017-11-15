@@ -23,6 +23,8 @@ def RpcFromId(rpccaller, resource, req_id):
     else:
         raise NotImplementedError
 
+    if not rpc_result:
+        return {'error': {'message': 'No rpc result for %s.' % resource}}
     return rpc_result
 
 def CacheChainInfoResult(db_client, chain, resource, json_result, req_id):
@@ -58,8 +60,6 @@ def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
         json_result = json.loads(db_result['blob'])
     except:
         json_result = RpcFromId(rpccaller, resource, req_id)
-        if not json_result:
-            return {'error': {'message': 'No rpc result for %s.' % resource}}
         if 'error' in json_result and json_result['error']:
             return {'error': json_result['error']}
         if resource == 'chaininfo':
@@ -85,8 +85,6 @@ def GetById(db_client, rpccaller, chain, resource, req_id):
             return {'result': count_by_height[0]['id']}
 
         json_result = RpcFromId(rpccaller, resource, req_id)
-        if not json_result:
-            return {'error': {'message': 'No rpc result for %s.' % resource}}
         if 'error' in json_result and json_result['error']:
             return {'error': json_result['error']}
         json_result = GetByIdBase(db_client, rpccaller, chain, 'block', json_result['result'])
