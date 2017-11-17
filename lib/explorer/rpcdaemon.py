@@ -43,4 +43,7 @@ class RpcCaller(object):
         # TODO remove special case for getrawmempool and getblockhash
         if ('result' in json_result and method != 'getrawmempool' and method != 'getblockhash'):
             json_result = json_result['result']
+        # If there's errors, only return the errors
+        if 'error' in json_result and json_result['error']:
+            return {'error': json_result['error']}
         return json_result

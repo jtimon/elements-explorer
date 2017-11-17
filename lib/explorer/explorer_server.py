@@ -60,8 +60,8 @@ def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
         json_result = json.loads(db_result['blob'])
     except:
         json_result = RpcFromId(rpccaller, resource, req_id)
-        if 'error' in json_result and json_result['error']:
-            return {'error': json_result['error']}
+        if 'error' in json_result:
+            return json_result
         if resource == 'chaininfo':
             CacheChainInfoResult(db_client, chain, resource, json_result, req_id)
         elif resource == 'block':
@@ -85,9 +85,11 @@ def GetById(db_client, rpccaller, chain, resource, req_id):
             return {'result': count_by_height[0]['id']}
 
         json_result = RpcFromId(rpccaller, resource, req_id)
-        if 'error' in json_result and json_result['error']:
-            return {'error': json_result['error']}
+        if 'error' in json_result:
+            return json_result
         json_result = GetByIdBase(db_client, rpccaller, chain, 'block', json_result['result'])
+        if 'error' in json_result:
+            return json_result
         return {'result': json_result['hash']}
 
     return GetByIdBase(db_client, rpccaller, chain, resource, req_id)
@@ -118,6 +120,7 @@ class BetterNameResource(object):
         else:
             json_result = self.rpccaller.RpcCall(self.resource, request)
 
+        # If there's errors, only return the errors
         if 'error' in json_result and json_result['error']:
             return {'error': json_result['error']}
         return json_result
