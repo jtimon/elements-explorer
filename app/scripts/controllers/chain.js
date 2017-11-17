@@ -11,7 +11,7 @@ angular.module('rpcExplorerApp')
             .catch(SrvUtil.errorCallbackScoped($scope));
 
         function initChainCallback(data) {
-            $scope.chaininfo = data;
+            $rootScope.chaininfo = data;
         };
 
         $scope.ChangeChain = function () {

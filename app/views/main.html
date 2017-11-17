@@ -60,6 +60,21 @@
       </tr>
 
       <tr>
+        <td>Confirmations:</td>
+        <td>{{ chaininfo.blocks - block.height }}</td>
+      </tr>
+
+      <tr>
+        <td>Height last cached:</td>
+        <td>{{ block.height - block.confirmations }}</td>
+      </tr>
+
+      <tr>
+        <td>Confirmations last cached:</td>
+        <td>{{ block.confirmations }}</td>
+      </tr>
+
+      <tr>
         <td>Hash:</td>
         <td><a ng-href="#!/chain/{{selected_chain}}/block/{{block.hash}}">{{ block.hash }}</a></td>
       </tr>
@@ -67,11 +82,6 @@
       <tr>
         <td>Previous block hash:</td>
         <td><a ng-href="#!/chain/{{selected_chain}}/block/{{block.previousblockhash}}">{{ block.previousblockhash }}</a></td>
-      </tr>
-
-      <tr>
-        <td>Confirmations:</td>
-        <td>{{ block.confirmations }}</td>
       </tr>
 
       <tr>
