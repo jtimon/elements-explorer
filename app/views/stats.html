@@ -1,4 +1,17 @@
 
+<div ng-show="error" class="alert alert-danger" border="1">
+  <strong>Error:</strong>
+  <nobr ng-show="IsErrorString()">{{error.message}}</nobr>
+  <!-- <nobr ng-show="!error.message">{{ error }}</nobr> -->
+  <nobr ng-show="!error.message">
+    <p></p>
+    <pre>
+      {{ error }}
+    </pre>
+  </nobr>
+</div>
+<p></p>
+
 <div class="container">
   Start Height:
   <input ng-disabled="loading_stats" type="number" min="0" step="1" ng-model="start_height">
@@ -32,19 +45,6 @@
              > {{name}}
     </span>
   </div>
-</div>
-<p></p>
-
-<div ng-show="error" class="alert alert-danger" border="1">
-  <strong>Error:</strong>
-  <nobr ng-show="IsErrorString()">{{error.message}}</nobr>
-  <!-- <nobr ng-show="!error.message">{{ error }}</nobr> -->
-  <nobr ng-show="!error.message">
-    <p></p>
-    <pre>
-      {{ error }}
-    </pre>
-  </nobr>
 </div>
 <p></p>
 

@@ -1,4 +1,17 @@
 
+<div ng-show="error" class="alert alert-danger" border="1">
+  <strong>Error:</strong>
+  <nobr ng-show="error.message">{{error.message}}</nobr>
+  <!-- <nobr ng-show="!error.message">{{ error }}</nobr> -->
+  <nobr ng-show="!error.message">
+    <p></p>
+    <pre>
+      {{ error }}
+    </pre>
+  </nobr>
+</div>
+<p></p>
+
 <div class="container">
   Verbose CT:
   <input type="checkbox" ng-model="CTverbose">
@@ -32,19 +45,6 @@
   </div>
 
 </div> <!-- container -->
-
-<div ng-show="error" class="alert alert-danger" border="1">
-  <strong>Error:</strong>
-  <nobr ng-show="error.message">{{error.message}}</nobr>
-  <!-- <nobr ng-show="!error.message">{{ error }}</nobr> -->
-  <nobr ng-show="!error.message">
-    <p></p>
-    <pre>
-      {{ error }}
-    </pre>
-  </nobr>
-</div>
-<p></p>
 
 <div class="container">
 
