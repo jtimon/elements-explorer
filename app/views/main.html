@@ -61,12 +61,7 @@
 
       <tr>
         <td>Confirmations:</td>
-        <td>{{ chaininfo.blocks - block.height }}</td>
-      </tr>
-
-      <tr>
-        <td>Height last cached:</td>
-        <td>{{ block.height - block.confirmations }}</td>
+        <td>{{ chaininfo.blocks - block.height + 1 }}</td>
       </tr>
 
       <tr>
