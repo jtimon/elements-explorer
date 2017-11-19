@@ -13,21 +13,17 @@ RESOURCES_FOR_GET_BY_ID = [
 
 def RpcFromId(rpccaller, resource, req_id):
     if resource == 'blockstats':
-        rpc_result = rpccaller.RpcCall('getblockstats', {'height': req_id})
+        return rpccaller.RpcCall('getblockstats', {'height': req_id})
     elif resource == 'block':
-        rpc_result = rpccaller.RpcCall('getblock', {'blockhash': req_id})
+        return rpccaller.RpcCall('getblock', {'blockhash': req_id})
     elif resource == 'tx':
-        rpc_result = rpccaller.RpcCall('getrawtransaction', {'txid': req_id, 'verbose': 1})
+        return rpccaller.RpcCall('getrawtransaction', {'txid': req_id, 'verbose': 1})
     elif resource == 'chaininfo':
-        rpc_result = rpccaller.RpcCall('getblockchaininfo', {})
+        return rpccaller.RpcCall('getblockchaininfo', {})
     elif resource == 'blockhash':
-        rpc_result = rpccaller.RpcCall('getblockhash', {'height': req_id})
+        return rpccaller.RpcCall('getblockhash', {'height': req_id})
     else:
         raise NotImplementedError
-
-    if not rpc_result:
-        return {'error': {'message': 'No rpc result for %s.' % resource}}
-    return rpc_result
 
 def CacheChainInfoResult(db_client, chain, resource, json_result, req_id):
     db_cache = {}
