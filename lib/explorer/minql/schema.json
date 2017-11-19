@@ -29,6 +29,11 @@
     }
   },
   "tx": {
+    "blockhash": {
+      "index": true, 
+      "required": true, 
+      "type": "string"
+    },
     "blob": {
       "index": false, 
       "required": true, 

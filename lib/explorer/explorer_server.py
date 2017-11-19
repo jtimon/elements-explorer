@@ -33,6 +33,15 @@ def CacheChainInfoResult(db_client, chain, resource, json_result, req_id):
     db_cache['mediantime'] = json_result['mediantime']
     db_client.put(chain + "_" + resource, db_cache)
 
+def CacheTxResult(db_client, chain, resource, json_result, req_id):
+    if 'blockhash' in json_result and json_result['blockhash']:
+        # Don't cache mempool txs
+        db_cache = {}
+        db_cache['id'] = req_id
+        db_cache['blockhash'] = json_result['blockhash']
+        db_cache['blob'] = json.dumps(json_result)
+        db_client.put(chain + "_" + resource, db_cache)
+
 def CacheBlockResult(db_client, chain, resource, json_result, req_id):
     db_cache = {}
     db_cache['id'] = req_id
@@ -59,6 +68,8 @@ def TryRpcAndCacheFromId(db_client, rpccaller, chain, resource, req_id):
         CacheBlockResult(db_client, chain, resource, json_result, req_id)
     elif resource == 'blockstats':
         CacheBlockResult(db_client, chain, resource, json_result, req_id)
+    elif resource == 'tx':
+        CacheTxResult(db_client, chain, resource, json_result, req_id)
     else:
         CacheResultAsBlob(db_client, chain, resource, json_result, req_id)
 
