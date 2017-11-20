@@ -2,9 +2,7 @@
 
 A simple block explorer based on deamon's rpc calls.
 
-# Using Docker:
-
-## Dependencies:
+# Dependencies: #
 
 Dependent on the OS distribution:
 
@@ -33,7 +31,7 @@ Test docker installation:
 docker run hello-world
 ```
 
-## Build & development
+# Build & development #
 
 To build and run:
 
@@ -64,7 +62,7 @@ For a full docker clean:
 make docker-clean
 ```
 
-## TODO
+# TODO #
 
 - [ ] Nodes: Not hardcoded rpcuser/rpcpassword:
 - [ ] elements: Show -signblockscript and block.scriptSig
