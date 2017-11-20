@@ -46,37 +46,39 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
         super(DaemonSubscriber, self)._init_process()
         self.db_client = minql.MinqlClientFactory(self.db_type)(self.db_adr, self.db_name, self.db_user, self.db_pass)
 
+    def update_tip(self, block_hash):
+        json_result = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
+        block_height = json_result['height']
+        block_mediantime = json_result['mediantime']
+
+        entry = {}
+        entry['id'] = self.chain
+        entry['bestblockhash'] = block_hash
+        entry['blocks'] = block_height
+        entry['mediantime'] = block_mediantime
+        try:
+            db_result = self.db_client.put(self.chain + "_" + 'chaininfo', entry)
+        except:
+            print('FAILED GREEDY CACHE %s in chain %s' % ('chaininfo', self.chain), entry)
+            return
+
+        try:
+            criteria = {'height': {'ge': block_height}}
+            to_delete = self.db_client.search(self.chain + "_" + 'block', criteria)
+            print('to_delete', to_delete)
+            self.db_client.delete(self.chain + "_" + 'block', criteria)
+            self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
+        except:
+            print('FAILED HANDLING REORG WITH %s in chain %s' % ('blockstats', self.chain), criteria)
+            return
+
+        try:
+            json_result = GetById(self.db_client, self.rpccaller, self.chain, 'blockstats', block_height)
+        except:
+            print('FAILED GREEDY CACHE %s in chain %s for height %s' % ('blockstats', self.chain, block_height))
+
     def _loop(self):
         while True:
             msg_parts = self.receive_message()
             block_hash = binascii.hexlify(msg_parts[1])
-
-            json_result = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
-            block_height = json_result['height']
-            block_mediantime = json_result['mediantime']
-
-            entry = {}
-            entry['id'] = self.chain
-            entry['bestblockhash'] = block_hash
-            entry['blocks'] = block_height
-            entry['mediantime'] = block_mediantime
-            try:
-                db_result = self.db_client.put(self.chain + "_" + 'chaininfo', entry)
-            except:
-                print('FAILED GREEDY CACHE %s in chain %s' % ('chaininfo', self.chain), entry)
-                continue
-
-            try:
-                criteria = {'height': {'ge': block_height}}
-                to_delete = self.db_client.search(self.chain + "_" + 'block', criteria)
-                print('to_delete', to_delete)
-                self.db_client.delete(self.chain + "_" + 'block', criteria)
-                self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
-            except:
-                print('FAILED HANDLING REORG WITH %s in chain %s' % ('blockstats', self.chain), criteria)
-                continue
-
-            try:
-                json_result = GetById(self.db_client, self.rpccaller, self.chain, 'blockstats', block_height)
-            except:
-                print('FAILED GREEDY CACHE %s in chain %s for height %s' % ('blockstats', self.chain, block_height))
+            self.update_tip(block_hash)
