@@ -8,7 +8,8 @@ from lib.explorer.explorer_server import GetById
 
 class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
 
-    def __init__(self, address,
+    def __init__(self,
+                 address,
                  db_type,
                  db_adr,
                  db_name,
@@ -20,13 +21,9 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
                  worker_id='DaemonSubscriber',
                  *args, **kwargs):
 
-        self.db_type = db_type
-        self.db_adr = db_adr
-        self.db_name = db_name
-        self.db_user = db_user
-        self.db_pass = db_pass
         self.chain = chain
         self.rpccaller = rpccaller
+        self.db_factory = minql.MinqlFactory(db_type, db_adr, db_name, db_user, db_pass)
 
         if (silent):
             import sys
@@ -44,7 +41,7 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
 
     def _init_process(self):
         super(DaemonSubscriber, self)._init_process()
-        self.db_client = minql.MinqlClientFactory(self.db_type)(self.db_adr, self.db_name, self.db_user, self.db_pass)
+        self.db_client = self.db_factory.create()
 
     def delete_from_height(self, block_height):
         criteria = {'height': {'ge': block_height}}
