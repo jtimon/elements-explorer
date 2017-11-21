@@ -32,7 +32,7 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
             import sys
             import os
             sys.stdout = open(os.devnull, 'w')
-        
+
         super(DaemonSubscriber, self).__init__(
             address=address,
             context=None, single=False,
@@ -48,8 +48,14 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
 
     def delete_from_height(self, block_height):
         criteria = {'height': {'ge': block_height}}
-        to_delete = self.db_client.search(self.chain + "_" + 'block', criteria)
-        print('to_delete', to_delete)
+        blocks_to_delete = self.db_client.search(self.chain + "_" + 'block', criteria)
+        for block in blocks_to_delete:
+            blockhash = block['id']
+            print('delete txs with blockhash %s' % blockhash)
+            print('to_delete_block', block)
+            tx_criteria = {'blockhash': blockhash}
+            self.db_client.delete(self.chain + "_" + 'tx', tx_criteria)
+
         self.db_client.delete(self.chain + "_" + 'block', criteria)
         self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
 
