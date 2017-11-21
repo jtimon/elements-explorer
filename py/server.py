@@ -26,7 +26,7 @@ def rpcexplorerrest(chain, resource):
 
     request_data = json.loads(request.data)
 
-    json_result = BetterNameResource(DB_CLIENT, AVAILABLE_CHAINS[chain], chain, resource).resolve_request(request_data)
+    json_result = BetterNameResource(DB_CLIENT, AVAILABLE_CHAINS[chain]['rpc'], chain, resource).resolve_request(request_data)
 
     if not json_result:
         return jsonify({'error': {'message': 'No result for %s.' % resource}}), 400

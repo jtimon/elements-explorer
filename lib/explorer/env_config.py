@@ -17,23 +17,29 @@ DB_CLIENT = minql.MinqlClientFactory(CONFIG['DB_TYPE'])(
     CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'])
 
 AVAILABLE_CHAINS = {
-    "bitcoin": RpcCaller(os.environ.get('BITCOIN_ADR'),
+    "bitcoin": {
+        'rpc': RpcCaller(os.environ.get('BITCOIN_ADR'),
                          os.environ.get('BITCOIN_RPCUSER'),
                          os.environ.get('BITCOIN_RPCPASSWORD')
-    ),
-    "testnet3": RpcCaller(os.environ.get('TESTNET3_ADR'),
-                          os.environ.get('TESTNET3_RPCUSER'),
-                          os.environ.get('TESTNET3_RPCPASSWORD')
-    ),
-    "elementsregtest": RpcCaller(os.environ.get('ELEMENTSREGTEST_ADR'),
-                                 os.environ.get('ELEMENTS_RPCUSER'),
-                                 os.environ.get('ELEMENTS_RPCPASSWORD')
-    ),
+        ),
+    },
+    "testnet3": {
+        'rpc': RpcCaller(os.environ.get('TESTNET3_ADR'),
+                         os.environ.get('TESTNET3_RPCUSER'),
+                         os.environ.get('TESTNET3_RPCPASSWORD')
+        ),
+    },
+    "elementsregtest": {
+        'rpc': RpcCaller(os.environ.get('ELEMENTSREGTEST_ADR'),
+                         os.environ.get('ELEMENTS_RPCUSER'),
+                         os.environ.get('ELEMENTS_RPCPASSWORD')
+        ),
+    },
 }
 
 SUBSCRIBER_PARAMS = {
-    'bitcoin': [os.environ.get('BITCOIN_ZMQ'), CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'], 'bitcoin', AVAILABLE_CHAINS['bitcoin']],
-    'testnet3': [os.environ.get('TESTNET3_ZMQ'), CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'], 'testnet3', AVAILABLE_CHAINS['testnet3']],
-    'elementsregtest': [os.environ.get('ELEMENTSREGTEST_ZMQ'), CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'], 'elementsregtest', AVAILABLE_CHAINS['elementsregtest']],
+    'bitcoin': [os.environ.get('BITCOIN_ZMQ'), CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'], 'bitcoin', AVAILABLE_CHAINS['bitcoin']['rpc']],
+    'testnet3': [os.environ.get('TESTNET3_ZMQ'), CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'], 'testnet3', AVAILABLE_CHAINS['testnet3']['rpc']],
+    'elementsregtest': [os.environ.get('ELEMENTSREGTEST_ZMQ'), CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'], 'elementsregtest', AVAILABLE_CHAINS['elementsregtest']['rpc']],
 }
 
