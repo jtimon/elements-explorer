@@ -32,6 +32,29 @@ def MinqlClientFactory(db):
 def MinqlClient(db, address):
     return MinqlClientFactory(db)(address)
 
+class MinqlFactory(object):
+
+    def __init__(self,
+                 db_type,
+                 db_adr,
+                 db_name,
+                 db_user,
+                 db_pass,
+                 *args, **kwargs):
+
+        self.db_type = db_type
+        self.db_adr = db_adr
+        self.db_name = db_name
+        self.db_user = db_user
+        self.db_pass = db_pass
+
+        super(MinqlFactory, self).__init__(
+            *args, **kwargs)
+
+    def create(self):
+        return MinqlClientFactory(self.db_type)(self.db_adr, self.db_name, self.db_user, self.db_pass)
+
+
 import json
 def read_json(path):
     with open(path, 'r') as infile:
