@@ -46,6 +46,13 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
         super(DaemonSubscriber, self)._init_process()
         self.db_client = minql.MinqlClientFactory(self.db_type)(self.db_adr, self.db_name, self.db_user, self.db_pass)
 
+    def delete_from_height(self, block_height):
+        criteria = {'height': {'ge': block_height}}
+        to_delete = self.db_client.search(self.chain + "_" + 'block', criteria)
+        print('to_delete', to_delete)
+        self.db_client.delete(self.chain + "_" + 'block', criteria)
+        self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
+
     def update_tip(self, block_hash):
         json_result = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
         block_height = json_result['height']
@@ -63,11 +70,7 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
             return
 
         try:
-            criteria = {'height': {'ge': block_height}}
-            to_delete = self.db_client.search(self.chain + "_" + 'block', criteria)
-            print('to_delete', to_delete)
-            self.db_client.delete(self.chain + "_" + 'block', criteria)
-            self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
+            self.delete_from_height(block_height)
         except:
             print('FAILED HANDLING REORG WITH %s in chain %s' % ('blockstats', self.chain), criteria)
             return
