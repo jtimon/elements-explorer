@@ -18,7 +18,7 @@ FLAGS = gflags.FLAGS
 # ===----------------------------------------------------------------------===
 
 from lib.explorer.daemon_subscriber import DaemonSubscriber
-from lib.explorer.env_config import SUBSCRIBER_PARAMS
+from lib.explorer.env_config import subscriber_params
 
-daemon_subscriber = DaemonSubscriber(*SUBSCRIBER_PARAMS[FLAGS.chain])
+daemon_subscriber = DaemonSubscriber(*subscriber_params(FLAGS.chain))
 daemon_subscriber.start()

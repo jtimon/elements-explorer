@@ -43,8 +43,5 @@ AVAILABLE_CHAINS = {
     },
 }
 
-SUBSCRIBER_PARAMS = {
-    'bitcoin': [AVAILABLE_CHAINS['bitcoin']['zmq'], 'bitcoin', AVAILABLE_CHAINS['bitcoin']['rpc'], AVAILABLE_CHAINS['bitcoin']['db']],
-    'testnet3': [AVAILABLE_CHAINS['testnet3']['zmq'], 'testnet3', AVAILABLE_CHAINS['testnet3']['rpc'], AVAILABLE_CHAINS['testnet3']['db']],
-    'elementsregtest': [AVAILABLE_CHAINS['elementsregtest']['zmq'], 'elementsregtest', AVAILABLE_CHAINS['elementsregtest']['rpc'], AVAILABLE_CHAINS['elementsregtest']['db']],
-}
+def subscriber_params(chain):
+    return [AVAILABLE_CHAINS[chain]['zmq'], chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db']]
