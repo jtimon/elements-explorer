@@ -10,20 +10,16 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
 
     def __init__(self,
                  address,
-                 db_type,
-                 db_adr,
-                 db_name,
-                 db_user,
-                 db_pass,
                  chain,
                  rpccaller,
+                 db_factory,
                  silent=False,
                  worker_id='DaemonSubscriber',
                  *args, **kwargs):
 
         self.chain = chain
         self.rpccaller = rpccaller
-        self.db_factory = minql.MinqlFactory(db_type, db_adr, db_name, db_user, db_pass)
+        self.db_factory = db_factory
 
         if (silent):
             import sys

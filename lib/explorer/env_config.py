@@ -13,8 +13,8 @@ CONFIG = {
     'DB_PASS': os.environ.get('DB_PASS'),
 }
 
-DB_CLIENT = minql.MinqlClientFactory(CONFIG['DB_TYPE'])(
-    CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'])
+DB_FACTORY = minql.MinqlFactory(CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'])
+DB_CLIENT = DB_FACTORY.create()
 
 AVAILABLE_CHAINS = {
     "bitcoin": {
@@ -38,8 +38,7 @@ AVAILABLE_CHAINS = {
 }
 
 SUBSCRIBER_PARAMS = {
-    'bitcoin': [os.environ.get('BITCOIN_ZMQ'), CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'], 'bitcoin', AVAILABLE_CHAINS['bitcoin']['rpc']],
-    'testnet3': [os.environ.get('TESTNET3_ZMQ'), CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'], 'testnet3', AVAILABLE_CHAINS['testnet3']['rpc']],
-    'elementsregtest': [os.environ.get('ELEMENTSREGTEST_ZMQ'), CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'], 'elementsregtest', AVAILABLE_CHAINS['elementsregtest']['rpc']],
+    'bitcoin': [os.environ.get('BITCOIN_ZMQ'), 'bitcoin', AVAILABLE_CHAINS['bitcoin']['rpc'], DB_FACTORY],
+    'testnet3': [os.environ.get('TESTNET3_ZMQ'), 'testnet3', AVAILABLE_CHAINS['testnet3']['rpc'], DB_FACTORY],
+    'elementsregtest': [os.environ.get('ELEMENTSREGTEST_ZMQ'), 'elementsregtest', AVAILABLE_CHAINS['elementsregtest']['rpc'], DB_FACTORY],
 }
-
