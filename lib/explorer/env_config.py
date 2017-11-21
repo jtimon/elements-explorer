@@ -23,6 +23,7 @@ AVAILABLE_CHAINS = {
                          os.environ.get('BITCOIN_RPCPASSWORD')
         ),
         'zmq': os.environ.get('BITCOIN_ZMQ'),
+        'db': DB_FACTORY,
     },
     "testnet3": {
         'rpc': RpcCaller(os.environ.get('TESTNET3_ADR'),
@@ -30,6 +31,7 @@ AVAILABLE_CHAINS = {
                          os.environ.get('TESTNET3_RPCPASSWORD')
         ),
         'zmq': os.environ.get('TESTNET3_ZMQ'),
+        'db': DB_FACTORY,
     },
     "elementsregtest": {
         'rpc': RpcCaller(os.environ.get('ELEMENTSREGTEST_ADR'),
@@ -37,11 +39,12 @@ AVAILABLE_CHAINS = {
                          os.environ.get('ELEMENTS_RPCPASSWORD')
         ),
         'zmq': os.environ.get('ELEMENTSREGTEST_ZMQ'),
+        'db': DB_FACTORY,
     },
 }
 
 SUBSCRIBER_PARAMS = {
-    'bitcoin': [AVAILABLE_CHAINS['bitcoin']['zmq'], 'bitcoin', AVAILABLE_CHAINS['bitcoin']['rpc'], DB_FACTORY],
-    'testnet3': [AVAILABLE_CHAINS['testnet3']['zmq'], 'testnet3', AVAILABLE_CHAINS['testnet3']['rpc'], DB_FACTORY],
-    'elementsregtest': [AVAILABLE_CHAINS['elementsregtest']['zmq'], 'elementsregtest', AVAILABLE_CHAINS['elementsregtest']['rpc'], DB_FACTORY],
+    'bitcoin': [AVAILABLE_CHAINS['bitcoin']['zmq'], 'bitcoin', AVAILABLE_CHAINS['bitcoin']['rpc'], AVAILABLE_CHAINS['bitcoin']['db']],
+    'testnet3': [AVAILABLE_CHAINS['testnet3']['zmq'], 'testnet3', AVAILABLE_CHAINS['testnet3']['rpc'], AVAILABLE_CHAINS['testnet3']['db']],
+    'elementsregtest': [AVAILABLE_CHAINS['elementsregtest']['zmq'], 'elementsregtest', AVAILABLE_CHAINS['elementsregtest']['rpc'], AVAILABLE_CHAINS['elementsregtest']['db']],
 }
