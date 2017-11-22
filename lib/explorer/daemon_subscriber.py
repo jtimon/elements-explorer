@@ -6,38 +6,21 @@ from lib import minql
 
 from lib.explorer.explorer_server import GetById
 
-class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
+class ChainCacher(object):
 
-    def __init__(self,
-                 address,
-                 chain,
-                 rpccaller,
-                 db_factory,
-                 silent=False,
-                 worker_id='DaemonSubscriber',
-                 *args, **kwargs):
+    def __init__(self, chain, rpccaller, db_client, *args, **kwargs):
+
+        super(ChainCacher, self).__init__(*args, **kwargs)
 
         self.chain = chain
         self.rpccaller = rpccaller
-        self.db_factory = db_factory
+        self.db_client = db_client
 
-        if (silent):
-            import sys
-            import os
-            sys.stdout = open(os.devnull, 'w')
+class DaemonReorgManager(ChainCacher):
 
-        super(DaemonSubscriber, self).__init__(
-            address=address,
-            context=None, single=False,
-            worker_id=worker_id,
-            json=False,
-            topic='hashblock',
-            multipart=True,
-            *args, **kwargs)
+    def __init__(self, chain, rpccaller, db_client):
 
-    def _init_process(self):
-        super(DaemonSubscriber, self)._init_process()
-        self.db_client = self.db_factory.create()
+        super(DaemonReorgManager, self).__init__(chain, rpccaller, db_client)
 
     def delete_from_height(self, block_height):
         criteria = {'height': {'ge': block_height}}
@@ -79,8 +62,41 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
         except:
             print('FAILED GREEDY CACHE %s in chain %s for height %s' % ('blockstats', self.chain, block_height))
 
+class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
+
+    def __init__(self,
+                 address,
+                 chain,
+                 rpccaller,
+                 db_factory,
+                 silent=False,
+                 worker_id='DaemonSubscriber',
+                 *args, **kwargs):
+
+        self.chain = chain
+        self.rpccaller = rpccaller
+        self.db_factory = db_factory
+
+        if (silent):
+            import sys
+            import os
+            sys.stdout = open(os.devnull, 'w')
+
+        super(DaemonSubscriber, self).__init__(
+            address=address,
+            context=None, single=False,
+            worker_id=worker_id,
+            json=False,
+            topic='hashblock',
+            multipart=True,
+            *args, **kwargs)
+
+    def _init_process(self):
+        super(DaemonSubscriber, self)._init_process()
+        self.reorg_man = DaemonReorgManager(self.chain, self.rpccaller, self.db_factory.create())
+
     def _loop(self):
         while True:
             msg_parts = self.receive_message()
             block_hash = binascii.hexlify(msg_parts[1])
-            self.update_tip(block_hash)
+            self.reorg_man.update_tip(block_hash)
