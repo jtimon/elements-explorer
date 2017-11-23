@@ -51,5 +51,12 @@
       "required": true, 
       "type": "text"
     }
+  },
+  "mempoolstats": {
+    "blob": {
+      "index": false, 
+      "required": true, 
+      "type": "text"
+    }
   }
 }
