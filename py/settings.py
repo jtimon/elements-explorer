@@ -10,6 +10,7 @@ WEB_ALLOWED_CALLS = [
     # cached in gui (TODO handle reorgs from gui)
     'chaininfo', # cached in server, reorgs handled with zmq subscription to node
     "blockhash", # cached in server, reorgs handled with zmq subscription to node
+    'mempoolstats', # Data from db, independent from reorgs
     "getmempoolinfo", # never cached, always hits the node
     "getrawmempool", # never cached, always hits the node
     "getmempoolentry", # never cached, always hits the node

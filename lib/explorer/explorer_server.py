@@ -74,7 +74,7 @@ def TryRpcAndCacheFromId(db_client, rpccaller, chain, resource, req_id):
         CacheResultAsBlob(db_client, chain, resource, json_result, req_id)
 
     return json_result
-    
+
 def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
     try:
         db_result = db_client.get(chain + "_" + resource, req_id)
@@ -136,6 +136,17 @@ class BetterNameResource(object):
                 return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}
 
             json_result = GetById(self.db_client, self.rpccaller, self.chain, self.resource, request['id'])
+        elif self.resource == 'mempoolstats':
+            try:
+                db_result = self.db_client.search(self.chain + "_" + self.resource, {})
+                if not db_result:
+                    return {'error': {'message': 'No result db for %s.' % self.resource}}
+                json_result = {}
+                for db_elem in db_result:
+                    json_result[db_elem['id']] = json.loads(db_elem['blob'])
+                return json_result
+            except:
+                return {'error': {'message': 'Error getting %s from db.' % (self.resource)}}
         else:
             json_result = self.rpccaller.RpcCall(self.resource, request)
 
