@@ -45,3 +45,6 @@ AVAILABLE_CHAINS = {
 
 def subscriber_params(chain):
     return [AVAILABLE_CHAINS[chain]['zmq'], chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db']]
+
+def mempool_cacher_params(chain):
+    return [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]

@@ -1,10 +1,23 @@
 
 import binascii
+import json
+import multiprocessing
+import time
 
 from lib import zmqmin
 from lib import minql
 
 from lib.explorer.explorer_server import GetById
+
+CURRENCY_UNIT_FLOAT = 100000000
+
+def BtcStrToSatInt(btc_str):
+    sat_float = float(btc_str) * CURRENCY_UNIT_FLOAT
+    return int(sat_float)
+
+def FeerateFromBtcFeeStrAndVsize(btc_str, vsize):
+    fee_sat = BtcStrToSatInt(btc_str)
+    return int(fee_sat / vsize)
 
 class ChainCacher(object):
 
@@ -15,6 +28,62 @@ class ChainCacher(object):
         self.chain = chain
         self.rpccaller = rpccaller
         self.db_client = db_client
+
+class MempoolStatsCacher(ChainCacher, multiprocessing.Process):
+
+    def __init__(self, chain, rpccaller, db_client, wait_time=60,
+                 *args, **kwargs):
+
+        super(MempoolStatsCacher, self).__init__(chain, rpccaller, db_client, *args, **kwargs)
+
+        self.wait_time = wait_time
+        self.initial_wait_time = 5
+        self.stats_types = ['count', 'fee', 'vsize']
+        self.stats_intervals = range(2, 6) + range(10, 100, 10) + range(100, 1100, 100)
+
+    def __loop(self):
+        reorg_detected = False
+        mempool_state = self.rpccaller.RpcCall('getrawmempool', {'verbose': True})
+        if 'error' in mempool_state and mempool_state['error']:
+            return
+        # TODO remove special case for getrawmempool
+        mempool_state = mempool_state['result']
+
+        stats = {}
+        for stats_type in self.stats_types:
+            stats[stats_type] = {}
+            for stats_interval in self.stats_intervals:
+                stats[stats_type][stats_interval] = 0
+
+        for txid, tx_entry in mempool_state.iteritems():
+            tx_fee = tx_entry['fee']
+            tx_size = tx_entry['size']
+            tx_feerate = FeerateFromBtcFeeStrAndVsize(tx_fee, tx_size)
+            max_interval = self.stats_intervals[-1]
+            for stats_interval in self.stats_intervals:
+                if tx_feerate <= stats_interval:
+                    max_interval = stats_interval
+
+            for stats_interval in self.stats_intervals:
+                if tx_feerate <= stats_interval:
+                    stats['count'][stats_interval] = stats['count'][stats_interval] + 1
+                    stats['fee'][stats_interval] = stats['fee'][stats_interval] + BtcStrToSatInt(tx_fee)
+                    stats['vsize'][stats_interval] = stats['vsize'][stats_interval] + tx_size
+
+        entry = {}
+        entry['id'] = int(time.time())
+        entry['blob'] = json.dumps(stats)
+        try:
+            db_result = self.db_client.put(self.chain + "_" + 'mempoolstats', entry)
+        except:
+            print('FAILED caching %s in chain %s' % ('mempoolstats', self.chain))
+            return
+
+    def run(self):
+        time.sleep(self.initial_wait_time)
+        while True:
+            self.__loop()
+            time.sleep(self.wait_time)
 
 class DaemonReorgManager(ChainCacher):
 

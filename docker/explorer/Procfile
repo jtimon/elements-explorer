@@ -5,3 +5,7 @@ create_db: python lib/explorer/bin/create_db.py --address $DB_PROXY_ADR --dbaddr
 subscriber_bitcoin: python lib/explorer/bin/chain_subscriber.py --chain bitcoin
 subscriber_testnet3: python lib/explorer/bin/chain_subscriber.py --chain testnet3
 subscriber_elementsregtest: python lib/explorer/bin/chain_subscriber.py --chain elementsregtest
+
+mempool_bitcoin: python lib/explorer/bin/mempool_cacher.py --chain bitcoin
+mempool_testnet3: python lib/explorer/bin/mempool_cacher.py --chain testnet3
+mempool_elementsregtest: python lib/explorer/bin/mempool_cacher.py --chain elementsregtest
