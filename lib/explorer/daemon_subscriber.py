@@ -29,6 +29,11 @@ class ChainCacher(object):
         self.rpccaller = rpccaller
         self.db_client = db_client
 
+def IncrementStats(stats, interval, tx_fee, tx_size):
+    stats['count'][interval] = stats['count'][interval] + 1
+    stats['fee'][interval] = stats['fee'][interval] + BtcStrToSatInt(tx_fee)
+    stats['vsize'][interval] = stats['vsize'][interval] + tx_size
+
 class MempoolStatsCacher(ChainCacher, multiprocessing.Process):
 
     def __init__(self, chain, rpccaller, db_client, wait_time=60,
@@ -39,7 +44,7 @@ class MempoolStatsCacher(ChainCacher, multiprocessing.Process):
         self.wait_time = wait_time
         self.initial_wait_time = 5
         self.stats_types = ['count', 'fee', 'vsize']
-        self.stats_intervals = range(2, 6) + range(10, 100, 10) + range(100, 1100, 100)
+        self.stats_intervals = range(1, 6) + range(10, 100, 10) + range(100, 1100, 100)
 
     def __loop(self):
         reorg_detected = False
@@ -52,6 +57,7 @@ class MempoolStatsCacher(ChainCacher, multiprocessing.Process):
         stats = {}
         for stats_type in self.stats_types:
             stats[stats_type] = {}
+            stats[stats_type]['total'] = 0
             for stats_interval in self.stats_intervals:
                 stats[stats_type][stats_interval] = 0
 
@@ -60,15 +66,17 @@ class MempoolStatsCacher(ChainCacher, multiprocessing.Process):
             tx_size = tx_entry['size']
             tx_feerate = FeerateFromBtcFeeStrAndVsize(tx_fee, tx_size)
             max_interval = self.stats_intervals[-1]
+
+            IncrementStats(stats, 'total', tx_fee, tx_size)
+
             for stats_interval in self.stats_intervals:
                 if tx_feerate <= stats_interval:
                     max_interval = stats_interval
 
             for stats_interval in self.stats_intervals:
+
                 if tx_feerate <= stats_interval:
-                    stats['count'][stats_interval] = stats['count'][stats_interval] + 1
-                    stats['fee'][stats_interval] = stats['fee'][stats_interval] + BtcStrToSatInt(tx_fee)
-                    stats['vsize'][stats_interval] = stats['vsize'][stats_interval] + tx_size
+                    IncrementStats(stats, stats_interval, tx_fee, tx_size)
 
         entry = {}
         entry['id'] = int(time.time())
