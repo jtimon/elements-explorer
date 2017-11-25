@@ -67,16 +67,15 @@ class MempoolStatsCacher(ChainCacher, multiprocessing.Process):
             tx_feerate = FeerateFromBtcFeeStrAndVsize(tx_fee, tx_size)
             max_interval = self.stats_intervals[-1]
 
-            IncrementStats(stats, 'total', tx_fee, tx_size)
-
             for stats_interval in self.stats_intervals:
                 if tx_feerate <= stats_interval:
                     max_interval = stats_interval
 
             for stats_interval in self.stats_intervals:
-
                 if tx_feerate <= stats_interval:
                     IncrementStats(stats, stats_interval, tx_fee, tx_size)
+
+            IncrementStats(stats, 'total', tx_fee, tx_size)
 
         entry = {}
         entry['id'] = int(time.time())
