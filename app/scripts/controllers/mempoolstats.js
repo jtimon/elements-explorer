@@ -33,38 +33,64 @@ angular.module('rpcExplorerApp')
             };
         }
 
-        function StatsToGraph(stats_type, selected_stats, data)
+        function CalculatePlotData(stats_type, valid_stats, data)
         {
-            var graph_list = [];
-            for (var i = 0; i < selected_stats.length; i++) {
+            var plot_data = {};
 
-                var sel_stat = selected_stats[i];
+            for (var i = 0; i < valid_stats.length; i++) {
+
+                var val_stat = valid_stats[i];
                 var xaxis_data = [];
                 var yaxis_data = [];
                 for (var key in data) {
                     if (data.hasOwnProperty(key)) {
                         xaxis_data.push(new Date(parseInt(key) * 1000));
-                        yaxis_data.push(data[key][stats_type][sel_stat]);
+                        yaxis_data.push(data[key][stats_type][val_stat]);
                     }
                 }
-                graph_list.push(CreateTrace(sel_stat, xaxis_data, yaxis_data));
+                plot_data[val_stat] = {'x': xaxis_data, 'y': yaxis_data};
             }
+            return plot_data;
+        }
 
+        var GetPlotData = function(stats_types, valid_stats, data) {
+
+            var plot_data = {};
+            for (var i = 0; i < stats_types.length; i++) {
+                plot_data[i] = CalculatePlotData(stats_types[i], valid_stats, data);
+            }
+            return plot_data;
+        };
+
+        function StatsToGraph(selected_stats, plot_data)
+        {
+            var graph_list = [];
+
+            for (var i = 0; i < selected_stats.length; i++) {
+                var sel_stat = selected_stats[i];
+                graph_list.push(CreateTrace(sel_stat, plot_data[sel_stat]['x'], plot_data[sel_stat]['y']));
+            }
             return graph_list;
         };
 
-        var successDoPlot = function(data) {
+        var successDoPlot = function(_data) {
+
+            var data = _data['data'];
+            var stats_types = $scope.stats_types;
+            var valid_stats = $scope.valid_stats;
+            var selected_stats = $scope.selected_stats;
+            var plot_data = GetPlotData(stats_types, valid_stats, data);
 
             $scope.graph_mp = {};
-            for (var i = 0; i < $scope.stats_types.length; i++) {
-                $scope.graph_mp[$scope.stats_types[i]] = StatsToGraph($scope.stats_types[i], $scope.selected_stats, data['data']);
+            for (var i = 0; i < stats_types.length; i++) {
+                $scope.graph_mp[stats_types[i]] = StatsToGraph(selected_stats, plot_data[i]);
             }
 
             $scope.graphPlots = $scope.graph_mp[$scope.sel_stats_type];
 
             $scope.loading_stats = false;
         };
-        
+
         $scope.doPlot = function() {
             $scope.loading_stats = true;
 
@@ -94,10 +120,14 @@ angular.module('rpcExplorerApp')
         };
 
         $scope.changeStatType = function(name) {
+            $scope.loading_stats = true;
+
             if ($scope.stats_types.indexOf(name) > -1) {
                 $scope.sel_stats_type = name;
             }
             $scope.graphPlots = $scope.graph_mp[$scope.sel_stats_type];
+
+            $scope.loading_stats = false;
         };
 
     });
