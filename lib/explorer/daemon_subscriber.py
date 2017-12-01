@@ -128,7 +128,7 @@ class GreedyCacher(ChainCacher, multiprocessing.Process):
             self.__loop()
             time.sleep(self.wait_time)
 
-class DaemonReorgManager(ChainCacher):
+class DaemonReorgManager(GreedyCacher):
 
     def __init__(self, chain, rpccaller, db_client):
 
@@ -169,10 +169,7 @@ class DaemonReorgManager(ChainCacher):
             print('FAILED HANDLING REORG WITH %s in chain %s' % ('blockstats', self.chain), criteria)
             return
 
-        try:
-            json_result = GetById(self.db_client, self.rpccaller, self.chain, 'blockstats', block_height)
-        except:
-            print('FAILED GREEDY CACHE %s in chain %s for height %s' % ('blockstats', self.chain, block_height))
+        self.cache_height(block_height)
 
 class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
 
