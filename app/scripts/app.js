@@ -43,7 +43,7 @@ angular
         controllerAs: 'stats',
         reloadOnSearch: false
       })
-      .when('/chain/:chain/mempoolstats', {
+      .when('/chain/:chain/queue', {
         templateUrl: 'views/mempoolstats.html',
         controller: 'MempoolStatsCtrl',
       })
