@@ -47,7 +47,6 @@ class MempoolStatsCacher(ChainCacher, multiprocessing.Process):
         self.stats_intervals = range(1, 6) + range(10, 100, 10) + range(100, 1100, 100)
 
     def __loop(self):
-        reorg_detected = False
         mempool_state = self.rpccaller.RpcCall('getrawmempool', {'verbose': True})
         if 'error' in mempool_state and mempool_state['error']:
             return
