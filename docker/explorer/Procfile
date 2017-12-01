@@ -9,3 +9,7 @@ subscriber_elementsregtest: python lib/explorer/bin/chain_subscriber.py --chain 
 mempool_bitcoin: python lib/explorer/bin/mempool_cacher.py --chain bitcoin
 mempool_testnet3: python lib/explorer/bin/mempool_cacher.py --chain testnet3
 mempool_elementsregtest: python lib/explorer/bin/mempool_cacher.py --chain elementsregtest
+
+greedy_cacher_bitcoin: python lib/explorer/bin/greedy_cacher.py --chain bitcoin
+greedy_cacher_testnet3: python lib/explorer/bin/greedy_cacher.py --chain testnet3
+greedy_cacher_elementsregtest: python lib/explorer/bin/greedy_cacher.py --chain elementsregtest

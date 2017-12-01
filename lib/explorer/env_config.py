@@ -48,3 +48,6 @@ def subscriber_params(chain):
 
 def mempool_cacher_params(chain):
     return [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]
+
+def greedy_cacher_params(chain):
+    return [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]

@@ -91,6 +91,43 @@ class MempoolStatsCacher(ChainCacher, multiprocessing.Process):
             self.__loop()
             time.sleep(self.wait_time)
 
+class GreedyCacher(ChainCacher, multiprocessing.Process):
+
+    def __init__(self, chain, rpccaller, db_client, wait_time=60,
+                 *args, **kwargs):
+
+        super(GreedyCacher, self).__init__(chain, rpccaller, db_client, *args, **kwargs)
+
+        self.wait_time = wait_time
+        self.initial_wait_time = 5
+        self.last_cached_height = -1
+
+    def cache_height(self, height):
+        try:
+            blockstats = GetById(self.db_client, self.rpccaller, self.chain, 'blockstats', height)
+            blockhash = GetById(self.db_client, self.rpccaller, self.chain, 'blockhash', height)['result']
+            block = GetById(self.db_client, self.rpccaller, self.chain, 'block', blockhash)
+            print('cache_height', height, blockhash)
+        except:
+            print('FAILED GREEDY CACHE height %s in chain %s' % (height, self.chain))
+
+    def __loop(self):
+        chaininfo = GetById(self.db_client, self.rpccaller, self.chain, 'chaininfo', self.chain)
+        if 'error' in chaininfo:
+            return
+        next_cached_height = chaininfo['blocks']
+        height = next_cached_height
+        while height > self.last_cached_height:
+            self.cache_height(height)
+            height = height - 1
+        self.last_cached_height = next_cached_height
+
+    def run(self):
+        time.sleep(self.initial_wait_time)
+        while True:
+            self.__loop()
+            time.sleep(self.wait_time)
+
 class DaemonReorgManager(ChainCacher):
 
     def __init__(self, chain, rpccaller, db_client):
