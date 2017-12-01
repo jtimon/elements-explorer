@@ -20,7 +20,7 @@ angular.module('rpcExplorerApp')
 
         $scope.valid_stats = ['1', '2', '3', '4', '5', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100', '200', '300', '400', '500', '600', '700', '800', '900', '1000', 'total'];
 
-        $scope.selected_stats = ['1', '2', '3', '4', '5', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100', '200', '300', '400', '500', '600', '700', '800', '900', '1000', 'total'];
+        $scope.selected_stats = ['1', '2', '3', '4', '5', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100', '200', 'total'];
 
         function CreateTrace(key, xaxis_data, yaxis_data)
         {
@@ -73,17 +73,17 @@ angular.module('rpcExplorerApp')
             return graph_list;
         };
 
-        var successDoPlot = function(_data) {
-
+        function CachePlotData(_data)
+        {
             var data = _data['data'];
-            var stats_types = $scope.stats_types;
-            var valid_stats = $scope.valid_stats;
-            var selected_stats = $scope.selected_stats;
-            var plot_data = GetPlotData(stats_types, valid_stats, data);
+            $scope.plot_data = GetPlotData($scope.stats_types, $scope.valid_stats, data);
+        }
 
+        function PlotCachedData()
+        {
             $scope.graph_mp = {};
-            for (var i = 0; i < stats_types.length; i++) {
-                $scope.graph_mp[stats_types[i]] = StatsToGraph(selected_stats, plot_data[i]);
+            for (var i = 0; i < $scope.stats_types.length; i++) {
+                $scope.graph_mp[$scope.stats_types[i]] = StatsToGraph($scope.selected_stats, $scope.plot_data[i]);
             }
 
             $scope.graphPlots = $scope.graph_mp[$scope.sel_stats_type];
@@ -94,9 +94,14 @@ angular.module('rpcExplorerApp')
         $scope.doPlot = function() {
             $scope.loading_stats = true;
 
-            SrvBackend.RpcCall('mempoolstats', {})
-                .then(successDoPlot)
-                .catch(SrvUtil.errorCallbackScoped($scope));
+            if ($scope.plot_data) {
+                PlotCachedData();
+            } else {
+                SrvBackend.RpcCall('mempoolstats', {})
+                    .then(CachePlotData)
+                    .then(PlotCachedData)
+                    .catch(SrvUtil.errorCallbackScoped($scope));
+            }
         };
 
         $scope.doPlot();
@@ -112,11 +117,16 @@ angular.module('rpcExplorerApp')
                 $scope.selected_stats.push(name);
             }
 
-            // if ($scope.plot_data) {
-            //     StatsToGraph($scope.plot_data);
-            // }
+            var aux_sel_stats = [];
+            for (var i = 0; i < $scope.valid_stats.length; i++) {
+                var val_stat = $scope.valid_stats[i];
+                if ($scope.selected_stats.indexOf(val_stat) > -1) {
+                    aux_sel_stats.push(val_stat);
+                }
+            }
+            $scope.selected_stats = aux_sel_stats;
+
             $scope.doPlot();
-            $scope.graphPlots = $scope.graph_mp[$scope.sel_stats_type];
         };
 
         $scope.changeStatType = function(name) {
