@@ -23,7 +23,7 @@ Add your user to the docker group:
 sudo usermod -a -G docker $USER
 ```
 
-Restart for the last command to take effect.
+Restart the system for the last command to take effect.
 
 Test docker installation:
 
@@ -36,10 +36,19 @@ docker run hello-world
 To build and run:
 
 ```
-make docker-up
+cd docker
+docker-compose up --build
 ```
 
-Visit the web going to http://127.0.0.1:5000
+Visit the local web going to http://127.0.0.1:5000
+
+If you prefer it to be run as a daemon use:
+
+```
+docker-compose up --build -d
+```
+
+## TODO Closing ##
 
 Before closing down the whole docker project, close the bitcoin daemon manually:
 
