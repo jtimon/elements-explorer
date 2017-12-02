@@ -9,6 +9,7 @@ from lib import minql
 
 from lib.explorer.explorer_server import GetById
 
+MEMPOOL_STATS_INTERVALS = range(1, 10) + range(10, 20, 2) + range(20, 100, 10) + range(100, 300, 20) + range(300, 1100, 100)
 CURRENCY_UNIT_FLOAT = 100000000
 
 def BtcStrToSatInt(btc_str):
@@ -44,7 +45,7 @@ class MempoolStatsCacher(ChainCacher, multiprocessing.Process):
         self.wait_time = wait_time
         self.initial_wait_time = 5
         self.stats_types = ['count', 'fee', 'vsize']
-        self.stats_intervals = range(1, 6) + range(10, 100, 10) + range(100, 1100, 100)
+        self.stats_intervals = MEMPOOL_STATS_INTERVALS
 
     def __loop(self):
         mempool_state = self.rpccaller.RpcCall('getrawmempool', {'verbose': True})
