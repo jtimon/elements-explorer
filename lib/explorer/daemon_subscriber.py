@@ -139,6 +139,8 @@ class DaemonReorgManager(GreedyCacher):
 
         super(DaemonReorgManager, self).__init__(chain, rpccaller, db_client)
 
+        self.prev_reorg_hash = None
+
     def delete_from_height(self, block_height):
         criteria = {'height': {'ge': block_height}}
         blocks_to_delete = self.db_client.search(self.chain + "_" + 'block', criteria)
@@ -156,6 +158,15 @@ class DaemonReorgManager(GreedyCacher):
         json_result = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
         block_height = json_result['height']
         block_mediantime = json_result['mediantime']
+
+        if not self.prev_reorg_hash:
+            self.prev_reorg_hash = block_hash
+
+        if self.prev_reorg_hash == block_hash:
+            # Don't do anything on first call or when the tip is the same
+            return
+
+        self.prev_reorg_hash = block_hash
 
         entry = {}
         entry['id'] = self.chain
@@ -175,6 +186,7 @@ class DaemonReorgManager(GreedyCacher):
             return
 
         self.cache_height(block_height)
+
 
 class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
 
