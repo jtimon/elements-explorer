@@ -139,6 +139,7 @@ class DaemonReorgManager(GreedyCacher):
 
         super(DaemonReorgManager, self).__init__(chain, rpccaller, db_client)
 
+        self.prev_reorg_height = -1
         self.prev_reorg_hash = None
 
     def delete_from_height(self, block_height):
@@ -154,6 +155,16 @@ class DaemonReorgManager(GreedyCacher):
         self.db_client.delete(self.chain + "_" + 'block', criteria)
         self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
 
+    def is_descendant(self, block_height, block_hash):
+        if self.prev_reorg_height >= block_height:
+            return False
+
+        return True
+
+    def manage_reorg(self, block_height, block_hash):
+        print('REORG DETECTED at height %s hash %s previous height %s hash %s' % (
+            block_height, block_hash, self.prev_reorg_height, self.prev_reorg_hash))
+    
     def update_tip(self, block_hash):
         json_result = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
         block_height = json_result['height']
@@ -161,12 +172,17 @@ class DaemonReorgManager(GreedyCacher):
 
         if not self.prev_reorg_hash:
             self.prev_reorg_hash = block_hash
+            self.prev_reorg_height = block_height
 
         if self.prev_reorg_hash == block_hash:
             # Don't do anything on first call or when the tip is the same
             return
 
+        if not self.is_descendant(block_height, block_hash):
+            self.manage_reorg(block_height, block_hash)
+
         self.prev_reorg_hash = block_hash
+        self.prev_reorg_height = block_height
 
         entry = {}
         entry['id'] = self.chain
