@@ -30,24 +30,40 @@ class ChainCacher(object):
         self.rpccaller = rpccaller
         self.db_client = db_client
 
+class CronCacher(ChainCacher, multiprocessing.Process):
+
+    def __init__(self, chain, rpccaller, db_client, wait_time=60,
+                 *args, **kwargs):
+
+        super(CronCacher, self).__init__(chain, rpccaller, db_client, *args, **kwargs)
+
+        self.wait_time = wait_time
+        self.initial_wait_time = 5
+
+    def run(self):
+        time.sleep(self.initial_wait_time)
+        while True:
+            self._cron_loop()
+            time.sleep(self.wait_time)
+
+
 def IncrementStats(stats, interval, tx_fee, tx_size):
     stats['count'][interval] = stats['count'][interval] + 1
     stats['fee'][interval] = stats['fee'][interval] + BtcStrToSatInt(tx_fee)
     stats['vsize'][interval] = stats['vsize'][interval] + tx_size
 
-class MempoolStatsCacher(ChainCacher, multiprocessing.Process):
+class MempoolStatsCacher(CronCacher):
 
     def __init__(self, chain, rpccaller, db_client, wait_time=60,
                  *args, **kwargs):
 
-        super(MempoolStatsCacher, self).__init__(chain, rpccaller, db_client, *args, **kwargs)
+        super(MempoolStatsCacher, self).__init__(chain, rpccaller, db_client, wait_time,
+                                                 *args, **kwargs)
 
-        self.wait_time = wait_time
-        self.initial_wait_time = 5
         self.stats_types = ['count', 'fee', 'vsize']
         self.stats_intervals = MEMPOOL_STATS_INTERVALS
 
-    def __loop(self):
+    def _cron_loop(self):
         mempool_state = self.rpccaller.RpcCall('getrawmempool', {'verbose': True})
         if 'error' in mempool_state and mempool_state['error']:
             return
@@ -86,21 +102,14 @@ class MempoolStatsCacher(ChainCacher, multiprocessing.Process):
             print('FAILED caching %s in chain %s' % ('mempoolstats', self.chain))
             return
 
-    def run(self):
-        time.sleep(self.initial_wait_time)
-        while True:
-            self.__loop()
-            time.sleep(self.wait_time)
-
-class GreedyCacher(ChainCacher, multiprocessing.Process):
+class GreedyCacher(CronCacher):
 
     def __init__(self, chain, rpccaller, db_client, wait_time=60,
                  *args, **kwargs):
 
-        super(GreedyCacher, self).__init__(chain, rpccaller, db_client, *args, **kwargs)
+        super(GreedyCacher, self).__init__(chain, rpccaller, db_client, wait_time,
+                                                 *args, **kwargs)
 
-        self.wait_time = wait_time
-        self.initial_wait_time = 5
         self.last_cached_height = -1
 
     def cache_height(self, height):
@@ -112,7 +121,7 @@ class GreedyCacher(ChainCacher, multiprocessing.Process):
         except:
             print('FAILED GREEDY CACHE height %s in chain %s' % (height, self.chain))
 
-    def __loop(self):
+    def _cron_loop(self):
         chaininfo = GetById(self.db_client, self.rpccaller, self.chain, 'chaininfo', self.chain)
         if 'error' in chaininfo:
             return
@@ -123,11 +132,6 @@ class GreedyCacher(ChainCacher, multiprocessing.Process):
             height = height - 1
         self.last_cached_height = next_cached_height
 
-    def run(self):
-        time.sleep(self.initial_wait_time)
-        while True:
-            self.__loop()
-            time.sleep(self.wait_time)
 
 class DaemonReorgManager(GreedyCacher):
 
