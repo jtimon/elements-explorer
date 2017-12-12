@@ -172,6 +172,11 @@ class DaemonReorgManager(GreedyCacher):
         self.db_client.delete(self.chain + "_" + 'block', criteria)
         self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
 
+    def commit_new_prev(self, block_height, block_hash):
+        self.prev_reorg_hash = block_hash
+        self.prev_reorg_height = block_height
+        self.cache_blockhash(self.prev_reorg_hash)
+
     def is_descendant(self, block_height, block_hash):
         print('is_descendant from reorg height %s hash %s', self.prev_reorg_height, self.prev_reorg_hash)
 
@@ -205,24 +210,24 @@ class DaemonReorgManager(GreedyCacher):
         print('REORG DETECTED at height %s hash %s previous height %s hash %s' % (
             block_height, block_hash, self.prev_reorg_height, self.prev_reorg_hash))
 
+        if not self.prev_reorg_hash:
+            # Don't do anything on first call
+            self.commit_new_prev(block_height, block_hash)
+            return
+
+        try:
+            self.delete_from_height(block_height)
+            print('HANDLING REORG SUCCESS delete_from_height %s' % block_height)
+        except:
+            print('FAILED HANDLING REORG calling delete_from_height %s' % block_height)
+            return
+
+        self.commit_new_prev(block_height, block_hash)
+
     def update_tip(self, block_hash):
         json_result = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
         block_height = json_result['height']
         block_mediantime = json_result['mediantime']
-
-        if not self.prev_reorg_hash:
-            self.prev_reorg_hash = block_hash
-            self.prev_reorg_height = block_height
-
-        if self.prev_reorg_hash == block_hash:
-            # Don't do anything on first call or when the tip is the same
-            return
-
-        if not self.is_descendant(block_height, block_hash):
-            self.manage_reorg(block_height, block_hash)
-
-        self.prev_reorg_hash = block_hash
-        self.prev_reorg_height = block_height
 
         entry = {}
         entry['id'] = self.chain
@@ -232,16 +237,13 @@ class DaemonReorgManager(GreedyCacher):
         try:
             db_result = self.db_client.put(self.chain + "_" + 'chaininfo', entry)
         except:
-            print('FAILED GREEDY CACHE %s in chain %s' % ('chaininfo', self.chain), entry)
+            print('FAILED UPDATE TIP in chain %s' % (self.chain), entry)
             return
 
-        try:
-            self.delete_from_height(block_height)
-        except:
-            print('FAILED HANDLING REORG calling delete_from_height %s' % block_height)
-            return
-
-        self.cache_blockhash(block_hash)
+        if self.is_descendant(block_height, block_hash):
+            self.commit_new_prev(block_height, block_hash)
+        else:
+            self.manage_reorg(block_height, block_hash)
 
 
 class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
