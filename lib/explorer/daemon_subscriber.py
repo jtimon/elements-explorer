@@ -173,10 +173,33 @@ class DaemonReorgManager(GreedyCacher):
         self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
 
     def is_descendant(self, block_height, block_hash):
+        print('is_descendant from reorg height %s hash %s', self.prev_reorg_height, self.prev_reorg_hash)
+
+        if not self.prev_reorg_hash:
+            return False
+
+        if self.prev_reorg_hash == block_hash:
+            return True
+
         if self.prev_reorg_height >= block_height:
             return False
 
-        return True
+        while self.prev_reorg_height <= block_height:
+            print('is_descendant loop height %s hash %s', block_height, block_hash)
+
+            if self.prev_reorg_hash == block_hash:
+                return True
+
+            try:
+                json_result = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
+            except:
+                print('FAILED is_descendant block.get(%s)' % block_hash, json_result)
+                return False
+
+            block_hash = json_result['previousblockhash']
+            block_height = block_height - 1
+
+        return False
 
     def manage_reorg(self, block_height, block_hash):
         print('REORG DETECTED at height %s hash %s previous height %s hash %s' % (
