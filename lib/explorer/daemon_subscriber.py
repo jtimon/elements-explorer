@@ -244,6 +244,11 @@ class DaemonReorgManager(GreedyCacher):
             self.commit_new_prev(block_height, block_hash)
         else:
             self.manage_reorg(block_height, block_hash)
+        
+    def _cron_loop(self):
+        chaininfo = self.rpccaller.RpcCall('getblockchaininfo', {})
+        if 'bestblockhash' in chaininfo:
+            self.update_tip(chaininfo['bestblockhash'])
 
 
 class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
