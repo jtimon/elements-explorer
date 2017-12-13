@@ -198,7 +198,7 @@ class DaemonReorgManager(GreedyCacher):
         try:
             self.delete_from_height(block_height)
         except:
-            print('FAILED HANDLING REORG WITH %s in chain %s' % ('blockstats', self.chain), criteria)
+            print('FAILED HANDLING REORG calling delete_from_height %s' % block_height)
             return
 
         self.cache_height(block_height)
