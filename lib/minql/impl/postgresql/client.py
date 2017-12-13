@@ -11,6 +11,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
         url, port = address.split(':')
         params = "dbname='%s' user='%s' password='%s' host='%s' port='%s'" % (name, user, password, url, port)
         self.connection = psycopg2.connect(params)
+        self.print_values_query = False
 
         super(PostgresqlMinqlClient, self).__init__(*args, **kwargs)
 
@@ -155,12 +156,18 @@ class PostgresqlMinqlClient(SqlMinqlClient):
             else:
                 values.append( str(value) )
 
-        query = 'INSERT INTO "%s" (%s) VALUES (%s)' % (
+        query = 'INSERT INTO "%s" (%s)' % (
             table_name,
             ', '.join(row.keys()),
-            ', '.join(values)
         )
         print(query)
+        query = '%s VALUES (%s)' % (
+            query,
+            ', '.join(values)
+        )
+        if self.print_values_query:
+            print(query)
+
         cur.execute(query)
         self.connection.commit()
         return row
