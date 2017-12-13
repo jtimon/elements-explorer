@@ -137,11 +137,16 @@ class PostgresqlMinqlClient(SqlMinqlClient):
                 else:
                     val = str(value)
                 updates.append('%s = %s' % (key, val) )
-        query = 'UPDATE "%s" SET %s' % (
-            table_name, ', '.join(updates))
-        query += " where id = '%s'" % row['id']
+        prequery = 'UPDATE "%s"' % table_name
+        query = '%s SET %s' % (
+            prequery, ', '.join(updates))
+        postquery = " where id = '%s'" % row['id']
+        query += postquery
+        if self.print_values_query:
+            print(query)
+        else:
+            print(prequery, postquery)
 
-        print(query)
         cur.execute(query)
         self.connection.commit()
         return row
