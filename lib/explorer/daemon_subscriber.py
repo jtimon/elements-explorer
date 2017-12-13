@@ -112,25 +112,34 @@ class GreedyCacher(CronCacher):
 
         self.last_cached_height = -1
 
-    def cache_height(self, height):
+    def cache_blockhash(self, blockhash):
         try:
-            blockstats = GetById(self.db_client, self.rpccaller, self.chain, 'blockstats', height)
-            blockhash = GetById(self.db_client, self.rpccaller, self.chain, 'blockhash', height)['result']
             block = GetById(self.db_client, self.rpccaller, self.chain, 'block', blockhash)
-            print('cache_height', height, blockhash)
+            blockstats = GetById(self.db_client, self.rpccaller, self.chain, 'blockstats', block['height'])
         except:
-            print('FAILED GREEDY CACHE height %s in chain %s' % (height, self.chain))
+            print('FAILED cache_blockhash %s' % blockhash)
+            return None
+        return block
 
     def _cron_loop(self):
         chaininfo = GetById(self.db_client, self.rpccaller, self.chain, 'chaininfo', self.chain)
         if 'error' in chaininfo:
             return
-        next_cached_height = chaininfo['blocks']
-        height = next_cached_height
+        height = chaininfo['blocks']
+        blockhash = chaininfo['bestblockhash']
         while height > self.last_cached_height:
-            self.cache_height(height)
+            block = self.cache_blockhash(blockhash)
+            if block and 'previousblockhash' in block:
+                blockhash = block['previousblockhash']
+            elif block and height == 0:
+                # the genesis block doesn't have a previous block
+                break
+            else:
+                print('FAILED no block %s' % blockhash)
+                return
             height = height - 1
-        self.last_cached_height = next_cached_height
+
+        self.last_cached_height = chaininfo['blocks']
 
 
 class DaemonReorgManager(GreedyCacher):
@@ -172,7 +181,7 @@ class DaemonReorgManager(GreedyCacher):
     def manage_reorg(self, block_height, block_hash):
         print('REORG DETECTED at height %s hash %s previous height %s hash %s' % (
             block_height, block_hash, self.prev_reorg_height, self.prev_reorg_hash))
-    
+
     def update_tip(self, block_hash):
         json_result = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
         block_height = json_result['height']
@@ -209,7 +218,7 @@ class DaemonReorgManager(GreedyCacher):
             print('FAILED HANDLING REORG calling delete_from_height %s' % block_height)
             return
 
-        self.cache_height(block_height)
+        self.cache_blockhash(block_hash)
 
 
 class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
