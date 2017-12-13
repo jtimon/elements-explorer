@@ -10,6 +10,6 @@ greedy_cacher_bitcoin: python lib/explorer/bin/greedy_cacher.py --chain bitcoin
 mempool_bitcoin: python lib/explorer/bin/mempool_cacher.py --chain bitcoin
 subscriber_bitcoin: python lib/explorer/bin/chain_subscriber.py --chain bitcoin
 
-greedy_cacher_testnet3: python lib/explorer/bin/greedy_cacher.py --chain testnet3
+# greedy_cacher_testnet3: python lib/explorer/bin/greedy_cacher.py --chain testnet3
 mempool_testnet3: python lib/explorer/bin/mempool_cacher.py --chain testnet3
 subscriber_testnet3: python lib/explorer/bin/chain_subscriber.py --chain testnet3
