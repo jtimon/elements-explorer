@@ -99,7 +99,6 @@ def GetById(db_client, rpccaller, chain, resource, req_id):
         if len(count_by_height) > 1:
             return {'error': {'message': 'More than one block cached for height %s' % req_id}}
         if len(count_by_height) == 1:
-            CacheBlockResult(db_client, chain, 'block', json.loads(count_by_height[0]['blob']), count_by_height[0]['id'])
             return {'result': count_by_height[0]['id']}
 
         json_result = RpcFromId(rpccaller, resource, req_id)
