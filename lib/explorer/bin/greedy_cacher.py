@@ -5,7 +5,7 @@ if __name__ != '__main__':
 import gflags
 
 gflags.DEFINE_string('chain', u"bitcoin",
-                     u"Chain to subscribe to")
+                     u"Chain to greedy cache for")
 
 try:
     import sys
