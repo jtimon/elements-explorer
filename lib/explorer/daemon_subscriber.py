@@ -185,10 +185,16 @@ class DaemonReorgManager(GreedyCacher):
         self.db_client.delete(self.chain + "_" + 'block', criteria)
         self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
 
-    def commit_new_prev(self, block_height, block_hash):
-        self.prev_reorg_hash = block_hash
-        self.prev_reorg_height = block_height
+    def commit_new_prev(self, block):
+        self.prev_reorg_hash = block['hash']
+        self.prev_reorg_height = block['height']
         self.cache_blockhash(self.prev_reorg_hash)
+
+        if not self.update_chainfo(block):
+            print('FAILED update_chainfo in commit_new_prev', block)
+            return False
+
+        return True
 
     def get_ascendant(self, block, target_height):
 
@@ -216,7 +222,9 @@ class DaemonReorgManager(GreedyCacher):
 
         return block
 
-    def manage_reorg(self, block_height, block_hash):
+    def manage_reorg(self, block):
+        block_height = block['height']
+        block_hash = block['hash']
         print('REORG DETECTED at height %s hash %s previous height %s hash %s' % (
             block_height, block_hash, self.prev_reorg_height, self.prev_reorg_hash))
 
@@ -225,9 +233,13 @@ class DaemonReorgManager(GreedyCacher):
             print('HANDLING REORG SUCCESS delete_from_height %s' % block_height)
         except:
             print('FAILED HANDLING REORG calling delete_from_height %s' % block_height)
-            return
+            return False
 
-        self.commit_new_prev(block_height, block_hash)
+        if not self.commit_new_prev(block):
+            print('FAILED update_chainfo in commit_new_prev in manage_reorg', block)
+            return False
+
+        return True
 
     def update_tip(self, block_hash):
         print('update_tip from reorg height %s hash %s to %s', self.prev_reorg_height, self.prev_reorg_hash, block_hash)
@@ -244,7 +256,11 @@ class DaemonReorgManager(GreedyCacher):
 
         if not self.prev_reorg_hash:
             # Only commit new tip if the first call
-            self.commit_new_prev(block_height, block_hash)
+            if not self.commit_new_prev(block):
+                print('FAILED update_chainfo in commit_new_prev in update_tip', block)
+                return
+
+            print('START update_tip with block', block_height, block_hash)
             return
 
         if self.prev_reorg_hash == block_hash:
@@ -252,18 +268,16 @@ class DaemonReorgManager(GreedyCacher):
             return
 
         if self.prev_reorg_height >= block_height:
-            self.manage_reorg(block_height, block_hash)
+            if not self.manage_reorg(block):
+                return
             return
 
         ascendant = self.get_ascendant(block, self.prev_reorg_height)
         if ascendant and 'hash' in ascendant and ascendant['hash'] == self.prev_reorg_hash:
-            self.commit_new_prev(block_height, block_hash)
+            self.commit_new_prev(block)
         else:
-            self.manage_reorg(block_height, block_hash)
-
-        if not self.update_chainfo(block):
-            print('FAILED update_chainfo', block)
-            return
+            if not self.manage_reorg(block):
+                return
 
     def _cron_loop(self):
         chaininfo = self.rpccaller.RpcCall('getblockchaininfo', {})
