@@ -152,6 +152,19 @@ class DaemonReorgManager(GreedyCacher):
         self.prev_reorg_hash = None
         self.print_delete_tx = False
 
+    def update_chainfo(self, block):
+        entry = {}
+        entry['id'] = self.chain
+        entry['bestblockhash'] = block['hash']
+        entry['blocks'] = block['height']
+        entry['mediantime'] = block['mediantime']
+        try:
+            db_result = self.db_client.put(self.chain + "_" + 'chaininfo', entry)
+        except:
+            print('FAILED UPDATE TIP in chain %s' % (self.chain), entry)
+            return False
+
+        return True
 
     def delete_from_height(self, block_height):
         criteria = {'height': {'ge': block_height}}
@@ -228,18 +241,6 @@ class DaemonReorgManager(GreedyCacher):
             return
 
         block_height = block['height']
-        block_mediantime = block['mediantime']
-
-        entry = {}
-        entry['id'] = self.chain
-        entry['bestblockhash'] = block_hash
-        entry['blocks'] = block_height
-        entry['mediantime'] = block_mediantime
-        try:
-            db_result = self.db_client.put(self.chain + "_" + 'chaininfo', entry)
-        except:
-            print('FAILED UPDATE TIP in chain %s' % (self.chain), entry)
-            return
 
         if not self.prev_reorg_hash:
             # Only commit new tip if the first call
@@ -259,6 +260,10 @@ class DaemonReorgManager(GreedyCacher):
             self.commit_new_prev(block_height, block_hash)
         else:
             self.manage_reorg(block_height, block_hash)
+
+        if not self.update_chainfo(block):
+            print('FAILED update_chainfo', block)
+            return
 
     def _cron_loop(self):
         chaininfo = self.rpccaller.RpcCall('getblockchaininfo', {})
