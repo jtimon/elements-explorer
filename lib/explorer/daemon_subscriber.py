@@ -177,6 +177,32 @@ class DaemonReorgManager(GreedyCacher):
         self.prev_reorg_height = block_height
         self.cache_blockhash(self.prev_reorg_hash)
 
+    def get_ascendant(self, block, target_height):
+
+        if not block or not 'hash' in block or not 'height' in block or target_height < 0:
+            return None
+
+        block_height = block['height']
+        block_hash = block['hash']
+
+        if target_height > block_height:
+            return None
+
+        while target_height < block_height:
+            print('get_ascendant loop height %s hash %s', block_height, block_hash)
+
+            if not 'previousblockhash' in block:
+                return None
+            block_hash = block['previousblockhash']
+            block_height = block_height - 1
+            try:
+                block = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
+            except:
+                print('FAILED get_ascendant block.get(%s)' % block_hash, block)
+                return None
+
+        return block
+
     def is_descendant(self, block_height, block_hash):
         print('is_descendant from reorg height %s hash %s', self.prev_reorg_height, self.prev_reorg_hash)
 
@@ -189,20 +215,16 @@ class DaemonReorgManager(GreedyCacher):
         if self.prev_reorg_height >= block_height:
             return False
 
-        while self.prev_reorg_height <= block_height:
-            print('is_descendant loop height %s hash %s', block_height, block_hash)
+        try:
+            block = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
+        except:
+            print('FAILED is_descendant block.get(%s)' % block_hash, block)
+            return False
+        assert(block and 'height' in block and block['height'] == block_height)
 
-            if self.prev_reorg_hash == block_hash:
-                return True
-
-            try:
-                json_result = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
-            except:
-                print('FAILED is_descendant block.get(%s)' % block_hash, json_result)
-                return False
-
-            block_hash = json_result['previousblockhash']
-            block_height = block_height - 1
+        ascendant = self.get_ascendant(block, self.prev_reorg_height)
+        if ascendant and 'hash' in ascendant and ascendant['hash'] == self.prev_reorg_hash:
+            return True
 
         return False
 
@@ -244,7 +266,7 @@ class DaemonReorgManager(GreedyCacher):
             self.commit_new_prev(block_height, block_hash)
         else:
             self.manage_reorg(block_height, block_hash)
-        
+
     def _cron_loop(self):
         chaininfo = self.rpccaller.RpcCall('getblockchaininfo', {})
         if 'bestblockhash' in chaininfo:
