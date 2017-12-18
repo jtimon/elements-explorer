@@ -203,39 +203,9 @@ class DaemonReorgManager(GreedyCacher):
 
         return block
 
-    def is_descendant(self, block_height, block_hash):
-        print('is_descendant from reorg height %s hash %s', self.prev_reorg_height, self.prev_reorg_hash)
-
-        if not self.prev_reorg_hash:
-            return False
-
-        if self.prev_reorg_hash == block_hash:
-            return True
-
-        if self.prev_reorg_height >= block_height:
-            return False
-
-        try:
-            block = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
-        except:
-            print('FAILED is_descendant block.get(%s)' % block_hash, block)
-            return False
-        assert(block and 'height' in block and block['height'] == block_height)
-
-        ascendant = self.get_ascendant(block, self.prev_reorg_height)
-        if ascendant and 'hash' in ascendant and ascendant['hash'] == self.prev_reorg_hash:
-            return True
-
-        return False
-
     def manage_reorg(self, block_height, block_hash):
         print('REORG DETECTED at height %s hash %s previous height %s hash %s' % (
             block_height, block_hash, self.prev_reorg_height, self.prev_reorg_hash))
-
-        if not self.prev_reorg_hash:
-            # Don't do anything on first call
-            self.commit_new_prev(block_height, block_hash)
-            return
 
         try:
             self.delete_from_height(block_height)
@@ -247,9 +217,18 @@ class DaemonReorgManager(GreedyCacher):
         self.commit_new_prev(block_height, block_hash)
 
     def update_tip(self, block_hash):
-        json_result = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
-        block_height = json_result['height']
-        block_mediantime = json_result['mediantime']
+        print('update_tip from reorg height %s hash %s to %s', self.prev_reorg_height, self.prev_reorg_hash, block_hash)
+
+        try:
+            block = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
+            assert(block and 'hash' in block and block['hash'] == block_hash and
+                   'height' in block and 'mediantime' in block)
+        except:
+            print('FAILED update_tip block.get(%s)' % block_hash, block)
+            return
+
+        block_height = block['height']
+        block_mediantime = block['mediantime']
 
         entry = {}
         entry['id'] = self.chain
@@ -262,7 +241,21 @@ class DaemonReorgManager(GreedyCacher):
             print('FAILED UPDATE TIP in chain %s' % (self.chain), entry)
             return
 
-        if self.is_descendant(block_height, block_hash):
+        if not self.prev_reorg_hash:
+            # Only commit new tip if the first call
+            self.commit_new_prev(block_height, block_hash)
+            return
+
+        if self.prev_reorg_hash == block_hash:
+            # Don't do anything if we're already on the tip
+            return
+
+        if self.prev_reorg_height >= block_height:
+            self.manage_reorg(block_height, block_hash)
+            return
+
+        ascendant = self.get_ascendant(block, self.prev_reorg_height)
+        if ascendant and 'hash' in ascendant and ascendant['hash'] == self.prev_reorg_hash:
             self.commit_new_prev(block_height, block_hash)
         else:
             self.manage_reorg(block_height, block_hash)
