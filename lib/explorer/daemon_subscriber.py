@@ -166,8 +166,8 @@ class DaemonReorgManager(GreedyCacher):
 
         return True
 
-    def delete_from_height(self, block_height):
-        criteria = {'height': {'ge': block_height}}
+
+    def delete_txs_from_blockheight(self, criteria):
         blocks_to_delete = self.db_client.search(self.chain + "_" + 'block', criteria)
         for block in blocks_to_delete:
             blockhash = block['id']
@@ -180,8 +180,13 @@ class DaemonReorgManager(GreedyCacher):
                 print('to_delete_block', to_delete_block)
 
             tx_criteria = {'blockhash': blockhash}
-            self.db_client.delete(self.chain + "_" + 'tx', tx_criteria)
+            txs_to_delete = self.db_client.search(self.chain + "_" + 'tx', criteria)
+            if txs_to_delete:
+                self.db_client.delete(self.chain + "_" + 'tx', tx_criteria)
 
+    def delete_from_height(self, block_height):
+        criteria = {'height': {'ge': block_height}}
+        self.delete_txs_from_blockheight(criteria)
         self.db_client.delete(self.chain + "_" + 'block', criteria)
         self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
 
