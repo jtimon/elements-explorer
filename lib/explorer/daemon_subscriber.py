@@ -9,7 +9,7 @@ from lib import minql
 
 from lib.explorer.explorer_server import GetById
 
-MEMPOOL_STATS_INTERVALS = range(1, 10) + range(10, 20, 2) + range(20, 100, 10) + range(100, 300, 20) + range(300, 1100, 100)
+MEMPOOL_STATS_INTERVALS = range(1, 10) + range(10, 20, 2) + range(20, 100, 10) + range(100, 500, 20) + range(500, 1000, 50) + range(1000, 1200, 100)
 CURRENCY_UNIT_FLOAT = 100000000
 
 def BtcStrToSatInt(btc_str):
