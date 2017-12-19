@@ -229,7 +229,6 @@ class DaemonReorgManager(GreedyCacher):
 
     def manage_reorg(self, block):
         block_height = block['height']
-        block_hash = block['hash']
         print('REORG DETECTED at height %s hash %s previous height %s hash %s' % (
             block_height, block_hash, self.prev_reorg_height, self.prev_reorg_hash))
 
