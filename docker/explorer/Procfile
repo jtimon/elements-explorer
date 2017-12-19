@@ -11,8 +11,8 @@ subscriber_testnet3: python lib/explorer/bin/chain_subscriber.py --chain testnet
 reorg_cron_testnet3: python lib/explorer/bin/reorg_cron.py --chain testnet3
 
 # mempool_elementsregtest: python lib/explorer/bin/mempool_cacher.py --chain elementsregtest
-subscriber_elementsregtest: python lib/explorer/bin/chain_subscriber.py --chain elementsregtest
-reorg_cron_elementsregtest: python lib/explorer/bin/reorg_cron.py --chain elementsregtest
+# subscriber_elementsregtest: python lib/explorer/bin/chain_subscriber.py --chain elementsregtest
+# reorg_cron_elementsregtest: python lib/explorer/bin/reorg_cron.py --chain elementsregtest
 
 greedy_cacher_bitcoin: python lib/explorer/bin/greedy_cacher.py --chain bitcoin
 # greedy_cacher_testnet3: python lib/explorer/bin/greedy_cacher.py --chain testnet3
