@@ -1,6 +1,6 @@
 web: gunicorn py:app -b "$WEB_HOST:$WEB_PORT" -w $WEB_WORKERS -k gevent --log-config py/config/logging.conf
 
-create_db: python lib/explorer/bin/create_db.py --address $DB_PROXY_ADR --dbaddress $DB_BACKEND_ADR --dbtype $DB_PROXY_TYPE --schema $MINQL_SCHEMA --dbname $DB_NAME --dbuser $DB_USER --dbpass $DB_PASS
+# create_db: python lib/explorer/bin/create_db.py --address $DB_PROXY_ADR --dbaddress $DB_BACKEND_ADR --dbtype $DB_PROXY_TYPE --schema $MINQL_SCHEMA --dbname $DB_NAME --dbuser $DB_USER --dbpass $DB_PASS
 
 mempool_bitcoin: python lib/explorer/bin/mempool_cacher.py --chain bitcoin
 subscriber_bitcoin: python lib/explorer/bin/chain_subscriber.py --chain bitcoin
@@ -14,6 +14,6 @@ reorg_cron_testnet3: python lib/explorer/bin/reorg_cron.py --chain testnet3
 # subscriber_elementsregtest: python lib/explorer/bin/chain_subscriber.py --chain elementsregtest
 # reorg_cron_elementsregtest: python lib/explorer/bin/reorg_cron.py --chain elementsregtest
 
-# greedy_cacher_bitcoin: python lib/explorer/bin/greedy_cacher.py --chain bitcoin
+greedy_cacher_bitcoin: python lib/explorer/bin/greedy_cacher.py --chain bitcoin
 # greedy_cacher_testnet3: python lib/explorer/bin/greedy_cacher.py --chain testnet3
 # greedy_cacher_elementsregtest: python lib/explorer/bin/greedy_cacher.py --chain elementsregtest
