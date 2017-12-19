@@ -229,8 +229,10 @@ class DaemonReorgManager(GreedyCacher):
 
     def manage_reorg(self, block):
         block_height = block['height']
-        print('REORG DETECTED at height %s hash %s previous height %s hash %s' % (
-            block_height, block_hash, self.prev_reorg_height, self.prev_reorg_hash))
+        print(
+            ('REORG DETECTED at previous height %s and hash %s, then comes a block' % (
+                self.prev_reorg_height, self.prev_reorg_hash))
+            , block)
 
         try:
             self.delete_from_height(block_height)
