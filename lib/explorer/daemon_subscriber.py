@@ -167,8 +167,8 @@ class DaemonReorgManager(GreedyCacher):
         return True
 
 
-    def delete_txs_from_blockheight(self, criteria):
-        blocks_to_delete = self.db_client.search(self.chain + "_" + 'block', criteria)
+    def delete_txs_from_blocks(self, blocks_to_delete):
+
         for block in blocks_to_delete:
             blockhash = block['id']
             print('delete txs with blockhash %s' % blockhash)
@@ -180,15 +180,21 @@ class DaemonReorgManager(GreedyCacher):
                 print('to_delete_block', to_delete_block)
 
             tx_criteria = {'blockhash': blockhash}
-            txs_to_delete = self.db_client.search(self.chain + "_" + 'tx', criteria)
+            txs_to_delete = self.db_client.search(self.chain + "_" + 'tx', tx_criteria)
             if txs_to_delete:
                 self.db_client.delete(self.chain + "_" + 'tx', tx_criteria)
 
     def delete_from_height(self, block_height):
+
         criteria = {'height': {'ge': block_height}}
-        self.delete_txs_from_blockheight(criteria)
-        self.db_client.delete(self.chain + "_" + 'block', criteria)
-        self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
+        blocks_to_delete = self.db_client.search(self.chain + "_" + 'block', criteria)
+        if blocks_to_delete:
+            self.delete_txs_from_blocks(blocks_to_delete)
+            self.db_client.delete(self.chain + "_" + 'block', criteria)
+
+        stats_to_delete = self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
+        if stats_to_delete:
+            self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
 
     def commit_new_prev(self, block):
         self.prev_reorg_hash = block['hash']
