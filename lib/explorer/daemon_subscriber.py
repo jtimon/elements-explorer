@@ -254,7 +254,7 @@ class DaemonReorgManager(GreedyCacher):
         return True
 
     def update_tip(self, block_hash):
-        print('update_tip from reorg height %s hash %s to %s', self.prev_reorg_height, self.prev_reorg_hash, block_hash)
+        print('update_tip from reorg height %s hash %s to %s' % (self.prev_reorg_height, self.prev_reorg_hash, block_hash))
 
         try:
             block = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
