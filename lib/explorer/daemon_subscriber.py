@@ -255,7 +255,7 @@ class DaemonReorgManager(GreedyCacher):
             assert(block and 'hash' in block and block['hash'] == block_hash and
                    'height' in block and 'mediantime' in block)
         except:
-            print('FAILED update_tip block.get(%s)' % block_hash, block)
+            print('FAILED update_tip block.get(%s)' % block_hash)
             return
 
         block_height = block['height']
