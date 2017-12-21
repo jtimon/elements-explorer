@@ -22,7 +22,7 @@ RUN pip install -r requirements.txt --require-hashes
 ADD setup.py /build_docker/setup.py
 ADD lib /build_docker/lib
 RUN python /build_docker/setup.py develop
-ADD py /build_docker/py
+ADD webflask /build_docker/webflask
 ADD gui /build_docker/gui
 ADD docker/explorer/Procfile /build_docker/docker/explorer/Procfile
 ADD docker/explorer/.env /build_docker/docker/explorer/.env
