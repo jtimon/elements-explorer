@@ -11,6 +11,7 @@ RPC_ALLOWED_CALLS = [
     "getmempoolinfo",
     "getrawmempool",
     "getmempoolentry",
+    'savemempool',
 ]
 
 class RpcCaller(object):

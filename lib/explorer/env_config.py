@@ -65,5 +65,8 @@ def reorg_cron_params(chain):
 def mempool_cacher_params(chain):
     return [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]
 
+def mempool_saver_params(chain):
+    return [chain, AVAILABLE_CHAINS[chain]['rpc'], 60]
+
 def greedy_cacher_params(chain):
     return [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]

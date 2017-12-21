@@ -17,8 +17,11 @@ FLAGS = gflags.FLAGS
 
 # ===----------------------------------------------------------------------===
 
-from lib.explorer.daemon_subscriber import MempoolStatsCacher
-from lib.explorer.env_config import mempool_cacher_params
+from lib.explorer.daemon_subscriber import MempoolStatsCacher, MempoolSaver
+from lib.explorer.env_config import mempool_cacher_params, mempool_saver_params
 
 mempool_cacher = MempoolStatsCacher(*mempool_cacher_params(FLAGS.chain))
 mempool_cacher.start()
+
+mempool_saver = MempoolSaver(*mempool_saver_params(FLAGS.chain))
+mempool_saver.start()
