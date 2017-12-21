@@ -6,7 +6,7 @@ import crossdomain
 
 from server import api_blueprint
 
-GUI_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'app')
+GUI_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'gui')
 
 from flask import Flask
 app = Flask(__name__)
