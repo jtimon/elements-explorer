@@ -150,7 +150,6 @@ class DaemonReorgManager(GreedyCacher):
 
         self.prev_reorg_height = -1
         self.prev_reorg_hash = None
-        self.print_delete_tx = False
 
     def update_chainfo(self, block):
         entry = {}
@@ -172,12 +171,6 @@ class DaemonReorgManager(GreedyCacher):
         for block in blocks_to_delete:
             blockhash = block['id']
             print('delete txs with blockhash %s' % blockhash)
-            if self.print_delete_tx:
-                print(block)
-            else:
-                to_delete_block = block
-                del to_delete_block['tx']
-                print('to_delete_block', to_delete_block)
 
             tx_criteria = {'blockhash': blockhash}
             txs_to_delete = self.db_client.search(self.chain + "_" + 'tx', tx_criteria)
@@ -193,11 +186,12 @@ class DaemonReorgManager(GreedyCacher):
             try:
                 self.delete_txs_from_blocks(blocks_to_delete)
             except:
-                print('ERROR with blocks_to_delete', blocks_to_delete)
+                print('ERROR with blocks_to_delete', len(blocks_to_delete))
                 # return False
             self.db_client.delete(self.chain + "_" + 'block', criteria)
 
-        stats_to_delete = self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
+        stats_to_delete = self.db_client.search(self.chain + "_" + 'blockstats', criteria)
+        print('stats_to_delete', len(stats_to_delete))
         if stats_to_delete:
             self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
 
@@ -239,11 +233,10 @@ class DaemonReorgManager(GreedyCacher):
         return block
 
     def manage_reorg(self, block):
+        block_hash = block['hash']
         block_height = block['height']
-        print(
-            ('REORG DETECTED at previous height %s and hash %s, then comes a block' % (
-                self.prev_reorg_height, self.prev_reorg_hash))
-            , block)
+        print('REORG DETECTED at previous height %s and hash %s, new height %s and hash %s' % (
+            self.prev_reorg_height, self.prev_reorg_hash, block_height, block_hash))
 
         try:
             self.delete_from_height(block_height)
