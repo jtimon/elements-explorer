@@ -232,27 +232,63 @@ class DaemonReorgManager(GreedyCacher):
 
         return block
 
-    def manage_reorg(self, block):
-        block_hash = block['hash']
-        block_height = block['height']
-        print('REORG DETECTED at previous height %s and hash %s, new height %s and hash %s' % (
-            self.prev_reorg_height, self.prev_reorg_hash, block_height, block_hash))
+    def check_basic_block(self, block):
+        return block and 'hash' in block and 'height' in block and 'previousblockhash' in block
+
+    def find_common_ancestor(self, block_A, block_B):
+        if not self.check_basic_block(block_A):
+            if not self.check_basic_block(block_B):
+                return None
+            else:
+                return block_B
+        elif not self.check_basic_block(block_B):
+            return block_A
 
         try:
-            self.delete_from_height(block_height)
-            print('HANDLING REORG SUCCESS delete_from_height %s' % block_height)
+            if block_A['hash'] == block_B['hash']:
+                return block_A
+            elif block_A['height'] > block_B['height']:
+                return self.find_common_ancestor(block_B, block_A)
+            elif block_A['height'] <= block_B['height']:
+                ascendant = self.get_ascendant(block_B, block_A['height'])
+                if not ascendant:
+                    print('FAILED calling get_ascendant in find_common_ancestor A: %s %s B: %s %s' % (
+                        block_A['height'], block_A['hash'], block_B['height'], block_B['hash']))
+                return self.find_common_ancestor(block_A, ascendant)
         except:
-            print('FAILED HANDLING REORG calling delete_from_height %s' % block_height)
+            print('FAILED calling find_common_ancestor A: %s %s B: %s %s' % (
+                block_A['height'], block_A['hash'], block_B['height'], block_B['hash']))
+
+        return None
+
+    def manage_reorg(self, block):
+        print('REORG DETECTED at previous height %s and hash %s, new height %s and hash %s' % (
+            self.prev_reorg_block['height'], self.prev_reorg_block['hash'], block['height'], block['hash']))
+
+        common_ancestor = self.find_common_ancestor(self.prev_reorg_block, block)
+        if not common_ancestor or not self.check_basic_block(common_ancestor):
+            print('FAILED HANDLING REORG calling find_common_ancestor %s' % block['height'], common_ancestor)
             return False
 
-        if not self.commit_new_prev(block):
-            print('FAILED update_chainfo in commit_new_prev in manage_reorg', block)
+        try:
+            block_height = common_ancestor['height'] + 1
+            self.delete_from_height(block_height)
+            print('HANDLING REORG SUCCESS for delete_from_height %s' % block_height)
+        except:
+            print('FAILED HANDLING REORG calling delete_from_height')
             return False
 
+        if not self.commit_new_prev(common_ancestor):
+            print('FAILED update_chainfo in commit_new_prev in manage_reorg', common_ancestor)
+            return False
+
+        print('HANDLING REORG SUCCESS at previous height %s and hash %s, new height %s and hash %s' % (
+            self.prev_reorg_block['height'], self.prev_reorg_block['hash'], block['height'], block['hash']))
         return True
 
     def update_tip(self, block_hash):
         print('update_tip from reorg height %s hash %s to %s' % (self.prev_reorg_height, self.prev_reorg_hash, block_hash))
+        self.prev_reorg_block = GetById(self.db_client, self.rpccaller, self.chain, 'block', self.prev_reorg_hash)
 
         try:
             block = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
@@ -286,7 +322,7 @@ class DaemonReorgManager(GreedyCacher):
         if ascendant and 'hash' in ascendant and ascendant['hash'] == self.prev_reorg_hash:
             self.commit_new_prev(block)
         else:
-            if not self.manage_reorg(block):
+            if not self.manage_reorg(ascendant):
                 return
 
     def _cron_loop(self):
