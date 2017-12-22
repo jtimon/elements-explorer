@@ -48,7 +48,7 @@ class CronCacher(ChainCacher, multiprocessing.Process):
 
 class MempoolSaver(CronCacher):
 
-    def __init__(self, chain, rpccaller, wait_time=60, initial_wait_time=1800,
+    def __init__(self, chain, rpccaller, wait_time, initial_wait_time,
                  *args, **kwargs):
 
         super(MempoolSaver, self).__init__(chain, rpccaller, None, wait_time, initial_wait_time,
