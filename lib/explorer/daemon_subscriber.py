@@ -32,13 +32,13 @@ class ChainCacher(object):
 
 class CronCacher(ChainCacher, multiprocessing.Process):
 
-    def __init__(self, chain, rpccaller, db_client, wait_time=60,
+    def __init__(self, chain, rpccaller, db_client, wait_time=60, initial_wait_time=5,
                  *args, **kwargs):
 
         super(CronCacher, self).__init__(chain, rpccaller, db_client, *args, **kwargs)
 
         self.wait_time = wait_time
-        self.initial_wait_time = 5
+        self.initial_wait_time = initial_wait_time
 
     def run(self):
         time.sleep(self.initial_wait_time)
@@ -48,12 +48,12 @@ class CronCacher(ChainCacher, multiprocessing.Process):
 
 class MempoolSaver(CronCacher):
 
-    def __init__(self, chain, rpccaller, wait_time=60,
+    def __init__(self, chain, rpccaller, wait_time=60, initial_wait_time=600,
                  *args, **kwargs):
 
-        super(MempoolSaver, self).__init__(chain, rpccaller, None, wait_time,
+        super(MempoolSaver, self).__init__(chain, rpccaller, None, wait_time, initial_wait_time,
                                                  *args, **kwargs)
-
+        
     def _cron_loop(self):
         try:
             self.rpccaller.RpcCall('savemempool', {})
