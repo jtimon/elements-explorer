@@ -5,8 +5,16 @@ function NumToPositive(num) {
     return (num > 0) ? (num) : 0;
 }
 
+function NumToNatural(num) {
+    return (num > 1) ? (num) : 1;
+}
+
 function ParseIntToPositive(num) {
     return NumToPositive(parseInt(num));
+}
+
+function ParseNatural(num) {
+    return NumToNatural(parseInt(num));
 }
 
 function GetResult(response) {
@@ -58,5 +66,6 @@ angular.module('rpcExplorerApp')
         srv.GetResult = GetResult;
         srv.NumToPositive = NumToPositive;
         srv.ParseIntToPositive = ParseIntToPositive;
+        srv.ParseNatural = ParseNatural;
         return srv;
     });

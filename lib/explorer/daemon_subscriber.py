@@ -1,5 +1,6 @@
 
 import binascii
+import datetime
 import json
 import multiprocessing
 import time
@@ -110,7 +111,8 @@ class MempoolStatsCacher(CronCacher):
             IncrementStats(stats, 'total', tx_fee, tx_size)
 
         entry = {}
-        entry['id'] = int(time.time())
+        entry['id'] = int((datetime.datetime.now()).strftime('%s'))
+        entry['time'] = int((datetime.datetime.now()).strftime('%s'))
         entry['blob'] = json.dumps(stats)
         try:
             db_result = self.db_client.put(self.chain + "_" + 'mempoolstats', entry)

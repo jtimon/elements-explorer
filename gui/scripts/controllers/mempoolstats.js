@@ -8,10 +8,11 @@
  * Controller of the rpcExplorerApp
  */
 angular.module('rpcExplorerApp')
-    .controller('MempoolStatsCtrl', function ($scope, $routeParams, SrvUtil, SrvChain, SrvBackend) {
+    .controller('MempoolStatsCtrl', function ($scope, $routeParams, $location, SrvUtil, SrvChain, SrvBackend) {
 
         SrvChain.set($routeParams.chain);
 
+        $scope.hours_ago = SrvUtil.ParseNatural($location.search().hours_ago);
         $scope.loading_stats = false;
         $scope.verbose_stats = false;
 
@@ -113,14 +114,16 @@ angular.module('rpcExplorerApp')
         $scope.doPlot = function() {
             $scope.loading_stats = true;
 
-            if ($scope.plot_data) {
+            if ($scope.plot_data && $scope.hours_ago == $scope.cached_hours_ago) {
                 PlotCachedData();
             } else {
-                SrvBackend.RpcCall('mempoolstats', {})
+                $scope.cached_hours_ago = $scope.hours_ago;
+                SrvBackend.RpcCall('mempoolstats', {'hours_ago': $scope.hours_ago })
                     .then(CachePlotData)
                     .then(PlotCachedData)
                     .catch(SrvUtil.errorCallbackScoped($scope));
             }
+            $location.search('hours_ago', $scope.hours_ago);
         };
 
         $scope.doPlot();

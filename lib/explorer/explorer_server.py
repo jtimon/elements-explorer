@@ -1,5 +1,6 @@
 
 import json
+import datetime
 
 from lib import minql
 
@@ -136,7 +137,11 @@ class BetterNameResource(object):
             json_result = GetById(self.db_client, self.rpccaller, self.chain, self.resource, request['id'])
         elif self.resource == 'mempoolstats':
             try:
-                db_result = self.db_client.search(self.chain + "_" + self.resource, {})
+                if not 'hours_ago' in request:
+                    return {'error': {'message': 'No hours_ago specified to get %s in request %s' % (self.resource, request)}}
+                seconds_ago = request['hours_ago'] * 60 * 60
+                min_epoch = int((datetime.datetime.now() - datetime.timedelta(seconds=seconds_ago)).strftime('%s'))
+                db_result = self.db_client.search(self.chain + "_" + self.resource, {'time': {'ge': min_epoch}})
                 if not db_result:
                     return {'error': {'message': 'No result db for %s.' % self.resource}}
                 json_result = {}

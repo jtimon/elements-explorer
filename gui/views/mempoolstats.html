@@ -13,6 +13,14 @@
 </div>
 
 <div class="container">
+
+  <div class="container">
+    Hours ago:
+    <input ng-disabled="loading_stats" type="number" min="1" step="1" ng-model="hours_ago">
+    <button ng-disabled="loading_stats" ng-click="doPlot();">Plot</button>
+    <p></p>
+  </div>
+
   <div class="container">
     Type:
     <span ng-repeat="name in stats_types">
