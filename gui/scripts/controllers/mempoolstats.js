@@ -35,10 +35,11 @@ angular.module('rpcExplorerApp')
             'total'
         ];
 
-        $scope.selected_stats = ['1', '10', '20', '30', '50', '70', '100',
-                                 '200', '300', '400', '500',
-                                 '600', '700', '800', '900', '1000',
-                                 'total'];
+        $scope.selected_stats = [
+            '1',
+            '10', '20', '30', '50', '70',
+            '100', '200', '300', '500', '700',
+            'total'];
 
         function CreateTrace(key, xaxis_data, yaxis_data)
         {
