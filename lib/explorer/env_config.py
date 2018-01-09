@@ -21,9 +21,9 @@ WEB_ALLOWED_CALLS = [
     'chaininfo', # cached in server, reorgs handled with zmq subscription to node
     "blockhash", # cached in server, reorgs handled with zmq subscription to node
     'mempoolstats', # Data from db, independent from reorgs
-    "getmempoolinfo", # never cached, always hits the node
-    "getrawmempool", # never cached, always hits the node
     "getmempoolentry", # never cached, always hits the node
+    "getmempoolinfo", # never cached, always hits the node
+    "getrawmempool", # never cached, always hits the node (limited to 8 results)
 ]
 
 DB_FACTORY = minql.MinqlFactory(CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'])

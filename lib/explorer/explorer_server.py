@@ -147,6 +147,8 @@ class BetterNameResource(object):
                 return {'error': {'message': 'Error getting %s from db.' % (self.resource)}}
         else:
             json_result = self.rpccaller.RpcCall(self.resource, request)
+            if self.resource == 'getrawmempool':
+                json_result['result'] = json_result['result'][:8]
 
         # If there's errors, only return the errors
         if 'error' in json_result and json_result['error']:
