@@ -13,20 +13,6 @@
 <p></p>
 
 <div class="container">
-  Verbose CT:
-  <input type="checkbox" ng-model="CTverbose">
-
-  Verbose RPC:
-  <input type="checkbox" ng-model="verbose">
-
-  <label>
-    Limit Raw hexadecimal strings to:
-    <input type="number" step="1" ng-model="rawhex_limit">
-  </label>
-</div>
-<p></p>
-
-<div class="container">
   <div>
     Block Height:
     <a ng-disabled="loading" ng-show="blockheight" ng-href="#!/chain/{{selected_chain}}/block-height/{{blockheight - 1}}">{{ blockheight - 1 }}<<< </a>
@@ -43,6 +29,21 @@
     <p></p>
 
   </div>
+  <p></p>
+
+  <div class="container">
+    Verbose CT:
+    <input type="checkbox" ng-model="CTverbose">
+
+    Verbose RPC:
+    <input type="checkbox" ng-model="verbose">
+
+    <label>
+      Limit Raw hexadecimal strings to:
+      <input type="number" step="1" ng-model="rawhex_limit">
+    </label>
+  </div>
+  <p></p>
 
 </div> <!-- container -->
 

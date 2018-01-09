@@ -19,9 +19,7 @@
   <input ng-disabled="loading_stats" type="number" min="0" step="1" ng-model="end_height">
 
   <button ng-disabled="loading_stats" ng-click="doPlot();">Plot</button>
-
-  Verbose Stats:
-  <input type="checkbox" ng-model="verbose_stats">
+  <p></p>
 
   <div class="container">
     X axis:
@@ -63,6 +61,12 @@
 <div ng-show="!loading_stats && graphPlots" class="container">
   <!-- This is where we are going to put our custom plotly directive -->
   <line-plot ng-show="!loading_stats && graphPlots" graph-plots=graphPlots></line-plot>
+
+  <div class="container">  
+    Verbose Stats:
+    <input type="checkbox" ng-model="verbose_stats">
+    <p></p>
+  </div>
 
   <div class="container" ng-show="verbose_stats">
 
