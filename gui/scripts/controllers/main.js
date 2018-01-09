@@ -66,6 +66,15 @@ angular.module('rpcExplorerApp')
             return $scope.blockid;
         };
 
+        function mempoolEntryCallback(data) {
+            $scope.mempoolentry = SrvUtil.GetResult(data);
+        };
+
+        function goToEntry(txhash) {
+            return SrvBackend.RpcCall("getmempoolentry", {"txid": txhash})
+                .then(mempoolEntryCallback);
+        };
+
         function successCallbackTx(data) {
             $scope.showtxlist = false;
             $scope.transaction = data;
@@ -76,6 +85,7 @@ angular.module('rpcExplorerApp')
                     .then(PromBlockstats);
             } else {
                 cleanBlock();
+                return goToEntry($scope.transaction['txid']);
             }
         };
 
@@ -93,7 +103,9 @@ angular.module('rpcExplorerApp')
 
         var goToTx = function(txhash) {
             return SrvBackend.get("tx", txhash)
-                .then(successCallbackTx);
+                .then(successCallbackTx)
+                .catch(SrvUtil.errorCallbackScoped($scope));
+            ;
         };
 
         $scope.IsCTOut = function(output) {

@@ -54,97 +54,6 @@
 </div>
 
 <div class="container">
-  <div>
-    Tx Id: <input ng-disabled="loading" ng-model="txid" ng-change="searchTx()">
-  </div>
-  <p></p>
-</div> <!-- container -->
-
-<div ng-show="mempoolentry" class="container">
-
-  <table border="1">
-
-    <tr>
-      <td>See other transaction details:</td>
-      <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{txid}}">{{ txid }}</a></td>
-    </tr>
-
-    <tr>
-      <td>Virtual size (see BIP141):</td>
-      <td>{{ mempoolentry.size }}</td>
-    </tr>
-
-    <tr>
-      <td>Fee:</td>
-      <td>{{ mempoolentry.fee }}</td>
-    </tr>
-
-    <tr>
-      <td>Modified fee:</td>
-      <td>{{ mempoolentry.modifiedfee }}</td>
-    </tr>
-
-    <tr>
-      <td>Time:</td>
-      <td>{{ mempoolentry.time }}</td>
-    </tr>
-
-    <tr>
-      <td>Height:</td>
-      <td>{{ mempoolentry.height }}</td>
-    </tr>
-
-    <tr>
-      <td>Descendant count:</td>
-      <td>{{ mempoolentry.descendantcount }}</td>
-    </tr>
-
-    <tr>
-      <td>Descendant virtual size:</td>
-      <td>{{ mempoolentry.descendantsize }}</td>
-    </tr>
-
-    <tr>
-      <td>Descendant modified fees:</td>
-      <td>{{ mempoolentry.descendantfees }}</td>
-    </tr>
-
-    <tr>
-      <td>Ancestor count:</td>
-      <td>{{ mempoolentry.ancestorcount }}</td>
-    </tr>
-
-    <tr>
-      <td>Ancestor virtual size:</td>
-      <td>{{ mempoolentry.ancestorsize }}</td>
-    </tr>
-
-    <tr>
-      <td>Ancestor modified fees:</td>
-      <td>{{ mempoolentry.ancestorfees }}</td>
-    </tr>
-
-  </table>
-  <p></p>
-
-  <span ng-show="mempoolentry.depends.length" class="container">
-    <nobr>
-      Depends on unconfirmed transactions used as inputs for this transaction ( {{ mempoolentry.depends.length }} ):
-    </nobr>
-    <p></p>
-
-    <table border="1">
-      <tr ng-repeat="txhash in mempoolentry.depends">
-        <td><a ng-href="#!/chain/{{selected_chain}}/mempool/entry/{{txhash}}">{{ txhash }}</a></td>
-      </tr>
-    </table>
-
-    <p></p>
-  </span>
-
-</div> <!-- container -->
-
-<div class="container">
   <nobr>
     Mempool Transactions ( {{ mempooltxs.length }} ):
     <button ng-disabled="loading" ng-click="LoadMempoolTxs();">Load</button>
@@ -153,7 +62,7 @@
 
   <table ng-show="mempooltxs" border="1">
     <tr ng-repeat="txhash in mempooltxs">
-      <td><a ng-href="#!/chain/{{selected_chain}}/mempool/entry/{{txhash}}">{{ txhash }}</a></td>
+      <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{txhash}}">{{ txhash }}</a></td>
     </tr>
   </table>
 

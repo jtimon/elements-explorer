@@ -51,10 +51,6 @@ angular
         templateUrl: 'views/mempool.html',
         controller: 'MempoolCtrl',
       })
-      .when('/chain/:chain/mempool/entry/:txid', {
-        templateUrl: 'views/mempool.html',
-        controller: 'MempoolCtrl',
-      })
       .when('/chain/:chain/about', {
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl',

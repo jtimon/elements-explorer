@@ -146,6 +146,85 @@
   </div>
 </div> <!-- block-container -->
 
+<div ng-show="mempoolentry" class="container">
+
+  <table border="1">
+
+    <tr>
+      <td>Virtual size (see BIP141):</td>
+      <td>{{ mempoolentry.size }}</td>
+    </tr>
+
+    <tr>
+      <td>Fee:</td>
+      <td>{{ mempoolentry.fee }}</td>
+    </tr>
+
+    <tr>
+      <td>Modified fee:</td>
+      <td>{{ mempoolentry.modifiedfee }}</td>
+    </tr>
+
+    <tr>
+      <td>Time:</td>
+      <td>{{ mempoolentry.time }}</td>
+    </tr>
+
+    <tr>
+      <td>Height:</td>
+      <td>{{ mempoolentry.height }}</td>
+    </tr>
+
+    <tr>
+      <td>Descendant count:</td>
+      <td>{{ mempoolentry.descendantcount }}</td>
+    </tr>
+
+    <tr>
+      <td>Descendant virtual size:</td>
+      <td>{{ mempoolentry.descendantsize }}</td>
+    </tr>
+
+    <tr>
+      <td>Descendant modified fees:</td>
+      <td>{{ mempoolentry.descendantfees }}</td>
+    </tr>
+
+    <tr>
+      <td>Ancestor count:</td>
+      <td>{{ mempoolentry.ancestorcount }}</td>
+    </tr>
+
+    <tr>
+      <td>Ancestor virtual size:</td>
+      <td>{{ mempoolentry.ancestorsize }}</td>
+    </tr>
+
+    <tr>
+      <td>Ancestor modified fees:</td>
+      <td>{{ mempoolentry.ancestorfees }}</td>
+    </tr>
+
+  </table>
+  <p></p>
+
+  <span ng-show="mempoolentry.depends.length" class="container">
+    <nobr>
+      Depends on unconfirmed transactions used as inputs for this transaction ( {{ mempoolentry.depends.length }} ):
+    </nobr>
+    <p></p>
+
+    <table border="1">
+      <tr ng-repeat="txhash in mempoolentry.depends">
+        <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{txhash}}">{{ txhash }}</a></td>
+      </tr>
+    </table>
+
+    <p></p>
+  </span>
+
+</div> <!-- mempoolentry container -->
+
 <div class="container">
 
   <div ng-show="transaction" border="1">
@@ -168,7 +247,7 @@
         <td>Blockhash:</td>
         <td>
           <a ng-show="transaction.blockhash" ng-href="#!/chain/{{selected_chain}}/block/{{transaction.blockhash}}">{{ transaction.blockhash }}</a>
-          <a ng-show="!transaction.blockhash" ng-href="#!/chain/{{selected_chain}}/mempool/entry/{{transaction.txid}}">Mempool transaction (not confirmed)</a>
+          <nobr ng-show="!transaction.blockhash">Mempool transaction (not confirmed)</nobr>
         </td>
       </tr>
 
