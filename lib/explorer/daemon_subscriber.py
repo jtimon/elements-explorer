@@ -53,7 +53,7 @@ class MempoolSaver(CronCacher):
 
         super(MempoolSaver, self).__init__(chain, rpccaller, None, wait_time, initial_wait_time,
                                                  *args, **kwargs)
-        
+
     def _cron_loop(self):
         try:
             self.rpccaller.RpcCall('savemempool', {})
@@ -265,12 +265,22 @@ class DaemonReorgManager(GreedyCacher):
                 return block_A
             elif block_A['height'] > block_B['height']:
                 return self.find_common_ancestor(block_B, block_A)
-            elif block_A['height'] <= block_B['height']:
+            elif block_A['height'] < block_B['height']:
                 ascendant = self.get_ascendant(block_B, block_A['height'])
                 if not ascendant:
                     print('FAILED calling get_ascendant in find_common_ancestor A: %s %s B: %s %s' % (
                         block_A['height'], block_A['hash'], block_B['height'], block_B['hash']))
+                    return None
                 return self.find_common_ancestor(block_A, ascendant)
+            elif block_A['height'] == block_B['height']:
+                ascendantA = self.get_ascendant(block_A, block_A['height'] - 1)
+                ascendantB = self.get_ascendant(block_B, block_A['height'] - 1)
+                if not ascendantA or not ascendantB:
+                    print('FAILED finding common_ancestor A: %s %s B: %s %s' % (
+                        block_A['height'], block_A['hash'], block_B['height'], block_B['hash']))
+                    return None
+                return self.find_common_ancestor(ascendantA, ascendantB)
+
         except:
             print('FAILED calling find_common_ancestor A: %s %s B: %s %s' % (
                 block_A['height'], block_A['hash'], block_B['height'], block_B['hash']))
@@ -284,7 +294,9 @@ class DaemonReorgManager(GreedyCacher):
         common_ancestor = self.find_common_ancestor(self.prev_reorg_block, block)
         if not common_ancestor or not self.check_basic_block(common_ancestor):
             print('FAILED HANDLING REORG calling find_common_ancestor %s' % block['height'], common_ancestor)
-            return False
+            common_ancestor = self.get_ascendant(block, block['height'] - 100)
+            print('Reorging to new common ancestor, old common ancestor:', self.prev_reorg_block)
+            print('new common ancestor:', common_ancestor)
 
         try:
             block_height = common_ancestor['height'] + 1
