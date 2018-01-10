@@ -33,7 +33,7 @@ class ChainCacher(object):
 
 class CronCacher(ChainCacher, multiprocessing.Process):
 
-    def __init__(self, chain, rpccaller, db_client, wait_time=60, initial_wait_time=5,
+    def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time,
                  *args, **kwargs):
 
         super(CronCacher, self).__init__(chain, rpccaller, db_client, *args, **kwargs)
@@ -71,10 +71,10 @@ def IncrementStats(stats, interval, tx_fee, tx_size):
 
 class MempoolStatsCacher(CronCacher):
 
-    def __init__(self, chain, rpccaller, db_client, wait_time=60,
+    def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time, 
                  *args, **kwargs):
 
-        super(MempoolStatsCacher, self).__init__(chain, rpccaller, db_client, wait_time,
+        super(MempoolStatsCacher, self).__init__(chain, rpccaller, db_client, wait_time, initial_wait_time,
                                                  *args, **kwargs)
 
         self.stats_types = ['count', 'fee', 'vsize']
@@ -122,10 +122,10 @@ class MempoolStatsCacher(CronCacher):
 
 class GreedyCacher(CronCacher):
 
-    def __init__(self, chain, rpccaller, db_client, wait_time=60,
+    def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time,
                  *args, **kwargs):
 
-        super(GreedyCacher, self).__init__(chain, rpccaller, db_client, wait_time,
+        super(GreedyCacher, self).__init__(chain, rpccaller, db_client, wait_time, initial_wait_time,
                                                  *args, **kwargs)
 
         self.last_cached_height = -1
@@ -162,9 +162,9 @@ class GreedyCacher(CronCacher):
 
 class DaemonReorgManager(GreedyCacher):
 
-    def __init__(self, chain, rpccaller, db_client):
+    def __init__(self, chain, rpccaller, db_client, wait_time=60, initial_wait_time=60):
 
-        super(DaemonReorgManager, self).__init__(chain, rpccaller, db_client)
+        super(DaemonReorgManager, self).__init__(chain, rpccaller, db_client, wait_time, initial_wait_time)
 
         self.prev_reorg_height = -1
         self.prev_reorg_hash = None
