@@ -5,11 +5,14 @@
 .PHONY: dev staging production
 all: dev
 
-dev:
+.PHONY: common-conf
+common-conf: docker/conf/explorer.env docker/conf/explorer.proc
+
+dev: common-conf
 	cd docker && docker-compose up --build
-staging:
+staging: common-conf
 	cd docker && docker-compose up -d --build
-production:
+production: common-conf
 	cd docker && docker-compose up -d --build
 
 .PHONY: stop clean prune

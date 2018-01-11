@@ -17,6 +17,6 @@ ENV DAEMON_NAME=elements
 ADD docker/daemon/build.sh /build_docker/docker/daemon/build.sh
 RUN sh /build_docker/docker/daemon/build.sh
 
-ADD docker/daemon/honcho/$DAEMON_NAME/.env /build_docker/docker/daemon/honcho/$DAEMON_NAME/.env
-ADD docker/daemon/honcho/$DAEMON_NAME/Procfile /build_docker/docker/daemon/honcho/$DAEMON_NAME/Procfile
-CMD honcho start -e docker/daemon/honcho/$DAEMON_NAME/.env -f docker/daemon/honcho/$DAEMON_NAME/Procfile
+ADD docker/conf/$DAEMON_NAME.env /build_docker/docker/conf/$DAEMON_NAME.env
+ADD docker/conf/$DAEMON_NAME.proc /build_docker/docker/conf/$DAEMON_NAME.proc
+CMD honcho start -e docker/conf/$DAEMON_NAME.env -f docker/conf/$DAEMON_NAME.proc

@@ -24,6 +24,6 @@ ADD lib /build_docker/lib
 RUN python /build_docker/setup.py develop
 ADD webflask /build_docker/webflask
 ADD gui /build_docker/gui
-ADD docker/explorer/Procfile /build_docker/docker/explorer/Procfile
-ADD docker/explorer/.env /build_docker/docker/explorer/.env
-CMD honcho start -e docker/explorer/.env -f docker/explorer/Procfile
+ADD docker/conf/explorer.proc /build_docker/docker/conf/explorer.proc
+ADD docker/conf/explorer.env /build_docker/docker/conf/explorer.env
+CMD honcho start -e docker/conf/explorer.env -f docker/conf/explorer.proc
