@@ -36,8 +36,13 @@ docker run hello-world
 To build and run:
 
 ```
-cd docker
-docker-compose up --build
+make
+```
+
+or 
+
+```
+make dev
 ```
 
 Visit the local web going to http://127.0.0.1:5000
@@ -45,15 +50,37 @@ Visit the local web going to http://127.0.0.1:5000
 If you prefer it to be run as a daemon use:
 
 ```
-docker-compose up --build -d
+make staging
+```
+
+or 
+
+```
+make production
+```
+
+## Closing ##
+
+If you're running dev, just Ctrl-c.
+If You're running staging or production:
+
+
+```
+make stop
+```
+
+For a full docker clean:
+
+```
+make clean
 ```
 
 ## Starting and restating the DB ##
 
-For starting and restating the database, the  in
+For starting and restating the database, the create_db process in
 https://github.com/jtimon/rpc-explorer/blob/master/docker/explorer/Procfile
 must be active. Conversely, to stop the db from being restarted with
-every deployment/run, one must comment that line of the Procfile.
+every deployment/run, one must comment that line/process of the Procfile.
 
 Currently the db needs to be restarted whenever:
 
@@ -94,29 +121,6 @@ if you're just using this project as a developer as you should. In
 that latter case you just have to remember not to DoS yourself harder
 than your machine can take, but please send back any weird concurrency
 errors you get.
-
-## TODO Closing ##
-
-Before closing down the whole docker project, close the bitcoin daemon manually:
-
-```
-docker ps -a
-docker attach rpcexplorer_bitcoin_1
-Ctrl-c, Ctrl-c
-```
-Or just mind .bitcoin_data/lock if exiting improperly.
-
-To detach without killing the container use Ctrl-p, Ctrl-q.
-
-```
-make docker-down
-```
-
-For a full docker clean:
-
-```
-make docker-clean
-```
 
 # TODO #
 
