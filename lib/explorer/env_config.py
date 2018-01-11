@@ -60,15 +60,15 @@ def subscriber_params(chain):
     return [AVAILABLE_CHAINS[chain]['zmq'], chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db']]
 
 def reorg_cron_params(chain):
-    return [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create(), 60, 600]
+    return [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create(), 60, 300] # 5 min
 
 def mempool_cacher_params(chain):
-    return [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create(), 60, 300]
+    return [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create(), 60, 60] # 1 min
 
 def mempool_saver_params(chain):
     # 2 hours before starting, change after https://github.com/bitcoin/bitcoin/issues/12142 is fixed
-    return [chain, AVAILABLE_CHAINS[chain]['rpc'], 60, 7200]
+    return [chain, AVAILABLE_CHAINS[chain]['rpc'], 60, 7200] # 2 hours
 
 def greedy_cacher_params(chain):
     # 2 hours before starting, change after https://github.com/bitcoin/bitcoin/issues/12142 is fixed
-    return [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create(), 60, 7200]
+    return [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create(), 60, 7200] # 2 hours
