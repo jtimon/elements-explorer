@@ -128,6 +128,24 @@ class BetterNameResource(object):
 
         super(BetterNameResource, self).__init__(**kwargs)
 
+    def resolve_mempoolstats(self, request):
+        if not 'hours_ago' in request:
+            return {'error': {'message': 'No hours_ago specified to get %s in request %s' % (self.resource, request)}}
+
+        json_result = {}
+        try:
+            seconds_ago = request['hours_ago'] * 60 * 60
+            min_epoch = int((datetime.datetime.now() - datetime.timedelta(seconds=seconds_ago)).strftime('%s'))
+            db_result = self.db_client.search(self.chain + "_" + self.resource, {'time': {'ge': min_epoch}})
+            if not db_result:
+                return {'error': {'message': 'No result db for %s.' % self.resource}}
+            for db_elem in db_result:
+                json_result[db_elem['id']] = json.loads(db_elem['blob'])
+        except:
+            return {'error': {'message': 'Error getting %s from db.' % (self.resource)}}
+
+        return json_result
+        
     def resolve_request(self, request):
         print('request', request)
         if self.resource in RESOURCES_FOR_GET_BY_ID:
@@ -136,20 +154,7 @@ class BetterNameResource(object):
 
             json_result = GetById(self.db_client, self.rpccaller, self.chain, self.resource, request['id'])
         elif self.resource == 'mempoolstats':
-            try:
-                if not 'hours_ago' in request:
-                    return {'error': {'message': 'No hours_ago specified to get %s in request %s' % (self.resource, request)}}
-                seconds_ago = request['hours_ago'] * 60 * 60
-                min_epoch = int((datetime.datetime.now() - datetime.timedelta(seconds=seconds_ago)).strftime('%s'))
-                db_result = self.db_client.search(self.chain + "_" + self.resource, {'time': {'ge': min_epoch}})
-                if not db_result:
-                    return {'error': {'message': 'No result db for %s.' % self.resource}}
-                json_result = {}
-                for db_elem in db_result:
-                    json_result[db_elem['id']] = json.loads(db_elem['blob'])
-                return json_result
-            except:
-                return {'error': {'message': 'Error getting %s from db.' % (self.resource)}}
+            json_result = self.resolve_mempoolstats(request)
         else:
             json_result = self.rpccaller.RpcCall(self.resource, request)
             if self.resource == 'getrawmempool':
