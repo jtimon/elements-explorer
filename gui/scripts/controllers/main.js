@@ -163,6 +163,23 @@ angular.module('rpcExplorerApp')
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
+        $scope.LoadMempoolTxs = function() {
+            return SrvBackend.RpcCall("getrawmempool", {})
+                .then(function(data) {
+                    $scope.mempooltxs = SrvUtil.GetResult(data);
+                });
+        };
+
+        function NothingSelectedLoad()
+        {
+            $scope.loading = true;
+            $scope.LoadMempoolTxs()
+                .then(function() {
+                    $scope.loading = false;
+                })
+                .catch(SrvUtil.errorCallbackScoped($scope));
+        };
+
         if ($routeParams.block) {
             $scope.blockid = $routeParams.block;
             goToBlock($routeParams.block)
@@ -182,6 +199,6 @@ angular.module('rpcExplorerApp')
                 })
                 .catch(SrvUtil.errorCallbackScoped($scope));
         } else {
-            $scope.loading = false;
+            NothingSelectedLoad();
         }
     });
