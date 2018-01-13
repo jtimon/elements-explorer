@@ -8,7 +8,6 @@ RPC_ALLOWED_CALLS = [
     "getblockhash",
     "getrawtransaction",
     "getblockstats",
-    "getmempoolinfo",
     "getrawmempool",
     "getmempoolentry",
     'savemempool',

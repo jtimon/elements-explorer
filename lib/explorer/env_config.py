@@ -22,7 +22,6 @@ WEB_ALLOWED_CALLS = [
     "blockhash", # cached in server, reorgs handled with zmq subscription to node
     'mempoolstats', # Data from db, independent from reorgs
     "getmempoolentry", # never cached, always hits the node
-    "getmempoolinfo", # never cached, always hits the node
     "getrawmempool", # never cached, always hits the node (limited to 8 results)
 ]
 

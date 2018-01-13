@@ -12,50 +12,9 @@
 </div>
 <p></p>
 
-<div ng-show="mempoolinfo" class="container" border="1">
-  Mempool Info:
-  <button ng-disabled="loading" ng-click="InitForSelectedChain();">Reload</button>
-  <p></p>
-
-  <table border="1">
-
-    <tr>
-      <td>Chain:</td>
-      <td><a ng-href="#!/chain/{{selected_chain}}">{{selected_chain}}</a></td>
-    </tr>
-
-    <tr>
-      <td>Size:</td>
-      <td>{{ mempoolinfo.size }}</td>
-    </tr>
-
-    <tr>
-      <td>Virtual bytes (see BIP141):</td>
-      <td>{{ mempoolinfo.bytes }}</td>
-    </tr>
-
-    <tr>
-      <td>Total memory usage:</td>
-      <td>{{ mempoolinfo.usage }}</td>
-    </tr>
-
-    <tr>
-      <td>Maximum memory usage:</td>
-      <td>{{ mempoolinfo.maxmempool }}</td>
-    </tr>
-
-    <tr>
-      <td>Minimum feerate for tx to be accepted:</td>
-      <td>{{ mempoolinfo.mempoolminfee }}</td>
-    </tr>
-
-  </table>
-  <p></p>
-</div>
-
 <div class="container">
   <nobr>
-    Mempool Transactions ( {{ mempooltxs.length }} ):
+    Some mempool transactions ( {{ mempooltxs.length }} ):
     <button ng-disabled="loading" ng-click="LoadMempoolTxs();">Load</button>
   </nobr>
   <p></p>
