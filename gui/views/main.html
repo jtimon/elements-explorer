@@ -48,6 +48,27 @@
 </div> <!-- container -->
 
 <div class="container" ng-show="!blockheight && !blockid && !txid">
+  Some recent blocks ( {{ recentblocks.length }} ):
+  <p></p>
+
+  <table ng-show="recentblocks" border="1">
+    <tr>
+      <th>Height</th>
+      <th>Median time</th>
+      <th>Txs</th>
+      <th>Size (bytes)</th>
+      <th>Hash</th>
+    </tr>
+    <tr ng-repeat="rblock in recentblocks">
+      <td><a ng-href="#!/chain/{{selected_chain}}/block-height/{{rblock.height}}">{{ rblock.height }}</a></td>
+      <td> {{ rblock.mediantime * 1000 | date:'HH:mm:ss yyyy-MM-dd' }} </td>
+      <td> {{ rblock.tx_count }} </td>
+      <td> {{ rblock.size }} </td>
+      <td><a ng-href="#!/chain/{{selected_chain}}/block/{{rblock.hash}}">{{ rblock.hash }}</a></td>
+    </tr>
+  </table>
+  <p></p>
+
   Some recently confirmed transactions ( {{ confirmed_txs.length }} ):
   <p></p>
 

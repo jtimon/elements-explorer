@@ -170,21 +170,42 @@ angular.module('rpcExplorerApp')
                 });
         };
 
-        function LoadConfirmedTxs()
+        function ProcessBlock(block) {
+            $scope.recentblocks.push({
+                'height': block['height'],
+                'mediantime': block['mediantime'],
+                'size': block['size'],
+                'tx_count': block['tx'].length,
+                'hash': block['hash']
+            });
+            return block['previousblockhash'];
+        }
+        
+        function LoadBlocksAndConfirmedTxs()
         {
             return SrvChain.GetChainInfo()
                 .then(function(chaininfo) {
-                    return SrvBackend.get("block", chaininfo['bestblockhash'])
+                    $scope.recentblocks = [];
+                    var promise = SrvBackend.get("block", chaininfo['bestblockhash'])
                         .then(function(block) {
                             $scope.confirmed_txs = block['tx'].slice(0, 8);
+                            return block;
+                        })
+                        .then(ProcessBlock);
+
+                    for (var i = 0; i < 7; i++) {
+                        promise = promise.then(function (blockhash) {
+                            return SrvBackend.get("block", blockhash).then(ProcessBlock);
                         });
+                    }
+                    return promise;
                 });
         };
 
         function NothingSelectedLoad()
         {
             $scope.loading = true;
-            LoadConfirmedTxs()
+            LoadBlocksAndConfirmedTxs()
                 .then($scope.LoadMempoolTxs)
                 .then(function() {
                     $scope.loading = false;
