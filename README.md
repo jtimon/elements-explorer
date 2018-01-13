@@ -132,4 +132,4 @@ errors you get.
 
 # License
 
-MIT, see COPYRIGHT.md
+MIT, see COPYING
