@@ -57,32 +57,6 @@
           </select>
         </div>
         <p></p>
-        <p></p>
-
-        <div ng-show="chaininfo" class="container" border="1">
-          Chain Data:
-          <p></p>
-
-          <table border="1">
-
-            <tr>
-              <td>Best block hash:</td>
-              <td><a ng-href="#!/chain/{{selected_chain}}/block/{{chaininfo.bestblockhash}}">{{ chaininfo.bestblockhash }}</a></td>
-            </tr>
-
-            <tr>
-              <td>Blocks:</td>
-              <td>{{ chaininfo.blocks }}</td>
-            </tr>
-
-            <tr>
-              <td>Median time:</td>
-              <td>{{ chaininfo.mediantime }} ( {{chaininfo.mediantime * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
-            </tr>
-
-          </table>
-          <p></p>
-        </div>
 
       </div>
       <p></p>
