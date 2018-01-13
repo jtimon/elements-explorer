@@ -48,6 +48,16 @@
 </div> <!-- container -->
 
 <div class="container" ng-show="!blockheight && !blockid && !txid">
+  Some recently confirmed transactions ( {{ confirmed_txs.length }} ):
+  <p></p>
+
+  <table ng-show="confirmed_txs" border="1">
+    <tr ng-repeat="txhash in confirmed_txs">
+      <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{txhash}}">{{ txhash }}</a></td>
+    </tr>
+  </table>
+  <p></p>
+
   <nobr>
     Some mempool transactions ( {{ mempooltxs.length }} ):
     <button ng-disabled="loading" ng-click="LoadMempoolTxs();">Reload</button>

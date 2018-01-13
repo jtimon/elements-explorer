@@ -170,10 +170,22 @@ angular.module('rpcExplorerApp')
                 });
         };
 
+        function LoadConfirmedTxs()
+        {
+            return SrvChain.GetChainInfo()
+                .then(function(chaininfo) {
+                    return SrvBackend.get("block", chaininfo['bestblockhash'])
+                        .then(function(block) {
+                            $scope.confirmed_txs = block['tx'].slice(0, 8);
+                        });
+                });
+        };
+
         function NothingSelectedLoad()
         {
             $scope.loading = true;
-            $scope.LoadMempoolTxs()
+            LoadConfirmedTxs()
+                .then($scope.LoadMempoolTxs)
                 .then(function() {
                     $scope.loading = false;
                 })
