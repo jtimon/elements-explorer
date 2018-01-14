@@ -163,10 +163,12 @@ angular.module('rpcExplorerApp')
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
+        var EXAMPLE_LIST_SIZE = 4;
+        
         $scope.LoadMempoolTxs = function() {
             return SrvBackend.RpcCall("getrawmempool", {})
                 .then(function(data) {
-                    $scope.mempooltxs = SrvUtil.GetResult(data);
+                    $scope.mempooltxs = SrvUtil.GetResult(data).slice(0, EXAMPLE_LIST_SIZE);
                 });
         };
 
@@ -188,12 +190,12 @@ angular.module('rpcExplorerApp')
                     $scope.recentblocks = [];
                     var promise = SrvBackend.get("block", chaininfo['bestblockhash'])
                         .then(function(block) {
-                            $scope.confirmed_txs = block['tx'].slice(0, 8);
+                            $scope.confirmed_txs = block['tx'].slice(0, EXAMPLE_LIST_SIZE);
                             return block;
                         })
                         .then(ProcessBlock);
 
-                    for (var i = 0; i < 7; i++) {
+                    for (var i = 0; i < EXAMPLE_LIST_SIZE - 1; i++) {
                         promise = promise.then(function (blockhash) {
                             return SrvBackend.get("block", blockhash).then(ProcessBlock);
                         });
