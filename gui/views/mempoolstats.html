@@ -38,12 +38,12 @@
     Select intervals:
     <p></p>
     <span ng-repeat="name in valid_stats">
+      {{name}}
       <input type="checkbox"
              value="{{name}}"
              ng-checked="selected_stats.indexOf(name) > -1"
              ng-click="toggleStat(name)"
              >
-      {{name}}
     </span>
   </div>
 </div>

@@ -36,11 +36,12 @@
 
   <divclass="container">
     <span ng-repeat="name in valid_stats">
+      {{name}}
       <input type="checkbox"
              value="{{name}}"
              ng-checked="selected_stats.indexOf(name) > -1"
              ng-click="toggleStat(name)"
-             > {{name}}
+             >
     </span>
   </div>
 </div>
@@ -62,7 +63,7 @@
   <!-- This is where we are going to put our custom plotly directive -->
   <line-plot ng-show="!loading_stats && graphPlots" graph-plots=graphPlots></line-plot>
 
-  <div class="container">  
+  <div class="container">
     Verbose Stats:
     <input type="checkbox" ng-model="verbose_stats">
     <p></p>
