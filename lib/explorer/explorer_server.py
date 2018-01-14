@@ -158,7 +158,7 @@ class BetterNameResource(object):
         else:
             json_result = self.rpccaller.RpcCall(self.resource, request)
             if self.resource == 'getrawmempool':
-                json_result['result'] = json_result['result'][:8]
+                json_result['result'] = json_result['result'][:5]
 
         # If there's errors, only return the errors
         if 'error' in json_result and json_result['error']:
