@@ -8,12 +8,12 @@
  * Controller of the rpcExplorerApp
  */
 angular.module('rpcExplorerApp')
-    .controller('MainCtrl', function ($scope, $routeParams, SrvUtil, SrvChain, SrvBackend) {
+    .controller('MainCtrl', function ($scope, $routeParams, $location, SrvUtil, SrvChain, SrvBackend) {
 
         SrvChain.set($routeParams.chain);
 
+        $scope.curious = $location.search().curious == 'true';
         $scope.loading = true;
-        $scope.verbose = false;
         $scope.rawhex_limit = 100;
 
         function cleanTx() {

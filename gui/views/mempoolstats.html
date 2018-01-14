@@ -66,14 +66,8 @@
   <line-plot graph-plots=graphPlots></line-plot>
 </div>
 
-<div class="container">
-  Verbose Stats:
-  <input type="checkbox" ng-model="verbose_stats">
-  <p></p>
-</div>
-
-<div class="container" ng-show="verbose_stats">
+<div class="container" ng-show="curious">
   <pre>
-    {{ graph_mp }}
+    {{ cached_mempoolstats }}
   </pre>
 </div>

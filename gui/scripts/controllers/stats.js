@@ -12,6 +12,7 @@ angular.module('rpcExplorerApp')
 
         SrvChain.set($routeParams.chain);
 
+        $scope.curious = $location.search().curious == 'true';
         $scope.start_height = SrvUtil.ParseIntToPositive($location.search().start);
         $scope.end_height = SrvUtil.ParseIntToPositive($location.search().end);
         if ($scope.start_height > $scope.end_height) {
@@ -19,8 +20,8 @@ angular.module('rpcExplorerApp')
         }
 
         $scope.loading_stats = false;
-        $scope.verbose_stats = false;
-
+        $scope.cached_plot_data = {};
+        
         $scope.xaxis_list = [
             "height",
             "time",
@@ -101,13 +102,13 @@ angular.module('rpcExplorerApp')
             if ($scope.xaxis_list.indexOf(name) > -1) {
                 $scope.xaxis = name;
             }
-            StatsToGraph($scope.plot_data);
+            StatsToGraph($scope.cached_plot_data);
         };
 
         function successCallbackPerBlockStats(data)
         {
-            $scope.plot_data = data;
-            StatsToGraph($scope.plot_data);
+            $scope.cached_plot_data = data;
+            StatsToGraph($scope.cached_plot_data);
             $scope.loading_stats = false;
         };
 
@@ -131,8 +132,8 @@ angular.module('rpcExplorerApp')
                 $scope.selected_stats.push(name);
             }
 
-            if ($scope.plot_data) {
-                StatsToGraph($scope.plot_data);
+            if ($scope.cached_plot_data) {
+                StatsToGraph($scope.cached_plot_data);
             }
         };
 

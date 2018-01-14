@@ -29,9 +29,6 @@
   <p></p>
 
   <div class="container">
-    Verbose RPC:
-    <input type="checkbox" ng-model="verbose">
-
     <label>
       Limit Raw hexadecimal strings to:
       <input type="number" step="1" ng-model="rawhex_limit">
@@ -478,7 +475,7 @@
   </div>
 </div> <!-- tx-container -->
 
-<div class="container" ng-show="verbose">
+<div class="container" ng-show="curious">
 
   Last getblock call result:
   <div class="container">
