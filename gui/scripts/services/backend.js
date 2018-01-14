@@ -28,7 +28,7 @@ angular.module('rpcExplorerApp')
             return retPromise;
         };
 
-        var MAX_PARALLEL_IT = 2; // (3) Number of parallel calls - 1 
+        var MAX_PARALLEL_IT = 500;
 
         srv.GetBlockStats = function(start, end) {
             var chain = SrvChain.get();
@@ -51,7 +51,7 @@ angular.module('rpcExplorerApp')
                         promises[it_parallel] = promises[it_parallel].then(task(i));
                     }
                     promises[it_parallel] = promises[it_parallel].then(SrvUtil.CacheElem(cache, chain, resource, i));
-                    if (it_parallel == MAX_PARALLEL_IT) {
+                    if (it_parallel == MAX_PARALLEL_IT - 1) {
                         it_parallel = 0;
                     } else {
                         ++it_parallel;
