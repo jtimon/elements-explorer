@@ -69,5 +69,4 @@ def mempool_saver_params(chain):
     return [chain, AVAILABLE_CHAINS[chain]['rpc'], 60, 7200] # 2 hours
 
 def greedy_cacher_params(chain):
-    # 2 hours before starting, change after https://github.com/bitcoin/bitcoin/issues/12142 is fixed
-    return [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create(), 60, 7200] # 2 hours
+    return [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create(), 60, 3600] # 1 hour
