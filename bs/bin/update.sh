@@ -5,7 +5,7 @@
 # to deoploy.
 # =--------------------------------------------------------------------------= #
 echo "Hello, I'm the gitlab update script."
-export MODULE="rpc-explorer"
+export MODULE="elements-explorer"
 export BASEDIR="/bs"
 export BSD="${BASEDIR}/${MODULE}"
 export SCAFFOLD="${BASEDIR}/.scaffold/${MODULE}"
@@ -43,7 +43,7 @@ export PATH=$PATH:/usr/local/bin
 
 # initally, this is just set here.
 export ROLE="prod"
-export CLASS="rpc-explorer"
+export CLASS="elements-explorer"
 
 
 export OUTDIR=$(mktemp -d /tmp/update-XXXXXXXX)

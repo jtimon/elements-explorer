@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /bs/rpc-explorer
+cd /bs/elemenets-explorer
 
 # clean out old images
 docker rmi $(sudo docker images -q)

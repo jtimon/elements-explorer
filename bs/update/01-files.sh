@@ -2,7 +2,7 @@
 
 echo "rsync'ing files in from the got repo..."
 
-BASEDIR="/bs/rpc-explorer/bs"
+BASEDIR="/bs/elements-explorer/bs"
 
 if [ -d $BASEDIR/files ]; then
 	cd /

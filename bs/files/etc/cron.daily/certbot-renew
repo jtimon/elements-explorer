@@ -1,3 +1,3 @@
 #!/bin/bash
 
-certbot renew --noninteractive --renew-hook /bs/rpc-explorer/bs/bin/restart-nginx.sh
+certbot renew --noninteractive --renew-hook /bs/elements-explorer/bs/bin/restart-nginx.sh

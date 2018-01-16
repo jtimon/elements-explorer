@@ -9,7 +9,7 @@
 # tests are run. Your test are run simply by calling script/test.
 # ============================================================================ #
 
-MODULE="rpc-explorer"
+MODULE="elements-explorer"
 
 echo "I've been called from the Continuous Ingegration service."
 

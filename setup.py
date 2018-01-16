@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name = "rpcexplorer",
+    name = "elementsexplorer",
     version = "0.0.1",
     packages=['lib'],
 )

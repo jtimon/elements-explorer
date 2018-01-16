@@ -1,6 +1,8 @@
-# rpc-explorer
+# Elements explorer
 
 A simple block explorer based on deamon's rpc calls.
+It supports https://github.com/ElementsProject/elements and should be
+easy to adapt to support other chains based on the elements codebase.
 
 # Dependencies: #
 
@@ -78,7 +80,7 @@ make clean
 ## Starting and restating the DB ##
 
 For starting and restating the database, the create_db process in
-https://github.com/jtimon/rpc-explorer/blob/master/docker/explorer/Procfile
+https://github.com/jtimon/elements-explorer/blob/master/docker/explorer/Procfile
 must be active. Conversely, to stop the db from being restarted with
 every deployment/run, one must comment that line/process of the Procfile.
 
@@ -95,7 +97,7 @@ Currently the db needs to be restarted whenever:
 ## greedy caching ##
 
 As explained in the previous section, processes can be activated or
-deactivated in https://github.com/jtimon/rpc-explorer/blob/master/docker/explorer/Procfile .
+deactivated in https://github.com/jtimon/elements-explorer/blob/master/docker/explorer/Procfile .
 
 One of the processes one may want to run when the db is not being
 restarted is the greedy cacher for any selected set of chains.
