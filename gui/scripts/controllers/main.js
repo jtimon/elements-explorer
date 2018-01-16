@@ -180,7 +180,10 @@ angular.module('rpcExplorerApp')
                 'tx_count': block['tx'].length,
                 'hash': block['hash']
             });
-            return block['previousblockhash'];
+            if (block.hasOwnProperty('previousblockhash')) {
+                return block['previousblockhash'];
+            }
+            return null;
         }
         
         function LoadBlocksAndConfirmedTxs()
@@ -197,7 +200,10 @@ angular.module('rpcExplorerApp')
 
                     for (var i = 0; i < EXAMPLE_LIST_SIZE - 1; i++) {
                         promise = promise.then(function (blockhash) {
-                            return SrvBackend.get("block", blockhash).then(ProcessBlock);
+                            if (blockhash) {
+                                return SrvBackend.get("block", blockhash).then(ProcessBlock);
+                            }
+                            return null;
                         });
                     }
                     return promise;
