@@ -47,10 +47,6 @@ angular
         templateUrl: 'views/mempoolstats.html',
         controller: 'MempoolStatsCtrl',
       })
-      .when('/chain/:chain/mempool', {
-        templateUrl: 'views/mempool.html',
-        controller: 'MempoolCtrl',
-      })
       .when('/chain/:chain/about', {
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl',
