@@ -47,6 +47,10 @@ angular
         templateUrl: 'views/mempoolstats.html',
         controller: 'MempoolStatsCtrl',
       })
+      .when('/chain/:chain/address', {
+        templateUrl: 'views/address.html',
+        controller: 'AddressCtrl',
+      })
       .when('/chain/:chain/about', {
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl',

@@ -1,0 +1,73 @@
+
+<div ng-show="error" class="alert alert-danger" border="1">
+  <strong>Error:</strong>
+  <nobr ng-show="error.message">{{error.message}}</nobr>
+  <!-- <nobr ng-show="!error.message">{{ error }}</nobr> -->
+  <nobr ng-show="!error.message">
+    <p></p>
+    <pre>
+      {{ error }}
+    </pre>
+  </nobr>
+</div>
+<p></p>
+
+<div class="container">
+  Start Height:
+  <input ng-disabled="loading" type="number" min="1" step="1" ng-model="start_height">
+  End Height:
+  <input ng-disabled="loading" type="number" min="1" step="1" ng-model="end_height">
+  <p></p>
+
+  <input ng-disabled="loading" ng-model="address" placeholder="Address">
+  <button ng-disabled="loading" ng-click="UpdateAddressArguments();">Search</button>
+  <p></p>
+</div>
+
+<div class="container" ng-show="receipts">
+  <p>Receipts:</p>
+  <table border="1">
+    <tr>
+      <th>Amount</th>
+      <th>Tx id</th>
+      <th>output.n</th>
+      <th>Height</th>
+    </tr>
+
+    <tr ng-repeat="receipt in receipts">
+      <td>{{ receipt.output.value }}</td>
+      <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{receipt.txid}}">{{ receipt.txid }}</a></td>
+      <td>{{ receipt.output.n }}</td>
+      <td><a ng-href="#!/chain/{{selected_chain}}/block-height/{{receipt.height}}">{{ receipt.height }}</a></td>
+    </tr>
+  </table>
+  <p></p>
+</div>
+
+<div class="container" ng-show="expenditures">
+  <p>Expenditures:</p>
+  <table border="1">
+    <tr>
+      <th>amount</th>
+      <th>txid</th>
+      <th>input.txid</th>
+      <th>input.vout</th>
+      <th>Height</th>
+    </tr>
+
+    <tr ng-repeat="spend in expenditures">
+      <td>{{ spend.prev_output.value }}</td>
+      <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{spend.input.txid}}">{{ spend.txid }}</a></td>
+      <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{spend.input.txid}}">{{ spend.input.txid }}</a></td>
+      <td>{{ spend.input.vout }}</td>
+      <td><a ng-href="#!/chain/{{selected_chain}}/block-height/{{spend.height}}">{{ spend.height }}</a></td>
+    </tr>
+  </table>
+  <p></p>
+</div>
+
+<div class="container" ng-show="curious">
+  <pre class="container">
+    {{ address_data }}
+  </pre>
+</div>

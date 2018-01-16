@@ -462,7 +462,9 @@
           <td>
             <table border="1">
               <tr ng-repeat="addr in output.scriptPubKey.addresses">
-                <td>{{ addr }}</td>
+                <td>
+                  <a ng-href="#!/chain/{{selected_chain}}/address?address={{addr}}&start_height={{blockheight}}&end_height={{blockheight}}">{{ addr }}</a>
+                </td>
               </tr>
             </table>
           </td>
