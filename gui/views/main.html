@@ -9,22 +9,19 @@
       {{ error }}
     </pre>
   </nobr>
+  <p></p>
 </div>
-<p></p>
 
 <div class="container">
   <div>
-    Block Height:
     <a ng-disabled="loading" ng-show="blockheight" ng-href="#!/chain/{{selected_chain}}/block-height/{{blockheight - 1}}">{{ blockheight - 1 }}<<< </a>
-    <input ng-disabled="loading" type="number" step="1" min="0" ng-model="blockheight" ng-change="searchBlockByHeight()">
+    <input ng-disabled="loading" type="number" step="1" min="0" ng-model="blockheight" ng-change="searchBlockByHeight()" placeholder="Block Height">
     <a ng-disabled="loading" ng-show="blockheight || blockheight == 0" ng-href="#!/chain/{{selected_chain}}/block-height/{{blockheight + 1}}"> >>>{{ blockheight + 1 }} </a>
 
-    Block Hash:
-    <input ng-disabled="loading" ng-model="blockid" ng-change="searchBlock()">
+    <input ng-disabled="loading" ng-model="blockid" ng-change="searchBlock()" placeholder="Block Hash">
     <p></p>
     <div>
-      Tx Id:
-      <input ng-disabled="loading" ng-model="txid" ng-change="searchTx()">
+      <input ng-disabled="loading" ng-model="txid" ng-change="searchTx()" placeholder="Tx Id">
     </div>
     <p></p>
 
