@@ -121,18 +121,20 @@ class MempoolStatsCacher(CronCacher):
 
 class GreedyCacher(CronCacher):
 
-    def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time,
-                 *args, **kwargs):
+    def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time, cache_txs):
 
-        super(GreedyCacher, self).__init__(chain, rpccaller, db_client, wait_time, initial_wait_time,
-                                                 *args, **kwargs)
+        super(GreedyCacher, self).__init__(chain, rpccaller, db_client, wait_time, initial_wait_time)
 
         self.last_cached_height = -1
+        self.cache_txs = cache_txs
 
     def cache_blockhash(self, blockhash):
         try:
             block = GetById(self.db_client, self.rpccaller, self.chain, 'block', blockhash)
             blockstats = GetById(self.db_client, self.rpccaller, self.chain, 'blockstats', block['height'])
+            if self.cache_txs and 'tx' in block:
+                for txid in block['tx']:
+                    tx = GetById(self.db_client, self.rpccaller, self.chain, 'tx', txid)
         except:
             print('FAILED cache_blockhash %s' % blockhash)
             return None
@@ -161,9 +163,9 @@ class GreedyCacher(CronCacher):
 
 class DaemonReorgManager(GreedyCacher):
 
-    def __init__(self, chain, rpccaller, db_client, wait_time=60, initial_wait_time=60):
+    def __init__(self, chain, rpccaller, db_client, wait_time=60, initial_wait_time=60, cache_txs=False):
 
-        super(DaemonReorgManager, self).__init__(chain, rpccaller, db_client, wait_time, initial_wait_time)
+        super(DaemonReorgManager, self).__init__(chain, rpccaller, db_client, wait_time, initial_wait_time, cache_txs)
 
         self.prev_reorg_height = -1
         self.prev_reorg_hash = None
