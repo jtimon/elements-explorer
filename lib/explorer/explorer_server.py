@@ -93,19 +93,22 @@ def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
 
     return json_result
 
+def GetBlockByHeight(db_client, rpccaller, chain, height):
+    criteria = {'height': height}
+    count_by_height = db_client.search(chain + "_" + 'block', criteria)
+    if len(count_by_height) > 1:
+        return {'error': {'message': 'More than one block cached for height %s' % height}}
+    if len(count_by_height) == 1:
+        return json.loads(count_by_height[0]['blob'])
+
+    json_result = RpcFromId(rpccaller, 'blockhash', height)
+    if 'error' in json_result:
+        return json_result
+    return GetByIdBase(db_client, rpccaller, chain, 'block', json_result['result'])
+
 def GetById(db_client, rpccaller, chain, resource, req_id):
     if resource == 'blockhash':
-        criteria = {'height': req_id}
-        count_by_height = db_client.search(chain + "_" + 'block', criteria)
-        if len(count_by_height) > 1:
-            return {'error': {'message': 'More than one block cached for height %s' % req_id}}
-        if len(count_by_height) == 1:
-            return {'result': count_by_height[0]['id']}
-
-        json_result = RpcFromId(rpccaller, resource, req_id)
-        if 'error' in json_result:
-            return json_result
-        json_result = GetByIdBase(db_client, rpccaller, chain, 'block', json_result['result'])
+        json_result = GetBlockByHeight(db_client, rpccaller, chain, req_id)
         if 'error' in json_result:
             return json_result
         return {'result': json_result['hash']}
