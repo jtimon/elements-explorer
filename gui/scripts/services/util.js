@@ -19,7 +19,7 @@ function ParseNatural(num) {
 
 function GetResult(response) {
     if (response['data']['result']) {
-        // TODO remove spacial case for getrawmempool and getblockhash
+        // TODO remove spacial case for getrawmempool
         return response['data']['result'];
     } else {
         return response['data'];

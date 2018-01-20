@@ -10,7 +10,6 @@ RESOURCES_FOR_GET_BY_ID = [
     'tx',
     'blockstats',
     'chaininfo',
-    'blockhash',
 ]
 
 def RpcFromId(rpccaller, resource, req_id):
@@ -22,8 +21,6 @@ def RpcFromId(rpccaller, resource, req_id):
         return rpccaller.RpcCall('getrawtransaction', {'txid': req_id, 'verbose': 1})
     elif resource == 'chaininfo':
         return rpccaller.RpcCall('getblockchaininfo', {})
-    elif resource == 'blockhash':
-        return rpccaller.RpcCall('getblockhash', {'height': req_id})
     else:
         raise NotImplementedError
 
@@ -64,8 +61,6 @@ def TryRpcAndCacheFromId(db_client, rpccaller, chain, resource, req_id):
 
     if resource == 'chaininfo':
         CacheChainInfoResult(db_client, chain, resource, json_result, req_id)
-    elif resource == 'blockhash':
-        CacheBlockhashResult(db_client, chain, resource, json_result, req_id)
     elif resource == 'block':
         CacheBlockResult(db_client, chain, resource, json_result, req_id)
     elif resource == 'blockstats':
@@ -102,18 +97,13 @@ def GetBlockByHeight(db_client, rpccaller, chain, height):
     if len(count_by_height) == 1:
         return json.loads(count_by_height[0]['blob'])
 
-    json_result = RpcFromId(rpccaller, 'blockhash', height)
+    json_result = rpccaller.RpcCall('getblockhash', {'height': height})
     if 'error' in json_result:
         return json_result
     return GetByIdBase(db_client, rpccaller, chain, 'block', json_result['result'])
 
 def GetById(db_client, rpccaller, chain, resource, req_id):
-    if resource == 'blockhash':
-        json_result = GetBlockByHeight(db_client, rpccaller, chain, req_id)
-        if 'error' in json_result:
-            return json_result
-        return {'result': json_result['hash']}
-    elif resource == 'blockheight':
+    if resource == 'blockheight':
         return GetBlockByHeight(db_client, rpccaller, chain, req_id)
 
     return GetByIdBase(db_client, rpccaller, chain, resource, req_id)
