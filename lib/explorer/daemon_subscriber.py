@@ -8,7 +8,7 @@ import time
 from lib import zmqmin
 from lib import minql
 
-from lib.explorer.explorer_server import GetById
+from lib.explorer.explorer_server import RpcCacher, GetById
 
 MEMPOOL_STATS_INTERVALS = (
     range(1, 5) + range(5, 30, 5) + range(30, 100, 10) +
@@ -24,22 +24,20 @@ def FeerateFromBtcFeeStrAndVsize(btc_str, vsize):
     fee_sat = BtcStrToSatInt(btc_str)
     return int(fee_sat / vsize)
 
-class ChainCacher(object):
+class ChainCacher(RpcCacher):
 
-    def __init__(self, chain, rpccaller, db_client, *args, **kwargs):
+    def __init__(self, chain, rpccaller, db_client):
 
-        super(ChainCacher, self).__init__(*args, **kwargs)
+        super(ChainCacher, self).__init__(rpccaller, db_client)
 
         self.chain = chain
-        self.rpccaller = rpccaller
-        self.db_client = db_client
 
 class CronCacher(ChainCacher, multiprocessing.Process):
 
     def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time,
                  *args, **kwargs):
 
-        super(CronCacher, self).__init__(chain, rpccaller, db_client, *args, **kwargs)
+        super(CronCacher, self).__init__(chain, rpccaller, db_client)
 
         self.wait_time = wait_time
         self.initial_wait_time = initial_wait_time

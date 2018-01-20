@@ -12,6 +12,14 @@ RESOURCES_FOR_GET_BY_ID = [
     'chaininfo',
 ]
 
+class RpcCacher(object):
+
+    def __init__(self, rpccaller, db_client):
+        super(RpcCacher, self).__init__()
+
+        self.rpccaller = rpccaller
+        self.db_client = db_client
+
 def RpcFromId(rpccaller, resource, req_id):
     if resource == 'blockstats':
         return rpccaller.RpcCall('getblockstats', {'height': req_id})
@@ -108,21 +116,14 @@ def GetById(db_client, rpccaller, chain, resource, req_id):
 
     return GetByIdBase(db_client, rpccaller, chain, resource, req_id)
 
-class BetterNameResource(object):
+class BetterNameResource(RpcCacher):
 
-    def __init__(self,
-                 db_client,
-                 rpccaller,
-                 chain,
-                 resource,
-                 **kwargs):
+    def __init__(self, db_client, rpccaller, chain, resource):
 
-        self.db_client = db_client
-        self.rpccaller = rpccaller
         self.chain = chain
         self.resource = resource
 
-        super(BetterNameResource, self).__init__(**kwargs)
+        super(BetterNameResource, self).__init__(rpccaller, db_client)
 
     def resolve_mempoolstats(self, request):
         if not 'hours_ago' in request:
