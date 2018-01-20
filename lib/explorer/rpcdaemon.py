@@ -46,8 +46,7 @@ class RpcCaller(object):
         if 'error' in json_result and json_result['error']:
             return {'error': json_result['error']}
 
-        # TODO remove special case for getrawmempool
-        if ('result' in json_result and method != 'getrawmempool'):
+        if ('result' in json_result):
             json_result = json_result['result']
 
         return json_result

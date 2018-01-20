@@ -87,8 +87,6 @@ class MempoolStatsCacher(CronCacher):
         mempool_state = self.rpccaller.RpcCall('getrawmempool', {'verbose': True})
         if 'error' in mempool_state and mempool_state['error']:
             return
-        # TODO remove special case for getrawmempool
-        mempool_state = mempool_state['result']
 
         stats = {}
         for stats_type in self.stats_types:
