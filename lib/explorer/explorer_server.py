@@ -3,6 +3,7 @@ import json
 import datetime
 
 from lib import minql
+from lib.explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN, WEB_ALLOWED_CALLS
 
 RESOURCES_FOR_GET_BY_ID = [
     'block',
@@ -159,7 +160,32 @@ class BetterNameResource(RpcCacher):
                     return {'error': json_result['error']}
                 return {'result': json_result[:5]}
 
-        # If there's errors, only return the errors
-        if 'error' in json_result and json_result['error']:
-            return {'error': json_result['error']}
         return json_result
+
+def explorer_request_processor(request, resource):
+
+    if resource == 'available_chains':
+        return {'status': 200, 'available_chains': AVAILABLE_CHAINS.keys()}
+
+    if not resource in WEB_ALLOWED_CALLS:
+        return {'status': 400, 'error': {'message': 'Resource "%s" not supported.' % resource}}
+
+    request_data = json.loads(request.data)
+    chain = DEFAULT_CHAIN
+    if 'chain' in request_data:
+        chain = request_data['chain']
+        if not chain in AVAILABLE_CHAINS:
+            return {'status': 400, 'error': {'message': 'Chain "%s" not supported.' % chain}}
+        del request_data['chain']
+
+    json_result = BetterNameResource(DB_CLIENT, AVAILABLE_CHAINS[chain]['rpc'], chain, resource).resolve_request(request_data)
+
+    if not json_result:
+        return {'status': 400, 'error': {'message': 'No result for %s.' % resource}}
+    # If there's errors, only return the errors
+    if 'error' in json_result and json_result['error']:
+        return {'status': 400, 'error': json_result['error']}
+
+    if not 'status' in json_result:
+        json_result['status'] = 200
+    return json_result
