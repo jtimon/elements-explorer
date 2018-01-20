@@ -29,9 +29,6 @@
   <p></p>
 
   <div class="container">
-    Verbose CT:
-    <input type="checkbox" ng-model="CTverbose">
-
     Verbose RPC:
     <input type="checkbox" ng-model="verbose">
 
@@ -414,32 +411,32 @@
           <td>{{ output.n }}</td>
         </tr>
 
-        <tr ng-show="CTverbose || !IsCTOut(output);">
+        <tr ng-show="!IsCTOut(output);">
           <td>value:</td>
-          <td>{{ output.value }} <nobr ng-show="IsCTOut(output);">Hidden by CT</nobr></td>
+          <td>{{ output.value }}</td>
         </tr>
 
-        <tr ng-show="CTverbose || IsCTOut(output);">
+        <tr ng-show="IsCTOut(output);">
           <td>serValue:</td>
           <td>{{ output.serValue }}</td>
         </tr>
 
-        <tr ng-show="CTverbose || IsCTOut(output);">
+        <tr ng-show="IsCTOut(output);">
           <td>ct-bits:</td>
           <td>{{ output["ct-bits"] }} <nobr ng-show="!IsCTOut(output);">non-CT</nobr></td>
         </tr>
 
-        <tr ng-show="CTverbose || IsCTOut(output);">
+        <tr ng-show="IsCTOut(output);">
           <td>ct-exponent:</td>
           <td>{{ output["ct-exponent"] }} <nobr ng-show="!IsCTOut(output);">non-CT</nobr></td>
         </tr>
 
-        <tr ng-show="CTverbose || IsCTOut(output);">
+        <tr ng-show="IsCTOut(output);">
           <td>value-minimum:</td>
           <td>{{ output["value-minimum"] }} <nobr ng-show="!IsCTOut(output);">non-CT</nobr></td>
         </tr>
 
-        <tr ng-show="CTverbose || IsCTOut(output);">
+        <tr ng-show="IsCTOut(output);">
           <td>value-maximum:</td>
           <td>{{ output["value-maximum"] }} <nobr ng-show="!IsCTOut(output);">non-CT</nobr></td>
         </tr>
