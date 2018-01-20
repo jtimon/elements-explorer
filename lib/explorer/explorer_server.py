@@ -100,7 +100,7 @@ def GetBlockByHeight(db_client, rpccaller, chain, height):
     json_result = rpccaller.RpcCall('getblockhash', {'height': height})
     if 'error' in json_result:
         return json_result
-    return GetByIdBase(db_client, rpccaller, chain, 'block', json_result['result'])
+    return GetByIdBase(db_client, rpccaller, chain, 'block', json_result)
 
 def GetById(db_client, rpccaller, chain, resource, req_id):
     if resource == 'blockheight':

@@ -40,13 +40,14 @@ class RpcCaller(object):
         # response.raise_for_status()
 
         json_result = response.json()
-        # TODO remove special case for getrawmempool and getblockhash
-        if ('result' in json_result and method != 'getrawmempool' and method != 'getblockhash'):
-            json_result = json_result['result']
-
-        # If there's errors, only return the errors
         if not json_result:
             return {'error': {'message': 'No rpc result for method %s' % method}}
+        # If there's errors, only return the errors
         if 'error' in json_result and json_result['error']:
             return {'error': json_result['error']}
+
+        # TODO remove special case for getrawmempool
+        if ('result' in json_result and method != 'getrawmempool'):
+            json_result = json_result['result']
+
         return json_result
