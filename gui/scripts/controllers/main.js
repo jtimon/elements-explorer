@@ -39,6 +39,7 @@ angular.module('rpcExplorerApp')
 
         function successCallbackBlock(data) {
             $scope.block = data;
+            $scope.blockid = $scope.block["hash"];
             $scope.blockheight = $scope.block["height"];
             $scope.blockjson = JSON.stringify($scope.block, null, 4);
 
@@ -58,11 +59,6 @@ angular.module('rpcExplorerApp')
             return function () {
                 return PromBlockstats(height);
             }
-        };
-
-        function successCallbackBlockHeight(data) {
-            $scope.blockid = SrvUtil.GetResult(data);
-            return $scope.blockid;
         };
 
         function mempoolEntryCallback(data) {
@@ -94,9 +90,8 @@ angular.module('rpcExplorerApp')
         };
 
         var goToHeight = function(height) {
-            return SrvBackend.RpcCall("blockhash", {"id": height})
-                .then(successCallbackBlockHeight)
-                .then(goToBlock)
+            return SrvBackend.GetBlockByHeight(height)
+                .then(successCallbackBlock)
                 .then(CreatePromBlockstats(height))
         };
 

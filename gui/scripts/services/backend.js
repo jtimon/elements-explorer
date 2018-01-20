@@ -12,6 +12,16 @@ angular.module('rpcExplorerApp')
             return $http.post(BACKEND_URL + '/chain/' + SrvChain.get() + '/' + rpcMethod, vRpcParams);
         };
 
+        function CacheBlockResponse(chain)
+        {
+            return function (response) {
+                var block = GetResult(response);
+                cache[chain]['block'][ block['hash'] ] = block;
+                cache[chain]['blockheight'][ block['height'] ] = block['hash'];
+                return block;
+            }
+        };
+
         srv.get = function(resource, id) {
             var chain = SrvChain.get();
             SrvUtil.PreCache(cache, chain, resource);
@@ -22,8 +32,33 @@ angular.module('rpcExplorerApp')
                     resolve(cache[chain][resource][id]);
                 });
             } else {
-                retPromise = srv.RpcCall(resource, {'id': id})
-                    .then(SrvUtil.CacheElem(cache, chain, resource, id))
+                if (resource == 'block') {
+                    SrvUtil.PreCache(cache, chain, 'blockheight');
+                    retPromise = srv.RpcCall(resource, {'id': id})
+                        .then(CacheBlockResponse(chain));
+                } else {
+                    retPromise = srv.RpcCall(resource, {'id': id})
+                        .then(SrvUtil.CacheElem(cache, chain, resource, id));
+                }
+
+            }
+            return retPromise;
+        };
+
+        srv.GetBlockByHeight = function(height) {
+            var chain = SrvChain.get();
+            SrvUtil.PreCache(cache, chain, 'blockheight');
+            SrvUtil.PreCache(cache, chain, 'block');
+
+            var retPromise;
+            if (cache[chain]['blockheight'][height]) {
+                retPromise = $q(function(resolve) {
+                    var blockhash = cache[chain]['blockheight'][height];
+                    resolve(cache[chain]['block'][blockhash]);
+                });
+            } else {
+                retPromise = srv.RpcCall('blockheight', {'id': height})
+                    .then(CacheBlockResponse(chain));
             }
             return retPromise;
         };
