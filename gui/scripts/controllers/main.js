@@ -67,13 +67,11 @@ angular.module('rpcExplorerApp')
                 .then(PromBlockstats);
         };
 
-        function mempoolEntryCallback(data) {
-            $scope.mempoolentry = SrvUtil.GetResult(data);
-        };
-
         function goToEntry(txhash) {
             return SrvBackend.RpcCall("getmempoolentry", {"txid": txhash})
-                .then(mempoolEntryCallback);
+                .then(function (data) {
+                    $scope.mempoolentry = SrvUtil.GetResult(data);
+                });
         };
 
         function successCallbackTx(data) {
