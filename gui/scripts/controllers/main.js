@@ -61,6 +61,12 @@ angular.module('rpcExplorerApp')
             }
         };
 
+        var goToBlock = function(blockhash) {
+            return SrvBackend.get("block", blockhash)
+                .then(successCallbackBlock)
+                .then(PromBlockstats);
+        };
+
         function mempoolEntryCallback(data) {
             $scope.mempoolentry = SrvUtil.GetResult(data);
         };
@@ -76,17 +82,11 @@ angular.module('rpcExplorerApp')
             $scope.txjson = JSON.stringify($scope.transaction, null, 4);
             if ($scope.transaction["blockhash"]) {
                 $scope.blockid = $scope.transaction["blockhash"];
-                return goToBlock($scope.blockid)
-                    .then(PromBlockstats);
+                return goToBlock($scope.blockid);
             } else {
                 cleanBlock();
                 return goToEntry($scope.transaction['txid']);
             }
-        };
-
-        var goToBlock = function(blockhash) {
-            return SrvBackend.get("block", blockhash)
-                .then(successCallbackBlock);
         };
 
         var goToHeight = function(height) {
@@ -116,7 +116,6 @@ angular.module('rpcExplorerApp')
             $scope.loading = true;
             cleanTx();
             goToBlock($scope.blockid)
-                .then(PromBlockstats)
                 .then(function() {
                     $scope.loading = false;
                 })
@@ -218,7 +217,6 @@ angular.module('rpcExplorerApp')
         if ($routeParams.block) {
             $scope.blockid = $routeParams.block;
             goToBlock($routeParams.block)
-                .then(PromBlockstats)
                 .then(function() {
                     $scope.loading = false;
                 })
