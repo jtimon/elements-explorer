@@ -15,6 +15,7 @@ CONFIG = {
 
 WEB_ALLOWED_CALLS = [
     'block', # cached in server and gui
+    'blockheight', # cached in server and gui
     'tx', # cached in server and gui
     'blockstats', # cached in server and gui
     # cached in gui (TODO handle reorgs from gui)

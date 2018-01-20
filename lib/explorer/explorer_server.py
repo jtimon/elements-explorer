@@ -6,6 +6,7 @@ from lib import minql
 
 RESOURCES_FOR_GET_BY_ID = [
     'block',
+    'blockheight',
     'tx',
     'blockstats',
     'chaininfo',
@@ -112,6 +113,8 @@ def GetById(db_client, rpccaller, chain, resource, req_id):
         if 'error' in json_result:
             return json_result
         return {'result': json_result['hash']}
+    elif resource == 'blockheight':
+        return GetBlockByHeight(db_client, rpccaller, chain, req_id)
 
     return GetByIdBase(db_client, rpccaller, chain, resource, req_id)
 
