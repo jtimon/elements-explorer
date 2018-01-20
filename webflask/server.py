@@ -3,27 +3,30 @@ from flask import Blueprint, request, jsonify
 import json
 
 from lib.explorer.explorer_server import BetterNameResource
-from lib.explorer.env_config import CONFIG, DB_CLIENT, AVAILABLE_CHAINS, WEB_ALLOWED_CALLS
+from lib.explorer.env_config import CONFIG, DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN, WEB_ALLOWED_CALLS
 
 import crossdomain
 
 api_blueprint = Blueprint('api_blueprint', __name__)
 API_URL = '/api/v0'
 
-@api_blueprint.route(API_URL + '/available_chains', methods = ['GET'])
+@api_blueprint.route(API_URL + '/<string:resource>', methods = ['POST', 'GET'])
 @crossdomain.crossdomain(origin='*')
-def available_chains():
-    return jsonify( {'available_chains': AVAILABLE_CHAINS.keys()} ), 200
+def rpcexplorerrest(resource):
 
-@api_blueprint.route(API_URL + '/chain/<string:chain>/<string:resource>', methods = ['POST'])
-@crossdomain.crossdomain(origin='*')
-def rpcexplorerrest(chain, resource):
-    if not chain in AVAILABLE_CHAINS:
-        return jsonify( {'error': {'message': 'Chain "%s" not supported.' % chain}} ), 400
+    if resource == 'available_chains':
+        return jsonify( {'available_chains': AVAILABLE_CHAINS.keys()} ), 200
+
     if not resource in WEB_ALLOWED_CALLS:
         return jsonify( {'error': {'message': 'Resource "%s" not supported.' % resource}} ), 400
 
     request_data = json.loads(request.data)
+    chain = DEFAULT_CHAIN
+    if 'chain' in request_data:
+        chain = request_data['chain']
+        if not chain in AVAILABLE_CHAINS:
+            return jsonify( {'error': {'message': 'Chain "%s" not supported.' % chain}} ), 400
+        del request_data['chain']
 
     json_result = BetterNameResource(DB_CLIENT, AVAILABLE_CHAINS[chain]['rpc'], chain, resource).resolve_request(request_data)
 

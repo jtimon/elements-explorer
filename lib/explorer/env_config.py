@@ -5,6 +5,8 @@ from lib import minql
 
 from lib.explorer.rpcdaemon import RpcCaller
 
+DEFAULT_CHAIN = 'bitcoin'
+
 CONFIG = {
     'DB_TYPE': os.environ.get('DB_TYPE'),
     'DB_ADR': os.environ.get('DB_ADR'),

@@ -9,7 +9,8 @@ angular.module('rpcExplorerApp')
         var cache = {};
 
         srv.RpcCall = function(rpcMethod, vRpcParams) {
-            return $http.post(BACKEND_URL + '/chain/' + SrvChain.get() + '/' + rpcMethod, vRpcParams);
+            vRpcParams['chain'] = SrvChain.get();
+            return $http.post(BACKEND_URL + '/' + rpcMethod, vRpcParams);
         };
 
         function CacheBlockResponse(chain)

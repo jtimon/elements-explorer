@@ -34,7 +34,7 @@ angular.module('rpcExplorerApp')
                     resolve(cache[selected_chain][resource][selected_chain]);
                 });
             } else {
-                return $http.post(BACKEND_URL + '/chain/' + selected_chain + '/' + resource, {'id': selected_chain})
+                return $http.post(BACKEND_URL + '/' + resource, {'id': selected_chain, 'chain': selected_chain})
                     .then(SrvUtil.CacheElem(cache, selected_chain, resource, selected_chain));
             }
         }
