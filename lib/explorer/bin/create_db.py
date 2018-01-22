@@ -28,6 +28,9 @@ gflags.DEFINE_string('schema', u"",
 gflags.DEFINE_string('dataset', u"",
     u"Dataset for MinQL server")
 
+gflags.DEFINE_string('chains', u"bitcoin,testnet3,elementsregtest",
+    u"Chains to restart the db for")
+
 try:
     import sys
     argv = gflags.FLAGS(sys.argv)
@@ -55,7 +58,7 @@ ddb = minql.ZmqMinqlServer(
     worker_id='ZmqServer')
 ddb.start()
 
-CHAINS = ["bitcoin", "testnet3", "elementsregtest"]
+CHAINS = FLAGS.chains.split(',')
 
 if FLAGS.schema:
     schema = minql.read_json(FLAGS.schema)

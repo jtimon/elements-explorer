@@ -1,6 +1,7 @@
 web: gunicorn webflask:app -b "$WEB_HOST:$WEB_PORT" -w $WEB_WORKERS -k gevent --log-config $GUNICORN_LOG_FILE
 
 # create_db: python lib/explorer/bin/create_db.py --address $DB_PROXY_ADR --dbaddress $DB_BACKEND_ADR --dbtype $DB_PROXY_TYPE --schema $MINQL_SCHEMA --dbname $DB_NAME --dbuser $DB_USER --dbpass $DB_PASS
+# create_db: python lib/explorer/bin/create_db.py --address $DB_PROXY_ADR --dbaddress $DB_BACKEND_ADR --dbtype $DB_PROXY_TYPE --schema $MINQL_SCHEMA --dbname $DB_NAME --dbuser $DB_USER --dbpass $DB_PASS --chains=elementsregtest
 
 mempool_bitcoin: python lib/explorer/bin/mempool_cacher.py --chain bitcoin
 subscriber_bitcoin: python lib/explorer/bin/chain_subscriber.py --chain bitcoin
