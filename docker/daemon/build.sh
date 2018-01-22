@@ -13,5 +13,6 @@ fi
 curl -L $BRANCH_URL | tar xz
 cd $BRANCH_DIR
 ./autogen.sh
-./configure --disable-wallet --without-gui --with-incompatible-bdb
+./configure --without-gui --with-incompatible-bdb
 make "src/"$DAEMON_NAME"d" -j$NUM_JOBS
+make "src/"$DAEMON_NAME"-cli" -j$NUM_JOBS
