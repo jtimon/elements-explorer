@@ -165,7 +165,13 @@ class BetterNameResource(RpcCacher):
 def explorer_request_processor(request, resource):
 
     if resource == 'available_chains':
-        return {'status': 200, 'available_chains': AVAILABLE_CHAINS.keys()}
+        available_chains = {}
+        for k, v in AVAILABLE_CHAINS.iteritems():
+            available_chains[k] = v['properties']
+        return {
+            'available_chains': available_chains,
+            'status': 200,
+        }
 
     if not resource in WEB_ALLOWED_CALLS:
         return {'status': 400, 'error': {'message': 'Resource "%s" not supported.' % resource}}

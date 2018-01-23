@@ -38,6 +38,9 @@ AVAILABLE_CHAINS = {
         ),
         'zmq': os.environ.get('BITCOIN_ZMQ'),
         'db': DB_FACTORY,
+        'properties': {
+            'stats_support': True,
+        },
     },
     "testnet3": {
         'rpc': RpcCaller(os.environ.get('TESTNET3_ADR'),
@@ -46,6 +49,9 @@ AVAILABLE_CHAINS = {
         ),
         'zmq': os.environ.get('TESTNET3_ZMQ'),
         'db': DB_FACTORY,
+        'properties': {
+            'stats_support': True,
+        },
     },
     "elementsregtest": {
         'rpc': RpcCaller(os.environ.get('ELEMENTSREGTEST_ADR'),
@@ -54,6 +60,9 @@ AVAILABLE_CHAINS = {
         ),
         'zmq': os.environ.get('ELEMENTSREGTEST_ZMQ'),
         'db': DB_FACTORY,
+        'properties': {
+            'stats_support': False,
+        },
     },
 }
 

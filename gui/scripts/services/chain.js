@@ -20,12 +20,21 @@ angular.module('rpcExplorerApp')
         }
 
         srv.GetAvailableChains = function() {
-            return $http.get(BACKEND_URL + '/available_chains')
-                .then(function (response) {
-                    return response["data"]["available_chains"]
-                });
+            if (cache['available_chains']) {
+                return SrvUtil.GetKeys(cache['available_chains']);
+            } else {
+                return $http.get(BACKEND_URL + '/available_chains')
+                    .then(function (response) {
+                        cache['available_chains'] = response["data"]["available_chains"];
+                        return SrvUtil.GetKeys(cache['available_chains']);
+                    });
+            }
         }
 
+        srv.GetProperties = function() {
+            return cache[selected_chain]['chaininfo'][selected_chain]['properties'];
+        }
+        
         srv.GetChainInfo = function() {
             var resource = 'chaininfo';
             SrvUtil.PreCache(cache, selected_chain, resource);
