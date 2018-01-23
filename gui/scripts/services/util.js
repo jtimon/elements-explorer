@@ -48,10 +48,18 @@ function PreCache(cache, chain, resource) {
     }
 }
 
+function CacheResult(cache, chain, resource, id) {
+    function cache_callback(result) {
+        cache[chain][resource][id] = result;
+        return cache[chain][resource][id];
+    }
+    return cache_callback;
+}
+
 function CacheElem(cache, chain, resource, id) {
     function cache_callback(response) {
-        cache[chain][resource][id] = GetResult(response);
-        return cache[chain][resource][id];
+        var result = GetResult(response);
+        return CacheResult(cache, chain, resource, id)(result);
     }
     return cache_callback;
 }
@@ -74,6 +82,7 @@ angular.module('rpcExplorerApp')
         srv.errorCallbackScoped = errorCallbackScoped;
         srv.PreCache = PreCache;
         srv.CacheElem = CacheElem;
+        srv.CacheResult = CacheResult;
         srv.GetResult = GetResult;
         srv.NumToPositive = NumToPositive;
         srv.ParseIntToPositive = ParseIntToPositive;
