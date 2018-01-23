@@ -72,7 +72,7 @@ def IncrementStats(stats, interval, tx_fee, tx_size):
 
 class MempoolStatsCacher(CronCacher):
 
-    def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time, 
+    def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time,
                  *args, **kwargs):
 
         super(MempoolStatsCacher, self).__init__(chain, rpccaller, db_client, wait_time, initial_wait_time,
@@ -127,12 +127,13 @@ class GreedyCacher(CronCacher):
 
         self.last_cached_height = -1
         self.cache_txs = cache_txs
+        self.first_pass = True
 
     def cache_blockhash(self, blockhash):
         try:
             block = GetById(self.db_client, self.rpccaller, self.chain, 'block', blockhash)
             blockstats = GetById(self.db_client, self.rpccaller, self.chain, 'blockstats', block['height'])
-            if self.cache_txs and 'tx' in block:
+            if self.cache_txs and not self.first_pass and 'tx' in block:
                 for txid in block['tx']:
                     tx = GetById(self.db_client, self.rpccaller, self.chain, 'tx', txid)
         except:
@@ -158,7 +159,10 @@ class GreedyCacher(CronCacher):
                 return
             height = height - 1
 
-        self.last_cached_height = chaininfo['blocks']
+        if self.first_pass:
+            self.first_pass = False
+        else:
+            self.last_cached_height = chaininfo['blocks']
 
 
 class DaemonReorgManager(GreedyCacher):
