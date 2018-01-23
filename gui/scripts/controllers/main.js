@@ -160,7 +160,8 @@ angular.module('rpcExplorerApp')
 
         var EXAMPLE_LIST_SIZE = 4;
         
-        $scope.LoadMempoolTxs = function() {
+        function LoadMempoolTxs()
+        {
             return SrvBackend.RpcCall("getrawmempool", {})
                 .then(function(data) {
                     $scope.mempooltxs = SrvUtil.GetResult(data).slice(0, EXAMPLE_LIST_SIZE);
@@ -209,7 +210,7 @@ angular.module('rpcExplorerApp')
         {
             $scope.loading = true;
             LoadBlocksAndConfirmedTxs()
-                .then($scope.LoadMempoolTxs)
+                .then(LoadMempoolTxs)
                 .then(function() {
                     $scope.loading = false;
                 })
