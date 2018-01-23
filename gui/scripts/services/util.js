@@ -56,6 +56,17 @@ function CacheElem(cache, chain, resource, id) {
     return cache_callback;
 }
 
+function GetKeys(dictionary)
+{
+    var keys = [];
+    for (var key in dictionary) {
+        if (dictionary.hasOwnProperty(key)) {
+            keys.push(key);
+        }
+    }
+    return keys;
+}
+
 angular.module('rpcExplorerApp')
     .service('SrvUtil', function SrvUtil() {
 
@@ -67,5 +78,6 @@ angular.module('rpcExplorerApp')
         srv.NumToPositive = NumToPositive;
         srv.ParseIntToPositive = ParseIntToPositive;
         srv.ParseNatural = ParseNatural;
+        srv.GetKeys = GetKeys;
         return srv;
     });
