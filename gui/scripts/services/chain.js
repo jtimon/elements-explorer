@@ -44,7 +44,11 @@ angular.module('rpcExplorerApp')
                 });
             } else {
                 return $http.post(BACKEND_URL + '/' + resource, {'id': selected_chain, 'chain': selected_chain})
-                    .then(SrvUtil.CacheElem(cache, selected_chain, resource, selected_chain));
+                    .then(function (response) {
+                        var result = SrvUtil.GetResult(response);
+                        result['properties'] = cache['available_chains'][ selected_chain ];
+                        return SrvUtil.CacheResult(cache, selected_chain, resource, selected_chain)(result);
+                    });
             }
         }
 

@@ -51,8 +51,12 @@ angular.module('rpcExplorerApp')
         };
 
         function PromBlockstats(height) {
-            return SrvBackend.get("blockstats", height)
-                .then(statsCallbackBlock);
+            if (SrvChain.GetProperties()['stats_support']) {
+                return SrvBackend.get("blockstats", height)
+                    .then(statsCallbackBlock);
+            } else {
+                return null;
+            }
         };
 
         function CreatePromBlockstats(height) {

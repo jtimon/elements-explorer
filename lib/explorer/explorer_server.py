@@ -143,9 +143,13 @@ class BetterNameResource(RpcCacher):
             return {'error': {'message': 'Error getting %s from db.' % (self.resource)}}
 
         return json_result
-        
+
     def resolve_request(self, request):
         print('request', request)
+
+        if self.resource == 'blockstats' and not AVAILABLE_CHAINS[self.chain]['properties']['stats_support']:
+                return {'error': {'message': 'API resource %s is not supported by chain %s' % ('blockstats', self.chain)}}
+
         if self.resource in RESOURCES_FOR_GET_BY_ID:
             if not 'id' in request:
                 return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}
