@@ -43,6 +43,8 @@ def api_generic(request, request_processor, app, resource):
     response = request_processor(app, req)
     if 'errors' in response:
         return jsonify({'errors': response['errors']}), 400
+    if 'error' in response:
+        return jsonify({'error': response['error']}), 400
     elif request.method == 'GET':
         return jsonify({resource: response['json']}), response['status']
     return jsonify(response['json']), response['status']
@@ -50,7 +52,8 @@ def api_generic(request, request_processor, app, resource):
 def create_restmin_app(app_name, config_path, base_url, request_processor):
     from flask import Flask
     app = Flask(app_name)
-    app.config.from_object(config_path)
+    if config_path:
+        app.config.from_object(config_path)
 
     @app.route(base_url + '<string:resource>', methods = ['GET', 'POST', 'PUT'])
     @crossdomain(origin='*')
