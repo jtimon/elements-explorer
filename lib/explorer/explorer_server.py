@@ -3,6 +3,7 @@ import json
 import datetime
 
 from lib import minql
+from lib import restmin
 from lib.explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN, WEB_ALLOWED_CALLS
 
 RESOURCES_FOR_GET_BY_ID = [
@@ -166,18 +167,22 @@ class BetterNameResource(RpcCacher):
 
         return json_result
 
+def get_available_chains(**kwargs):
+    available_chains = {}
+    for k, v in AVAILABLE_CHAINS.iteritems():
+        available_chains[k] = v['properties']
+    return available_chains, 200
+
+RESOURCES = {
+    'available_chains': restmin.resources.FunctionResource(get_available_chains),
+}
+
 def explorer_request_processor(app, req):
     request_data = req['json']
     resource = req['resource']
 
-    if resource == 'available_chains':
-        available_chains = {}
-        for k, v in AVAILABLE_CHAINS.iteritems():
-            available_chains[k] = v['properties']
-        return {
-            'json': available_chains,
-            'status': 200,
-        }
+    if resource in RESOURCES:
+        return restmin.domain.Domain(RESOURCES).resolve_request(req)
 
     if not resource in WEB_ALLOWED_CALLS:
         return {'status': 404, 'error': {'message': 'Resource "%s" not supported.' % resource}}
