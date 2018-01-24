@@ -23,7 +23,6 @@ WEB_ALLOWED_CALLS = [
     # cached in gui (TODO handle reorgs from gui)
     'chaininfo', # cached in server, reorgs handled with zmq subscription to node
     'mempoolstats', # Data from db, independent from reorgs
-    "getrawmempool", # never cached, always hits the node (limited to 5 results)
 ]
 
 DB_FACTORY = minql.MinqlFactory(CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'])

@@ -138,8 +138,9 @@ class ChainResource(restmin.resources.Resource):
 
 
 class RpcCallerResource(ChainResource):
-    def __init__(self, resource):
+    def __init__(self, resource, limit_array_result=0):
         self.resource = resource
+        self.limit_array_result = limit_array_result
 
     def resolve_request(self, req):
         try:
@@ -150,7 +151,11 @@ class RpcCallerResource(ChainResource):
         json_result = self.rpccaller.RpcCall(self.resource, req['json'])
         if 'error' in json_result and json_result['error']:
             return {'error': json_result['error']}, 400
-        return {'result': json_result}, 200
+
+        if self.limit_array_result:
+            return {'result': json_result[:self.limit_array_result]}, 200
+        else:
+            return {'result': json_result}, 200
 
 
 class BetterNameResource(RpcCacher):
@@ -193,11 +198,6 @@ class BetterNameResource(RpcCacher):
             json_result = GetById(self.db_client, self.rpccaller, self.chain, self.resource, request['id'])
         elif self.resource == 'mempoolstats':
             json_result = self.resolve_mempoolstats(request)
-        elif self.resource == 'getrawmempool':
-            json_result = self.rpccaller.RpcCall(self.resource, request)
-            if 'error' in json_result and json_result['error']:
-                return {'error': json_result['error']}
-            return {'result': json_result[:5]}
         else:
             return {'error': {'message': 'Resource "%s" not supported.' % resource}}
 
@@ -213,6 +213,7 @@ RESOURCES = {
     'available_chains': restmin.resources.FunctionResource(get_available_chains),
     # never cached, always hits the node
     'getmempoolentry': RpcCallerResource('getmempoolentry'),
+    'getrawmempool': RpcCallerResource('getrawmempool', limit_array_result=4),
 }
 
 def explorer_request_processor(app, req):
