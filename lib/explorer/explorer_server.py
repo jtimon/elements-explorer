@@ -166,21 +166,22 @@ class BetterNameResource(RpcCacher):
 
         return json_result
 
-def explorer_request_processor(request, resource):
+def explorer_request_processor(app, req):
+    request_data = req['json']
+    resource = req['resource']
 
     if resource == 'available_chains':
         available_chains = {}
         for k, v in AVAILABLE_CHAINS.iteritems():
             available_chains[k] = v['properties']
         return {
-            'available_chains': available_chains,
+            'json': available_chains,
             'status': 200,
         }
 
     if not resource in WEB_ALLOWED_CALLS:
         return {'status': 404, 'error': {'message': 'Resource "%s" not supported.' % resource}}
 
-    request_data = json.loads(request.data)
     chain = DEFAULT_CHAIN
     if 'chain' in request_data:
         chain = request_data['chain']
@@ -196,6 +197,11 @@ def explorer_request_processor(request, resource):
     if 'error' in json_result and json_result['error']:
         return {'status': 400, 'error': json_result['error']}
 
-    if not 'status' in json_result:
-        json_result['status'] = 200
-    return json_result
+    result = {}
+    if 'status' in json_result:
+        result['status'] = json_result['status']
+        del json_result['status']
+    else:
+        result['status'] = 200
+    result['json'] = json_result
+    return result

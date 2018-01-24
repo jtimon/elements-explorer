@@ -2,16 +2,16 @@
 import os
 
 from flask import send_from_directory
-import crossdomain
 
-from server import api_blueprint
+from lib.restmin.impl.flask import create_restmin_app
+from lib.explorer.explorer_server import explorer_request_processor
 
 GUI_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'gui')
 
-from flask import Flask
-app = Flask(__name__)
-
-app.register_blueprint(api_blueprint)
+app = create_restmin_app(app_name=__name__, 
+                         config_path='', 
+                         base_url='/api/v0/',
+                         request_processor=explorer_request_processor)
 
 app.static_url_path = ''
 app.static_folder   = GUI_DIRECTORY
