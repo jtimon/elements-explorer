@@ -178,7 +178,7 @@ def explorer_request_processor(request, resource):
         }
 
     if not resource in WEB_ALLOWED_CALLS:
-        return {'status': 400, 'error': {'message': 'Resource "%s" not supported.' % resource}}
+        return {'status': 404, 'error': {'message': 'Resource "%s" not supported.' % resource}}
 
     request_data = json.loads(request.data)
     chain = DEFAULT_CHAIN
