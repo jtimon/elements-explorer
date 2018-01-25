@@ -26,7 +26,7 @@ class RpcCaller(object):
 
     def RpcCall(self, method, params):
         if not method in RPC_ALLOWED_CALLS:
-            return {'error': {'message': 'Method "%s" not supported.' % method}}
+            return {'error': {'message': 'Daemon RPC method "%s" not supported.' % method}}
 
         requestData = {
             'method': method,
