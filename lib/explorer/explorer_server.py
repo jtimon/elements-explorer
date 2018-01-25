@@ -7,11 +7,7 @@ from lib import restmin
 from lib.explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN, WEB_ALLOWED_CALLS
 
 RESOURCES_FOR_GET_BY_ID = [
-    'block',
-    'blockheight',
-    'tx',
     'blockstats',
-    'chaininfo',
 ]
 
 class RpcCacher(object):
@@ -190,6 +186,26 @@ class MempoolStatsResource(ChainCachedResource):
         return json_result, 200
 
 
+class GetByIdResource(ChainCachedResource):
+
+    def __init__(self, db_client, resource):
+        super(GetByIdResource, self).__init__(db_client)
+
+        self.resource = resource
+
+    def resolve_request(self, req):
+        try:
+            req['json'] = self.update_chain(req['json'])
+        except UnknownChainError:
+            return {'error': {'message': 'Chain "%s" not supported.' % chain}}, 400
+
+        request = req['json']
+        if not 'id' in request:
+            return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}, 400
+
+        return GetById(self.db_client, self.rpccaller, self.chain, self.resource, request['id']), 200
+
+
 class BetterNameResource(RpcCacher):
 
     def __init__(self, db_client, rpccaller, chain, resource):
@@ -228,6 +244,12 @@ RESOURCES = {
     'getrawmempool': RpcCallerResource('getrawmempool', limit_array_result=4),
     # Data from db, independent from reorgs
     'mempoolstats': MempoolStatsResource(DB_CLIENT),
+    # cached in server and gui
+    'block': GetByIdResource(DB_CLIENT, 'block'),
+    'blockheight': GetByIdResource(DB_CLIENT, 'blockheight'),
+    'tx': GetByIdResource(DB_CLIENT, 'tx'),
+    # TODO handle reorgs from gui
+    'chaininfo': GetByIdResource(DB_CLIENT, 'chaininfo'),
 }
 
 def explorer_request_processor(app, req):

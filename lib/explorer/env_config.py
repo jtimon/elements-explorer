@@ -16,12 +16,7 @@ CONFIG = {
 }
 
 WEB_ALLOWED_CALLS = [
-    'block', # cached in server and gui
-    'blockheight', # cached in server and gui
-    'tx', # cached in server and gui
     'blockstats', # cached in server and gui
-    # cached in gui (TODO handle reorgs from gui)
-    'chaininfo', # cached in server, reorgs handled with zmq subscription to node
 ]
 
 DB_FACTORY = minql.MinqlFactory(CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'])
