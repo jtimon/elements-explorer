@@ -4,10 +4,7 @@ import datetime
 
 from lib import minql
 from lib import restmin
-from lib.explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN, WEB_ALLOWED_CALLS
-
-RESOURCES_FOR_GET_BY_ID = [
-]
+from lib.explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
 
 class RpcCacher(object):
 
@@ -210,35 +207,14 @@ class GetByIdResource(ChainCachedResource):
         return GetById(self.db_client, self.rpccaller, self.chain, self.resource, request['id']), 200
 
 
-class BetterNameResource(RpcCacher):
-
-    def __init__(self, db_client, rpccaller, chain, resource):
-
-        self.chain = chain
-        self.resource = resource
-
-        super(BetterNameResource, self).__init__(rpccaller, db_client)
-
-    def resolve_request(self, request):
-        print('request', request)
-
-        if self.resource in RESOURCES_FOR_GET_BY_ID:
-            if not 'id' in request:
-                return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}
-
-            json_result = GetById(self.db_client, self.rpccaller, self.chain, self.resource, request['id'])
-        else:
-            return {'error': {'message': 'Resource "%s" not supported.' % resource}}
-
-        return json_result
-
 def get_available_chains(**kwargs):
     available_chains = {}
     for k, v in AVAILABLE_CHAINS.iteritems():
         available_chains[k] = v['properties']
     return available_chains, 200
 
-RESOURCES = {
+
+API_DOMAIN = restmin.domain.Domain({
     'available_chains': restmin.resources.FunctionResource(get_available_chains),
     # never cached, always hits the node
     'getmempoolentry': RpcCallerResource('getmempoolentry'),
@@ -252,38 +228,4 @@ RESOURCES = {
     'blockstats': GetByIdResource(DB_CLIENT, 'blockstats', ['stats_support']),
     # TODO handle reorgs from gui
     'chaininfo': GetByIdResource(DB_CLIENT, 'chaininfo'),
-}
-
-def explorer_request_processor(app, req):
-    request_data = req['json']
-    resource = req['resource']
-
-    if resource in RESOURCES:
-        return restmin.domain.Domain(RESOURCES).resolve_request(req)
-
-    if not resource in WEB_ALLOWED_CALLS:
-        return {'status': 404, 'error': {'message': 'Resource "%s" not supported.' % resource}}
-
-    chain = DEFAULT_CHAIN
-    if 'chain' in request_data:
-        chain = request_data['chain']
-        if not chain in AVAILABLE_CHAINS:
-            return {'status': 400, 'error': {'message': 'Chain "%s" not supported.' % chain}}
-        del request_data['chain']
-
-    json_result = BetterNameResource(DB_CLIENT, AVAILABLE_CHAINS[chain]['rpc'], chain, resource).resolve_request(request_data)
-
-    if not json_result:
-        return {'status': 400, 'error': {'message': 'No result for %s.' % resource}}
-    # If there's errors, only return the errors
-    if 'error' in json_result and json_result['error']:
-        return {'status': 400, 'error': json_result['error']}
-
-    result = {}
-    if 'status' in json_result:
-        result['status'] = json_result['status']
-        del json_result['status']
-    else:
-        result['status'] = 200
-    result['json'] = json_result
-    return result
+})

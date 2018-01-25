@@ -15,9 +15,6 @@ CONFIG = {
     'DB_PASS': os.environ.get('DB_PASS'),
 }
 
-WEB_ALLOWED_CALLS = [
-]
-
 DB_FACTORY = minql.MinqlFactory(CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'])
 DB_CLIENT = DB_FACTORY.create()
 

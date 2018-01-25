@@ -4,9 +4,12 @@ import os
 from flask import send_from_directory
 
 from lib.restmin.impl.flask import create_restmin_app
-from lib.explorer.explorer_server import explorer_request_processor
+from lib.explorer.explorer_server import API_DOMAIN
 
 GUI_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'gui')
+
+def explorer_request_processor(app, req):
+    return API_DOMAIN.resolve_request(req)
 
 app = create_restmin_app(app_name=__name__, 
                          config_path='', 
