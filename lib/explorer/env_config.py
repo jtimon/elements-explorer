@@ -16,7 +16,6 @@ CONFIG = {
 }
 
 WEB_ALLOWED_CALLS = [
-    'blockstats', # cached in server and gui
 ]
 
 DB_FACTORY = minql.MinqlFactory(CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'])

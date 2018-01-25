@@ -7,7 +7,6 @@ from lib import restmin
 from lib.explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN, WEB_ALLOWED_CALLS
 
 RESOURCES_FOR_GET_BY_ID = [
-    'blockstats',
 ]
 
 class RpcCacher(object):
@@ -188,10 +187,11 @@ class MempoolStatsResource(ChainCachedResource):
 
 class GetByIdResource(ChainCachedResource):
 
-    def __init__(self, db_client, resource):
+    def __init__(self, db_client, resource, chain_required_properties=[]):
         super(GetByIdResource, self).__init__(db_client)
 
         self.resource = resource
+        self.chain_required_properties = chain_required_properties
 
     def resolve_request(self, req):
         try:
@@ -199,6 +199,10 @@ class GetByIdResource(ChainCachedResource):
         except UnknownChainError:
             return {'error': {'message': 'Chain "%s" not supported.' % chain}}, 400
 
+        for required_property in self.chain_required_properties:
+            if not AVAILABLE_CHAINS[self.chain]['properties'][required_property]:
+                return {'error': {'message': 'API resource %s is not supported by chain %s' % (self.resource, self.chain)}}, 400
+        
         request = req['json']
         if not 'id' in request:
             return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}, 400
@@ -217,9 +221,6 @@ class BetterNameResource(RpcCacher):
 
     def resolve_request(self, request):
         print('request', request)
-
-        if self.resource == 'blockstats' and not AVAILABLE_CHAINS[self.chain]['properties']['stats_support']:
-                return {'error': {'message': 'API resource %s is not supported by chain %s' % ('blockstats', self.chain)}}
 
         if self.resource in RESOURCES_FOR_GET_BY_ID:
             if not 'id' in request:
@@ -248,6 +249,7 @@ RESOURCES = {
     'block': GetByIdResource(DB_CLIENT, 'block'),
     'blockheight': GetByIdResource(DB_CLIENT, 'blockheight'),
     'tx': GetByIdResource(DB_CLIENT, 'tx'),
+    'blockstats': GetByIdResource(DB_CLIENT, 'blockstats', ['stats_support']),
     # TODO handle reorgs from gui
     'chaininfo': GetByIdResource(DB_CLIENT, 'chaininfo'),
 }
