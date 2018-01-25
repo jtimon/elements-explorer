@@ -158,6 +158,38 @@ class RpcCallerResource(ChainResource):
             return {'result': json_result}, 200
 
 
+class ChainCachedResource(ChainResource):
+    def __init__(self, db_client):
+        self.db_client = db_client
+
+
+class MempoolStatsResource(ChainCachedResource):
+
+    def resolve_request(self, req):
+        try:
+            req['json'] = self.update_chain(req['json'])
+        except UnknownChainError:
+            return {'error': {'message': 'Chain "%s" not supported.' % chain}}, 400
+
+        request = req['json']
+        if not 'hours_ago' in request:
+            return {'error': {'message': 'No hours_ago specified to get %s in request %s' % ('mempoolstats', request)}}, 400
+
+        json_result = {}
+        try:
+            seconds_ago = request['hours_ago'] * 60 * 60
+            min_epoch = int((datetime.datetime.now() - datetime.timedelta(seconds=seconds_ago)).strftime('%s'))
+            db_result = self.db_client.search(self.chain + "_" + 'mempoolstats', {'time': {'ge': min_epoch}})
+            if not db_result:
+                return {'error': {'message': 'No result db for %s.' % 'mempoolstats'}}, 400
+            for db_elem in db_result:
+                json_result[db_elem['id']] = json.loads(db_elem['blob'])
+        except:
+            return {'error': {'message': 'Error getting %s from db.' % ('mempoolstats')}}, 400
+
+        return json_result, 200
+
+
 class BetterNameResource(RpcCacher):
 
     def __init__(self, db_client, rpccaller, chain, resource):
@@ -166,24 +198,6 @@ class BetterNameResource(RpcCacher):
         self.resource = resource
 
         super(BetterNameResource, self).__init__(rpccaller, db_client)
-
-    def resolve_mempoolstats(self, request):
-        if not 'hours_ago' in request:
-            return {'error': {'message': 'No hours_ago specified to get %s in request %s' % (self.resource, request)}}
-
-        json_result = {}
-        try:
-            seconds_ago = request['hours_ago'] * 60 * 60
-            min_epoch = int((datetime.datetime.now() - datetime.timedelta(seconds=seconds_ago)).strftime('%s'))
-            db_result = self.db_client.search(self.chain + "_" + self.resource, {'time': {'ge': min_epoch}})
-            if not db_result:
-                return {'error': {'message': 'No result db for %s.' % self.resource}}
-            for db_elem in db_result:
-                json_result[db_elem['id']] = json.loads(db_elem['blob'])
-        except:
-            return {'error': {'message': 'Error getting %s from db.' % (self.resource)}}
-
-        return json_result
 
     def resolve_request(self, request):
         print('request', request)
@@ -196,8 +210,6 @@ class BetterNameResource(RpcCacher):
                 return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}
 
             json_result = GetById(self.db_client, self.rpccaller, self.chain, self.resource, request['id'])
-        elif self.resource == 'mempoolstats':
-            json_result = self.resolve_mempoolstats(request)
         else:
             return {'error': {'message': 'Resource "%s" not supported.' % resource}}
 
@@ -214,6 +226,8 @@ RESOURCES = {
     # never cached, always hits the node
     'getmempoolentry': RpcCallerResource('getmempoolentry'),
     'getrawmempool': RpcCallerResource('getrawmempool', limit_array_result=4),
+    # Data from db, independent from reorgs
+    'mempoolstats': MempoolStatsResource(DB_CLIENT),
 }
 
 def explorer_request_processor(app, req):
