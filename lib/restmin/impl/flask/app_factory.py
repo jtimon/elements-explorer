@@ -10,7 +10,7 @@ import json
 
 from .crossdomain import crossdomain
 
-def api_generic(request, request_processor, app, resource):
+def api_generic(request, request_processor, app, resource, auth_required=False):
     req = {}
     req['method'] = request.method
     req['resource'] = resource
@@ -29,16 +29,17 @@ def api_generic(request, request_processor, app, resource):
             params[k] = v
     req['params'] = params
 
-    auth_form = {}
-    if request.authorization:
-        auth_form['user'] = request.authorization.username
-        auth_form['password'] = request.authorization.password
-    else:
-        if 'X-User' in request.headers:
-            auth_form['user'] = request.headers['X-User']
-        if 'X-Token' in request.headers:
-            auth_form['token'] = request.headers['X-Token']
-    req['auth_form'] = auth_form
+    if auth_required:
+        auth_form = {}
+        if request.authorization:
+            auth_form['user'] = request.authorization.username
+            auth_form['password'] = request.authorization.password
+        else:
+            if 'X-User' in request.headers:
+                auth_form['user'] = request.headers['X-User']
+            if 'X-Token' in request.headers:
+                auth_form['token'] = request.headers['X-Token']
+        req['auth_form'] = auth_form
 
     response = request_processor(app, req)
     if 'errors' in response:
@@ -49,7 +50,7 @@ def api_generic(request, request_processor, app, resource):
         return jsonify({resource: response['json']}), response['status']
     return jsonify(response['json']), response['status']
 
-def create_restmin_app(app_name, config_path, base_url, request_processor):
+def create_restmin_app(app_name, config_path, base_url, request_processor, auth_required=False):
     from flask import Flask
     app = Flask(app_name)
     if config_path:
@@ -58,7 +59,7 @@ def create_restmin_app(app_name, config_path, base_url, request_processor):
     @app.route(base_url + '<string:resource>', methods = ['GET', 'POST', 'PUT'])
     @crossdomain(origin='*')
     def _api_generic(resource):
-        return api_generic(request, request_processor, current_app, resource)
+        return api_generic(request, request_processor, current_app, resource, auth_required)
 
     @app.route(base_url + '<string:resource>', methods = ['OPTIONS'])
     @crossdomain(origin='*', headers='Content-Type, X-User, X-Token')
