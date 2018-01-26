@@ -118,6 +118,41 @@ def GetById(db_client, rpccaller, chain, resource, req_id):
 
     return GetByIdBase(db_client, rpccaller, chain, resource, req_id)
 
+class UnknownChainError(BaseException):
+    pass
+
+class ChainResource(restmin.resources.Resource):
+
+    def update_chain(self, request_data):
+        if 'chain' in request_data:
+            self.chain = request_data['chain']
+            del request_data['chain']
+        else:
+            self.chain = DEFAULT_CHAIN
+        if not self.chain in AVAILABLE_CHAINS:
+            raise UnknownChainError
+
+        self.rpccaller = AVAILABLE_CHAINS[self.chain]['rpc']
+
+        return request_data
+
+
+class RpcCallerResource(ChainResource):
+    def __init__(self, resource):
+        self.resource = resource
+
+    def resolve_request(self, req):
+        try:
+            req['json'] = self.update_chain(req['json'])
+        except UnknownChainError:
+            return {'error': {'message': 'Chain "%s" not supported.' % chain}}, 400
+
+        json_result = self.rpccaller.RpcCall(self.resource, req['json'])
+        if 'error' in json_result and json_result['error']:
+            return {'error': json_result['error']}, 400
+        return {'result': json_result}, 200
+
+
 class BetterNameResource(RpcCacher):
 
     def __init__(self, db_client, rpccaller, chain, resource):
@@ -158,12 +193,13 @@ class BetterNameResource(RpcCacher):
             json_result = GetById(self.db_client, self.rpccaller, self.chain, self.resource, request['id'])
         elif self.resource == 'mempoolstats':
             json_result = self.resolve_mempoolstats(request)
-        else:
+        elif self.resource == 'getrawmempool':
             json_result = self.rpccaller.RpcCall(self.resource, request)
-            if self.resource == 'getrawmempool':
-                if 'error' in json_result and json_result['error']:
-                    return {'error': json_result['error']}
-                return {'result': json_result[:5]}
+            if 'error' in json_result and json_result['error']:
+                return {'error': json_result['error']}
+            return {'result': json_result[:5]}
+        else:
+            return {'error': {'message': 'Resource "%s" not supported.' % resource}}
 
         return json_result
 
@@ -175,6 +211,8 @@ def get_available_chains(**kwargs):
 
 RESOURCES = {
     'available_chains': restmin.resources.FunctionResource(get_available_chains),
+    # never cached, always hits the node
+    'getmempoolentry': RpcCallerResource('getmempoolentry'),
 }
 
 def explorer_request_processor(app, req):
