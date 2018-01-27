@@ -26,3 +26,18 @@ class StringField(Field):
             raise FieldError(self.max_len_msg or '"%s" must be shorter than %s' % (name, self.max_len))
 
         return value
+
+class TextField(Field):
+
+    def __init__(self, **kwargs):
+        super(TextField, self).__init__(field_type='text', **kwargs)
+
+    def _clean_value(self, value):
+        return str(value)
+
+    def validate(self, model, name):
+        value = super(TextField, self).validate(model, name)
+        if value is None:
+            return None
+
+        return value
