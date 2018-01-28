@@ -296,8 +296,9 @@ class DaemonReorgManager(GreedyCacher):
 
     def manage_reorg(self, block):
         print('REORG DETECTED at previous height %s and hash %s, new height %s and hash %s' % (
-            self.prev_reorg_block['height'], self.prev_reorg_block['hash'], block['height'], block['hash']))
+            self.prev_reorg_height, self.prev_reorg_hash, block['height'], block['hash']))
 
+        self.prev_reorg_block = GetById(self.db_client, self.rpccaller, self.chain, 'block', self.prev_reorg_hash)
         common_ancestor = self.find_common_ancestor(self.prev_reorg_block, block)
         if not common_ancestor or not self.check_basic_block(common_ancestor):
             print('FAILED HANDLING REORG calling find_common_ancestor %s' % block['height'], common_ancestor)
@@ -323,7 +324,6 @@ class DaemonReorgManager(GreedyCacher):
 
     def update_tip(self, block_hash):
         print('update_tip from reorg height %s hash %s to %s' % (self.prev_reorg_height, self.prev_reorg_hash, block_hash))
-        self.prev_reorg_block = GetById(self.db_client, self.rpccaller, self.chain, 'block', self.prev_reorg_hash)
 
         try:
             block = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
@@ -333,6 +333,10 @@ class DaemonReorgManager(GreedyCacher):
             print('FAILED update_tip block.get(%s)' % block_hash)
             return
 
+        if not block:
+            print('FAILED update_tip block.get(%s) returned empty block' % block_hash)
+            return
+        
         block_height = block['height']
 
         if not self.prev_reorg_hash:
