@@ -3,7 +3,8 @@ import json
 import datetime
 
 from lib import minql
-from lib import restmin
+from mintools import restmin
+
 from lib.explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
 
 class RpcCacher(object):
