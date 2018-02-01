@@ -116,6 +116,7 @@ class UnknownChainError(BaseException):
 class ChainResource(restmin.resources.Resource):
 
     def update_chain(self, request_data):
+        self.chain = None
         if 'chain' in request_data:
             self.chain = request_data['chain']
             del request_data['chain']
@@ -138,7 +139,7 @@ class RpcCallerResource(ChainResource):
         try:
             req['json'] = self.update_chain(req['json'])
         except UnknownChainError:
-            return {'error': {'message': 'Chain "%s" not supported.' % chain}}, 400
+            return {'error': {'message': 'Chain "%s" not supported.' % self.chain}}, 400
 
         json_result = self.rpccaller.RpcCall(self.resource, req['json'])
         if 'error' in json_result and json_result['error']:
@@ -161,7 +162,7 @@ class MempoolStatsResource(ChainCachedResource):
         try:
             req['json'] = self.update_chain(req['json'])
         except UnknownChainError:
-            return {'error': {'message': 'Chain "%s" not supported.' % chain}}, 400
+            return {'error': {'message': 'Chain "%s" not supported.' % self.chain}}, 400
 
         request = req['json']
         if not 'hours_ago' in request:
@@ -194,7 +195,7 @@ class GetByIdResource(ChainCachedResource):
         try:
             req['json'] = self.update_chain(req['json'])
         except UnknownChainError:
-            return {'error': {'message': 'Chain "%s" not supported.' % chain}}, 400
+            return {'error': {'message': 'Chain "%s" not supported.' % self.chain}}, 400
 
         for required_property in self.chain_required_properties:
             if not AVAILABLE_CHAINS[self.chain]['properties'][required_property]:
@@ -245,7 +246,7 @@ class AddressResource(ChainCachedResource):
         try:
             req['json'] = self.update_chain(req['json'])
         except UnknownChainError:
-            return {'error': {'message': 'Chain "%s" not supported.' % chain}}, 400
+            return {'error': {'message': 'Chain "%s" not supported.' % self.chain}}, 400
 
         request = req['json']
         if not 'addresses' in request:
