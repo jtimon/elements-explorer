@@ -48,7 +48,7 @@ FLAGS = gflags.FLAGS
 # ===----------------------------------------------------------------------===
 
 from mintools import zmqmin
-from lib import minql
+from mintools import minql
 
 import time
 time.sleep(1)

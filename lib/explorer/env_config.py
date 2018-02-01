@@ -1,7 +1,7 @@
 
 import os
 
-from lib import minql
+from mintools import minql
 
 from lib.explorer.rpcdaemon import RpcCaller
 

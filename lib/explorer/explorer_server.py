@@ -2,7 +2,7 @@
 import json
 import datetime
 
-from lib import minql
+from mintools import minql
 from mintools import restmin
 
 from lib.explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
