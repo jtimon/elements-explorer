@@ -1,6 +1,6 @@
 
 from lib import restmin
-from lib import zmqmin
+from mintools import zmqmin
 
 from ... import MinqlClientFactory
 

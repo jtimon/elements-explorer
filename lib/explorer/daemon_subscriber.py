@@ -5,7 +5,7 @@ import json
 import multiprocessing
 import time
 
-from lib import zmqmin
+from mintools import zmqmin
 from lib import minql
 
 from lib.explorer.explorer_server import RpcCacher, GetById

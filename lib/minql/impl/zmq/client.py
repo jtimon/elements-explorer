@@ -1,5 +1,5 @@
 
-from lib import zmqmin
+from mintools import zmqmin
 
 from ...interface import MinqlBaseClient
 
