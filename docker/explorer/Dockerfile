@@ -19,6 +19,7 @@ RUN cd gui && npm i
 ADD docker/explorer/requirements.txt /build_docker/requirements.txt
 RUN pip install -r requirements.txt --require-hashes
 
+ADD mintools /build_docker/mintools
 ADD setup.py /build_docker/setup.py
 ADD lib /build_docker/lib
 RUN python /build_docker/setup.py develop
