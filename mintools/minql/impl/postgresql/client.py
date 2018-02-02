@@ -66,18 +66,18 @@ class PostgresqlMinqlClient(SqlMinqlClient):
             if 'index' in value and value['index']:
                 query = 'CREATE INDEX "%s_%s_index" ON "%s" ("%s");' % (
                     table_name, key, table_name, key)
-                cur = self.connection.cursor()
                 print(query)
+                cur = self.connection.cursor()
                 cur.execute(query)
                 self.connection.commit()
 
     # TODO postgres doesn't drop tables
     def _drop_table(self, table_name):
         print('postgres drop table', table_name)
-        cur = self.connection.cursor()
-        self.connection.set_isolation_level(0)
         query = 'DROP TABLE IF EXISTS "%s"' % table_name
         print(query)
+        cur = self.connection.cursor()
+        self.connection.set_isolation_level(0)
         # cur.execute('ALTER TABLE "%s" DROP CONSTRAINT  "%s"' % (
         #     table_name, table_name))
         cur.execute(query)

@@ -64,3 +64,6 @@ if FLAGS.schema:
 
     if FLAGS.dataset:
         c.put_dataset_from_file(FLAGS.dataset)
+
+# Force printing after completing (the process will keep running with ddb)
+raise NotImplementedError 

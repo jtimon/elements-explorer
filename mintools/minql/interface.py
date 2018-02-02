@@ -10,6 +10,7 @@ class MinqlBaseClient(object):
         raise NotImplementedError
 
     def drop_table(self, table_name):
+        print('drop_table %s' % table_name)
         try:
             self._drop_table(table_name)
         except:
@@ -52,6 +53,7 @@ class MinqlBaseClient(object):
 
     def put_table(self, table_name, schema):
         self.drop_table(table_name)
+        print('create_table %s' % table_name)
         self.create_table(table_name, schema)
 
     def put_schema(self, schema={}):
