@@ -81,7 +81,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
         # cur.execute('ALTER TABLE "%s" DROP CONSTRAINT  "%s"' % (
         #     table_name, table_name))
         cur.execute(query)
-        # self.connection.commit()
+        self.connection.commit()
 
     def get_criteria_string(self, criteria):
          if criteria:
