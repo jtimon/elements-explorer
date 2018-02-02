@@ -4,7 +4,7 @@ if __name__ != '__main__':
 
 import gflags
 
-gflags.DEFINE_string('address', u"localhost:1984", 
+gflags.DEFINE_string('address', u"localhost:1984",
                      u"Address clients will connect to")
 
 gflags.DEFINE_string('dbaddress', u"localhost:1984",
@@ -48,8 +48,8 @@ import time
 time.sleep(1)
 
 ddb = minql.ZmqMinqlServer(
-    FLAGS.dbtype, 
-    single=True, 
+    FLAGS.dbtype,
+    single=True,
     address=FLAGS.address,
     db_address=FLAGS.dbaddress,
     db_name=FLAGS.dbname,
@@ -72,3 +72,6 @@ if FLAGS.schema:
     c.put_schema(per_chain_schema)
     if FLAGS.dataset:
         c.put_dataset_from_file(FLAGS.dataset)
+
+# Force printing after completing (the process will keep running with ddb)
+raise NotImplementedError
