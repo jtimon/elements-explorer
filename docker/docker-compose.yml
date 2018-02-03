@@ -17,6 +17,8 @@ services:
     build:
       context: ../
       dockerfile: docker/explorer/Dockerfile
+    volumes:
+      - ../../explorer-data/target:/root/target
     ports:
       - "5000:5000"
     networks:
