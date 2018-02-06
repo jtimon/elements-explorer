@@ -21,11 +21,3 @@ class Blockstats(ormin.Model):
 class Mempoolstats(ormin.Model):
     time = ormin.IntField(index=True)
     blob = ormin.TextField()
-
-ORMIN_DOMAIN = ormin.Domain([
-    Chaininfo,
-    Block,
-    Tx,
-    Blockstats,
-    Mempoolstats,
-])
