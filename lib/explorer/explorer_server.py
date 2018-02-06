@@ -7,14 +7,6 @@ from mintools import restmin
 
 from lib.explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
 
-class RpcCacher(object):
-
-    def __init__(self, rpccaller, db_client):
-        super(RpcCacher, self).__init__()
-
-        self.rpccaller = rpccaller
-        self.db_client = db_client
-
 def RpcFromId(rpccaller, resource, req_id):
     if resource == 'blockstats':
         return rpccaller.RpcCall('getblockstats', {'height': req_id})
@@ -201,7 +193,7 @@ class GetByIdResource(ChainCachedResource):
         for required_property in self.chain_required_properties:
             if not AVAILABLE_CHAINS[self.chain]['properties'][required_property]:
                 return {'error': {'message': 'API resource %s is not supported by chain %s' % (self.resource, self.chain)}}, 400
-        
+
         request = req['json']
         if not 'id' in request:
             return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}, 400

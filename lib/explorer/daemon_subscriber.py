@@ -8,7 +8,7 @@ import time
 from mintools import zmqmin
 from mintools import minql
 
-from lib.explorer.explorer_server import RpcCacher, GetById
+from lib.explorer.explorer_server import GetById
 
 MEMPOOL_STATS_INTERVALS = (
     range(1, 5) + range(5, 30, 5) + range(30, 100, 10) +
@@ -23,6 +23,14 @@ def BtcStrToSatInt(btc_str):
 def FeerateFromBtcFeeStrAndVsize(btc_str, vsize):
     fee_sat = BtcStrToSatInt(btc_str)
     return int(fee_sat / vsize)
+
+class RpcCacher(object):
+
+    def __init__(self, rpccaller, db_client):
+        super(RpcCacher, self).__init__()
+
+        self.rpccaller = rpccaller
+        self.db_client = db_client
 
 class ChainCacher(RpcCacher):
 
@@ -336,7 +344,7 @@ class DaemonReorgManager(GreedyCacher):
         if not block:
             print('FAILED update_tip block.get(%s) returned empty block' % block_hash)
             return
-        
+
         block_height = block['height']
 
         if not self.prev_reorg_hash:
