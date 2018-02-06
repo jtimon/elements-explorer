@@ -68,3 +68,5 @@ def write_json(path, value, ugly=False):
             json.dump(value, outfile, sort_keys=True, indent=2)
 
 from .impl.zmq import ZmqMinqlServer
+
+from .migration import get_migration_schema, Migration
