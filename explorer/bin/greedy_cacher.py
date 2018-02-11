@@ -5,7 +5,7 @@ if __name__ != '__main__':
 import gflags
 
 gflags.DEFINE_string('chain', u"bitcoin",
-                     u"Chain to subscribe to for caching mempool stats")
+                     u"Chain to greedy cache for")
 
 try:
     import sys
@@ -17,11 +17,8 @@ FLAGS = gflags.FLAGS
 
 # ===----------------------------------------------------------------------===
 
-from lib.explorer.daemon_subscriber import MempoolStatsCacher, MempoolSaver
-from lib.explorer.env_config import mempool_cacher_params, mempool_saver_params
+from explorer.daemon_subscriber import GreedyCacher
+from explorer.env_config import greedy_cacher_params
 
-mempool_cacher = MempoolStatsCacher(*mempool_cacher_params(FLAGS.chain))
-mempool_cacher.start()
-
-mempool_saver = MempoolSaver(*mempool_saver_params(FLAGS.chain))
-mempool_saver.start()
+greedy_cacher = GreedyCacher(*greedy_cacher_params(FLAGS.chain))
+greedy_cacher.start()

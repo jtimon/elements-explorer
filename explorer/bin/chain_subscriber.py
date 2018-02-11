@@ -5,7 +5,7 @@ if __name__ != '__main__':
 import gflags
 
 gflags.DEFINE_string('chain', u"bitcoin",
-                     u"Chain to greedy cache for")
+                     u"Chain to subscribe to")
 
 try:
     import sys
@@ -17,8 +17,8 @@ FLAGS = gflags.FLAGS
 
 # ===----------------------------------------------------------------------===
 
-from lib.explorer.daemon_subscriber import GreedyCacher
-from lib.explorer.env_config import greedy_cacher_params
+from explorer.daemon_subscriber import DaemonSubscriber
+from explorer.env_config import subscriber_params
 
-greedy_cacher = GreedyCacher(*greedy_cacher_params(FLAGS.chain))
-greedy_cacher.start()
+daemon_subscriber = DaemonSubscriber(*subscriber_params(FLAGS.chain))
+daemon_subscriber.start()

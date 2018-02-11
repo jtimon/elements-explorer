@@ -1,7 +1,7 @@
 
 from mintools import ormin
 
-from .model import *
+from explorer.model import *
 
 ORMIN_DOMAIN = ormin.Domain([
     Chaininfo,

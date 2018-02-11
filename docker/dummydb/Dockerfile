@@ -8,8 +8,8 @@ ADD docker/dummydb/requirements.txt /build_docker/requirements.txt
 RUN pip install -r requirements.txt --require-hashes
 
 ADD mintools /build_docker/mintools
+ADD explorer /build_docker/explorer
 ADD setup.py /build_docker/setup.py
-ADD lib /build_docker/lib
 RUN python /build_docker/setup.py develop
 
 ADD docker/dummydb/Procfile /build_docker/docker/dummydb/Procfile

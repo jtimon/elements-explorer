@@ -3,7 +3,7 @@ import os
 
 from mintools import minql
 
-from lib.explorer.rpcdaemon import RpcCaller
+from explorer.rpcdaemon import RpcCaller
 
 DEFAULT_CHAIN = 'bitcoin'
 

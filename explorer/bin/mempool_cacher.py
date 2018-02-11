@@ -5,7 +5,7 @@ if __name__ != '__main__':
 import gflags
 
 gflags.DEFINE_string('chain', u"bitcoin",
-                     u"Chain to manage reorgs for")
+                     u"Chain to subscribe to for caching mempool stats")
 
 try:
     import sys
@@ -17,8 +17,11 @@ FLAGS = gflags.FLAGS
 
 # ===----------------------------------------------------------------------===
 
-from lib.explorer.daemon_subscriber import DaemonReorgManager
-from lib.explorer.env_config import reorg_cron_params
+from explorer.daemon_subscriber import MempoolStatsCacher, MempoolSaver
+from explorer.env_config import mempool_cacher_params, mempool_saver_params
 
-daemon_reorg_cron = DaemonReorgManager(*reorg_cron_params(FLAGS.chain))
-daemon_reorg_cron.start()
+mempool_cacher = MempoolStatsCacher(*mempool_cacher_params(FLAGS.chain))
+mempool_cacher.start()
+
+mempool_saver = MempoolSaver(*mempool_saver_params(FLAGS.chain))
+mempool_saver.start()

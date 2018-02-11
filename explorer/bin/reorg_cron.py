@@ -5,7 +5,7 @@ if __name__ != '__main__':
 import gflags
 
 gflags.DEFINE_string('chain', u"bitcoin",
-                     u"Chain to subscribe to")
+                     u"Chain to manage reorgs for")
 
 try:
     import sys
@@ -17,8 +17,8 @@ FLAGS = gflags.FLAGS
 
 # ===----------------------------------------------------------------------===
 
-from lib.explorer.daemon_subscriber import DaemonSubscriber
-from lib.explorer.env_config import subscriber_params
+from explorer.daemon_subscriber import DaemonReorgManager
+from explorer.env_config import reorg_cron_params
 
-daemon_subscriber = DaemonSubscriber(*subscriber_params(FLAGS.chain))
-daemon_subscriber.start()
+daemon_reorg_cron = DaemonReorgManager(*reorg_cron_params(FLAGS.chain))
+daemon_reorg_cron.start()

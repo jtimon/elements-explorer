@@ -8,7 +8,7 @@ import time
 from mintools import zmqmin
 from mintools import minql
 
-from lib.explorer.explorer_server import GetById
+from explorer.explorer_server import GetById
 
 MEMPOOL_STATS_INTERVALS = (
     range(1, 5) + range(5, 30, 5) + range(30, 100, 10) +
