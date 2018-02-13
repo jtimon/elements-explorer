@@ -5,6 +5,7 @@ import datetime
 from mintools import minql
 from mintools import restmin
 
+from explorer import model
 from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
 
 def RpcFromId(rpccaller, resource, req_id):
@@ -69,11 +70,18 @@ def TryRpcAndCacheFromId(db_client, rpccaller, chain, resource, req_id):
 
 def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
     try:
-        db_result = db_client.get(chain + "_" + resource, req_id)
+        db_result = None
+        if resource == 'chaininfo':
+            return model.Chaininfo.get(req_id, namespace=chain, minql_client=db_client).json()
+        elif resource == 'block':
+            db_result = model.Block.get(req_id, namespace=chain, minql_client=db_client).json()
+        elif resource == 'blockstats':
+            db_result = model.Blockstats.get(req_id, namespace=chain, minql_client=db_client).json()
+        elif resource == 'tx':
+            db_result = model.Tx.get(req_id, namespace=chain, minql_client=db_client).json()
+
         if not db_result:
             return {'error': {'message': 'No result db for %s.' % resource}}
-        if resource == 'chaininfo':
-            return db_result
         if not 'blob' in db_result:
             return {'error': {'message': 'No blob result db for %s.' % resource}}
         json_result = json.loads(db_result['blob'])
@@ -81,7 +89,6 @@ def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
         json_result = TryRpcAndCacheFromId(db_client, rpccaller, chain, resource, req_id)
     except:
         return {'error': {'message': 'Error getting %s from db by id %s.' % (resource, req_id)}}
-
     return json_result
 
 def GetBlockByHeight(db_client, rpccaller, chain, height):
