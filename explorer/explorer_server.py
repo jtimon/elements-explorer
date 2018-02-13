@@ -93,16 +93,16 @@ def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
 
 def GetBlockByHeight(db_client, rpccaller, chain, height):
     criteria = {'height': height}
-    count_by_height = db_client.search(chain + "_" + 'block', criteria)
-    if len(count_by_height) > 1:
+    block_by_height = model.Block.search(criteria, namespace=chain, minql_client=db_client)
+    if len(block_by_height) > 1:
         return {'error': {'message': 'More than one block cached for height %s' % height}}
-    if len(count_by_height) == 1:
-        return json.loads(count_by_height[0]['blob'])
+    if len(block_by_height) == 1:
+        return json.loads(block_by_height[0].blob)
 
-    json_result = rpccaller.RpcCall('getblockhash', {'height': height})
-    if 'error' in json_result:
-        return json_result
-    return GetByIdBase(db_client, rpccaller, chain, 'block', json_result)
+    blockhash = rpccaller.RpcCall('getblockhash', {'height': height})
+    if 'error' in blockhash:
+        return blockhash
+    return model.Block.get(blockhash, namespace=chain, minql_client=db_client).json()
 
 def GetById(db_client, rpccaller, chain, resource, req_id):
     if resource == 'blockheight':
