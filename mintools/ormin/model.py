@@ -54,21 +54,41 @@ class Model(form.Form):
         self.id = id
 
     @classmethod
-    def get(cls, id):
-        obj = cls.db().get(cls.get_name(), id)
+    def get_minql_client(cls, minql_client=None):
+        if minql_client:
+            l_minql_client = minql_client
+        else:
+            l_minql_client = cls.db()
+        return l_minql_client
+
+    @classmethod
+    def get_namspace_name(cls, namespace=None):
+        if namespace:
+            l_name = namespace + '_' + cls.get_name()
+        else:
+            l_name = cls.get_name()
+        return l_name
+
+    @classmethod
+    def get(cls, id, minql_client=None, namespace=None):
+        l_minql_client = cls.get_minql_client(minql_client)
+        l_name = cls.get_namspace_name(namespace)
+        obj = l_minql_client.get(l_name, id)
         return cls(obj)
 
     @classmethod
-    def search(cls, criteria={}):
+    def search(cls, criteria={}, minql_client=None, namespace=None):
+        l_minql_client = cls.get_minql_client(minql_client)
+        l_name = cls.get_namspace_name(namespace)
         for k, c in criteria.iteritems():
             if not c:
                 raise Exception(criteria)
-        objs = cls.db().search(cls.get_name(), criteria)
+        objs = l_minql_client.search(l_name, criteria)
         return cls.parse_json_list(objs)
 
     @classmethod
-    def all(cls):
-        return cls.search()
+    def all(cls, minql_client=None, namespace=None):
+        return cls.search(minql_client=minql_client, namespace=namespace)
 
     def save(self):
         self.validate()
