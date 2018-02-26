@@ -2,6 +2,8 @@
 /.tmp
 /gui/node_modules
 /gui2/node_modules
+/gui2/public/css/styles.css
 *.pyc
 /.build
 .explorer-data
+.DS_Store

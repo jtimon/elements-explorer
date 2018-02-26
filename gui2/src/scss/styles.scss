@@ -1,0 +1,160 @@
+
+$teal: #28948f;
+$light-blue: #00ccff;
+$grey: #78838e;
+$dark-grey: #22242c;
+$black: #15191e;
+$black-background: #0f1318;
+
+$navbar-height: 76px;
+$footer-height: 60px;
+
+@font-face {
+    font-family: DINPro;
+    src: url("../font/DINPro-Regular.otf") format("opentype");
+}
+
+@font-face {
+    font-family: DINPro;
+    font-weight: bold;
+    src: url("../font/DINPro-Medium.otf") format("opentype");
+}
+
+@mixin table() {
+    & {
+        display: table;
+        table-layout:fixed;
+        width: 100%;
+    }
+    & > * {
+        display: table-cell;
+        vertical-align: middle;
+    }
+}
+
+@mixin prefix($property, $value, $prefixes: ()) {
+    @each $prefix in $prefixes {
+        #{'-' + $prefix + '-' + $property}: $value;
+    }
+    #{$property}: $value;
+}
+
+@mixin clickable() {
+    @include prefix(user-select, none, webkit moz o ms);
+    -webkit-touch-callout: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+body {
+    font-family: DINPro;
+    color: #fff;
+    background-color: $black-background;
+    margin-bottom: $footer-height;
+}
+
+a, a:link, a:visited, a:hover, a:focus {
+    color: $light-blue;
+    text-decoration: none;
+}
+
+.navbar {
+    margin-bottom: calc(#{$navbar-height} * -1);
+    background-color: rgba(26, 31, 38, 0.6);
+}
+
+.jumbotron-fluid {
+    background-image: url("../img/Header-a-HD.png");
+    background-position: center center;
+    height: 346px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: calc(#{$navbar-height} + 64px);
+    margin-bottom: 3.5rem;
+    h1 {
+      margin-bottom: 2rem;
+    }
+    .block-dropdowns {
+        display: flex;
+        flex-direction: row;
+        & > div {
+          @include table;
+          @include clickable;
+          height: 40px;
+          background-color: $dark-grey;
+          border-radius: 2px;
+          border: 1px solid $teal;
+          &.date-dropdown {
+            width: 220px;
+          }
+          &.time-dropdown {
+            width: 184px;
+            margin-left: 12px;
+          }
+          & > div:nth-child(1) {
+            width: 42px;
+            padding-right: 12px;
+            & > img {
+              width: 30px;
+            }
+          }
+          & > div:nth-child(2) {
+            font-size: 14px;
+            font-weight: 600;
+          }
+          & > div:nth-child(3) {
+            width: 42px;
+            padding-left: 12px;
+            & > img {
+              width: 30px;
+            }
+          }
+        }
+    }
+}
+
+body, .navbar, .jumbotron-fluid, footer {
+    & > .container {
+      max-width: 1000px;
+    }
+}
+
+.blocks-table {
+    .blocks-table-row {
+        @include table;
+        &.header, &.block-data {
+            height: 52px;
+            & > * {
+                font-size: 16px;
+            }
+        }
+        &.header {
+            & > * {
+                text-transform: uppercase;
+                color: $grey;
+                font-weight: 600;
+            }
+        }
+        &.block-data {
+            border-top: 1px $dark-grey solid;
+            & > * {
+                font-size: 16px;
+            }
+        }
+    }
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: $footer-height; /* Set the fixed height of the footer here */
+  line-height: $footer-height; /* Vertically center the text there */
+  background-color: #000;
+  & > .container {
+    @include table;
+    & > *:nth-child(2) {
+      text-align: right;
+    }
+  }
+}
