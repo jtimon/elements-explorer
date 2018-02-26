@@ -25,10 +25,6 @@ GUI2_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..',
 def index():
     return app.send_static_file('index.html')
 
-@app.route('/<path:filename>')
-def send_file(filename):
-    return app.send_static_file(filename)
-
 @app.route('/gui2/', defaults={'path': ''})
 @app.route('/gui2/<path:path>')
 def index_gui2(path):
