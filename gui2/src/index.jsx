@@ -9,8 +9,10 @@ class Body extends Component {
     render() {
         return (
           <div className="explorer-container">
-            <Navbar />
-            <RecentBlocks />
+            <div class="content-wrap">
+              <Navbar />
+              <RecentBlocks />
+            </div>
             <Footer />
           </div>
         );

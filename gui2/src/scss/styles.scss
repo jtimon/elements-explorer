@@ -50,12 +50,16 @@ body {
     font-family: DINPro;
     color: #fff;
     background-color: $black-background;
-    margin-bottom: $footer-height;
 }
 
 a, a:link, a:visited, a:hover, a:focus {
     color: $light-blue;
     text-decoration: none;
+}
+
+.content-wrap {
+  min-height: calc(100vh - #{$footer-height} - 24px);
+  margin-bottom: 24px;
 }
 
 .navbar {
@@ -145,8 +149,6 @@ body, .navbar, .jumbotron-fluid, footer {
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
   width: 100%;
   height: $footer-height; /* Set the fixed height of the footer here */
   line-height: $footer-height; /* Vertically center the text there */
