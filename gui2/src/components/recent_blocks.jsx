@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import { Link } from 'react-router-dom';
 
 import utils from '../utils.js';
 
 import Jumbotron from './jumbotron.jsx';
+import RecentBlocksJumbotron from './jumbotron_recent_blocks.jsx';
 
 class RecentBlocks extends Component {
     constructor(props) {
@@ -61,7 +63,7 @@ class RecentBlocks extends Component {
                 let time = new Date(block.mediantime * 1000);
                 return (
                   <div className="blocks-table-row block-data" key={block.height}>
-                    <div className="blocks-table-cell"><a href="#">{block.height}</a></div>
+                    <div className="blocks-table-cell"><Link to={'/block/' + block.hash}>{block.height}</Link></div>
                     <div className="blocks-table-cell">{time.toString()}</div>
                     <div className="blocks-table-cell">{block.tx_count}</div>
                     <div className="blocks-table-cell">{block.size}</div>
@@ -72,7 +74,7 @@ class RecentBlocks extends Component {
         let blocks = this.state.recent_blocks;
         return (
           <div>
-            <Jumbotron />
+            <Jumbotron component={RecentBlocksJumbotron} />
             <div className="container">
               <div className="blocks-table">
                 <div className="blocks-table-row header">
