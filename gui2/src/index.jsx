@@ -9,7 +9,7 @@ class Body extends Component {
     render() {
         return (
           <div className="explorer-container">
-            <div class="content-wrap">
+            <div className="content-wrap">
               <Navbar />
               <RecentBlocks />
             </div>
