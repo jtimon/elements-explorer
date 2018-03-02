@@ -75,8 +75,16 @@ a, a:link, a:visited, a:hover, a:focus {
     background-size: cover;
     padding-top: calc(#{$navbar-height} + 64px);
     margin-bottom: 3.5rem;
+    &.block-page {
+      background-image: url("../img/Header-b-HD.png");
+    }
     h1 {
       margin-bottom: 2rem;
+    }
+    .block-hash {
+      img {
+        width: 30px;
+      }
     }
     .block-dropdowns {
         display: flex;
@@ -113,7 +121,54 @@ a, a:link, a:visited, a:hover, a:focus {
               width: 30px;
             }
           }
-        }
+       }
+    }
+    .prev-next-blocks-btns {
+        @include table;
+        & > div {
+          a, a:link, a:visited, a:hover, a:focus {
+              color: #fff;
+              text-decoration: none;
+              text-transform: uppercase;
+              font-size: 14px;
+              font-weight: 400;
+          }
+          a > div {
+            @include table;
+            width: 140px !important;
+            height: 40px;
+            border: 1px solid $light-blue;
+            border-radius: 2px;
+            background-color: $dark-grey;
+         }
+         &:nth-child(1) {
+           a > div {
+             & > div:nth-child(1) {
+               width: 30px;
+               img {
+                 width: 30px;
+               }
+             }
+             & > div:nth-child(2) {
+               text-align: center;
+             }
+           }
+         }
+         &:nth-child(2) {
+           a > div {
+             float: right;
+             & > div:nth-child(1) {
+               text-align: center;
+             }
+             & > div:nth-child(2) {
+               width: 30px;
+               img {
+                 width: 30px;
+               }
+             }
+           }
+         }
+       }
     }
 }
 

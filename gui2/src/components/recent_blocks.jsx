@@ -32,9 +32,9 @@ class RecentBlocks extends Component {
         }
 
         let recentBlocks = this.state.recent_blocks;
-        utils.api_chaininfo()
+        utils.apiChainInfo()
         .then((data) => {
-            let promise = utils.api_getblock(data.bestblockhash)
+            let promise = utils.apiGetBlockByHash(data.bestblockhash)
                 .then((block) => {
                     return block;
                 })
@@ -43,7 +43,7 @@ class RecentBlocks extends Component {
             for (var i = 0; i < 9; i++) {
                 promise = promise.then((blockhash) => {
                   if (blockhash) {
-                      return utils.api_getblock(blockhash).then(processBlock);
+                      return utils.apiGetBlockByHash(blockhash).then(processBlock);
                   }
                   return null;
                 });
