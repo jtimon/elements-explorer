@@ -138,7 +138,7 @@ a, a:link, a:visited, a:hover, a:focus {
             width: 140px !important;
             height: 40px;
             border: 1px solid $light-blue;
-            border-radius: 2px;
+            border-radius: 5px;
             background-color: $dark-grey;
          }
          &:nth-child(1) {
@@ -201,6 +201,22 @@ body, .navbar, .jumbotron-fluid, footer {
             }
         }
     }
+}
+
+.block-stats-table {
+  & > div {
+    @include table;
+    height: 52px;
+    border-top: 1px $dark-grey solid;
+    font-size: 16px;
+    & > div:nth-child(1) {
+      text-transform: uppercase;
+      color: $grey;
+    }
+    & > div:nth-child(2) {
+      text-align: right;
+    }
+  }
 }
 
 .footer {

@@ -34,13 +34,39 @@ class BlockPage extends Component {
 
     render() {
         let block = this.state.block;
+        let time = new Date(block.mediantime * 1000);
         return (
           <div>
             <Jumbotron component={(props) => (
                 <BlockJumbotron block={block} />
             )} pageType={'block-page'} />
             <div className="container">
-              <p>This block: {block.hash}</p>
+              <div className="block-stats-table">
+                <div>
+                  <div>Height</div>
+                  <div>{block.height}</div>
+                </div>
+                <div>
+                  <div>Confirmations</div>
+                  <div>{block.confirmations}</div>
+                </div>
+                <div>
+                  <div>Timestamp</div>
+                  <div>{time.toString()}</div>
+                </div>
+                <div>
+                  <div>Size (KB)</div>
+                  <div>{block.size}</div>
+                </div>
+                <div>
+                  <div>Weight (KWU)</div>
+                  <div>{block.weight}</div>
+                </div>
+                <div>
+                  <div>Version</div>
+                  <div>{block.version}</div>
+                </div>
+              </div>
             </div>
           </div>
         );
