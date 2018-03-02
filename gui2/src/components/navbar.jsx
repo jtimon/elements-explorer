@@ -7,9 +7,9 @@ class Navbar extends Component {
         return (
           <nav className="navbar">
             <div className="container">
-              <a className="navbar-brand" href="/gui2/">
+              <Link className="navbar-brand" to="/gui2/">
                 <img src="/gui2/static/img/icons/Menu-logo.svg" height="50" className="d-inline-block align-top" alt="" />
-              </a>
+              </Link>
             </div>
           </nav>
         );
