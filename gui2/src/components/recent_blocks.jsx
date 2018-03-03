@@ -63,7 +63,7 @@ class RecentBlocks extends Component {
                 let time = new Date(block.mediantime * 1000);
                 return (
                   <div className="blocks-table-row block-data" key={block.height}>
-                    <div className="blocks-table-cell"><Link to={'/block/' + block.hash}>{block.height}</Link></div>
+                    <div className="blocks-table-cell"><Link to={'/gui2/block/' + block.hash}>{block.height}</Link></div>
                     <div className="blocks-table-cell">{time.toString()}</div>
                     <div className="blocks-table-cell">{block.tx_count}</div>
                     <div className="blocks-table-cell">{block.size}</div>

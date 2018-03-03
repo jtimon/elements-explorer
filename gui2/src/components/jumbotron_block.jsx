@@ -17,7 +17,7 @@ class BlockJumbotron extends Component {
               <p className="block-hash">{block.hash} <img src="/gui2/static/img/icons/code.svg" /></p>
               <div className="prev-next-blocks-btns">
                 <div>
-                  <Link to={'/block/' + previousBlock}>
+                  <Link to={'/gui2/block/' + previousBlock}>
                     <div>
                       <div>
                         <img src="/gui2/static/img/icons/Arrow-left-blue.svg" />
@@ -29,7 +29,7 @@ class BlockJumbotron extends Component {
                   </Link>
                 </div>
                 <div>
-                  <Link to={'/block/' + nextBlock}>
+                  <Link to={'/gui2/block/' + nextBlock}>
                     <div>
                       <div>
                         <span>Next</span>
