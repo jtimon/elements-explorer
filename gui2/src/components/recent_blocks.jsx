@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Link } from 'react-router-dom';
 
-import utils from '../utils.js';
+import api from '../api.js';
+import format from '../utils/format.js';
 
 import Jumbotron from './jumbotron.jsx';
 import RecentBlocksJumbotron from './jumbotron_recent_blocks.jsx';
@@ -32,9 +33,9 @@ class RecentBlocks extends Component {
         }
 
         let recentBlocks = this.state.recent_blocks;
-        utils.apiChainInfo()
+        api.apiChainInfo()
         .then((data) => {
-            let promise = utils.apiGetBlockByHash(data.bestblockhash)
+            let promise = api.apiGetBlockByHash(data.bestblockhash)
                 .then((block) => {
                     return block;
                 })
@@ -43,7 +44,7 @@ class RecentBlocks extends Component {
             for (var i = 0; i < 9; i++) {
                 promise = promise.then((blockhash) => {
                   if (blockhash) {
-                      return utils.apiGetBlockByHash(blockhash).then(processBlock);
+                      return api.apiGetBlockByHash(blockhash).then(processBlock);
                   }
                   return null;
                 });
@@ -60,11 +61,11 @@ class RecentBlocks extends Component {
         function generateBlocksRows() {
             return blocks
               .map((block) => {
-                let time = new Date(block.mediantime * 1000);
+                let time = format.formatDate(block.mediantime * 1000);
                 return (
                   <div className="blocks-table-row block-data" key={block.height}>
                     <div className="blocks-table-cell"><Link to={'/gui2/block/' + block.hash}>{block.height}</Link></div>
-                    <div className="blocks-table-cell">{time.toString()}</div>
+                    <div className="blocks-table-cell">{time}</div>
                     <div className="blocks-table-cell">{block.tx_count}</div>
                     <div className="blocks-table-cell">{block.size}</div>
                     <div className="blocks-table-cell">{block.weight}</div>

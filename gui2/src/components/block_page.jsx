@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Link } from 'react-router-dom';
 
-import utils from '../utils.js';
+import api from '../api.js';
+import format from '../utils/format.js';
 
 import Jumbotron from './jumbotron.jsx';
 import BlockJumbotron from './jumbotron_block.jsx';
@@ -31,13 +32,13 @@ class BlockPage extends Component {
         }
         let loadedBlock = {};
         let loadedTransactions = [];
-        utils.apiGetBlockByHash(blockhash)
+        api.apiGetBlockByHash(blockhash)
         .then((block) => {
             loadedBlock = block;
             let promise = Promise.resolve();
             for (let i = 0; i < block.tx.length; i++) {
                promise = promise.then(() => {
-                 return utils.apiGetTransaction(block.tx[i]).then(processTx);
+                 return api.apiGetTransaction(block.tx[i]).then(processTx);
                });
             }
             return promise;
@@ -62,7 +63,8 @@ class BlockPage extends Component {
         }
         let loadedTransactions = this.state.transactions;
         let block = this.state.block;
-        let time = new Date(block.mediantime * 1000);
+        let time = block.mediantime;
+        let formattedTime = time ? format.formatDate(time * 1000) : '';
         let transactionCount = (block.tx) ? block.tx.length : 0;
         return (
           <div>
@@ -81,7 +83,7 @@ class BlockPage extends Component {
                 </div>
                 <div>
                   <div>Timestamp</div>
-                  <div>{time.toString()}</div>
+                  <div>{formattedTime}</div>
                 </div>
                 <div>
                   <div>Size (KB)</div>

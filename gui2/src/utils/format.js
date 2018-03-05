@@ -1,3 +1,4 @@
+import moment from 'moment-timezone';
 
 function formatNumber(num) {
     let numString = num.toString();
@@ -11,6 +12,11 @@ function formatNumber(num) {
     return formattedNumber.join('');
 }
 
+function formatDate(date, format = "ddd, D MMM YYYY HH:mm:ss zz") {
+    return moment(date).tz(moment.tz.guess()).format(format).toString();
+}
+
 module.exports = {
+    formatDate,
     formatNumber
 }
