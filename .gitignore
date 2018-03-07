@@ -3,6 +3,7 @@
 /gui/node_modules
 /gui2/node_modules
 /gui2/public/css/styles.css
+/gui2/public/css/mixins.css
 /gui2/public/js/bundle.js
 *.pyc
 /.build

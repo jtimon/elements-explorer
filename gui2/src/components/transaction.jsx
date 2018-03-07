@@ -78,7 +78,7 @@ class Transaction extends Component {
               </div>
               <div></div>
               <div>
-                <span>Confirmations</span>
+                <span>{this.props.block.confirmations} Confirmations</span>
                 <span></span>
               </div>
             </div>

@@ -1,4 +1,6 @@
 
+@import 'mixins';
+
 $teal: #28948f;
 $light-blue: #00ccff;
 $grey: #78838e;
@@ -18,32 +20,6 @@ $footer-height: 60px;
     font-family: DINPro;
     font-weight: bold;
     src: url("../font/DINPro-Medium.otf") format("opentype");
-}
-
-@mixin table() {
-    & {
-        display: table;
-        table-layout:fixed;
-        width: 100%;
-    }
-    & > * {
-        display: table-cell;
-        vertical-align: middle;
-    }
-}
-
-@mixin prefix($property, $value, $prefixes: ()) {
-    @each $prefix in $prefixes {
-        #{'-' + $prefix + '-' + $property}: $value;
-    }
-    #{$property}: $value;
-}
-
-@mixin clickable() {
-    @include prefix(user-select, none, webkit moz o ms);
-    -webkit-touch-callout: none;
-    user-select: none;
-    cursor: pointer;
 }
 
 body {
@@ -218,6 +194,43 @@ body, .navbar, .jumbotron-fluid, footer {
     }
     & > div:nth-child(2) {
       text-align: right;
+    }
+  }
+}
+
+.transaction-stats {
+  margin-top: 84px;
+  & > .transaction-stats-boxes {
+    margin: 32px -10px 30px;
+    & > .box-wrapper {
+      flex: 1;
+      margin: 0 10px;
+      & > .transaction-stats-box {
+        .box-header {
+          border-radius: 5px 5px 0 0;
+          background-color: $dark-grey;
+          height: 52px;
+          line-height: 52px;
+          text-transform: uppercase;
+          padding: 0 46px;
+        }
+        .box-body {
+          border-radius: 0 0 5px 5px;
+          background-color: $black;
+          padding: 0 46px;
+          & > div {
+            @include table;
+            height: 57px;
+            & > span:nth-child(1) {
+                text-transform: uppercase;
+                color: $grey;
+            }
+            & > span:nth-child(2) {
+                text-align: right;
+            }
+          }
+        }
+      }
     }
   }
 }

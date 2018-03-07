@@ -1,0 +1,26 @@
+
+@mixin table() {
+    & {
+        display: table;
+        table-layout:fixed;
+        width: 100%;
+    }
+    & > * {
+        display: table-cell;
+        vertical-align: middle;
+    }
+}
+
+@mixin prefix($property, $value, $prefixes: ()) {
+    @each $prefix in $prefixes {
+        #{'-' + $prefix + '-' + $property}: $value;
+    }
+    #{$property}: $value;
+}
+
+@mixin clickable() {
+    @include prefix(user-select, none, webkit moz o ms);
+    -webkit-touch-callout: none;
+    user-select: none;
+    cursor: pointer;
+}

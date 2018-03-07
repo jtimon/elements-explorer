@@ -58,6 +58,26 @@ function apiGetBlockByHeight(id) {
   });
 }
 
+function apiGetBlockStats(id) {
+  const url = 'http://localhost:5000/api/v0/blockstats'
+  let requestParams = {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        chain: 'testnet3',
+        id: id
+      })
+  }
+  return fetch(url, requestParams)
+  .then((response) => {
+    return response.json();
+  }).then((data) => {
+    return data;
+  });
+}
+
 function apiGetTransaction(id) {
   const url = 'http://localhost:5000/api/v0/tx'
   let requestParams = {
@@ -82,5 +102,6 @@ module.exports = {
   apiChainInfo,
   apiGetBlockByHash,
   apiGetBlockByHeight,
+  apiGetBlockStats,
   apiGetTransaction
 }
