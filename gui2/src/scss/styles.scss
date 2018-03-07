@@ -207,8 +207,11 @@ body, .navbar, .jumbotron-fluid, footer {
   & > div {
     @include table;
     height: 52px;
-    border-top: 1px $dark-grey solid;
+    border-top: 1px solid $dark-grey;
     font-size: 16px;
+    &:last-child {
+      border-bottom: 1px solid $dark-grey;
+    }
     & > div:nth-child(1) {
       text-transform: uppercase;
       color: $grey;
@@ -219,7 +222,103 @@ body, .navbar, .jumbotron-fluid, footer {
   }
 }
 
-.footer {
+.transactions {
+  margin-top: 84px;
+}
+
+.transaction-box:not(:first-of-type) {
+  margin-top: 24px;
+}
+.transaction-box {
+  background-color: $black;
+  padding: 0 24px;
+  border-radius: 5px;
+  & > .header {
+    @include table;
+    height: 88px;
+    a {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    & > div:nth-child(2) {
+      width: 200px;
+      & > div {
+        @include table;
+        @include clickable;
+        width: 200px;
+        height: 34px;
+        border: 1px solid $teal;
+        border-radius: 2px;
+        color: $teal;
+        float: right;
+        text-transform: uppercase;
+        font-size: 14px;
+        & > div:nth-child(1) {
+          text-align: center;
+        }
+        & > div:nth-child(2) {
+          width: 30px;
+        }
+      }
+    }
+  }
+  & > .ins-and-outs {
+    @include table;
+    & > div {
+      vertical-align: top;
+    }
+    & > .vins, .vouts {
+      & > div {
+        &:not(:first-child) {
+          margin-top: 12px;
+        }
+        background-color: $dark-grey;
+        border-radius: 5px;
+        height: 46px;
+        line-height: 46px;
+        font-size: 14px;
+        padding: 0 24px;
+      }
+    }
+    & > div:nth-child(2) {
+      width: 74px;
+      padding: 0 12px;
+      & > div {
+        height: 46px;
+        & > .helper {
+          display: inline-block;
+          height: 100%;
+          vertical-align: middle;
+        }
+        img {
+          vertical-align: middle;
+          width: 50px;
+        }
+      }
+    }
+  }
+  & > .footer {
+    @include table;
+    height: 64px;
+    & > div:nth-child(1) {
+      & > span:nth-child(1) {
+        color: $grey;
+        text-transform: uppercase;
+        margin-right: 36px;
+      }
+    }
+    & > div:nth-child(2) {
+      width: 74px;
+    }
+    & > div:nth-child(3) {
+      text-align: right;
+      text-transform: uppercase;
+      color: $teal;
+    }
+  }
+}
+
+.explorer-container > .footer {
   width: 100%;
   height: $footer-height; /* Set the fixed height of the footer here */
   line-height: $footer-height; /* Vertically center the text there */

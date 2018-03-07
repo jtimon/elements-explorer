@@ -7,6 +7,7 @@ import format from '../utils/format.js';
 
 import Jumbotron from './jumbotron.jsx';
 import BlockJumbotron from './jumbotron_block.jsx';
+import Transaction from './transaction.jsx';
 
 class BlockPage extends Component {
     constructor(props) {
@@ -28,7 +29,19 @@ class BlockPage extends Component {
 
     loadBlock(blockhash) {
         function processTx(tx) {
+          let promise = Promise.resolve();
+          for (let i = 0; i < tx.vin.length; i++) {
+              if (tx.vin[i].txid) {
+                let vout = tx.vin[i].vout;
+                 promise = promise.then(() => {
+                    return api.apiGetTransaction(tx.vin[i].txid).then((vin) => {
+                        tx.vin[i].tx = vin.vout[vout];
+                    })
+                 })
+              }
+          }
           loadedTransactions.push(tx);
+          return promise;
         }
         let loadedBlock = {};
         let loadedTransactions = [];
@@ -53,13 +66,9 @@ class BlockPage extends Component {
 
     render() {
         function generateTransactions() {
-           return loadedTransactions.map((tx) => {
-              return (
-                <div key={tx.txid}>
-                  <p>{tx.txid}</p>
-                </div>
-              )
-           })
+          return loadedTransactions.map((tx) => {
+            return (<Transaction key={tx.txid} tx={tx} time={formattedTime} />);
+          })
         }
         let loadedTransactions = this.state.transactions;
         let block = this.state.block;
@@ -98,7 +107,7 @@ class BlockPage extends Component {
                   <div>{block.version}</div>
                 </div>
               </div>
-              <div className="transactions-stats">
+              <div className="transactions">
                 <h3>{transactionCount} Transactions</h3>
                 {generateTransactions()}
               </div>
