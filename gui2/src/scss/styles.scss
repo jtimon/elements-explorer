@@ -22,6 +22,10 @@ $footer-height: 60px;
     src: url("../font/DINPro-Medium.otf") format("opentype");
 }
 
+.hide {
+  display: none !important;
+}
+
 body {
     font-family: DINPro;
     color: #fff;
@@ -287,10 +291,38 @@ body, .navbar, .jumbotron-fluid, footer {
         }
         background-color: $dark-grey;
         border-radius: 5px;
+        border: 1px solid $dark-grey;
         height: 46px;
         line-height: 46px;
         font-size: 14px;
-        padding: 0 24px;
+        &.active {
+          height: auto;
+        }
+        & > .vin-header, .vout-header {
+          padding: 0 24px;
+        }
+        & > .vin-body, .vout-body {
+          word-wrap: break-word;
+          background-color: $black;
+          padding: 30px 24px;
+          & > div {
+            @include table;
+            &:not(:last-child) {
+              margin-bottom: 12px;
+            }
+            & > div {
+              vertical-align: text-top;
+            }
+            & > div:nth-child(1) {
+              text-transform: uppercase;
+              color: $grey;
+              font-weight: 600;
+            }
+            & > div:nth-child(2) {
+              line-height: initial;
+            }
+          }
+        }
       }
     }
     & > div:nth-child(2) {
