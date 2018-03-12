@@ -7,7 +7,6 @@ import dom from '../utils/dom.js';
 import format from '../utils/format.js';
 
 import Jumbotron from './jumbotron.jsx';
-import BlockJumbotron from './jumbotron_block.jsx';
 
 class Transaction extends Component {
     constructor(props) {
@@ -89,7 +88,7 @@ class Transaction extends Component {
           <div className="transaction-box">
             <div className="header">
               <div>
-                <a href="#">{tx.txid}</a>
+                <Link to={'/gui2/tx/' + tx.txid}>{tx.txid}</Link>
               </div>
               <div>
                 <div onClick={this.toggleAdvanced}>
