@@ -1,17 +1,14 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
+import React from 'react';
 
-class Footer extends Component {
-    render() {
-        return (
-          <footer className="footer">
-            <div className="container">
-              <span>&copy; Blockstream  Corp. All rights reserved.</span>
-              <span>Code at <a href="#">GitHub</a></span>
-            </div>
-          </footer>
-        );
-    }
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="container">
+        <span>&copy; Blockstream Corp. All rights reserved.</span>
+        <span>Code at <a href="https://github.com/jtimon/elements-explorer">GitHub</a></span>
+      </div>
+    </footer>
+  );
 }
 
 export default Footer;

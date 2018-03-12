@@ -1,28 +1,30 @@
-var webpack = require('webpack');
-var path = require('path');
+const path = require('path');
 
-var BUILD_DIR = path.resolve(__dirname, 'public/js');
-var APP_DIR = path.resolve(__dirname, 'src');
+const BUILD_DIR = path.resolve(__dirname, 'public/js');
+const APP_DIR = path.resolve(__dirname, 'src');
 
-var config = {
-  entry: APP_DIR + '/index.jsx',
+const config = {
+  entry: `${APP_DIR}/index.jsx`,
   output: {
     path: BUILD_DIR,
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
+        resolve: {
+          extensions: ['.js', '.jsx'],
+        },
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['es2015']
-          }
-        }
-      }
-    ]
+            presets: ['es2015'],
+          },
+        },
+      },
+    ],
   },
 };
 

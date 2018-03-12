@@ -1,24 +1,29 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-class Jumbotron extends Component {
-    render() {
-        let JumbotronComponent = this.props.component;
-        let pageType = this.props.pageType;
-        let classes = "jumbotron jumbotron-fluid";
-        if (pageType) {
-          classes += ' ' + pageType;
-        }
-        return (
-          <div className={classes}>
-            {(JumbotronComponent) ? (
-              <JumbotronComponent />
-            ) : (
-              null
-            )}
-          </div>
-        );
-    }
+function Jumbotron({ component, pageType }) {
+  const JumbotronComponent = component;
+  let classes = 'jumbotron jumbotron-fluid';
+  if (pageType) {
+    classes += ` ${pageType}`;
+  }
+  return (
+    <div className={classes}>
+      {(JumbotronComponent) ? (
+        <JumbotronComponent />
+      ) : (
+        null
+      )}
+    </div>
+  );
 }
+Jumbotron.defaultProps = {
+  component: null,
+  pageType: '',
+};
+Jumbotron.propTypes = {
+  component: PropTypes.func,
+  pageType: PropTypes.string,
+};
 
 export default Jumbotron;

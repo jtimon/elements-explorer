@@ -1,17 +1,17 @@
 function classIf(condition, className) {
-    return (condition) ? className : '';
+  return (condition) ? className : '';
 }
 
 function classNames(...args) {
-    return args.join(' ');
+  return args.join(' ');
 }
 
 function showIf(condition) {
-    return (condition) ? '' : 'hide';
+  return (condition) ? '' : 'hide';
 }
 
 export default {
-    classIf: classIf,
-    classNames: classNames,
-    showIf: showIf
-}
+  classIf,
+  classNames,
+  showIf,
+};

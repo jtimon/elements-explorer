@@ -1,16 +1,17 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-class TransactionJumbotron extends Component {
-    render() {
-        let tx = this.props.tx;
-        return (
-            <div className="container">
-              <h1>Transaction</h1>
-              <p className="block-hash">{tx.txid} <img src="/gui2/static/img/icons/code.svg" /></p>
-            </div>
-        );
-    }
+function TransactionJumbotron({ tx }) {
+  return (
+    <div className="container">
+      <h1>Transaction</h1>
+      <p className="block-hash">{tx.txid} <img alt="" src="/gui2/static/img/icons/code.svg" /></p>
+    </div>
+  );
 }
+TransactionJumbotron.propTypes = {
+  tx: PropTypes.object.isRequired,
+};
+
 
 export default TransactionJumbotron;
