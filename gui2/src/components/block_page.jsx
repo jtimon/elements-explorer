@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import api from '../api';
 import format from '../utils/format';
@@ -28,38 +29,44 @@ class BlockPage extends Component {
   }
 
   loadBlock(blockhash) {
+    const loadedTransactions = [];
+    let loadedBlock = {};
+    let blockStats = {};
+
     function processTx(tx) {
       let promise = Promise.resolve();
-      for (let i = 0; i < tx.vin.length; i++) {
-        if (tx.vin[i].txid) {
-          const vout = tx.vin[i].vout;
-          promise = promise.then(() => {
-            return api.apiGetTransaction(tx.vin[i].txid).then((vin) => {
-              tx.vin[i].tx = vin.vout[vout];
-            });
-          })
+      tx.vin.forEach((vin) => {
+        if (vin.txid) {
+          const { vout } = vin;
+          promise = promise.then(() => (
+            api.apiGetTransaction(vin.txid)
+              .then((vinTx) => {
+                // eslint-disable-next-line no-param-reassign
+                vin.tx = vinTx.vout[vout];
+              })
+          ));
         }
-      }
+      });
       loadedTransactions.push(tx);
       return promise;
     }
-    let loadedBlock = {};
-    let loadedTransactions = [];
-    let blockStats = {};
+
     api.apiGetBlockByHash(blockhash)
       .then((block) => {
         loadedBlock = block;
         let promise = Promise.resolve();
         promise = promise.then(() => (
-          api.apiGetBlockStats(block.height).then((stats) => {
-            blockStats = stats;
-          })
+          api.apiGetBlockStats(block.height)
+            .then((stats) => {
+              blockStats = stats;
+            })
         ));
-        for (let i = 0; i < block.tx.length; i++) {
+        block.tx.forEach((tx) => {
           promise = promise.then(() => (
-            api.apiGetTransaction(block.tx[i]).then(processTx)
+            api.apiGetTransaction(tx)
+              .then(processTx)
           ));
-        }
+        });
         return promise;
       })
       .finally(() => {
@@ -72,17 +79,20 @@ class BlockPage extends Component {
   }
 
   render() {
+    window.state = this.state;
+    const { block } = this.state;
+    const loadedTransactions = this.state.transactions;
+    const blockStats = this.state.block_stats;
+    const time = block.mediantime;
+    const formattedTime = time ? format.formatDate(time * 1000) : '';
+    const transactionCount = (block.tx) ? block.tx.length : 0;
+
     function generateTransactions() {
-      return loadedTransactions.map((tx) => {
-        return (<Transaction key={tx.txid} tx={tx} time={formattedTime} block={block} />);
-      })
+      return loadedTransactions.map(tx => (
+        <Transaction key={tx.txid} transaction={tx} time={formattedTime} block={block} />
+      ));
     }
-    let loadedTransactions = this.state.transactions;
-    let block = this.state.block;
-    let blockStats = this.state.block_stats;
-    let time = block.mediantime;
-    let formattedTime = time ? format.formatDate(time * 1000) : '';
-    let transactionCount = (block.tx) ? block.tx.length : 0;
+
     return (
       <div>
         <Jumbotron
@@ -228,5 +238,13 @@ class BlockPage extends Component {
     );
   }
 }
+BlockPage.propTypes = {
+  match: PropTypes.shape({
+    isExact: PropTypes.bool,
+    params: PropTypes.object.isRequired,
+    path: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 export default BlockPage;

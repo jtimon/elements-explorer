@@ -17,13 +17,13 @@ function Jumbotron({ component, pageType }) {
     </div>
   );
 }
-Jumbotron.defaultProps = {
-  component: null,
-  pageType: '',
-};
 Jumbotron.propTypes = {
   component: PropTypes.func,
   pageType: PropTypes.string,
+};
+Jumbotron.defaultProps = {
+  component: null,
+  pageType: '',
 };
 
 export default Jumbotron;

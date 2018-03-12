@@ -18,6 +18,8 @@ class RecentBlocks extends Component {
   }
 
   componentDidMount() {
+    const recentBlocks = this.state.recent_blocks;
+
     function processBlock(block) {
       recentBlocks.push({
         height: block.height,
@@ -33,14 +35,13 @@ class RecentBlocks extends Component {
       return null;
     }
 
-    let recentBlocks = this.state.recent_blocks;
     api.apiChainInfo()
       .then((data) => {
         let promise = api.apiGetBlockByHash(data.bestblockhash)
           .then(block => block)
           .then(processBlock);
 
-        for (let i = 0; i < 9; i++) {
+        for (let i = 0; i < 9; i += 1) {
           promise = promise.then((blockhash) => {
             if (blockhash) {
               return api.apiGetBlockByHash(blockhash).then(processBlock);
@@ -57,6 +58,8 @@ class RecentBlocks extends Component {
   }
 
   render() {
+    const blocks = this.state.recent_blocks;
+
     function generateBlocksRows() {
       return blocks.map((block) => {
         const time = format.formatDate(block.mediantime * 1000);
@@ -71,7 +74,7 @@ class RecentBlocks extends Component {
         );
       });
     }
-    let blocks = this.state.recent_blocks;
+
     return (
       <div>
         <Jumbotron component={RecentBlocksJumbotron} />

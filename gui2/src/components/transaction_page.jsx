@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import api from '../api';
 import format from '../utils/format';
@@ -28,24 +29,29 @@ class TransactionPage extends Component {
   }
 
   loadTx(txid) {
+    let loadedTransaction = {};
+    let loadedBlock = {};
+
     function processTx(tx) {
       let promise = Promise.resolve();
-      for (let i = 0; i < tx.vin.length; i++) {
-        if (tx.vin[i].txid) {
-          let vout = tx.vin[i].vout;
-          promise = promise.then(() => api.apiGetTransaction(tx.vin[i].txid)
-            .then((vin) => {
-              tx.vin[i].tx = vin.vout[vout];
-            }));
+      tx.vin.forEach((vin) => {
+        if (vin.txid) {
+          const { vout } = vin;
+          promise = promise.then(() => (
+            api.apiGetTransaction(vin.txid)
+              .then((vinTx) => {
+                // eslint-disable-next-line no-param-reassign
+                vin.tx = vinTx.vout[vout];
+              })
+          ));
         }
-      }
+      });
       promise = promise.then(() => {
         loadedTransaction = tx;
       });
       return promise;
     }
-    let loadedTransaction = {};
-    let loadedBlock = {};
+
     api.apiGetTransaction(txid).then(processTx)
       .then(() => {
         let promise = Promise.resolve();
@@ -65,7 +71,7 @@ class TransactionPage extends Component {
 
   render() {
     const tx = this.state.transaction;
-    const block = this.state.block;
+    const { block } = this.state;
     const time = block.mediantime;
     const formattedTime = time ? format.formatDate(time * 1000) : '';
     const txLoaded = !utils.isEmpty(tx);
@@ -103,12 +109,21 @@ class TransactionPage extends Component {
             </div>
           </div>
           {(txLoaded) ? (
-            <Transaction tx={tx} time={formattedTime} block={block} />
+            <Transaction transaction={tx} time={formattedTime} block={block} />
           ) : null}
         </div>
       </div>
     );
   }
 }
+TransactionPage.propTypes = {
+  match: PropTypes.shape({
+    isExact: PropTypes.bool,
+    params: PropTypes.object.isRequired,
+    path: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
 
 export default TransactionPage;

@@ -10,7 +10,7 @@ function TransactionJumbotron({ tx }) {
   );
 }
 TransactionJumbotron.propTypes = {
-  tx: PropTypes.object.isRequired,
+  tx: PropTypes.shape({}).isRequired,
 };
 
 

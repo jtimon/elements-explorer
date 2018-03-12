@@ -42,7 +42,7 @@ function BlockJumbotron({ block }) {
   );
 }
 BlockJumbotron.propTypes = {
-  block: PropTypes.object.isRequired,
+  block: PropTypes.shape({}).isRequired,
 };
 
 export default BlockJumbotron;

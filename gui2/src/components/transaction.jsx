@@ -20,6 +20,9 @@ class Transaction extends Component {
   }
 
   render() {
+    const { transaction } = this.props;
+    const showAdvanced = this.state.show_advanced;
+
     function generateVIn(tx) {
       if (tx.vin) {
         return tx.vin.map((vin) => {
@@ -56,8 +59,9 @@ class Transaction extends Component {
 
     function generateVOut(tx) {
       return tx.vout.map((vout, i) => {
-        const scriptPubKey = vout.scriptPubKey;
+        const { scriptPubKey } = vout;
         return (
+          // eslint-disable-next-line react/no-array-index-key
           <div key={i} className={dom.classNames('vout', dom.classIf(showAdvanced, 'active'))}>
             <div className="vout-header">
               <a href="#addr">{(scriptPubKey.addresses) ? scriptPubKey.addresses[0] : 'nonstandard'}</a>
@@ -77,16 +81,19 @@ class Transaction extends Component {
       });
     }
 
-    let tx = this.props.tx;
-    let showAdvanced = this.state.show_advanced;
     return (
       <div className="transaction-box">
         <div className="header">
           <div>
-            <Link to={`/gui2/tx/${tx.txid}`}>{tx.txid}</Link>
+            <Link to={`/gui2/tx/${transaction.txid}`}>{transaction.txid}</Link>
           </div>
           <div>
-            <div role="button" tabIndex={0} onClick={this.toggleAdvanced} onKeyPress={this.toggleAdvanced}>
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={this.toggleAdvanced}
+              onKeyPress={this.toggleAdvanced}
+            >
               <div>Advanced Details</div>
               <div>
                 {(showAdvanced) ? (
@@ -100,7 +107,7 @@ class Transaction extends Component {
         </div>
         <div className="ins-and-outs">
           <div className="vins">
-            {generateVIn(tx)}
+            {generateVIn(transaction)}
           </div>
           <div>
             <div>
@@ -109,7 +116,7 @@ class Transaction extends Component {
             </div>
           </div>
           <div className="vouts">
-            {generateVOut(tx)}
+            {generateVOut(transaction)}
           </div>
         </div>
         <div className="footer">
@@ -128,8 +135,10 @@ class Transaction extends Component {
   }
 }
 Transaction.propTypes = {
-  tx: PropTypes.object.isRequired,
-  block: PropTypes.object.isRequired,
+  transaction: PropTypes.shape({}).isRequired,
+  block: PropTypes.shape({
+    confirmations: PropTypes.number.isRequired,
+  }).isRequired,
   time: PropTypes.string.isRequired,
 };
 
