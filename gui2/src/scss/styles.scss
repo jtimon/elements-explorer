@@ -260,7 +260,7 @@ a, a:link, a:visited, a:hover, a:focus {
     }
 }
 
-body, .navbar, .jumbotron-fluid, footer {
+body, .navbar, .jumbotron-fluid, .content-wrap > div, footer {
     & > .container {
       max-width: 1000px;
     }
