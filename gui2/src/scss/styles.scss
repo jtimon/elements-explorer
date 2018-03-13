@@ -284,9 +284,19 @@ body, .navbar, .jumbotron-fluid, .content-wrap > div, footer {
         }
         &.block-data {
             border-top: 1px $dark-grey solid;
+            &:hover {
+              background-color: rgba(255, 255, 255, 0.05);
+            }
             & > * {
                 font-size: 16px;
             }
+        }
+        & > div:nth-child(1) {
+          width: 150px;
+          padding-left: 12px;
+        }
+        & > div:nth-child(2) {
+          width: 350px;
         }
     }
 }
