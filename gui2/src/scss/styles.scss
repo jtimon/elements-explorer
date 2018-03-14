@@ -320,6 +320,7 @@ body, .navbar, .jumbotron-fluid, .content-wrap > div, footer {
       border-bottom: 1px solid $dark-grey;
     }
     & > div:nth-child(1) {
+      width: 200px;
       text-transform: uppercase;
       color: $grey;
     }
