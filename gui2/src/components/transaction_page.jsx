@@ -38,7 +38,7 @@ class TransactionPage extends Component {
         if (vin.txid) {
           const { vout } = vin;
           promise = promise.then(() => (
-            api.apiGetTransaction(vin.txid)
+            api.getTransaction(vin.txid)
               .then((vinTx) => {
                 // eslint-disable-next-line no-param-reassign
                 vin.tx = vinTx.vout[vout];
@@ -52,10 +52,10 @@ class TransactionPage extends Component {
       return promise;
     }
 
-    api.apiGetTransaction(txid).then(processTx)
+    api.getTransaction(txid).then(processTx)
       .then(() => {
         let promise = Promise.resolve();
-        promise = promise.then(() => api.apiGetBlockByHash(loadedTransaction.blockhash)
+        promise = promise.then(() => api.getBlockByHash(loadedTransaction.blockhash)
           .then((block) => {
             loadedBlock = block;
           }));

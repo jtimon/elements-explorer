@@ -35,16 +35,16 @@ class RecentBlocks extends Component {
       return null;
     }
 
-    api.apiChainInfo()
+    api.getChainInfo()
       .then((data) => {
-        let promise = api.apiGetBlockByHash(data.bestblockhash)
+        let promise = api.getBlockByHash(data.bestblockhash)
           .then(block => block)
           .then(processBlock);
 
         for (let i = 0; i < 9; i += 1) {
           promise = promise.then((blockhash) => {
             if (blockhash) {
-              return api.apiGetBlockByHash(blockhash).then(processBlock);
+              return api.getBlockByHash(blockhash).then(processBlock);
             }
             return null;
           });

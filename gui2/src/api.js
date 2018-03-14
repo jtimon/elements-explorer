@@ -1,4 +1,4 @@
-function apiChainInfo() {
+function getChainInfo() {
   const url = 'http://localhost:5000/api/v0/chaininfo';
   const requestParams = {
     method: 'POST',
@@ -15,7 +15,7 @@ function apiChainInfo() {
     .then(data => data);
 }
 
-function apiGetBlockByHash(id) {
+function getBlockByHash(id) {
   const url = 'http://localhost:5000/api/v0/block';
   const requestParams = {
     method: 'POST',
@@ -32,7 +32,7 @@ function apiGetBlockByHash(id) {
     .then(data => data);
 }
 
-function apiGetBlockByHeight(id) {
+function getBlockByHeight(id) {
   const url = 'http://localhost:5000/api/v0/blockheight';
   const requestParams = {
     method: 'POST',
@@ -49,7 +49,7 @@ function apiGetBlockByHeight(id) {
     .then(data => data);
 }
 
-function apiGetBlockStats(id) {
+function getBlockStats(id) {
   const url = 'http://localhost:5000/api/v0/blockstats';
   const requestParams = {
     method: 'POST',
@@ -66,7 +66,7 @@ function apiGetBlockStats(id) {
     .then(data => data);
 }
 
-function apiGetTransaction(id) {
+function getTransaction(id) {
   const url = 'http://localhost:5000/api/v0/tx';
   const requestParams = {
     method: 'POST',
@@ -83,10 +83,30 @@ function apiGetTransaction(id) {
     .then(data => data);
 }
 
+function getAddress(address, startHeight, endHeight) {
+  const url = 'http://localhost:5000/api/v0/address';
+  const requestParams = {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      start_height: startHeight,
+      end_height: endHeight,
+      addresses: [address],
+      chain: 'testnet3',
+    }),
+  };
+  return fetch(url, requestParams)
+    .then(response => response.json())
+    .then(data => data);
+}
+
 module.exports = {
-  apiChainInfo,
-  apiGetBlockByHash,
-  apiGetBlockByHeight,
-  apiGetBlockStats,
-  apiGetTransaction,
+  getChainInfo,
+  getBlockByHash,
+  getBlockByHeight,
+  getBlockStats,
+  getTransaction,
+  getAddress,
 };

@@ -39,7 +39,7 @@ class BlockPage extends Component {
         if (vin.txid) {
           const { vout } = vin;
           promise = promise.then(() => (
-            api.apiGetTransaction(vin.txid)
+            api.getTransaction(vin.txid)
               .then((vinTx) => {
                 // eslint-disable-next-line no-param-reassign
                 vin.tx = vinTx.vout[vout];
@@ -51,19 +51,19 @@ class BlockPage extends Component {
       return promise;
     }
 
-    api.apiGetBlockByHash(blockhash)
+    api.getBlockByHash(blockhash)
       .then((block) => {
         loadedBlock = block;
         let promise = Promise.resolve();
         promise = promise.then(() => (
-          api.apiGetBlockStats(block.height)
+          api.getBlockStats(block.height)
             .then((stats) => {
               blockStats = stats;
             })
         ));
         block.tx.forEach((tx) => {
           promise = promise.then(() => (
-            api.apiGetTransaction(tx)
+            api.getTransaction(tx)
               .then(processTx)
           ));
         });
