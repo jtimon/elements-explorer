@@ -1,6 +1,8 @@
 
 @import 'mixins';
 
+@import url('https://fonts.googleapis.com/css?family=Inconsolata');
+
 $teal: #28948f;
 $light-blue: #00ccff;
 $grey: #78838e;
@@ -20,6 +22,11 @@ $footer-height: 60px;
     font-family: DINPro;
     font-weight: bold;
     src: url("../font/DINPro-Medium.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Inconsolata;
+    src: url('https://fonts.googleapis.com/css?family=Inconsolata');
 }
 
 .hide {
@@ -94,7 +101,7 @@ a, a:link, a:visited, a:hover, a:focus {
             position: absolute;
             left: -435px;
             top: 44px;
-            background-color: rgba(40, 148, 143, 0.8);
+            background-color: #107070;
             color: #fff;
             font-size: 14px;
             font-weight: 400;
@@ -112,7 +119,7 @@ a, a:link, a:visited, a:hover, a:focus {
                 transform: rotate(45deg);
                 width: 9px;
                 height: 9px;
-                background-color: rgba(40, 148, 143, 0.8);
+                background-color: #107070;
             }
             &:after {
                 content: '';
@@ -142,7 +149,9 @@ a, a:link, a:visited, a:hover, a:focus {
               color: #fff;
               margin-bottom: 40px;
               font-size: 16px;
-              font-family: DINPro
+              font-family: Inconsolata;
+              white-space: pre-wrap;
+              overflow-wrap: break-word;
             }
             .close-button {
                 @include table;

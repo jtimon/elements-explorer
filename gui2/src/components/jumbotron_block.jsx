@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import format from '../utils/format';
-import dom from '../utils/dom';
+
+import JumbotronTooltip from './jumbotron_tooltip';
 
 class BlockJumbotron extends Component {
   constructor(props) {
@@ -51,34 +52,13 @@ class BlockJumbotron extends Component {
         <div className="block-hash">
           <span>{(block.hash) ? block.hash : ''}</span>
           {(block.hash) ? (
-            <div className="code-button">
-              <div
-                className="code-button-btn"
-                role="button"
-                tabIndex={0}
-                onClick={this.handleMouseClick}
-                onKeyPress={this.handleMouseClick}
-              >
-                <img alt="" src="/gui2/static/img/icons/code.svg" />
-              </div>
-              <div className={dom.classNames('overlay', dom.classIf(!showTooltip, 'hide'))} />
-              <div className={dom.classNames('code-button-text', dom.classIf(showTooltip, 'active'))}>
-                <h4>Block {blockHeight}</h4>
-                <pre>{JSON.stringify(tooltipData, null, 8)}</pre>
-                <div
-                  className="close-button"
-                  role="button"
-                  tabIndex={0}
-                  onClick={this.handleMouseClickClose}
-                  onKeyPress={this.handleMouseClickClose}
-                >
-                  <div>Close</div>
-                  <div>
-                    <img alt="" src="/gui2/static/img/icons/cancel.svg" />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <JumbotronTooltip
+              showTooltip={showTooltip}
+              clickHandler={this.handleMouseClick}
+              clickCloseHandler={this.handleMouseClickClose}
+              header={`Block ${blockHeight}`}
+              data={tooltipData}
+            />
           ) : null}
         </div>
         <div className="prev-next-blocks-btns">
