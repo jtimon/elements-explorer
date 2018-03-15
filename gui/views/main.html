@@ -484,6 +484,44 @@
             </table>
           </td>
         </tr>
+
+        <tr ng-show="output.scriptPubKey.pegout_chain">
+          <td>scriptPubKey.pegout_chain:</td>
+          <td>{{ output.scriptPubKey.pegout_chain }}</td>
+        </tr>
+
+        <tr ng-show="output.scriptPubKey.pegout_asm">
+          <td>scriptPubKey.pegout_asm:</td>
+          <td>{{ output.scriptPubKey.pegout_asm }}</td>
+        </tr>
+
+        <tr ng-show="output.scriptPubKey.pegout_hex">
+          <td>scriptPubKey.pegout_hex:</td>
+          <td>{{ output.scriptPubKey.pegout_hex }}</td>
+        </tr>
+
+        <tr ng-show="output.scriptPubKey.pegout_reqSigs">
+          <td>scriptPubKey.pegout_reqSigs:</td>
+          <td>{{ output.scriptPubKey.pegout_reqSigs }}</td>
+        </tr>
+
+        <tr ng-show="output.scriptPubKey.pegout_type">
+          <td>scriptPubKey.pegout_type:</td>
+          <td>{{ output.scriptPubKey.pegout_type }}</td>
+        </tr>
+
+        <tr ng-show="output.scriptPubKey.pegout_addresses">
+          <td>scriptPubKey.pegout_addresses:</td>
+          <td>
+            <table border="1">
+              <tr ng-repeat="addr in output.scriptPubKey.pegout_addresses">
+                <td>
+                  <a ng-href="#!/chain/{{output.scriptPubKey.pegout_chain}}/address?address={{addr}}">{{ addr }}</a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
       </table>
       <p></p>
     </div>
