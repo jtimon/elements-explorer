@@ -34,6 +34,9 @@ gflags.DEFINE_string('dataset', u"",
 gflags.DEFINE_string('chains', u"bitcoin,testnet3,elementsregtest",
     u"Chains to restart the db for")
 
+gflags.DEFINE_string('forcechains', u"",
+    u"Chains to restart the db for")
+
 try:
     import sys
     argv = gflags.FLAGS(sys.argv)
@@ -55,6 +58,7 @@ time.sleep(1)
 migration_schema = {}
 migration_diff = {}
 CHAINS = FLAGS.chains.split(',')
+FORCE_CHAINS = FLAGS.forcechains.split(',')
 
 ddb = minql.ZmqMinqlServer(
     FLAGS.dbtype,
@@ -116,8 +120,18 @@ if migration_schema:
 
     db_client.put_schema(per_chain_schema)
 
-    if FLAGS.dataset:
-        db_client.put_dataset_from_file(FLAGS.dataset)
+if FORCE_CHAINS:
+    forced_chains_schema = {}
+    for table_name in new_schema:
+        table_schema = new_schema[table_name]
+        for chain in FORCE_CHAINS:
+            forced_chains_schema[chain + "_" + table_name] = table_schema
+
+    print('forced_chains_schema', forced_chains_schema)
+    db_client.put_schema(forced_chains_schema)
+
+if FLAGS.dataset:
+    db_client.put_dataset_from_file(FLAGS.dataset)
 
 # Force printing after completing (the process will keep running with ddb)
 raise NotImplementedError

@@ -1,7 +1,8 @@
 web: gunicorn webflask:app -b "$WEB_HOST:$WEB_PORT" -w $WEB_WORKERS -k gevent --log-config $GUNICORN_LOG_FILE
 
 # Restart only tables when they need it:
-create_db: python explorer/bin/model2db.py --address $DB_PROXY_ADR --dbaddress $DB_BACKEND_ADR --dbtype $DB_PROXY_TYPE --dbname $DB_NAME --dbuser $DB_USER --dbpass $DB_PASS --model $ORM_MODEL --modelschema $ORM_SCHEMA
+# Always force db restart for elementsregtest
+create_db: python explorer/bin/model2db.py --address $DB_PROXY_ADR --dbaddress $DB_BACKEND_ADR --dbtype $DB_PROXY_TYPE --dbname $DB_NAME --dbuser $DB_USER --dbpass $DB_PASS --model $ORM_MODEL --modelschema $ORM_SCHEMA --forcechains=elementsregtest
 
 # Force db restart per chain by removing $ORM_SCHEMA/schema.json:
 # create_db: python explorer/bin/model2db.py --address $DB_PROXY_ADR --dbaddress $DB_BACKEND_ADR --dbtype $DB_PROXY_TYPE --dbname $DB_NAME --dbuser $DB_USER --dbpass $DB_PASS --model $ORM_MODEL --modelschema $ORM_SCHEMA --chains=elementsregtest
