@@ -42,7 +42,10 @@ JumbotronTooltip.propTypes = {
   clickHandler: PropTypes.func.isRequired,
   clickCloseHandler: PropTypes.func.isRequired,
   header: PropTypes.string.isRequired,
-  data: PropTypes.shape({}).isRequired,
+  data: PropTypes.oneOfType([
+    PropTypes.shape({}),
+    PropTypes.string,
+  ]).isRequired,
 };
 
 export default JumbotronTooltip;
