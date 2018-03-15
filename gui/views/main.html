@@ -438,7 +438,7 @@
         </tr>
 
         <tr>
-          <td>scriptSig.asm:</td>
+          <td>scriptPubKey.asm:</td>
           <td>{{ output.scriptPubKey.asm }}</td>
         </tr>
 
@@ -447,18 +447,18 @@
           <td>{{ output.scriptPubKey.hex }}</td>
         </tr>
 
-        <tr>
+        <tr ng-show="output.scriptPubKey.reqSigs">
           <td>scriptPubKey.reqSigs:</td>
           <td>{{ output.scriptPubKey.reqSigs }}</td>
         </tr>
 
-        <tr>
+        <tr ng-show="output.scriptPubKey.type">
           <td>scriptPubKey.type:</td>
           <td>{{ output.scriptPubKey.type }}</td>
         </tr>
 
-        <tr>
-          <td>output.scriptPubKey.addresses:</td>
+        <tr ng-show="output.scriptPubKey.addresses">
+          <td>scriptPubKey.addresses:</td>
           <td>
             <table border="1">
               <tr ng-repeat="addr in output.scriptPubKey.addresses">
