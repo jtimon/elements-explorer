@@ -2,7 +2,7 @@
 /*global $:false */
 
 angular.module('rpcExplorerApp')
-    .service('SrvChain', function SrvChain($q, $http, $rootScope, SrvUtil) {
+    .service('SrvChain', function SrvChain($q, $http, $rootScope, $route, SrvUtil) {
 
         var BACKEND_URL = '/api/v0';
         var srv = {};
@@ -11,6 +11,26 @@ angular.module('rpcExplorerApp')
         var cache = {};
 
         srv.set = function(_selected_chain) {
+
+            if (!cache['available_chains']) {
+                srv.GetAvailableChains();
+            }
+            // If it's not an avilable chain, try to see if it's a
+            // chain_id instead of a petname
+            if (!cache['available_chains'][_selected_chain]) {
+                for (var chain_petname in cache['available_chains']) {
+                    // skip loop if the property is from prototype
+                    if (!cache['available_chains'].hasOwnProperty(chain_petname)) {
+                        continue;
+                    }
+
+                    if (_selected_chain == cache['available_chains'][chain_petname]['chain_id']) {
+                        $route.updateParams({chain: chain_petname})
+                        _selected_chain = chain_petname;
+                        break;
+                    }
+                }
+            }
             selected_chain = _selected_chain;
             $rootScope.selected_chain = selected_chain;
         }
