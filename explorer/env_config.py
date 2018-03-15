@@ -28,6 +28,7 @@ AVAILABLE_CHAINS = {
         'db': DB_FACTORY,
         'properties': {
             'stats_support': True,
+            'chain_id': '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f',
         },
     },
     "testnet3": {
@@ -39,6 +40,7 @@ AVAILABLE_CHAINS = {
         'db': DB_FACTORY,
         'properties': {
             'stats_support': True,
+            'chain_id': '0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206',
         },
     },
     "elementsregtest": {
@@ -50,6 +52,7 @@ AVAILABLE_CHAINS = {
         'db': DB_FACTORY,
         'properties': {
             'stats_support': False,
+            'chain_id': 'elementsregtest_genesis_hash',
         },
     },
 }
