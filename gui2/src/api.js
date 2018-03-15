@@ -11,8 +11,7 @@ function getChainInfo() {
     }),
   };
   return fetch(url, requestParams)
-    .then(response => response.json())
-    .then(data => data);
+    .then(response => response.json());
 }
 
 function getBlockByHash(id) {
@@ -28,8 +27,7 @@ function getBlockByHash(id) {
     }),
   };
   return fetch(url, requestParams)
-    .then(response => response.json())
-    .then(data => data);
+    .then(response => response.json());
 }
 
 function getBlockByHeight(id) {
@@ -62,8 +60,7 @@ function getBlockStats(id) {
     }),
   };
   return fetch(url, requestParams)
-    .then(response => response.json())
-    .then(data => data);
+    .then(response => response.json());
 }
 
 function getTransaction(id) {
@@ -79,8 +76,7 @@ function getTransaction(id) {
     }),
   };
   return fetch(url, requestParams)
-    .then(response => response.json())
-    .then(data => data);
+    .then(response => response.json());
 }
 
 function getAddress(address, startHeight, endHeight) {
@@ -98,8 +94,7 @@ function getAddress(address, startHeight, endHeight) {
     }),
   };
   return fetch(url, requestParams)
-    .then(response => response.json())
-    .then(data => data);
+    .then(response => response.json());
 }
 
 module.exports = {
