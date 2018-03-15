@@ -1,30 +1,48 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import { Route, Switch } from 'react-router';
+import { Provider } from 'react-redux';
 
-import Footer from './components/footer';
-import Navbar from './components/navbar';
-import RecentBlocks from './components/recent_blocks';
-import BlockPage from './components/block_page';
-import TransactionPage from './components/transaction_page';
+import api from './utils/api';
+import createStore from './store';
+
+import App from './components/app';
+
+const Immutable = require('seamless-immutable').static;
+
+const store = createStore();
+
+window.store = store;
 
 function Body() {
   return (
-    <BrowserRouter>
-      <div className="explorer-container">
-        <div className="content-wrap">
-          <Navbar />
-          <Switch>
-            <Route exact path="/gui2/" component={RecentBlocks} />
-            <Route path="/gui2/block/:blockhash" component={BlockPage} />
-            <Route path="/gui2/tx/:txid" component={TransactionPage} />
-          </Switch>
-        </div>
-        <Footer />
-      </div>
-    </BrowserRouter>
+    <Provider store={store}>
+      <App />
+    </Provider>
   );
 }
 
-render(<Body />, document.getElementById('liquid-explorer'));
+function initStateValues() {
+  store.dispatchMerge({
+    chain_info: Immutable({}),
+    blocks: Immutable({}),
+    transactions: Immutable({}),
+  });
+}
+
+function loadChainInfo() {
+  // make async call to api, handle promise, dispatch action when promise is resolved
+  return api.getChainInfo()
+    .then((data) => {
+      store.dispatchMerge({
+        chain_info: data,
+      });
+    })
+    .catch((error) => {
+      throw (error);
+    });
+}
+
+initStateValues();
+loadChainInfo().then(() => ( // FIXME: Don't wait for chain info load to render
+  render(<Body />, document.getElementById('liquid-explorer'))
+));

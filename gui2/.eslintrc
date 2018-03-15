@@ -12,6 +12,9 @@
             "aspects": [ "noHref", "invalidHref", "preferButton" ]
         }]
     },
+    "globals": {
+        "store"                  : false,
+    },
     "env": {
         "browser"                : true,
     }

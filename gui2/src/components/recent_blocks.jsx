@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import api from '../api';
+import api from '../utils/api';
 import format from '../utils/format';
 
 import Jumbotron from './jumbotron';
@@ -34,7 +35,6 @@ class RecentBlocks extends Component {
       }
       return null;
     }
-
     api.getChainInfo()
       .then((data) => {
         let promise = api.getBlockByHash(data.bestblockhash)
@@ -59,7 +59,6 @@ class RecentBlocks extends Component {
 
   render() {
     const blocks = this.state.recent_blocks;
-
     function generateBlocksRows() {
       return blocks.map((block) => {
         const time = format.formatDate(block.mediantime * 1000);
@@ -95,4 +94,8 @@ class RecentBlocks extends Component {
   }
 }
 
-export default RecentBlocks;
+function mapStateToProps() {
+  return {};
+}
+
+export default connect(mapStateToProps)(RecentBlocks);
