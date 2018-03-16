@@ -452,12 +452,12 @@
           <td>{{ output["value-maximum"] }} <nobr ng-show="!IsCTOut(output);">non-CT</nobr></td>
         </tr>
 
-        <tr>
+        <tr ng-show="output.scriptPubKey.asm">
           <td>scriptPubKey.asm:</td>
           <td>{{ output.scriptPubKey.asm }}</td>
         </tr>
 
-        <tr>
+        <tr ng-show="output.scriptPubKey.hex">
           <td>scriptPubKey.hex:</td>
           <td>{{ output.scriptPubKey.hex }}</td>
         </tr>
