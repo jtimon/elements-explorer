@@ -10,21 +10,20 @@ angular.module('rpcExplorerApp')
         var selected_chain = "bitcoin";
         var cache = {};
 
-        srv.set = function(_selected_chain) {
-
-            if (!cache['available_chains']) {
-                srv.GetAvailableChains();
-            }
+        function SetSelectedChain(_selected_chain)
+        {
             // If it's not an avilable chain, try to see if it's a
             // chain_id instead of a petname
-            if (!cache['available_chains'][_selected_chain]) {
+            if (cache['available_chains'] && !cache['available_chains'][_selected_chain]) {
                 for (var chain_petname in cache['available_chains']) {
                     // skip loop if the property is from prototype
                     if (!cache['available_chains'].hasOwnProperty(chain_petname)) {
                         continue;
                     }
 
-                    if (_selected_chain == cache['available_chains'][chain_petname]['chain_id']) {
+                    if (cache['available_chains'][chain_petname] &&
+                        cache['available_chains'][chain_petname]['chain_id'] &&
+                        _selected_chain == cache['available_chains'][chain_petname]['chain_id']) {
                         $route.updateParams({chain: chain_petname})
                         _selected_chain = chain_petname;
                         break;
@@ -33,6 +32,19 @@ angular.module('rpcExplorerApp')
             }
             selected_chain = _selected_chain;
             $rootScope.selected_chain = selected_chain;
+            return selected_chain;
+        }
+        
+        srv.set = function(_selected_chain) {
+
+            if (cache['available_chains']) {
+                return SetSelectedChain(_selected_chain);
+            } else {
+                return srv.GetAvailableChains()
+                    .then(function() {
+                        return SetSelectedChain(_selected_chain);
+                    });
+            }
         }
 
         srv.get = function() {
