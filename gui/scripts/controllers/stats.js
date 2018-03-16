@@ -13,6 +13,8 @@ angular.module('rpcExplorerApp')
         SrvChain.set($routeParams.chain);
 
         $scope.curious = $location.search().curious == 'true';
+        // TODO default to latest 100 blocks here instead of in
+        // index.html like in address.js
         $scope.start_height = SrvUtil.ParseIntToPositive($location.search().start);
         $scope.end_height = SrvUtil.ParseIntToPositive($location.search().end);
         if ($scope.start_height > $scope.end_height) {
