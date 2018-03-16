@@ -13,6 +13,7 @@
         }]
     },
     "globals": {
+        "Immutable"              : false,
         "store"                  : false,
     },
     "env": {

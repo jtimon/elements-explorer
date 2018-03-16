@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -37,6 +38,9 @@ class RecentBlocks extends Component {
     }
     api.getChainInfo()
       .then((data) => {
+        store.dispatchMerge({
+          chain_info: data,
+        });
         let promise = api.getBlockByHash(data.bestblockhash)
           .then(block => block)
           .then(processBlock);
@@ -93,9 +97,14 @@ class RecentBlocks extends Component {
     );
   }
 }
+RecentBlocks.propTypes = {
+  chain_info: PropTypes.shape({}).isRequired,
+};
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    chain_info: state.chain_info,
+  };
 }
 
 export default connect(mapStateToProps)(RecentBlocks);
