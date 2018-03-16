@@ -348,7 +348,7 @@
 
     <div ng-repeat="input in transaction.vin">
       <table border="1">
-        <tr>
+        <tr ng-show="input.sequence">
           <td>Sequence:</td>
           <td>{{ input.sequence }}</td>
         </tr>
@@ -358,27 +358,27 @@
           <td><pre>{{ input.coinbase | limitTo:rawhex_limit }}</pre></td>
         </tr>
 
-        <tr ng-show="!input.coinbase">
+        <tr ng-show="input.txid">
           <td>Txid:</td>
           <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{input.txid}}">{{ input.txid }}</a></td>
         </tr>
 
-        <tr ng-show="!input.coinbase">
+        <tr ng-show="input.vout">
           <td>vout:</td>
           <td>{{ input.vout }}</td>
         </tr>
 
-        <tr ng-show="!input.coinbase">
+        <tr ng-show="input.scriptSig.asm">
           <td>scriptSig.asm:</td>
           <td><pre>{{ input.scriptSig.asm | limitTo:rawhex_limit }}</pre></td>
         </tr>
 
-        <tr ng-show="!input.coinbase">
+        <tr ng-show="input.scriptSig.hex">
           <td>scriptSig.hex:</td>
           <td><pre>{{ input.scriptSig.hex | limitTo:rawhex_limit }}</pre></td>
         </tr>
 
-        <tr>
+        <tr ng-show="input.txinwitness">
           <td>txinwitness:</td>
           <td>
             <table border="1">
