@@ -407,12 +407,27 @@
           <td>{{ output.n }}</td>
         </tr>
 
-        <tr ng-show="!IsCTOut(output);">
+        <tr ng-show="output.asset">
+          <td>Asset:</td>
+          <td>{{ output.asset }}</td>
+        </tr>
+
+        <tr ng-show="output.assetcommitment">
+          <td>Asset (confidential):</td>
+          <td>{{ output.assetcommitment }}</td>
+        </tr>
+
+        <tr ng-show="!IsCTOut(output)">
           <td>value:</td>
           <td>{{ output.value }}</td>
         </tr>
 
-        <tr ng-show="IsCTOut(output);">
+        <tr ng-show="IsCTOut(output) && output.amountcommitment">
+          <td>Amount (confidential):</td>
+          <td>{{ output.amountcommitment }}</td>
+        </tr>
+
+        <tr ng-show="IsCTOut(output) && output.serValue">
           <td>serValue:</td>
           <td>{{ output.serValue }}</td>
         </tr>
