@@ -38,7 +38,7 @@ angular.module('rpcExplorerApp')
         };
 
         $scope.SearchAddress = function() {
-            if ($scope.address) {
+            if ($scope.address && $scope.start_height && $scope.end_height) {
                 $scope.loading = true;
                 SrvBackend.RpcCall('address', {
                     'start_height': $scope.start_height,
