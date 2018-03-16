@@ -1,6 +1,7 @@
 /dist
 /.tmp
 /gui/node_modules
+/gui2/node_modules
 *.pyc
 /.build
 .explorer-data

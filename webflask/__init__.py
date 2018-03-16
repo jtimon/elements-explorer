@@ -7,6 +7,7 @@ from mintools.restmin.impl.flask import create_restmin_app
 from explorer.explorer_server import API_DOMAIN
 
 GUI_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'gui')
+GUI2_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'gui2')
 
 def explorer_request_processor(app, req):
     return API_DOMAIN.resolve_request(req)
@@ -29,6 +30,14 @@ def index():
 @app.route('/<path:filename>')
 def send_file(filename):
     return send_from_directory(GUI_DIRECTORY, filename)
+
+@app.route('/gui2')
+def index_gui2():
+    return send_from_directory(GUI2_DIRECTORY, 'index.html')
+
+@app.route('/gui2/<path:filename>')
+def send_file_gui2(filename):
+    return send_from_directory(GUI2_DIRECTORY, filename)
 
 if __name__ == '__main__':
     app.debug = True
