@@ -79,8 +79,8 @@ MEMPOOL_SAVER_PARAMS = {
 
 GREEDY_CACHER_PARAMS = {
     "bitcoin": [60, 60 * 60 * 24, True], # every 1 min after 1 day, cache txs
-    "testnet3": [60, 60 * 60, True], # every 1 min after 1 hour, cache txs
-    "elementsregtest": [60 * 60, 60 * 60, True], # every 1 hour after 1 hour, cache txs
+    "testnet3": [60, 60 * 5, True], # every 1 min after 5 min, cache txs
+    "elementsregtest": [60 * 60, 60 * 5, True], # every 1 hour after 5 min, cache txs
 }
 
 def subscriber_params(chain):
