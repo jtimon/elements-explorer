@@ -5,8 +5,7 @@ import json
 import multiprocessing
 import time
 
-from mintools import zmqmin
-from mintools import minql
+from mintools import zmqmin, minql, ormin
 
 from explorer.explorer_server import GetById
 
@@ -31,6 +30,7 @@ class RpcCacher(object):
 
         self.rpccaller = rpccaller
         self.db_client = db_client
+        ormin.Model.set_db(db_client)
 
 class ChainCacher(RpcCacher):
 

@@ -71,13 +71,13 @@ def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
     try:
         db_result = None
         if resource == 'chaininfo':
-            return model.Chaininfo.get(req_id, namespace=chain, minql_client=db_client).json()
+            return model.Chaininfo.get(req_id, namespace=chain).json()
         elif resource == 'block':
-            db_result = model.Block.get(req_id, namespace=chain, minql_client=db_client).json()
+            db_result = model.Block.get(req_id, namespace=chain).json()
         elif resource == 'blockstats':
-            db_result = model.Blockstats.get(req_id, namespace=chain, minql_client=db_client).json()
+            db_result = model.Blockstats.get(req_id, namespace=chain).json()
         elif resource == 'tx':
-            db_result = model.Tx.get(req_id, namespace=chain, minql_client=db_client).json()
+            db_result = model.Tx.get(req_id, namespace=chain).json()
 
         if not db_result:
             return {'error': {'message': 'No result db for %s.' % resource}}
@@ -93,7 +93,7 @@ def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
 def GetBlockByHeight(db_client, rpccaller, chain, height):
     criteria = {'height': height}
     try:
-        block_by_height = model.Block.search(criteria, namespace=chain, minql_client=db_client)
+        block_by_height = model.Block.search(criteria, namespace=chain)
     except minql.NotFoundError:
         block_by_height = []
     except:
@@ -158,6 +158,7 @@ class RpcCallerResource(ChainResource):
 class ChainCachedResource(ChainResource):
     def __init__(self, db_client):
         self.db_client = db_client
+        ormin.Model.set_db(db_client)
 
 
 class MempoolStatsResource(ChainCachedResource):
