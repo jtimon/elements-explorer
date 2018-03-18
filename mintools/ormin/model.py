@@ -54,14 +54,6 @@ class Model(form.Form):
         self.id = id
 
     @classmethod
-    def get_minql_client(cls, minql_client=None):
-        if minql_client:
-            l_minql_client = minql_client
-        else:
-            l_minql_client = cls.db()
-        return l_minql_client
-
-    @classmethod
     def get_namspace_name(cls, namespace=None):
         if namespace:
             l_name = namespace + '_' + cls.get_name()
@@ -70,20 +62,18 @@ class Model(form.Form):
         return l_name
 
     @classmethod
-    def get(cls, id, minql_client=None, namespace=None):
-        l_minql_client = cls.get_minql_client(minql_client)
+    def get(cls, id, namespace=None):
         l_name = cls.get_namspace_name(namespace)
-        obj = l_minql_client.get(l_name, id)
+        obj = cls.db().get(l_name, id)
         return cls(obj)
 
     @classmethod
-    def search(cls, criteria={}, minql_client=None, namespace=None):
-        l_minql_client = cls.get_minql_client(minql_client)
+    def search(cls, criteria={}, namespace=None):
         l_name = cls.get_namspace_name(namespace)
         for k, c in criteria.iteritems():
             if not c:
                 raise Exception(criteria)
-        objs = l_minql_client.search(l_name, criteria)
+        objs = cls.db().search(l_name, criteria)
         return cls.parse_json_list(objs)
 
     @classmethod
