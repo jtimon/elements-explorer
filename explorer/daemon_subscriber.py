@@ -140,18 +140,18 @@ class GreedyCacher(CronCacher):
 
     def cache_blockhash(self, blockhash):
         try:
-            block = GetById(self.db_client, self.rpccaller, self.chain, 'block', blockhash)
-            blockstats = GetById(self.db_client, self.rpccaller, self.chain, 'blockstats', block['height'])
+            block = GetById(self.rpccaller, self.chain, 'block', blockhash)
+            blockstats = GetById(self.rpccaller, self.chain, 'blockstats', block['height'])
             if self.cache_txs and not self.first_pass and 'tx' in block:
                 for txid in block['tx']:
-                    tx = GetById(self.db_client, self.rpccaller, self.chain, 'tx', txid)
+                    tx = GetById(self.rpccaller, self.chain, 'tx', txid)
         except:
             print('FAILED cache_blockhash %s' % blockhash)
             return None
         return block
 
     def _cron_loop(self):
-        chaininfo = GetById(self.db_client, self.rpccaller, self.chain, 'chaininfo', self.chain)
+        chaininfo = GetById(self.rpccaller, self.chain, 'chaininfo', self.chain)
         if 'error' in chaininfo:
             return
         height = chaininfo['blocks']
@@ -257,7 +257,7 @@ class DaemonReorgManager(GreedyCacher):
             block_hash = block['previousblockhash']
             block_height = block_height - 1
             try:
-                block = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
+                block = GetById(self.rpccaller, self.chain, 'block', block_hash)
             except:
                 print('FAILED get_ascendant block.get(%s)' % block_hash, block)
                 return None
@@ -307,7 +307,7 @@ class DaemonReorgManager(GreedyCacher):
         print('REORG DETECTED at previous height %s and hash %s, new height %s and hash %s' % (
             self.prev_reorg_height, self.prev_reorg_hash, block['height'], block['hash']))
 
-        self.prev_reorg_block = GetById(self.db_client, self.rpccaller, self.chain, 'block', self.prev_reorg_hash)
+        self.prev_reorg_block = GetById(self.rpccaller, self.chain, 'block', self.prev_reorg_hash)
         common_ancestor = self.find_common_ancestor(self.prev_reorg_block, block)
         if not common_ancestor or not self.check_basic_block(common_ancestor):
             print('FAILED HANDLING REORG calling find_common_ancestor %s' % block['height'], common_ancestor)
@@ -335,7 +335,7 @@ class DaemonReorgManager(GreedyCacher):
         print('update_tip from reorg height %s hash %s to %s' % (self.prev_reorg_height, self.prev_reorg_hash, block_hash))
 
         try:
-            block = GetById(self.db_client, self.rpccaller, self.chain, 'block', block_hash)
+            block = GetById(self.rpccaller, self.chain, 'block', block_hash)
             assert(block and 'hash' in block and block['hash'] == block_hash and
                    'height' in block and 'mediantime' in block)
         except:

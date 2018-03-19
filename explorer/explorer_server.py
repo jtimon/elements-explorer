@@ -19,55 +19,55 @@ def RpcFromId(rpccaller, resource, req_id):
     else:
         raise NotImplementedError
 
-def CacheChainInfoResult(db_client, chain, resource, json_result, req_id):
+def CacheChainInfoResult(chain, resource, json_result, req_id):
     db_cache = {}
     db_cache['id'] = req_id
     db_cache['bestblockhash'] = json_result['bestblockhash']
     db_cache['blocks'] = json_result['blocks']
     db_cache['mediantime'] = json_result['mediantime']
-    db_client.put(chain + "_" + resource, db_cache)
+    ormin.Model.db().put(chain + "_" + resource, db_cache)
 
-def CacheTxResult(db_client, chain, resource, json_result, req_id):
+def CacheTxResult(chain, resource, json_result, req_id):
     if 'blockhash' in json_result and json_result['blockhash']:
         # Don't cache mempool txs
         db_cache = {}
         db_cache['id'] = req_id
         db_cache['blockhash'] = json_result['blockhash']
         db_cache['blob'] = json.dumps(json_result)
-        db_client.put(chain + "_" + resource, db_cache)
+        ormin.Model.db().put(chain + "_" + resource, db_cache)
 
-def CacheBlockResult(db_client, chain, resource, json_result, req_id):
+def CacheBlockResult(chain, resource, json_result, req_id):
     db_cache = {}
     db_cache['id'] = req_id
     db_cache['height'] = json_result['height']
     db_cache['blob'] = json.dumps(json_result)
-    db_client.put(chain + "_" + resource, db_cache)
+    ormin.Model.db().put(chain + "_" + resource, db_cache)
 
-def CacheResultAsBlob(db_client, chain, resource, json_result, req_id):
+def CacheResultAsBlob(chain, resource, json_result, req_id):
     db_cache = {}
     db_cache['id'] = req_id
     db_cache['blob'] = json.dumps(json_result)
-    db_client.put(chain + "_" + resource, db_cache)
+    ormin.Model.db().put(chain + "_" + resource, db_cache)
 
-def TryRpcAndCacheFromId(db_client, rpccaller, chain, resource, req_id):
+def TryRpcAndCacheFromId(rpccaller, chain, resource, req_id):
     json_result = RpcFromId(rpccaller, resource, req_id)
     if 'error' in json_result:
         return json_result
 
     if resource == 'chaininfo':
-        CacheChainInfoResult(db_client, chain, resource, json_result, req_id)
+        CacheChainInfoResult(chain, resource, json_result, req_id)
     elif resource == 'block':
-        CacheBlockResult(db_client, chain, resource, json_result, req_id)
+        CacheBlockResult(chain, resource, json_result, req_id)
     elif resource == 'blockstats':
-        CacheBlockResult(db_client, chain, resource, json_result, req_id)
+        CacheBlockResult(chain, resource, json_result, req_id)
     elif resource == 'tx':
-        CacheTxResult(db_client, chain, resource, json_result, req_id)
+        CacheTxResult(chain, resource, json_result, req_id)
     else:
-        CacheResultAsBlob(db_client, chain, resource, json_result, req_id)
+        CacheResultAsBlob(chain, resource, json_result, req_id)
 
     return json_result
 
-def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
+def GetByIdBase(rpccaller, chain, resource, req_id):
     try:
         db_result = None
         if resource == 'chaininfo':
@@ -85,13 +85,13 @@ def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
             return {'error': {'message': 'No blob result db for %s.' % resource}}
         json_result = json.loads(db_result['blob'])
     except minql.NotFoundError:
-        json_result = TryRpcAndCacheFromId(db_client, rpccaller, chain, resource, req_id)
+        json_result = TryRpcAndCacheFromId(rpccaller, chain, resource, req_id)
     except Exception as e:
         print("Error:", type(e), e)
         return {'error': {'message': 'Error getting %s from db by id %s.' % (resource, req_id)}}
     return json_result
 
-def GetBlockByHeight(db_client, rpccaller, chain, height):
+def GetBlockByHeight(rpccaller, chain, height):
     try:
         block_by_height = model.Block.search({'height': height})
     except minql.NotFoundError:
@@ -106,13 +106,13 @@ def GetBlockByHeight(db_client, rpccaller, chain, height):
     blockhash = rpccaller.RpcCall('getblockhash', {'height': height})
     if 'error' in blockhash:
         return blockhash
-    return GetByIdBase(db_client, rpccaller, chain, 'block', blockhash)
+    return GetByIdBase(rpccaller, chain, 'block', blockhash)
 
-def GetById(db_client, rpccaller, chain, resource, req_id):
+def GetById(rpccaller, chain, resource, req_id):
     if resource == 'blockheight':
-        return GetBlockByHeight(db_client, rpccaller, chain, req_id)
+        return GetBlockByHeight(rpccaller, chain, req_id)
 
-    return GetByIdBase(db_client, rpccaller, chain, resource, req_id)
+    return GetByIdBase(rpccaller, chain, resource, req_id)
 
 class UnknownChainError(BaseException):
     pass
@@ -156,13 +156,7 @@ class RpcCallerResource(ChainResource):
             return {'result': json_result}, 200
 
 
-class ChainCachedResource(ChainResource):
-    def __init__(self, db_client):
-        self.db_client = db_client
-        ormin.Model.set_db(db_client)
-
-
-class MempoolStatsResource(ChainCachedResource):
+class MempoolStatsResource(ChainResource):
 
     def resolve_request(self, req):
         try:
@@ -194,10 +188,10 @@ class MempoolStatsResource(ChainCachedResource):
         return json_result, 200
 
 
-class GetByIdResource(ChainCachedResource):
+class GetByIdResource(ChainResource):
 
-    def __init__(self, db_client, resource, chain_required_properties=[]):
-        super(GetByIdResource, self).__init__(db_client)
+    def __init__(self, resource, chain_required_properties=[], *args, **kwargs):
+        super(GetByIdResource, self).__init__(*args, **kwargs)
 
         self.resource = resource
         self.chain_required_properties = chain_required_properties
@@ -216,21 +210,21 @@ class GetByIdResource(ChainCachedResource):
         if not 'id' in request:
             return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}, 400
 
-        return GetById(self.db_client, self.rpccaller, self.chain, self.resource, request['id']), 200
+        return GetById(self.rpccaller, self.chain, self.resource, request['id']), 200
 
 
-class AddressResource(ChainCachedResource):
+class AddressResource(ChainResource):
 
     def search_by_address(self, height, addresses):
 
-        block = GetBlockByHeight(self.db_client, self.rpccaller, self.chain, height)
+        block = GetBlockByHeight(self.rpccaller, self.chain, height)
         if 'error' in block:
             return block
 
         receipts = []
         expenditures = []
         for txid in block['tx']:
-            tx = GetById(self.db_client, self.rpccaller, self.chain, 'tx', txid)
+            tx = GetById(self.rpccaller, self.chain, 'tx', txid)
             if 'error' in tx:
                 print('ERROR: error getting tx %s (address)' % txid)
                 return tx
@@ -242,7 +236,7 @@ class AddressResource(ChainCachedResource):
 
             for tx_input in tx['vin']:
                 if 'txid' in tx_input and 'vout' in tx_input:
-                    tx_in = GetById(self.db_client, self.rpccaller, self.chain, 'tx', tx_input['txid'])
+                    tx_in = GetById(self.rpccaller, self.chain, 'tx', tx_input['txid'])
                     if 'error' in tx_in:
                         print('ERROR: error getting tx %s (address)' % tx_input['txid'])
                         return tx_in
@@ -293,8 +287,7 @@ class ExplorerApiDomain(restmin.Domain):
 
     def __init__(self, domain, db_client, *args, **kwargs):
 
-        self.db_client = db_client
-        ormin.Model.set_db( self.db_client )
+        ormin.Model.set_db( db_client )
 
         super(ExplorerApiDomain, self).__init__(domain, *args, **kwargs)
 
@@ -304,14 +297,14 @@ API_DOMAIN = ExplorerApiDomain({
     'getmempoolentry': RpcCallerResource('getmempoolentry'),
     'getrawmempool': RpcCallerResource('getrawmempool', limit_array_result=4),
     # Data from db, independent from reorgs
-    'mempoolstats': MempoolStatsResource(DB_CLIENT),
+    'mempoolstats': MempoolStatsResource(),
     # currently goes throught the whole block
-    'address': AddressResource(DB_CLIENT),
+    'address': AddressResource(),
     # cached in server and gui
-    'block': GetByIdResource(DB_CLIENT, 'block'),
-    'blockheight': GetByIdResource(DB_CLIENT, 'blockheight'),
-    'tx': GetByIdResource(DB_CLIENT, 'tx'),
-    'blockstats': GetByIdResource(DB_CLIENT, 'blockstats', ['stats_support']),
+    'block': GetByIdResource('block'),
+    'blockheight': GetByIdResource('blockheight'),
+    'tx': GetByIdResource('tx'),
+    'blockstats': GetByIdResource('blockstats', ['stats_support']),
     # TODO handle reorgs from gui (ie use websockets)
-    'chaininfo': GetByIdResource(DB_CLIENT, 'chaininfo'),
+    'chaininfo': GetByIdResource('chaininfo'),
 }, DB_CLIENT)
