@@ -2,8 +2,7 @@
 import json
 import datetime
 
-from mintools import minql
-from mintools import restmin
+from mintools import minql, restmin, ormin
 
 from explorer import model
 from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
@@ -283,8 +282,17 @@ def get_available_chains(**kwargs):
         available_chains[k] = v['properties']
     return available_chains, 200
 
+class ExplorerApiDomain(restmin.Domain):
 
-API_DOMAIN = restmin.domain.Domain({
+    def __init__(self, domain, db_client, 
+                 *args, **kwargs):
+
+        self.db_client = db_client
+        ormin.Model.set_db( self.db_client )
+
+        super(ExplorerApiDomain, self).__init__(domain, *args, **kwargs)
+
+API_DOMAIN = ExplorerApiDomain({
     'available_chains': restmin.resources.FunctionResource(get_available_chains),
     # never cached, always hits the node
     'getmempoolentry': RpcCallerResource('getmempoolentry'),
@@ -298,6 +306,6 @@ API_DOMAIN = restmin.domain.Domain({
     'blockheight': GetByIdResource(DB_CLIENT, 'blockheight'),
     'tx': GetByIdResource(DB_CLIENT, 'tx'),
     'blockstats': GetByIdResource(DB_CLIENT, 'blockstats', ['stats_support']),
-    # TODO handle reorgs from gui
+    # TODO handle reorgs from gui (ie use websockets)
     'chaininfo': GetByIdResource(DB_CLIENT, 'chaininfo'),
-})
+}, DB_CLIENT)
