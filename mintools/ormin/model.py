@@ -70,6 +70,13 @@ class Model(form.Form):
     def all(cls):
         return cls.search()
 
+    @classmethod
+    def delete(cls, criteria={}):
+        for k, c in criteria.iteritems():
+            if not c:
+                raise Exception(criteria)
+        cls.db().delete(cls.get_name(), criteria)
+
     def save(self):
         self.validate()
         if self.errors:
