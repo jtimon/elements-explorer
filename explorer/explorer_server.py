@@ -92,9 +92,8 @@ def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
     return json_result
 
 def GetBlockByHeight(db_client, rpccaller, chain, height):
-    criteria = {'height': height}
     try:
-        block_by_height = model.Block.search(criteria)
+        block_by_height = model.Block.search({'height': height})
     except minql.NotFoundError:
         block_by_height = []
     except:
@@ -175,17 +174,22 @@ class MempoolStatsResource(ChainCachedResource):
         if not 'hours_ago' in request:
             return {'error': {'message': 'No hours_ago specified to get %s in request %s' % ('mempoolstats', request)}}, 400
 
-        json_result = {}
+        seconds_ago = request['hours_ago'] * 60 * 60
+        min_epoch = int((datetime.datetime.now() - datetime.timedelta(seconds=seconds_ago)).strftime('%s'))
         try:
-            seconds_ago = request['hours_ago'] * 60 * 60
-            min_epoch = int((datetime.datetime.now() - datetime.timedelta(seconds=seconds_ago)).strftime('%s'))
-            db_result = self.db_client.search(self.chain + "_" + 'mempoolstats', {'time': {'ge': min_epoch}})
-            if not db_result:
-                return {'error': {'message': 'No result db for %s.' % 'mempoolstats'}}, 400
-            for db_elem in db_result:
-                json_result[db_elem['id']] = json.loads(db_elem['blob'])
-        except:
+            db_result = model.Mempoolstats.search({'time': {'ge': min_epoch}})
+        except minql.NotFoundError:
+            return {'error': {'message': 'No mempoolstats in the last %s hours.' % hours_ago}}, 400
+        except Exception as e:
+            print("Error:", type(e), e)
             return {'error': {'message': 'Error getting %s from db.' % ('mempoolstats')}}, 400
+
+        if not db_result:
+            return {'error': {'message': 'No result db for %s.' % 'mempoolstats'}}, 400
+
+        json_result = {}
+        for db_elem in db_result:
+            json_result[db_elem.id] = json.loads(db_elem.blob)
 
         return json_result, 200
 
@@ -287,8 +291,7 @@ def get_available_chains(**kwargs):
 
 class ExplorerApiDomain(restmin.Domain):
 
-    def __init__(self, domain, db_client, 
-                 *args, **kwargs):
+    def __init__(self, domain, db_client, *args, **kwargs):
 
         self.db_client = db_client
         ormin.Model.set_db( self.db_client )
