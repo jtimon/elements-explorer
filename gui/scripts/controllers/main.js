@@ -203,7 +203,8 @@ angular.module('rpcExplorerApp')
                         });
                     }
                     return promise;
-                });
+                })
+                .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
         function NothingSelectedLoad()
