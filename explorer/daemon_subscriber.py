@@ -7,6 +7,7 @@ import time
 
 from mintools import zmqmin, minql, ormin
 
+from explorer import model
 from explorer.explorer_server import GetById
 
 MEMPOOL_STATS_INTERVALS = (
@@ -201,31 +202,40 @@ class DaemonReorgManager(GreedyCacher):
     def delete_txs_from_blocks(self, blocks_to_delete):
 
         for block in blocks_to_delete:
-            blockhash = block['id']
+            blockhash = block.id
             print('delete txs with blockhash %s' % blockhash)
 
             tx_criteria = {'blockhash': blockhash}
-            txs_to_delete = self.db_client.search(self.chain + "_" + 'tx', tx_criteria)
-            print('txs_to_delete', txs_to_delete)
-            if txs_to_delete:
-                self.db_client.delete(self.chain + "_" + 'tx', tx_criteria)
+            try:
+                txs_to_delete = model.Tx.search(tx_criteria)
+                print('txs_to_delete', txs_to_delete)
+                if txs_to_delete:
+                    model.Tx.delete(tx_criteria)
+            except minql.NotFoundError:
+                pass
 
     def delete_from_height(self, block_height):
 
         criteria = {'height': {'ge': block_height}}
-        blocks_to_delete = self.db_client.search(self.chain + "_" + 'block', criteria)
-        if blocks_to_delete:
-            try:
-                self.delete_txs_from_blocks(blocks_to_delete)
-            except:
-                print('ERROR with blocks_to_delete', len(blocks_to_delete))
-                # return False
-            self.db_client.delete(self.chain + "_" + 'block', criteria)
+        try:
+            blocks_to_delete = model.Block.search(criteria)
+            if blocks_to_delete:
+                try:
+                    self.delete_txs_from_blocks(blocks_to_delete)
+                except:
+                    print('ERROR with blocks_to_delete', len(blocks_to_delete))
+                    # return False
+                model.Block.delete(criteria)
+        except minql.NotFoundError:
+            pass
 
-        stats_to_delete = self.db_client.search(self.chain + "_" + 'blockstats', criteria)
-        print('stats_to_delete', len(stats_to_delete))
-        if stats_to_delete:
-            self.db_client.delete(self.chain + "_" + 'blockstats', criteria)
+        try:
+            stats_to_delete = model.Blockstats.search(criteria)
+            print('stats_to_delete', len(stats_to_delete))
+            if stats_to_delete:
+                model.Blockstats.delete(criteria)
+        except minql.NotFoundError:
+            pass
 
     def commit_new_prev(self, block):
         self.prev_reorg_hash = block['hash']
