@@ -39,6 +39,7 @@ class ChainCacher(RpcCacher):
         super(ChainCacher, self).__init__(rpccaller, db_client)
 
         self.chain = chain
+        ormin.Form.set_namespace(self.chain)
 
 class CronCacher(ChainCacher, multiprocessing.Process):
 

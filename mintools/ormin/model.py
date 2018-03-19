@@ -54,31 +54,21 @@ class Model(form.Form):
         self.id = id
 
     @classmethod
-    def get_namspace_name(cls, namespace=None):
-        if namespace:
-            l_name = namespace + '_' + cls.get_name()
-        else:
-            l_name = cls.get_name()
-        return l_name
-
-    @classmethod
-    def get(cls, id, namespace=None):
-        l_name = cls.get_namspace_name(namespace)
-        obj = cls.db().get(l_name, id)
+    def get(cls, id):
+        obj = cls.db().get(cls.get_name(), id)
         return cls(obj)
 
     @classmethod
-    def search(cls, criteria={}, namespace=None):
-        l_name = cls.get_namspace_name(namespace)
+    def search(cls, criteria={}):
         for k, c in criteria.iteritems():
             if not c:
                 raise Exception(criteria)
-        objs = cls.db().search(l_name, criteria)
+        objs = cls.db().search(cls.get_name(), criteria)
         return cls.parse_json_list(objs)
 
     @classmethod
-    def all(cls, minql_client=None, namespace=None):
-        return cls.search(minql_client=minql_client, namespace=namespace)
+    def all(cls):
+        return cls.search()
 
     def save(self):
         self.validate()

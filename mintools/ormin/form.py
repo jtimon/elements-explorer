@@ -36,10 +36,18 @@ class Form(object):
                     attr.add_property(cls, attr_name)
 
     @classmethod
+    def set_namespace(cls, value):
+        cls._namespace = value
+
+    @classmethod
     def get_name(cls):
         import re
         s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', cls.__name__)
-        return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+        s2 = re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+        if hasattr(cls, '_namespace') and cls._namespace:
+            return cls._namespace + '_' + s2
+        else:
+            return s2
 
     @classmethod
     def json_schema(cls):

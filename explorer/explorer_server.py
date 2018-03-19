@@ -71,13 +71,13 @@ def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
     try:
         db_result = None
         if resource == 'chaininfo':
-            return model.Chaininfo.get(req_id, namespace=chain).json()
+            return model.Chaininfo.get(req_id).json()
         elif resource == 'block':
-            db_result = model.Block.get(req_id, namespace=chain).json()
+            db_result = model.Block.get(req_id).json()
         elif resource == 'blockstats':
-            db_result = model.Blockstats.get(req_id, namespace=chain).json()
+            db_result = model.Blockstats.get(req_id).json()
         elif resource == 'tx':
-            db_result = model.Tx.get(req_id, namespace=chain).json()
+            db_result = model.Tx.get(req_id).json()
 
         if not db_result:
             return {'error': {'message': 'No result db for %s.' % resource}}
@@ -86,14 +86,15 @@ def GetByIdBase(db_client, rpccaller, chain, resource, req_id):
         json_result = json.loads(db_result['blob'])
     except minql.NotFoundError:
         json_result = TryRpcAndCacheFromId(db_client, rpccaller, chain, resource, req_id)
-    except:
+    except Exception as e:
+        print("Error:", type(e), e)
         return {'error': {'message': 'Error getting %s from db by id %s.' % (resource, req_id)}}
     return json_result
 
 def GetBlockByHeight(db_client, rpccaller, chain, height):
     criteria = {'height': height}
     try:
-        block_by_height = model.Block.search(criteria, namespace=chain)
+        block_by_height = model.Block.search(criteria)
     except minql.NotFoundError:
         block_by_height = []
     except:
@@ -129,6 +130,7 @@ class ChainResource(restmin.resources.Resource):
         if not self.chain in AVAILABLE_CHAINS:
             raise UnknownChainError
 
+        ormin.Form.set_namespace(self.chain)
         self.rpccaller = AVAILABLE_CHAINS[self.chain]['rpc']
 
         return request_data
