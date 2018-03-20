@@ -1,4 +1,12 @@
+import utils from './utils';
+
+const has = Object.prototype.hasOwnProperty;
+
 function getChainInfo() {
+  const state = store.getState();
+  if (!utils.isEmpty(state.chain_info)) {
+    return Promise.resolve().then(() => state.chain_info);
+  }
   const url = '/api/v0/chaininfo';
   const requestParams = {
     method: 'POST',
@@ -11,10 +19,22 @@ function getChainInfo() {
     }),
   };
   return fetch(url, requestParams)
-    .then(response => response.json());
+    .then(response => response.json())
+    .then((data) => {
+      store.dispatchMerge({
+        chain_info: data,
+      });
+      return data;
+    });
 }
 
 function getBlockByHash(id) {
+  const state = store.getState();
+  if (!utils.isEmpty(state.blocks.hashes)) {
+    if (has.call(state.blocks.hashes, id)) {
+      return Promise.resolve().then(() => state.blocks.heights[id]);
+    }
+  }
   const url = '/api/v0/block';
   const requestParams = {
     method: 'POST',
@@ -27,7 +47,17 @@ function getBlockByHash(id) {
     }),
   };
   return fetch(url, requestParams)
-    .then(response => response.json());
+    .then(response => response.json())
+    .then((data) => {
+      const blockHash = data.hash;
+      const blockHeight = data.height;
+      let newData = Immutable.setIn(state.blocks, ['hashes', blockHash], data);
+      newData = Immutable.setIn(newData, ['heights', blockHeight], blockHash);
+      store.dispatchMerge({
+        blocks: newData,
+      });
+      return data;
+    });
 }
 
 function getBlockByHeight(id) {

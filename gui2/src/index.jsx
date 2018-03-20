@@ -26,7 +26,10 @@ function initLibraries() {
 function initStateValues() {
   store.dispatchMerge({
     chain_info: Immutable({}),
-    blocks: Immutable({}),
+    blocks: Immutable.from({
+      hashes: {},
+      heights: {},
+    }),
     transactions: Immutable({}),
   });
 }
