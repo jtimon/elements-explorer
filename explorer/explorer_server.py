@@ -85,7 +85,7 @@ def GetByIdBase(rpccaller, resource, req_id):
         elif resource == 'tx':
             json_result = CacheTxResult(rpccaller, req_id)
         else:
-            raise NotImplementedError
+            return {'error': {'message': 'Error caching %s from db by id %s. (unkown resource)' % (resource, req_id)}}
     except Exception as e:
         print("Error:", type(e), e)
         return {'error': {'message': 'Error getting %s from db by id %s.' % (resource, req_id)}}
