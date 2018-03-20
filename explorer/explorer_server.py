@@ -210,7 +210,10 @@ class GetByIdResource(ChainResource):
         if not 'id' in request:
             return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}, 400
 
-        return GetById(self.rpccaller, self.chain, self.resource, request['id']), 200
+        response = GetById(self.rpccaller, self.chain, self.resource, request['id'])
+        if 'error' in response:
+            return {'error': response['error']}, 400
+        return response, 200
 
 
 class AddressResource(ChainResource):
