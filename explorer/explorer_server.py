@@ -7,24 +7,21 @@ from mintools import minql, restmin, ormin
 from explorer import model
 from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
 
-def RpcFromId(rpccaller, resource, req_id):
-    if resource == 'blockstats':
-        return rpccaller.RpcCall('getblockstats', {'height': req_id})
-    elif resource == 'block':
-        return rpccaller.RpcCall('getblock', {'blockhash': req_id})
-    elif resource == 'tx':
-        return rpccaller.RpcCall('getrawtransaction', {'txid': req_id, 'verbose': 1})
-    elif resource == 'chaininfo':
-        return rpccaller.RpcCall('getblockchaininfo', {})
-    else:
-        raise NotImplementedError
+def CacheChainInfoResult(rpccaller, req_id):
+    json_result = rpccaller.RpcCall('getblockchaininfo', {})
+    if 'error' in json_result:
+        return json_result
 
-def CacheChainInfoResult(json_result, req_id):
     chaininfo = model.Chaininfo(json=json_result)
     chaininfo.id = req_id
     chaininfo.insert()
+    return json_result
 
-def CacheTxResult(json_result, req_id):
+def CacheTxResult(rpccaller, req_id):
+    json_result = rpccaller.RpcCall('getrawtransaction', {'txid': req_id, 'verbose': 1})
+    if 'error' in json_result:
+        return json_result
+
     if 'blockhash' in json_result and json_result['blockhash']:
         # Don't cache mempool txs
         tx = model.Tx()
@@ -33,37 +30,43 @@ def CacheTxResult(json_result, req_id):
         tx.id = req_id
         tx.insert()
 
-def CacheBlockResult(json_result, req_id):
+    return json_result
+
+def CacheBlockResult(rpccaller, req_id):
+    json_result = rpccaller.RpcCall('getblock', {'blockhash': req_id})
+    if 'error' in json_result:
+        return json_result
+
     block = model.Block()
     block.height = json_result['height']
     block.blob = json.dumps(json_result)
     block.id = req_id
     block.insert()
+    return json_result
 
-def CacheBlockStatsResult(json_result, req_id):
+def CacheBlockStatsResult(rpccaller, req_id):
+    json_result = rpccaller.RpcCall('getblockstats', {'height': req_id})
+    if 'error' in json_result:
+        return json_result
+
     blockstats = model.Blockstats()
     blockstats.height = json_result['height']
     blockstats.blob = json.dumps(json_result)
     blockstats.id = req_id
     blockstats.insert()
+    return json_result
 
 def TryRpcAndCacheFromId(rpccaller, resource, req_id):
-    json_result = RpcFromId(rpccaller, resource, req_id)
-    if 'error' in json_result:
-        return json_result
-
     if resource == 'chaininfo':
-        CacheChainInfoResult(json_result, req_id)
+        return CacheChainInfoResult(rpccaller, req_id)
     elif resource == 'block':
-        CacheBlockResult(json_result, req_id)
+        return CacheBlockResult(rpccaller, req_id)
     elif resource == 'blockstats':
-        CacheBlockStatsResult(json_result, req_id)
+        return CacheBlockStatsResult(rpccaller, req_id)
     elif resource == 'tx':
-        CacheTxResult(json_result, req_id)
+        return CacheTxResult(rpccaller, req_id)
     else:
         raise NotImplementedError
-
-    return json_result
 
 def GetByIdBase(rpccaller, resource, req_id):
     try:
