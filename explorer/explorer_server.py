@@ -7,23 +7,6 @@ from mintools import minql, restmin, ormin
 from explorer import model
 from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
 
-def CacheTxResult(rpccaller, req_id):
-    json_result = rpccaller.RpcCall('getrawtransaction', {'txid': req_id, 'verbose': 1})
-    if 'error' in json_result:
-        return json_result
-
-    if 'blockhash' in json_result and json_result['blockhash']:
-        # Don't cache mempool txs
-        tx = model.Tx()
-        tx.blockhash = json_result['blockhash']
-        tx.blob = json.dumps(json_result)
-        tx.id = req_id
-        tx.save()
-        if tx.errors:
-            return {'error': {'message': json.dumps(tx.errors)}}
-
-    return json_result
-
 def CacheBlockStatsResult(rpccaller, req_id):
     json_result = rpccaller.RpcCall('getblockstats', {'height': req_id})
     if 'error' in json_result:
@@ -62,8 +45,6 @@ def GetByIdBase(rpccaller, resource, req_id):
     except minql.NotFoundError:
         if resource == 'blockstats':
             return CacheBlockStatsResult(rpccaller, req_id)
-        elif resource == 'tx':
-            return CacheTxResult(rpccaller, req_id)
         else:
             return {'error': {'message': 'Error caching %s from db by id %s. (unkown resource)' % (resource, req_id)}}
     except Exception as e:
