@@ -121,7 +121,7 @@ class MempoolStatsCacher(CronCacher):
         mempoolstats = model.Mempoolstats()
         mempoolstats.time = int((datetime.datetime.now()).strftime('%s'))
         mempoolstats.blob = json.dumps(stats)
-        mempoolstats.id = mempoolstats.time
+        mempoolstats.id = str(mempoolstats.time)
         try:
             mempoolstats.insert()
         except:
