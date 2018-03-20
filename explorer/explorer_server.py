@@ -56,18 +56,6 @@ def CacheBlockStatsResult(rpccaller, req_id):
     blockstats.insert()
     return json_result
 
-def TryRpcAndCacheFromId(rpccaller, resource, req_id):
-    if resource == 'chaininfo':
-        return CacheChainInfoResult(rpccaller, req_id)
-    elif resource == 'block':
-        return CacheBlockResult(rpccaller, req_id)
-    elif resource == 'blockstats':
-        return CacheBlockStatsResult(rpccaller, req_id)
-    elif resource == 'tx':
-        return CacheTxResult(rpccaller, req_id)
-    else:
-        raise NotImplementedError
-
 def GetByIdBase(rpccaller, resource, req_id):
     try:
         db_result = None
@@ -79,6 +67,8 @@ def GetByIdBase(rpccaller, resource, req_id):
             db_result = model.Blockstats.get(req_id).json()
         elif resource == 'tx':
             db_result = model.Tx.get(req_id).json()
+        else:
+            raise NotImplementedError
 
         if not db_result:
             return {'error': {'message': 'No result db for %s.' % resource}}
@@ -86,7 +76,16 @@ def GetByIdBase(rpccaller, resource, req_id):
             return {'error': {'message': 'No blob result db for %s.' % resource}}
         json_result = json.loads(db_result['blob'])
     except minql.NotFoundError:
-        json_result = TryRpcAndCacheFromId(rpccaller, resource, req_id)
+        if resource == 'chaininfo':
+            json_result = CacheChainInfoResult(rpccaller, req_id)
+        elif resource == 'block':
+            json_result = CacheBlockResult(rpccaller, req_id)
+        elif resource == 'blockstats':
+            json_result = CacheBlockStatsResult(rpccaller, req_id)
+        elif resource == 'tx':
+            json_result = CacheTxResult(rpccaller, req_id)
+        else:
+            raise NotImplementedError
     except Exception as e:
         print("Error:", type(e), e)
         return {'error': {'message': 'Error getting %s from db by id %s.' % (resource, req_id)}}
