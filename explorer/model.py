@@ -1,4 +1,6 @@
 
+import json
+
 from mintools import ormin
 
 class RpcCachedModel(ormin.CachedModel):
@@ -24,9 +26,22 @@ class Chaininfo(RpcCachedModel):
         chaininfo.save()
         return chaininfo
 
-class Block(ormin.Model):
+class Block(RpcCachedModel):
     height = ormin.IntField(index=True, unique=True)
     blob = ormin.TextField()
+
+    @classmethod
+    def truth_src_get(cls, req_id):
+        json_result = super(Block, cls)._rpccaller.RpcCall('getblock', {'blockhash': req_id})
+        if 'error' in json_result:
+            return json_result
+
+        block = Block()
+        block.height = json_result['height']
+        block.blob = json.dumps(json_result)
+        block.id = req_id
+        block.save()
+        return block
 
 class Tx(ormin.Model):
     blockhash = ormin.StringField(index=True)

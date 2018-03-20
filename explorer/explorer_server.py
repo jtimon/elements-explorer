@@ -24,20 +24,6 @@ def CacheTxResult(rpccaller, req_id):
 
     return json_result
 
-def CacheBlockResult(rpccaller, req_id):
-    json_result = rpccaller.RpcCall('getblock', {'blockhash': req_id})
-    if 'error' in json_result:
-        return json_result
-
-    block = model.Block()
-    block.height = json_result['height']
-    block.blob = json.dumps(json_result)
-    block.id = req_id
-    block.save()
-    if block.errors:
-        return {'error': {'message': json.dumps(block.errors)}}
-    return json_result
-
 def CacheBlockStatsResult(rpccaller, req_id):
     json_result = rpccaller.RpcCall('getblockstats', {'height': req_id})
     if 'error' in json_result:
@@ -66,32 +52,41 @@ def GetByIdBase(rpccaller, resource, req_id):
                 return {'error': {'message': 'Error getting chaininfo.'}}
 
         elif resource == 'block':
-            db_result = model.Block.get(req_id).json()
+            db_result = model.Block.get(req_id)
         elif resource == 'blockstats':
-            db_result = model.Blockstats.get(req_id).json()
+            db_result = model.Blockstats.get(req_id)
         elif resource == 'tx':
-            db_result = model.Tx.get(req_id).json()
+            db_result = model.Tx.get(req_id)
         else:
             raise NotImplementedError
-
-        if not db_result:
-            return {'error': {'message': 'No result db for %s.' % resource}}
-        if not 'blob' in db_result:
-            return {'error': {'message': 'No blob result db for %s.' % resource}}
-        json_result = json.loads(db_result['blob'])
     except minql.NotFoundError:
-        if resource == 'block':
-            json_result = CacheBlockResult(rpccaller, req_id)
-        elif resource == 'blockstats':
-            json_result = CacheBlockStatsResult(rpccaller, req_id)
+        if resource == 'blockstats':
+            return CacheBlockStatsResult(rpccaller, req_id)
         elif resource == 'tx':
-            json_result = CacheTxResult(rpccaller, req_id)
+            return CacheTxResult(rpccaller, req_id)
         else:
             return {'error': {'message': 'Error caching %s from db by id %s. (unkown resource)' % (resource, req_id)}}
     except Exception as e:
         print("Error in GetByIdBase:", type(e), e)
         return {'error': {'message': 'Error getting %s from db by id %s.' % (resource, req_id)}}
-    return json_result
+
+    if not db_result:
+        return {'error': {'message': 'No result db for %s.' % resource}}
+
+    if isinstance(db_result, dict):
+        if 'error' in db_result:
+            return db_result
+        elif not 'blob' in db_result:
+            print('ERROR: No blob result db for %s. db_result:' % resource, db_result)
+            return {'error': {'message': 'No blob result db for %s.' % resource}}
+        json_result = db_result
+    elif isinstance(db_result, ormin.Model):
+        json_result = db_result.json()
+    else:
+        print('ERROR: getting %s. db_result:' % resource, db_result)
+        return {'error': {'message': 'Error getting %s.' % resource}}
+
+    return json.loads(json_result['blob'])
 
 def GetBlockByHeight(rpccaller, height):
     try:
