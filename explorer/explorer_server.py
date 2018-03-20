@@ -19,55 +19,53 @@ def RpcFromId(rpccaller, resource, req_id):
     else:
         raise NotImplementedError
 
-def CacheChainInfoResult(chain, resource, json_result, req_id):
-    db_cache = {}
-    db_cache['id'] = req_id
-    db_cache['bestblockhash'] = json_result['bestblockhash']
-    db_cache['blocks'] = json_result['blocks']
-    db_cache['mediantime'] = json_result['mediantime']
-    ormin.Model.db().put(chain + "_" + resource, db_cache)
+def CacheChainInfoResult(json_result, req_id):
+    chaininfo = model.Chaininfo(json=json_result)
+    chaininfo.id = req_id
+    chaininfo.insert()
 
-def CacheTxResult(chain, resource, json_result, req_id):
+def CacheTxResult(json_result, req_id):
     if 'blockhash' in json_result and json_result['blockhash']:
         # Don't cache mempool txs
-        db_cache = {}
-        db_cache['id'] = req_id
-        db_cache['blockhash'] = json_result['blockhash']
-        db_cache['blob'] = json.dumps(json_result)
-        ormin.Model.db().put(chain + "_" + resource, db_cache)
+        tx = model.Tx()
+        tx.blockhash = json_result['blockhash']
+        tx.blob = json.dumps(json_result)
+        tx.id = req_id
+        tx.insert()
 
-def CacheBlockResult(chain, resource, json_result, req_id):
-    db_cache = {}
-    db_cache['id'] = req_id
-    db_cache['height'] = json_result['height']
-    db_cache['blob'] = json.dumps(json_result)
-    ormin.Model.db().put(chain + "_" + resource, db_cache)
+def CacheBlockResult(json_result, req_id):
+    block = model.Block()
+    block.height = json_result['height']
+    block.blob = json.dumps(json_result)
+    block.id = req_id
+    block.insert()
 
-def CacheResultAsBlob(chain, resource, json_result, req_id):
-    db_cache = {}
-    db_cache['id'] = req_id
-    db_cache['blob'] = json.dumps(json_result)
-    ormin.Model.db().put(chain + "_" + resource, db_cache)
+def CacheBlockStatsResult(json_result, req_id):
+    blockstats = model.Blockstats()
+    blockstats.height = json_result['height']
+    blockstats.blob = json.dumps(json_result)
+    blockstats.id = req_id
+    blockstats.insert()
 
-def TryRpcAndCacheFromId(rpccaller, chain, resource, req_id):
+def TryRpcAndCacheFromId(rpccaller, resource, req_id):
     json_result = RpcFromId(rpccaller, resource, req_id)
     if 'error' in json_result:
         return json_result
 
     if resource == 'chaininfo':
-        CacheChainInfoResult(chain, resource, json_result, req_id)
+        CacheChainInfoResult(json_result, req_id)
     elif resource == 'block':
-        CacheBlockResult(chain, resource, json_result, req_id)
+        CacheBlockResult(json_result, req_id)
     elif resource == 'blockstats':
-        CacheBlockResult(chain, resource, json_result, req_id)
+        CacheBlockStatsResult(json_result, req_id)
     elif resource == 'tx':
-        CacheTxResult(chain, resource, json_result, req_id)
+        CacheTxResult(json_result, req_id)
     else:
-        CacheResultAsBlob(chain, resource, json_result, req_id)
+        raise NotImplementedError
 
     return json_result
 
-def GetByIdBase(rpccaller, chain, resource, req_id):
+def GetByIdBase(rpccaller, resource, req_id):
     try:
         db_result = None
         if resource == 'chaininfo':
@@ -85,13 +83,13 @@ def GetByIdBase(rpccaller, chain, resource, req_id):
             return {'error': {'message': 'No blob result db for %s.' % resource}}
         json_result = json.loads(db_result['blob'])
     except minql.NotFoundError:
-        json_result = TryRpcAndCacheFromId(rpccaller, chain, resource, req_id)
+        json_result = TryRpcAndCacheFromId(rpccaller, resource, req_id)
     except Exception as e:
         print("Error:", type(e), e)
         return {'error': {'message': 'Error getting %s from db by id %s.' % (resource, req_id)}}
     return json_result
 
-def GetBlockByHeight(rpccaller, chain, height):
+def GetBlockByHeight(rpccaller, height):
     try:
         block_by_height = model.Block.search({'height': height})
     except minql.NotFoundError:
@@ -106,13 +104,13 @@ def GetBlockByHeight(rpccaller, chain, height):
     blockhash = rpccaller.RpcCall('getblockhash', {'height': height})
     if 'error' in blockhash:
         return blockhash
-    return GetByIdBase(rpccaller, chain, 'block', blockhash)
+    return GetByIdBase(rpccaller, 'block', blockhash)
 
-def GetById(rpccaller, chain, resource, req_id):
+def GetById(rpccaller, resource, req_id):
     if resource == 'blockheight':
-        return GetBlockByHeight(rpccaller, chain, req_id)
+        return GetBlockByHeight(rpccaller, req_id)
 
-    return GetByIdBase(rpccaller, chain, resource, req_id)
+    return GetByIdBase(rpccaller, resource, req_id)
 
 class UnknownChainError(BaseException):
     pass
@@ -210,7 +208,7 @@ class GetByIdResource(ChainResource):
         if not 'id' in request:
             return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}, 400
 
-        response = GetById(self.rpccaller, self.chain, self.resource, request['id'])
+        response = GetById(self.rpccaller, self.resource, request['id'])
         if 'error' in response:
             return {'error': response['error']}, 400
         return response, 200
@@ -220,14 +218,14 @@ class AddressResource(ChainResource):
 
     def search_by_address(self, height, addresses):
 
-        block = GetBlockByHeight(self.rpccaller, self.chain, height)
+        block = GetBlockByHeight(self.rpccaller, height)
         if 'error' in block:
             return block
 
         receipts = []
         expenditures = []
         for txid in block['tx']:
-            tx = GetById(self.rpccaller, self.chain, 'tx', txid)
+            tx = GetById(self.rpccaller, 'tx', txid)
             if 'error' in tx:
                 print('ERROR: error getting tx %s (address)' % txid)
                 return tx
@@ -239,7 +237,7 @@ class AddressResource(ChainResource):
 
             for tx_input in tx['vin']:
                 if 'txid' in tx_input and 'vout' in tx_input:
-                    tx_in = GetById(self.rpccaller, self.chain, 'tx', tx_input['txid'])
+                    tx_in = GetById(self.rpccaller, 'tx', tx_input['txid'])
                     if 'error' in tx_in:
                         print('ERROR: error getting tx %s (address)' % tx_input['txid'])
                         return tx_in
