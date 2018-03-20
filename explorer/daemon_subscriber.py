@@ -30,7 +30,6 @@ class RpcCacher(object):
         super(RpcCacher, self).__init__()
 
         self.rpccaller = rpccaller
-        self.db_client = db_client
         ormin.Model.set_db(db_client)
 
 class ChainCacher(RpcCacher):
@@ -119,15 +118,14 @@ class MempoolStatsCacher(CronCacher):
 
             IncrementStats(stats, 'total', tx_fee, tx_size)
 
-        entry = {}
-        entry['id'] = int((datetime.datetime.now()).strftime('%s'))
-        entry['time'] = int((datetime.datetime.now()).strftime('%s'))
-        entry['blob'] = json.dumps(stats)
+        mempoolstats = model.Mempoolstats()
+        mempoolstats.time = int((datetime.datetime.now()).strftime('%s'))
+        mempoolstats.blob = json.dumps(stats)
+        mempoolstats.id = mempoolstats.time
         try:
-            db_result = self.db_client.put(self.chain + "_" + 'mempoolstats', entry)
+            mempoolstats.insert()
         except:
-            print('FAILED caching %s in chain %s' % ('mempoolstats', self.chain))
-            return
+            print('FAILED caching %s in chain %s %s' % ('mempoolstats', self.chain, json.dumps(mempoolstats.json())))
 
 class GreedyCacher(CronCacher):
 
@@ -185,15 +183,19 @@ class DaemonReorgManager(GreedyCacher):
         self.prev_reorg_hash = None
 
     def update_chainfo(self, block):
-        entry = {}
-        entry['id'] = self.chain
-        entry['bestblockhash'] = block['hash']
-        entry['blocks'] = block['height']
-        entry['mediantime'] = block['mediantime']
+        chaininfo = model.Chaininfo(json={
+            'bestblockhash': block['hash'],
+            'blocks': block['height'],
+            'mediantime': block['mediantime'],
+        })
+        chaininfo.id = self.chain
         try:
-            db_result = self.db_client.put(self.chain + "_" + 'chaininfo', entry)
+            model.Chaininfo.get(self.chain)
+            chaininfo.update()
+        except minql.NotFoundError:
+            chaininfo.insert()
         except:
-            print('FAILED UPDATE TIP in chain %s' % (self.chain), entry)
+            print('FAILED UPDATE TIP in chain %s %s' % (self.chain), entry, json.dumps(chaininfo.json()))
             return False
 
         return True
