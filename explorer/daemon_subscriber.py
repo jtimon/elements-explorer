@@ -143,16 +143,20 @@ class GreedyCacher(CronCacher):
 
     def cache_blockhash(self, blockhash):
         try:
-            block = GetById(self.rpccaller, 'block', blockhash)
-            blockstats = GetById(self.rpccaller, 'blockstats', block['height'])
-            if self.cache_txs and 'tx' in block:
-                for txid in block['tx']:
-                    tx = GetById(self.rpccaller, 'tx', txid)
+            block = model.Block.get(blockhash)
+            if not isinstance(block, model.Block):
+                print("Error in GreedyCacher.cache_blockhash: wrong type for block", blockhash, block)
+                return None
+
+            model.Block.get(block.height)
+            blockblob = json.loads(block.blob)
+            if self.cache_txs and 'tx' in blockblob:
+                for txid in blockblob['tx']:
+                    tx = model.Tx.get(txid)
+            return block.json()
         except Exception as e:
-            print("Error in GreedyCacher.cache_blockhash:", type(e), e)
-            print('FAILED cache_blockhash %s' % blockhash)
+            print("Error in GreedyCacher.cache_blockhash:", blockhash, type(e), e)
             return None
-        return block
 
     def _cron_loop(self):
         chaininfo = GetById(self.rpccaller, 'chaininfo', self.chain)
