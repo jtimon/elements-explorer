@@ -64,9 +64,22 @@ class Tx(RpcCachedModel):
 
         return json_result
 
-class Blockstats(ormin.Model):
+class Blockstats(RpcCachedModel):
     height = ormin.IntField(index=True)
     blob = ormin.TextField()
+
+    @classmethod
+    def truth_src_get(cls, req_id):
+        json_result = super(Blockstats, cls)._rpccaller.RpcCall('getblockstats', {'height': req_id})
+        if 'error' in json_result:
+            return json_result
+
+        blockstats = Blockstats()
+        blockstats.height = json_result['height']
+        blockstats.blob = json.dumps(json_result)
+        blockstats.id = req_id
+        blockstats.save()
+        return blockstats
 
 class Mempoolstats(ormin.Model):
     time = ormin.IntField(index=True)
