@@ -30,6 +30,7 @@ class RpcCacher(object):
         super(RpcCacher, self).__init__()
 
         self.rpccaller = rpccaller
+        self.db_client = db_client
         ormin.Model.set_db(db_client)
 
 class ChainCacher(RpcCacher):
@@ -118,14 +119,18 @@ class MempoolStatsCacher(CronCacher):
 
             IncrementStats(stats, 'total', tx_fee, tx_size)
 
-        mempoolstats = model.Mempoolstats()
-        mempoolstats.time = int((datetime.datetime.now()).strftime('%s'))
-        mempoolstats.blob = json.dumps(stats)
-        mempoolstats.id = str(mempoolstats.time)
+        int_time = int((datetime.datetime.now()).strftime('%s'))
+        mempoolstats = model.Mempoolstats(json={
+            'id': int_time,
+            'time': int_time,
+            'blob': json.dumps(stats),
+        })
         try:
             mempoolstats.insert()
-        except:
+            print('SUCCESS caching %s in chain %s %s' % ('mempoolstats', self.chain, json.dumps(mempoolstats.json())))
+        except Exception as e:
             print('FAILED caching %s in chain %s %s' % ('mempoolstats', self.chain, json.dumps(mempoolstats.json())))
+            print("Error:", type(e), e)
 
 class GreedyCacher(CronCacher):
 
