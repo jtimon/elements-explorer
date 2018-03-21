@@ -49,18 +49,22 @@ function getBlockByHash(id) {
   return fetch(url, requestParams)
     .then(response => response.json())
     .then((data) => {
-      const blockHash = data.hash;
-      const blockHeight = data.height;
-      let newData = Immutable.setIn(state.blocks, ['hashes', blockHash], data);
-      newData = Immutable.setIn(newData, ['heights', blockHeight], blockHash);
+      const { blocks } = state;
       store.dispatchMerge({
-        blocks: newData,
+        blocks: utils.addBlockToStore(blocks, data),
       });
       return data;
     });
 }
 
 function getBlockByHeight(id) {
+  const state = store.getState();
+  if (!utils.isEmpty(state.blocks.heights)) {
+    if (has.call(state.blocks.heights, id)) {
+      const blockHash = state.blocks.heights[id];
+      return Promise.resolve().then(() => state.blocks.hashes[blockHash]);
+    }
+  }
   const url = '/api/v0/blockheight';
   const requestParams = {
     method: 'POST',
@@ -74,7 +78,13 @@ function getBlockByHeight(id) {
   };
   return fetch(url, requestParams)
     .then(response => response.json())
-    .then(data => data);
+    .then((data) => {
+      const { blocks } = store.getState();
+      store.dispatchMerge({
+        blocks: utils.addBlockToStore(blocks, data),
+      });
+      return data;
+    });
 }
 
 function getBlockStats(id) {
