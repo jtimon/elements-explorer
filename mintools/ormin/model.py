@@ -109,3 +109,25 @@ class Model(form.Form):
         obj = self.db().put(self.get_name(), self.json(False))
         print('Put...', self.get_name(), self.id)
         return self.__class__(obj)
+
+
+class CachedModel(Model):
+
+    @classmethod
+    def truth_src_get(cls, req_id):
+        raise NotImplementedError
+
+    @classmethod
+    def get(cls, id):
+        try:
+            return super(CachedModel, cls).get(id)
+        except minql.NotFoundError:
+            obj = cls.truth_src_get(id)
+            if isinstance(obj, dict):
+                if 'error' in obj:
+                    return obj
+                return cls(obj)
+            elif isinstance(obj, form.Form):
+                if obj.errors:
+                    return {'error': {'message': json.dumps(obj.errors)}}
+                return obj
