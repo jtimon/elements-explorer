@@ -140,16 +140,16 @@ class GreedyCacher(CronCacher):
 
         self.last_cached_height = -1
         self.cache_txs = cache_txs
-        self.first_pass = True
 
     def cache_blockhash(self, blockhash):
         try:
             block = GetById(self.rpccaller, 'block', blockhash)
             blockstats = GetById(self.rpccaller, 'blockstats', block['height'])
-            if self.cache_txs and not self.first_pass and 'tx' in block:
+            if self.cache_txs and 'tx' in block:
                 for txid in block['tx']:
                     tx = GetById(self.rpccaller, 'tx', txid)
-        except:
+        except Exception as e:
+            print("Error:", type(e), e)
             print('FAILED cache_blockhash %s' % blockhash)
             return None
         return block
@@ -172,10 +172,7 @@ class GreedyCacher(CronCacher):
                 return
             height = height - 1
 
-        if self.first_pass:
-            self.first_pass = False
-        else:
-            self.last_cached_height = chaininfo['blocks']
+        self.last_cached_height = chaininfo['blocks']
 
 
 class DaemonReorgManager(GreedyCacher):
