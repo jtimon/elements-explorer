@@ -44,8 +44,11 @@ class BlockJumbotron extends Component {
       time: block.time,
       nonce: block.nonce,
       bits: block.bits,
-      previousblockhash: block.previousblockhash,
     };
+    if (previousBlock) {
+      tooltipData.previousblockhash = previousBlock;
+    }
+
     return (
       <div className="container">
         <h1>Block {blockHeight}</h1>
@@ -64,29 +67,33 @@ class BlockJumbotron extends Component {
         <div className="prev-next-blocks-btns">
           <div>
             <div>
-              <Link to={`/gui2/block/${previousBlock}`}>
-                <div>
+              {(previousBlock) ? (
+                <Link to={`/gui2/block/${previousBlock}`}>
                   <div>
-                    <img alt="" src="/gui2/static/img/icons/Arrow-left-blue.svg" />
+                    <div>
+                      <img alt="" src="/gui2/static/img/icons/Arrow-left-blue.svg" />
+                    </div>
+                    <div>
+                      <span>Previous</span>
+                    </div>
                   </div>
-                  <div>
-                    <span>Previous</span>
-                  </div>
-                </div>
-              </Link>
+                </Link>
+              ) : null}
             </div>
           </div>
           <div>
-            <Link to={`/gui2/block/${nextBlock}`}>
-              <div>
+            {(nextBlock) ? (
+              <Link to={`/gui2/block/${nextBlock}`}>
                 <div>
-                  <span>Next</span>
+                  <div>
+                    <span>Next</span>
+                  </div>
+                  <div>
+                    <img alt="" src="/gui2/static/img/icons/Arrow-r-blue.svg" />
+                  </div>
                 </div>
-                <div>
-                  <img alt="" src="/gui2/static/img/icons/Arrow-r-blue.svg" />
-                </div>
-              </div>
-            </Link>
+              </Link>
+            ) : null}
           </div>
         </div>
       </div>

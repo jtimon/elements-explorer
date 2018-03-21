@@ -50,36 +50,36 @@ class BlockPage extends Component {
       loadedTransactions.push(tx);
       return promise;
     }
-
-    api.getBlockByHash(blockhash)
-      .then((block) => {
-        loadedBlock = block;
-        let promise = Promise.resolve();
-        promise = promise.then(() => (
-          api.getBlockStats(block.height)
-            .then((stats) => {
-              blockStats = stats;
-            })
-        ));
-        block.tx.forEach((tx) => {
+    api.getChainInfo().then(() => {
+      api.getBlockByHash(blockhash)
+        .then((block) => {
+          loadedBlock = block;
+          let promise = Promise.resolve();
           promise = promise.then(() => (
-            api.getTransaction(tx)
-              .then(processTx)
+            api.getBlockStats(block.height)
+              .then((stats) => {
+                blockStats = stats;
+              })
           ));
+          block.tx.forEach((tx) => {
+            promise = promise.then(() => (
+              api.getTransaction(tx)
+                .then(processTx)
+            ));
+          });
+          return promise;
+        })
+        .finally(() => {
+          this.setState({
+            block: loadedBlock,
+            block_stats: blockStats,
+            transactions: loadedTransactions,
+          });
         });
-        return promise;
-      })
-      .finally(() => {
-        this.setState({
-          block: loadedBlock,
-          block_stats: blockStats,
-          transactions: loadedTransactions,
-        });
-      });
+    });
   }
 
   render() {
-    window.state = this.state;
     const { block } = this.state;
     const loadedTransactions = this.state.transactions;
     const blockStats = this.state.block_stats;
