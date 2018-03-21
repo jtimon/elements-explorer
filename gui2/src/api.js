@@ -1,5 +1,5 @@
 function getChainInfo() {
-  const url = 'http://localhost:5000/api/v0/chaininfo';
+  const url = '/api/v0/chaininfo';
   const requestParams = {
     method: 'POST',
     headers: {
@@ -15,7 +15,7 @@ function getChainInfo() {
 }
 
 function getBlockByHash(id) {
-  const url = 'http://localhost:5000/api/v0/block';
+  const url = '/api/v0/block';
   const requestParams = {
     method: 'POST',
     headers: {
@@ -31,7 +31,7 @@ function getBlockByHash(id) {
 }
 
 function getBlockByHeight(id) {
-  const url = 'http://localhost:5000/api/v0/blockheight';
+  const url = '/api/v0/blockheight';
   const requestParams = {
     method: 'POST',
     headers: {
@@ -48,7 +48,7 @@ function getBlockByHeight(id) {
 }
 
 function getBlockStats(id) {
-  const url = 'http://localhost:5000/api/v0/blockstats';
+  const url = '/api/v0/blockstats';
   const requestParams = {
     method: 'POST',
     headers: {
@@ -64,7 +64,7 @@ function getBlockStats(id) {
 }
 
 function getTransaction(id) {
-  const url = 'http://localhost:5000/api/v0/tx';
+  const url = '/api/v0/tx';
   const requestParams = {
     method: 'POST',
     headers: {
@@ -80,7 +80,7 @@ function getTransaction(id) {
 }
 
 function getAddress(address, startHeight, endHeight) {
-  const url = 'http://localhost:5000/api/v0/address';
+  const url = '/api/v0/address';
   const requestParams = {
     method: 'POST',
     headers: {
