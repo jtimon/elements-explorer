@@ -29,6 +29,7 @@ function initStateValues() {
     blocks: Immutable.from({
       hashes: {},
       heights: {},
+      stats: {},
     }),
     transactions: Immutable({}),
   });

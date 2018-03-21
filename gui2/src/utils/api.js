@@ -88,6 +88,12 @@ function getBlockByHeight(id) {
 }
 
 function getBlockStats(id) {
+  const state = store.getState();
+  if (!utils.isEmpty(state.blocks.stats)) {
+    if (has.call(state.blocks.stats, id)) {
+      return Promise.resolve().then(() => state.blocks.stats[id]);
+    }
+  }
   const url = '/api/v0/blockstats';
   const requestParams = {
     method: 'POST',
@@ -100,7 +106,14 @@ function getBlockStats(id) {
     }),
   };
   return fetch(url, requestParams)
-    .then(response => response.json());
+    .then(response => response.json())
+    .then((data) => {
+      const { blocks } = store.getState();
+      store.dispatchMerge({
+        blocks: Immutable.setIn(blocks, ['stats', id], data),
+      });
+      return data;
+    });
 }
 
 function getTransaction(id) {
