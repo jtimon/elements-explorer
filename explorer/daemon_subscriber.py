@@ -30,6 +30,7 @@ class RpcCacher(object):
         super(RpcCacher, self).__init__()
 
         self.rpccaller = rpccaller
+        model.RpcCachedModel.set_rpccaller(rpccaller)
         self.db_client = db_client
         ormin.Model.set_db(db_client)
 
