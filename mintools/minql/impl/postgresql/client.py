@@ -15,6 +15,18 @@ class PostgresqlMinqlClient(SqlMinqlClient):
 
         super(PostgresqlMinqlClient, self).__init__(*args, **kwargs)
 
+    def try_commit(self):
+        try:
+            self.connection.commit()
+        except psycopg2.Error as e:
+            print("Error in PostgresqlMinqlClient.try_commit:", {
+                'message': e.pgerror,
+                'type': type(e),
+                'code': e.pgcode,
+                'full': e,
+            })
+            raise e
+
     # TODO find out how to do the same in hyperdex
     # and add it to the interface?
     def get_tables():
@@ -59,7 +71,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
         cur = self.connection.cursor()
         print(query)
         cur.execute(query)
-        self.connection.commit()
+        self.try_commit()
 
         for key, value in schema.iteritems():
 
@@ -69,7 +81,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
                 print(query)
                 cur = self.connection.cursor()
                 cur.execute(query)
-                self.connection.commit()
+                self.try_commit()
 
     # TODO postgres doesn't drop tables
     def _drop_table(self, table_name):
@@ -81,7 +93,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
         # cur.execute('ALTER TABLE "%s" DROP CONSTRAINT  "%s"' % (
         #     table_name, table_name))
         cur.execute(query)
-        self.connection.commit()
+        self.try_commit()
 
     def get_criteria_string(self, criteria):
          if criteria:
@@ -148,7 +160,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
             print(prequery, postquery)
 
         cur.execute(query)
-        self.connection.commit()
+        self.try_commit()
         return row
 
     def insert(self, table_name, row):
@@ -174,7 +186,7 @@ class PostgresqlMinqlClient(SqlMinqlClient):
             print(query)
 
         cur.execute(query)
-        self.connection.commit()
+        self.try_commit()
         return row
 
     def _get(self, table_name, id):
