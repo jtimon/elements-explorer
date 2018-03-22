@@ -32,28 +32,10 @@ class TransactionPage extends Component {
     let loadedTransaction = {};
     let loadedBlock = {};
 
-    function processTx(tx) {
-      let promise = Promise.resolve();
-      tx.vin.forEach((vin) => {
-        if (vin.txid) {
-          const { vout } = vin;
-          promise = promise.then(() => (
-            api.getTransaction(vin.txid)
-              .then((vinTx) => {
-                // eslint-disable-next-line no-param-reassign
-                vin.tx = vinTx.vout[vout];
-              })
-          ));
-        }
-      });
-      promise = promise.then(() => {
+    api.getTransaction(txid)
+      .then((tx) => {
         loadedTransaction = tx;
-      });
-      return promise;
-    }
 
-    api.getTransaction(txid).then(processTx)
-      .then(() => {
         let promise = Promise.resolve();
         promise = promise.then(() => api.getBlockByHash(loadedTransaction.blockhash)
           .then((block) => {

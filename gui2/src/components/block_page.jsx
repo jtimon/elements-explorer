@@ -33,23 +33,6 @@ class BlockPage extends Component {
     let loadedBlock = {};
     let blockStats = {};
 
-    function processTx(tx) {
-      let promise = Promise.resolve();
-      tx.vin.forEach((vin) => {
-        if (vin.txid) {
-          const { vout } = vin;
-          promise = promise.then(() => (
-            api.getTransaction(vin.txid)
-              .then((vinTx) => {
-                // eslint-disable-next-line no-param-reassign
-                vin.tx = vinTx.vout[vout];
-              })
-          ));
-        }
-      });
-      loadedTransactions.push(tx);
-      return promise;
-    }
     api.getChainInfo().then(() => {
       api.getBlockByHash(blockhash)
         .then((block) => {
@@ -64,7 +47,9 @@ class BlockPage extends Component {
           block.tx.forEach((tx) => {
             promise = promise.then(() => (
               api.getTransaction(tx)
-                .then(processTx)
+                .then(txData => (
+                  loadedTransactions.push(txData)
+                ))
             ));
           });
           return promise;

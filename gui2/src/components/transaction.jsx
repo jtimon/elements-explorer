@@ -2,15 +2,50 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+import api from '../utils/api';
 import dom from '../utils/dom';
 
 class Transaction extends Component {
   constructor(props) {
     super(props);
+    this.loadVIns = this.loadVIns.bind(this);
     this.toggleAdvanced = this.toggleAdvanced.bind(this);
     this.state = {
       show_advanced: false,
+      vins: [],
     };
+  }
+
+  componentDidMount() {
+    this.loadVIns(this.props.transaction);
+  }
+
+  loadVIns(tx) {
+    const vins = [];
+    const promises = [];
+    tx.vin.forEach((vin, i) => {
+      if (vin.txid) {
+        promises.push(api.getTransaction(vin.txid)
+          .then(() => {
+            vins[i] = {
+              coinbase: false,
+              txid: vin.txid,
+              vout: vin.vout,
+            };
+          }));
+      } else {
+        vins[i] = {
+          coinbase: true,
+          txid: undefined,
+          vout: undefined,
+        };
+      }
+    });
+    Promise.all(promises).then(() => {
+      this.setState({
+        vins,
+      });
+    });
   }
 
   toggleAdvanced() {
@@ -21,35 +56,40 @@ class Transaction extends Component {
 
   render() {
     const { transaction } = this.props;
+    const { vins } = this.state;
+    window.vins = vins;
+    const storeTxs = store.getState().transactions;
     const showAdvanced = this.state.show_advanced;
 
-    function generateVIn(tx) {
-      if (tx.vin) {
-        return tx.vin.map((vin) => {
-          if (vin.tx) {
-            return vin.tx.scriptPubKey.addresses.map(addr => (
-              <div key={vin.tx.n} className={dom.classNames('vin', dom.classIf(showAdvanced, 'active'))}>
+    function generateVIn() {
+      if (vins.length) {
+        return vins.map((vin, i) => {
+          if (vin.coinbase) {
+            return (
+              <div key="coinbase" className="vin">
+                <div className="vin-header">Coinbase</div>
+              </div>
+            );
+          } else if (vin.txid) {
+            const tx = storeTxs[vin.txid].vout[vin.vout];
+            const { scriptSig } = transaction.vin[i];
+            return tx.scriptPubKey.addresses.map(addr => (
+              <div key={tx.n} className={dom.classNames('vin', dom.classIf(showAdvanced, 'active'))}>
                 <div className="vin-header">
                   <a href="#addr">{addr}</a>
                 </div>
                 <div className={dom.classNames('vin-body', dom.showIf(showAdvanced))}>
                   <div>
                     <div>scriptSig.ASM</div>
-                    <div>{vin.scriptSig.asm}</div>
+                    <div>{scriptSig.asm}</div>
                   </div>
                   <div>
                     <div>scriptSig.hex</div>
-                    <div>{vin.scriptSig.hex}</div>
+                    <div>{scriptSig.hex}</div>
                   </div>
                 </div>
               </div>
             ));
-          } else if (vin.coinbase) {
-            return (
-              <div key="coinbase" className="vin">
-                <div className="vin-header">Coinbase</div>
-              </div>
-            );
           }
           return null;
         });
@@ -107,7 +147,7 @@ class Transaction extends Component {
         </div>
         <div className="ins-and-outs">
           <div className="vins">
-            {generateVIn(transaction)}
+            {generateVIn()}
           </div>
           <div>
             <div>

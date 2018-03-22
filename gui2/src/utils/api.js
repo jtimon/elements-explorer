@@ -117,6 +117,12 @@ function getBlockStats(id) {
 }
 
 function getTransaction(id) {
+  const state = store.getState();
+  if (!utils.isEmpty(state.transactions)) {
+    if (has.call(state.transactions, id)) {
+      return Promise.resolve().then(() => state.transactions[id]);
+    }
+  }
   const url = '/api/v0/tx';
   const requestParams = {
     method: 'POST',
@@ -129,7 +135,14 @@ function getTransaction(id) {
     }),
   };
   return fetch(url, requestParams)
-    .then(response => response.json());
+    .then(response => response.json())
+    .then((data) => {
+      const { transactions } = state;
+      store.dispatchMerge({
+        transactions: Immutable.setIn(transactions, [id], data),
+      });
+      return data;
+    });
 }
 
 function getAddress(address, startHeight, endHeight) {
