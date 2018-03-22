@@ -7,7 +7,7 @@ class Chaininfo(ormin.Model):
     mediantime = ormin.IntField()
 
 class Block(ormin.Model):
-    height = ormin.IntField(index=True)
+    height = ormin.IntField(index=True, unique=True)
     blob = ormin.TextField()
 
 class Tx(ormin.Model):
