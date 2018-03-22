@@ -197,7 +197,7 @@ class DaemonReorgManager(GreedyCacher):
             chaininfo.insert()
         except Exception as e:
             print("Error in DaemonReorgManager.update_chainfo:", type(e), e)
-            print('FAILED UPDATE TIP in chain %s %s' % (self.chain), entry, json.dumps(chaininfo.json()))
+            print('FAILED UPDATE TIP in chain %s %s' % (self.chain, entry), json.dumps(chaininfo.json()))
             return False
 
         return True
