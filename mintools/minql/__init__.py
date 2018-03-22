@@ -1,13 +1,16 @@
 
-class TableNotFoundError(BaseException):
+class MinqlException(BaseException):
     pass
 
-class NotFoundError(BaseException):
+class TableNotFoundError(MinqlException):
+    pass
+
+class NotFoundError(MinqlException):
     def __init__(self, table_name, id, *args, **kwargs):
         self.errors = {'Error:': '%s %s not found.' % (table_name, id)}
         super(NotFoundError, self).__init__(*args, **kwargs)
 
-class AlreadyExistsError(BaseException):
+class AlreadyExistsError(MinqlException):
     def __init__(self, table_name, id, *args, **kwargs):
         self.errors = {'Error:':'The %s %s already exists.' % (table_name, id)}
         super(AlreadyExistsError, self).__init__(*args, **kwargs)
