@@ -70,9 +70,8 @@ class MempoolSaver(CronCacher):
         try:
             self.rpccaller.RpcCall('savemempool', {})
             print('Success saving mempool...')
-        except:
-            print('ERROR saving mempool')
-            return
+        except Exception as e:
+            print("Error in MempoolSaver._cron_loop:", type(e), e)
 
 
 def IncrementStats(stats, interval, tx_fee, tx_size):
@@ -127,10 +126,10 @@ class MempoolStatsCacher(CronCacher):
         })
         try:
             mempoolstats.insert()
-            print('SUCCESS caching %s in chain %s %s' % ('mempoolstats', self.chain, json.dumps(mempoolstats.json())))
+            print('SUCCESS caching %s in chain %s' % ('mempoolstats', self.chain))
         except Exception as e:
+            print("Error in MempoolStatsCacher._cron_loop:", type(e), e)
             print('FAILED caching %s in chain %s %s' % ('mempoolstats', self.chain, json.dumps(mempoolstats.json())))
-            print("Error:", type(e), e)
 
 class GreedyCacher(CronCacher):
 
@@ -149,7 +148,7 @@ class GreedyCacher(CronCacher):
                 for txid in block['tx']:
                     tx = GetById(self.rpccaller, 'tx', txid)
         except Exception as e:
-            print("Error:", type(e), e)
+            print("Error in GreedyCacher.cache_blockhash:", type(e), e)
             print('FAILED cache_blockhash %s' % blockhash)
             return None
         return block
@@ -196,7 +195,8 @@ class DaemonReorgManager(GreedyCacher):
             chaininfo.update()
         except minql.NotFoundError:
             chaininfo.insert()
-        except:
+        except Exception as e:
+            print("Error in DaemonReorgManager.update_chainfo:", type(e), e)
             print('FAILED UPDATE TIP in chain %s %s' % (self.chain), entry, json.dumps(chaininfo.json()))
             return False
 
@@ -226,7 +226,8 @@ class DaemonReorgManager(GreedyCacher):
             if blocks_to_delete:
                 try:
                     self.delete_txs_from_blocks(blocks_to_delete)
-                except:
+                except Exception as e:
+                    print("Error in DaemonReorgManager.delete_from_height:", type(e), e)
                     print('ERROR with blocks_to_delete', len(blocks_to_delete))
                     # return False
                 model.Block.delete(criteria)
@@ -272,7 +273,8 @@ class DaemonReorgManager(GreedyCacher):
             block_height = block_height - 1
             try:
                 block = GetById(self.rpccaller, 'block', block_hash)
-            except:
+            except Exception as e:
+                print("Error in DaemonReorgManager.get_ascendant:", type(e), e)
                 print('FAILED get_ascendant block.get(%s)' % block_hash, block)
                 return None
 
@@ -311,7 +313,8 @@ class DaemonReorgManager(GreedyCacher):
                     return None
                 return self.find_common_ancestor(ascendantA, ascendantB)
 
-        except:
+        except Exception as e:
+            print("Error in DaemonReorgManager.find_common_ancestor:", type(e), e)
             print('FAILED calling find_common_ancestor A: %s %s B: %s %s' % (
                 block_A['height'], block_A['hash'], block_B['height'], block_B['hash']))
 
@@ -333,7 +336,8 @@ class DaemonReorgManager(GreedyCacher):
             block_height = common_ancestor['height'] + 1
             self.delete_from_height(block_height)
             print('HANDLING REORG SUCCESS for delete_from_height %s' % block_height)
-        except:
+        except Exception as e:
+            print("Error in DaemonReorgManager.manage_reorg:", type(e), e)
             print('FAILED HANDLING REORG calling delete_from_height')
             return False
 
@@ -352,7 +356,8 @@ class DaemonReorgManager(GreedyCacher):
             block = GetById(self.rpccaller, 'block', block_hash)
             assert(block and 'hash' in block and block['hash'] == block_hash and
                    'height' in block and 'mediantime' in block)
-        except:
+        except Exception as e:
+            print("Error in DaemonReorgManager.update_tip:", type(e), e)
             print('FAILED update_tip block.get(%s)' % block_hash)
             return
 

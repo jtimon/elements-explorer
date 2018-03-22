@@ -87,7 +87,7 @@ def GetByIdBase(rpccaller, resource, req_id):
         else:
             return {'error': {'message': 'Error caching %s from db by id %s. (unkown resource)' % (resource, req_id)}}
     except Exception as e:
-        print("Error:", type(e), e)
+        print("Error in GetByIdBase:", type(e), e)
         return {'error': {'message': 'Error getting %s from db by id %s.' % (resource, req_id)}}
     return json_result
 
@@ -96,7 +96,8 @@ def GetBlockByHeight(rpccaller, height):
         block_by_height = model.Block.search({'height': height})
     except minql.NotFoundError:
         block_by_height = []
-    except:
+    except Exception as e:
+        print("Error in GetBlockByHeight:", type(e), e)
         return {'error': {'message': 'Error getting block from db by height %s' % height}}
     if len(block_by_height) > 1:
         return {'error': {'message': 'More than one block cached for height %s' % height}}
@@ -175,7 +176,7 @@ class MempoolStatsResource(ChainResource):
         except minql.NotFoundError:
             return {'error': {'message': 'No mempoolstats in the last %s hours.' % hours_ago}}, 400
         except Exception as e:
-            print("Error:", type(e), e)
+            print("Error in MempoolStatsResource.resolve_request:", type(e), e)
             return {'error': {'message': 'Error getting %s from db.' % ('mempoolstats')}}, 400
 
         if not db_result:
