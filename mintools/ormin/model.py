@@ -84,10 +84,8 @@ class Model(form.Form):
         for k, r in self.__class__._relations.iteritems():
             if isinstance(r, relations.ManyToOneField):
                 r.save(self, k)
-        if self.id:
-            result = self.update()
-        else:
-            result = self.insert()
+
+        result = self.put()
         for k, r in self.__class__._relations.iteritems():
             if isinstance(r, relations.OneToManyField):
                 r.save(self, k)
@@ -97,10 +95,17 @@ class Model(form.Form):
         if not hasattr(self, 'id'):
             self.new_id()
         obj = self.db().insert(self.get_name(), self.json(False))
-        print 'Inserted...', self.get_name(), self.id
+        print('Inserted...', self.get_name(), self.id)
         return self.__class__(obj)
 
     def update(self):
         obj = self.db().update(self.get_name(), self.json(False))
-        print 'Updated...', self.get_name(), self.id
+        print('Updated...', self.get_name(), self.id)
+        return self.__class__(obj)
+
+    def put(self):
+        if not hasattr(self, 'id'):
+            self.new_id()
+        obj = self.db().put(self.get_name(), self.json(False))
+        print('Put...', self.get_name(), self.id)
         return self.__class__(obj)
