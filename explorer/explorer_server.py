@@ -188,10 +188,13 @@ class AddressResource(ChainResource):
         receipts = []
         expenditures = []
         for txid in block['tx']:
-            tx = GetById(self.rpccaller, 'tx', txid)
-            if 'error' in tx:
-                print('ERROR: error getting tx %s (address)' % txid)
-                return tx
+            orm_tx = model.Tx.get(txid)
+            if isinstance(orm_tx, dict) and 'error' in orm_tx:
+                return orm_tx
+            elif not isinstance(orm_tx, model.Tx):
+                print('Error in AddressResource.search_by_address: wrong type for tx', txid, orm_tx)
+                return {'error': {'message': 'Error getting tx %s (address)' % txid}}
+            tx = json.loads(orm_tx.blob)
 
             for output in tx['vout']:
                 for address in addresses:
@@ -200,10 +203,14 @@ class AddressResource(ChainResource):
 
             for tx_input in tx['vin']:
                 if 'txid' in tx_input and 'vout' in tx_input:
-                    tx_in = GetById(self.rpccaller, 'tx', tx_input['txid'])
-                    if 'error' in tx_in:
-                        print('ERROR: error getting tx %s (address)' % tx_input['txid'])
-                        return tx_in
+                    orm_tx_in = model.Tx.get(tx_input['txid'])
+                    if isinstance(orm_tx_in, dict) and 'error' in orm_tx_in:
+                        return orm_tx_in
+                    elif not isinstance(orm_tx_in, model.Tx):
+                        print('Error in AddressResource.search_by_address_ascendant: wrong type for tx', tx_input['txid'], orm_tx_in)
+                        return {'error': {'message': 'Error getting tx %s (address)' % tx_input['txid']}}
+                    tx_in = json.loads(orm_tx_in.blob)
+                    print('tx_in', tx_in, "tx_input['vout']", tx_input['vout'])
                     output = tx_in['vout'][ tx_input['vout'] ]
                     for address in addresses:
                         if 'addresses' in output['scriptPubKey'] and address in output['scriptPubKey']['addresses']:
