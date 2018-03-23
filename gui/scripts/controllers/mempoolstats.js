@@ -10,7 +10,7 @@
 angular.module('rpcExplorerApp')
     .controller('MempoolStatsCtrl', function ($scope, $routeParams, $location, SrvUtil, SrvChain, SrvBackend) {
 
-        SrvChain.set($routeParams.chain);
+        SrvChain.set($routeParams.chain, $scope);
 
         $scope.curious = $location.search().curious == 'true';
         $scope.hours_ago = SrvUtil.ParseNatural($location.search().hours_ago);

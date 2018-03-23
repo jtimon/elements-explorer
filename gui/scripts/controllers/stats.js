@@ -10,7 +10,7 @@
 angular.module('rpcExplorerApp')
     .controller('StatsCtrl', function ($scope, $routeParams, $location, SrvUtil, SrvChain, SrvBackend) {
 
-        SrvChain.set($routeParams.chain);
+        SrvChain.set($routeParams.chain, $scope);
 
         $scope.curious = $location.search().curious == 'true';
         // TODO default to latest 100 blocks here instead of in

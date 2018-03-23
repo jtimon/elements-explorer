@@ -10,7 +10,7 @@
 angular.module('rpcExplorerApp')
     .controller('AddressCtrl', function ($scope, $routeParams, $location, SrvUtil, SrvChain, SrvBackend) {
 
-        SrvChain.set($routeParams.chain);
+        SrvChain.set($routeParams.chain, $scope);
         $scope.loading = false;
 
         $scope.curious = $location.search().curious == 'true';
@@ -64,6 +64,7 @@ angular.module('rpcExplorerApp')
             if ($scope.start_height > $scope.end_height) {
                 $scope.end_height = $scope.start_height;
             }
-        }).then($scope.SearchAddress);
+        }).then($scope.SearchAddress)
+            .catch(SrvUtil.errorCallbackScoped($scope));
 
     });

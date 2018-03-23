@@ -35,7 +35,7 @@ angular.module('rpcExplorerApp')
             return selected_chain;
         }
         
-        srv.set = function(_selected_chain) {
+        srv.set = function(_selected_chain, $scope) {
 
             if (cache['available_chains']) {
                 return SetSelectedChain(_selected_chain);
@@ -43,7 +43,8 @@ angular.module('rpcExplorerApp')
                 return srv.GetAvailableChains()
                     .then(function() {
                         return SetSelectedChain(_selected_chain);
-                    });
+                    })
+                    .catch(SrvUtil.errorCallbackScoped($scope));
             }
         }
 

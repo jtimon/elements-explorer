@@ -10,7 +10,7 @@
 angular.module('rpcExplorerApp')
     .controller('MainCtrl', function ($scope, $routeParams, $location, SrvUtil, SrvChain, SrvBackend) {
 
-        SrvChain.set($routeParams.chain);
+        SrvChain.set($routeParams.chain, $scope);
 
         $scope.curious = $location.search().curious == 'true';
         $scope.loading = true;

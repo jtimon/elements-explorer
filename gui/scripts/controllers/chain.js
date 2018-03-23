@@ -16,7 +16,7 @@ angular.module('rpcExplorerApp')
 
         $scope.ChangeChain = function () {
             if ($scope.selected_chain) {
-                SrvChain.set($scope.selected_chain);
+                SrvChain.set($scope.selected_chain, $scope);
                 $location.path($location.path().replace(/chain\/(.+?)\/(.*)/g,"chain/" + $scope.selected_chain + "/$2"));
             }
         };
