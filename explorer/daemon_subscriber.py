@@ -8,7 +8,6 @@ import time
 from mintools import zmqmin, minql, ormin
 
 from explorer import model
-from explorer.explorer_server import GetById
 
 MEMPOOL_STATS_INTERVALS = (
     range(1, 5) + range(5, 30, 5) + range(30, 100, 10) +
@@ -278,10 +277,13 @@ class DaemonReorgManager(GreedyCacher):
             block_hash = block['previousblockhash']
             block_height = block_height - 1
             try:
-                block = GetById(self.rpccaller, 'block', block_hash)
+                orm_block = model.Block.get(block_hash)
+                if not isinstance(orm_block, model.Block):
+                    print('Error in DaemonReorgManager.get_ascendant: wrong type for block', block_hash, orm_block)
+                    return None
+                block = json.loads(orm_block.blob)
             except Exception as e:
-                print("Error in DaemonReorgManager.get_ascendant:", type(e), e)
-                print('FAILED get_ascendant block.get(%s)' % block_hash, block)
+                print('FAILED DaemonReorgManager.get_ascendant: block.get(%s)' % block_hash, type(e), e, block)
                 return None
 
         return block
@@ -330,7 +332,11 @@ class DaemonReorgManager(GreedyCacher):
         print('REORG DETECTED at previous height %s and hash %s, new height %s and hash %s' % (
             self.prev_reorg_height, self.prev_reorg_hash, block['height'], block['hash']))
 
-        self.prev_reorg_block = GetById(self.rpccaller, 'block', self.prev_reorg_hash)
+        orm_block = model.Block.get(self.prev_reorg_hash)
+        if not isinstance(orm_block, model.Block):
+            print('Error in DaemonReorgManager.manage_reorg: wrong type for block', self.prev_reorg_hash, orm_block)
+            return None
+        self.prev_reorg_block = json.loads(orm_block.blob)
         common_ancestor = self.find_common_ancestor(self.prev_reorg_block, block)
         if not common_ancestor or not self.check_basic_block(common_ancestor):
             print('FAILED HANDLING REORG calling find_common_ancestor %s' % block['height'], common_ancestor)
@@ -359,7 +365,11 @@ class DaemonReorgManager(GreedyCacher):
         print('update_tip from reorg height %s hash %s to %s' % (self.prev_reorg_height, self.prev_reorg_hash, block_hash))
 
         try:
-            block = GetById(self.rpccaller, 'block', block_hash)
+            orm_block = model.Block.get(block_hash)
+            if not isinstance(orm_block, model.Block):
+                print('Error in DaemonReorgManager.update_tip: wrong type for block', block_hash, orm_block)
+                return
+            block = json.loads(orm_block.blob)
             assert(block and 'hash' in block and block['hash'] == block_hash and
                    'height' in block and 'mediantime' in block)
         except Exception as e:
