@@ -14,7 +14,9 @@ def CacheChainInfoResult(rpccaller, req_id):
 
     chaininfo = model.Chaininfo(json=json_result)
     chaininfo.id = req_id
-    chaininfo.put()
+    chaininfo.save()
+    if chaininfo.errors:
+        return {'error': {'message': json.dumps(chaininfo.errors)}}
     return json_result
 
 def CacheTxResult(rpccaller, req_id):
@@ -28,7 +30,9 @@ def CacheTxResult(rpccaller, req_id):
         tx.blockhash = json_result['blockhash']
         tx.blob = json.dumps(json_result)
         tx.id = req_id
-        tx.put()
+        tx.save()
+        if tx.errors:
+            return {'error': {'message': json.dumps(tx.errors)}}
 
     return json_result
 
@@ -41,7 +45,9 @@ def CacheBlockResult(rpccaller, req_id):
     block.height = json_result['height']
     block.blob = json.dumps(json_result)
     block.id = req_id
-    block.put()
+    block.save()
+    if block.errors:
+        return {'error': {'message': json.dumps(block.errors)}}
     return json_result
 
 def CacheBlockStatsResult(rpccaller, req_id):
@@ -53,7 +59,9 @@ def CacheBlockStatsResult(rpccaller, req_id):
     blockstats.height = json_result['height']
     blockstats.blob = json.dumps(json_result)
     blockstats.id = req_id
-    blockstats.put()
+    blockstats.save()
+    if blockstats.errors:
+        return {'error': {'message': json.dumps(blockstats.errors)}}
     return json_result
 
 def GetByIdBase(rpccaller, resource, req_id):
