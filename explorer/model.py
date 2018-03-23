@@ -53,16 +53,15 @@ class Tx(RpcCachedModel):
         if 'error' in json_result:
             return json_result
 
+        tx = Tx()
+        tx.blob = json.dumps(json_result)
+        tx.id = req_id
         if 'blockhash' in json_result and json_result['blockhash']:
             # Don't cache mempool txs
-            tx = Tx()
             tx.blockhash = json_result['blockhash']
-            tx.blob = json.dumps(json_result)
-            tx.id = req_id
             tx.save()
-            return tx
 
-        return json_result
+        return tx
 
 class Blockstats(RpcCachedModel):
     height = ormin.IntField(index=True)
