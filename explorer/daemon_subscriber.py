@@ -159,11 +159,13 @@ class GreedyCacher(CronCacher):
             return None
 
     def _cron_loop(self):
-        chaininfo = GetById(self.rpccaller, 'chaininfo', self.chain)
-        if 'error' in chaininfo:
+        chaininfo = model.Chaininfo.get(self.chain)
+        if not isinstance(chaininfo, model.Chaininfo):
+            print("Error in GreedyCacher._cron_loop: wrong type for chaininfo", chaininfo)
             return
-        height = chaininfo['blocks']
-        blockhash = chaininfo['bestblockhash']
+
+        height = chaininfo.blocks
+        blockhash = chaininfo.bestblockhash
         while height > self.last_cached_height:
             block = self.cache_blockhash(blockhash)
             if block and 'previousblockhash' in block:
@@ -176,7 +178,7 @@ class GreedyCacher(CronCacher):
                 return
             height = height - 1
 
-        self.last_cached_height = chaininfo['blocks']
+        self.last_cached_height = chaininfo.blocks
 
 
 class DaemonReorgManager(GreedyCacher):
