@@ -53,7 +53,7 @@ class Field(object):
         value = self.clean_value(name, value)
         setattr(model, '_' + name, value)
 
-        if self.unique:
+        if self.unique and value is not None:
             if model.search({name: value}):
                 raise FieldError('"%s" already exists' % value)
 

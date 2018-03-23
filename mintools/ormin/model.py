@@ -61,7 +61,7 @@ class Model(form.Form):
     @classmethod
     def search(cls, criteria={}):
         for k, c in criteria.iteritems():
-            if not c:
+            if c is None:
                 raise Exception(criteria)
         objs = cls.db().search(cls.get_name(), criteria)
         return cls.parse_json_list(objs)
@@ -73,7 +73,7 @@ class Model(form.Form):
     @classmethod
     def delete(cls, criteria={}):
         for k, c in criteria.iteritems():
-            if not c:
+            if c is None:
                 raise Exception(criteria)
         cls.db().delete(cls.get_name(), criteria)
 
