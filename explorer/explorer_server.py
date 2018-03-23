@@ -66,7 +66,13 @@ def GetBlockByHeight(rpccaller, height):
     blockhash = rpccaller.RpcCall('getblockhash', {'height': height})
     if 'error' in blockhash:
         return blockhash
-    return GetByIdBase(rpccaller, 'block', blockhash)
+    orm_block = model.Block.get(blockhash)
+    if isinstance(orm_block, dict) and 'error' in orm_block:
+        return orm_block
+    elif not isinstance(orm_block, model.Block):
+        print('Error in GetBlockByHeight: wrong type for block', blockhash, orm_block)
+        return {'error': {'message': 'Error getting block %s (by height %s)' % (blockhash, height)}}
+    return json.loads(orm_block.blob)
 
 def GetById(rpccaller, resource, req_id):
     if resource == 'blockheight':
