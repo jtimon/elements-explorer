@@ -7,18 +7,6 @@ from mintools import minql, restmin, ormin
 from explorer import model
 from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
 
-def CacheChainInfoResult(rpccaller, req_id):
-    json_result = rpccaller.RpcCall('getblockchaininfo', {})
-    if 'error' in json_result:
-        return json_result
-
-    chaininfo = model.Chaininfo(json=json_result)
-    chaininfo.id = req_id
-    chaininfo.save()
-    if chaininfo.errors:
-        return {'error': {'message': json.dumps(chaininfo.errors)}}
-    return json_result
-
 def CacheTxResult(rpccaller, req_id):
     json_result = rpccaller.RpcCall('getrawtransaction', {'txid': req_id, 'verbose': 1})
     if 'error' in json_result:
@@ -68,7 +56,15 @@ def GetByIdBase(rpccaller, resource, req_id):
     try:
         db_result = None
         if resource == 'chaininfo':
-            return model.Chaininfo.get(req_id).json()
+            db_result = model.Chaininfo.get(req_id)
+            if isinstance(db_result, dict):
+                return db_result
+            elif isinstance(db_result, ormin.Model):
+                return db_result.json()
+            else:
+                print('ERROR: getting chaininfo. db_result:', db_result)
+                return {'error': {'message': 'Error getting chaininfo.'}}
+
         elif resource == 'block':
             db_result = model.Block.get(req_id).json()
         elif resource == 'blockstats':
@@ -84,9 +80,7 @@ def GetByIdBase(rpccaller, resource, req_id):
             return {'error': {'message': 'No blob result db for %s.' % resource}}
         json_result = json.loads(db_result['blob'])
     except minql.NotFoundError:
-        if resource == 'chaininfo':
-            json_result = CacheChainInfoResult(rpccaller, req_id)
-        elif resource == 'block':
+        if resource == 'block':
             json_result = CacheBlockResult(rpccaller, req_id)
         elif resource == 'blockstats':
             json_result = CacheBlockStatsResult(rpccaller, req_id)
