@@ -7,49 +7,6 @@ from mintools import minql, restmin, ormin
 from explorer import model
 from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
 
-def GetByIdBase(rpccaller, resource, req_id):
-    try:
-        db_result = None
-        if resource == 'chaininfo':
-            db_result = model.Chaininfo.get(req_id)
-            if isinstance(db_result, dict):
-                return db_result
-            elif isinstance(db_result, ormin.Model):
-                return db_result.json()
-            else:
-                print('ERROR: getting chaininfo. db_result:', db_result)
-                return {'error': {'message': 'Error getting chaininfo.'}}
-
-        elif resource == 'block':
-            db_result = model.Block.get(req_id)
-        elif resource == 'blockstats':
-            db_result = model.Blockstats.get(req_id)
-        elif resource == 'tx':
-            db_result = model.Tx.get(req_id)
-        else:
-            raise NotImplementedError
-    except Exception as e:
-        print("Error in GetByIdBase:", type(e), e)
-        return {'error': {'message': 'Error getting %s from db by id %s.' % (resource, req_id)}}
-
-    if not db_result:
-        return {'error': {'message': 'No result db for %s.' % resource}}
-
-    if isinstance(db_result, dict):
-        if 'error' in db_result:
-            return db_result
-        elif not 'blob' in db_result:
-            print('ERROR: No blob result db for %s. db_result:' % resource, db_result)
-            return {'error': {'message': 'No blob result db for %s.' % resource}}
-        json_result = db_result
-    elif isinstance(db_result, ormin.Model):
-        json_result = db_result.json()
-    else:
-        print('ERROR: getting %s. db_result:' % resource, db_result)
-        return {'error': {'message': 'Error getting %s.' % resource}}
-
-    return json.loads(json_result['blob'])
-
 def GetBlockByHeight(rpccaller, height):
     try:
         block_by_height = model.Block.search({'height': height})
@@ -73,12 +30,6 @@ def GetBlockByHeight(rpccaller, height):
         print('Error in GetBlockByHeight: wrong type for block', blockhash, orm_block)
         return {'error': {'message': 'Error getting block %s (by height %s)' % (blockhash, height)}}
     return json.loads(orm_block.blob)
-
-def GetById(rpccaller, resource, req_id):
-    if resource == 'blockheight':
-        return GetBlockByHeight(rpccaller, req_id)
-
-    return GetByIdBase(rpccaller, resource, req_id)
 
 class UnknownChainError(BaseException):
     pass
@@ -177,7 +128,53 @@ class GetByIdResource(ChainResource):
         if not 'id' in request:
             return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}, 400
 
-        response = GetById(self.rpccaller, self.resource, request['id'])
+        if self.resource == 'blockheight':
+            response = GetBlockByHeight(self.rpccaller, request['id'])
+        elif self.resource == 'chaininfo':
+            try:
+                db_result = model.Chaininfo.get(request['id'])
+                if isinstance(db_result, dict):
+                    response = db_result
+                elif isinstance(db_result, ormin.Model):
+                    response = db_result.json()
+                else:
+                    print('ERROR: getting chaininfo. db_result:', db_result)
+                    return {'error': {'message': 'Error getting chaininfo.'}}, 400
+            except Exception as e:
+                print("Error in GetByIdResource.resolve_request (resource=chaininfo):", type(e), e)
+                return {'error': {'message': 'Error getting %s from db by id %s.' % (self.resource, request['id'])}}, 400
+        else:
+            try:
+                if self.resource == 'block':
+                    db_result = model.Block.get(request['id'])
+                elif self.resource == 'blockstats':
+                    db_result = model.Blockstats.get(request['id'])
+                elif self.resource == 'tx':
+                    db_result = model.Tx.get(request['id'])
+                else:
+                    raise NotImplementedError
+            except Exception as e:
+                print("Error in GetByIdBase:", type(e), e)
+                return {'error': {'message': 'Error getting %s from db by id %s.' % (self.resource, request['id'])}}, 400
+
+            if not db_result:
+                return {'error': {'message': 'No result db for %s %s.' % (self.resource, request['id'])}}, 400
+            elif isinstance(db_result, dict):
+                if 'error' in db_result:
+                    return {'error': {'message': db_result['error']}}, 400
+                else:
+                    json_result = db_result
+            elif isinstance(db_result, ormin.Model):
+                json_result = db_result.json()
+            else:
+                print('ERROR: getting %s. db_result:' % self.resource, db_result)
+                return {'error': {'message': 'Error getting %s.' % self.resource}}, 400
+
+            if not 'blob' in json_result:
+                print('ERROR: No blob result db for %s. db_result:' % self.resource, db_result)
+                return {'error': {'message': 'No blob result db for %s.' % self.resource}}, 400
+            response = json.loads(json_result['blob'])
+
         if 'error' in response:
             return {'error': response['error']}, 400
         return response, 200
