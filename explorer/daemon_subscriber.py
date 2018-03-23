@@ -191,10 +191,7 @@ class DaemonReorgManager(GreedyCacher):
         })
         chaininfo.id = self.chain
         try:
-            model.Chaininfo.get(self.chain)
-            chaininfo.update()
-        except minql.NotFoundError:
-            chaininfo.insert()
+            chaininfo.put()
         except Exception as e:
             print("Error in DaemonReorgManager.update_chainfo:", type(e), e)
             print('FAILED UPDATE TIP in chain %s %s' % (self.chain, entry), json.dumps(chaininfo.json()))
