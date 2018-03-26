@@ -168,13 +168,16 @@ class GreedyCacher(CronCacher):
         blockhash = chaininfo.bestblockhash
         while height > self.last_cached_height:
             block = self.cache_blockhash(blockhash)
-            if block and 'previousblockhash' in block:
+            if not block:
+                print('Error in GreedyCacher._cron_loop: no block %s %s' % (height, blockhash))
+                return
+            elif 'previousblockhash' in block:
                 blockhash = block['previousblockhash']
-            elif block and height == 0:
+            elif height == 0:
                 # the genesis block doesn't have a previous block
                 break
             else:
-                print('FAILED no block %s' % blockhash)
+                print('Error in GreedyCacher._cron_loop: no previousblockhash in block %s %s' % (height, blockhash), block)
                 return
             height = height - 1
 
