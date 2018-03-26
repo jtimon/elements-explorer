@@ -115,7 +115,6 @@ class GetByIdResource(ChainResource):
         self.model = model
         self.chain_required_properties = chain_required_properties
         self.uses_blob = uses_blob
-        
 
     def resolve_request(self, req):
         try:
@@ -148,7 +147,7 @@ class GetByIdResource(ChainResource):
             if not (isinstance(db_result, dict) or isinstance(db_result, ormin.Model)):
                 print('ERROR: getting %s. db_result:' % self.resource, db_result)
                 return {'error': {'message': 'Error getting %s.' % self.resource}}, 400
-            
+
             if self.uses_blob:
                 if isinstance(db_result, dict):
                     json_result = db_result
