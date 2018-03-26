@@ -25,14 +25,16 @@ class Transaction extends Component {
     const promises = [];
     tx.vin.forEach((vin, i) => {
       if (vin.txid) {
-        promises.push(api.getTransaction(vin.txid)
-          .then(() => {
+        promises.push(Promise.resolve().then(() => (
+          api.getTransaction(vin.txid).then((data) => {
             vins[i] = {
               coinbase: false,
               txid: vin.txid,
               vout: vin.vout,
             };
-          }));
+            return data;
+          })
+        )));
       } else {
         vins[i] = {
           coinbase: true,
@@ -57,44 +59,40 @@ class Transaction extends Component {
   render() {
     const { transaction } = this.props;
     const { vins } = this.state;
-    window.vins = vins;
     const storeTxs = store.getState().transactions;
     const showAdvanced = this.state.show_advanced;
 
     function generateVIn() {
-      if (vins.length) {
-        return vins.map((vin, i) => {
-          if (vin.coinbase) {
-            return (
-              <div key="coinbase" className="vin">
-                <div className="vin-header">Coinbase</div>
+      return vins.map((vin, i) => {
+        if (vin.coinbase) {
+          return (
+            <div key="coinbase" className="vin">
+              <div className="vin-header">Coinbase</div>
+            </div>
+          );
+        } else if (vin.txid) {
+          const tx = storeTxs[vin.txid].vout[vin.vout];
+          const { scriptSig } = transaction.vin[i];
+          return tx.scriptPubKey.addresses.map(addr => (
+            <div key={tx.n} className={dom.classNames('vin', dom.classIf(showAdvanced, 'active'))}>
+              <div className="vin-header">
+                <a href="#addr">{addr}</a>
               </div>
-            );
-          } else if (vin.txid) {
-            const tx = storeTxs[vin.txid].vout[vin.vout];
-            const { scriptSig } = transaction.vin[i];
-            return tx.scriptPubKey.addresses.map(addr => (
-              <div key={tx.n} className={dom.classNames('vin', dom.classIf(showAdvanced, 'active'))}>
-                <div className="vin-header">
-                  <a href="#addr">{addr}</a>
+              <div className={dom.classNames('vin-body', dom.showIf(showAdvanced))}>
+                <div>
+                  <div>scriptSig.ASM</div>
+                  <div>{scriptSig.asm}</div>
                 </div>
-                <div className={dom.classNames('vin-body', dom.showIf(showAdvanced))}>
-                  <div>
-                    <div>scriptSig.ASM</div>
-                    <div>{scriptSig.asm}</div>
-                  </div>
-                  <div>
-                    <div>scriptSig.hex</div>
-                    <div>{scriptSig.hex}</div>
-                  </div>
+                <div>
+                  <div>scriptSig.hex</div>
+                  <div>{scriptSig.hex}</div>
                 </div>
               </div>
-            ));
-          }
-          return null;
-        });
-      }
-      return null;
+            </div>
+          ));
+        }
+        return null;
+      });
     }
 
     function generateVOut(tx) {

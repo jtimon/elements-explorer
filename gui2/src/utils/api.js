@@ -49,7 +49,7 @@ function getBlockByHash(id) {
   return fetch(url, requestParams)
     .then(response => response.json())
     .then((data) => {
-      const { blocks } = state;
+      const { blocks } = store.getState();
       store.dispatchMerge({
         blocks: utils.addBlockToStore(blocks, data),
       });
@@ -79,7 +79,7 @@ function getBlockByHeight(id) {
   return fetch(url, requestParams)
     .then(response => response.json())
     .then((data) => {
-      const { blocks } = state;
+      const { blocks } = store.getState();
       store.dispatchMerge({
         blocks: utils.addBlockToStore(blocks, data),
       });
@@ -108,7 +108,7 @@ function getBlockStats(id) {
   return fetch(url, requestParams)
     .then(response => response.json())
     .then((data) => {
-      const { blocks } = state;
+      const { blocks } = store.getState();
       store.dispatchMerge({
         blocks: Immutable.setIn(blocks, ['stats', id], data),
       });
@@ -137,7 +137,7 @@ function getTransaction(id) {
   return fetch(url, requestParams)
     .then(response => response.json())
     .then((data) => {
-      const { transactions } = state;
+      const { transactions } = store.getState();
       store.dispatchMerge({
         transactions: Immutable.setIn(transactions, [id], data),
       });
