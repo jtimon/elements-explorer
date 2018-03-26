@@ -147,12 +147,13 @@ class GreedyCacher(CronCacher):
                 print("Error in GreedyCacher.cache_blockhash: wrong type for block", blockhash, block)
                 return None
 
-            model.Block.get(block.height)
+            model.Blockstats.get(block.height)
             blockblob = json.loads(block.blob)
             if self.cache_txs and 'tx' in blockblob:
                 for txid in blockblob['tx']:
                     tx = model.Tx.get(txid)
-            return block.json()
+            return blockblob
+            
         except Exception as e:
             print("Error in GreedyCacher.cache_blockhash:", blockhash, type(e), e)
             return None
