@@ -329,13 +329,14 @@ class DaemonReorgManager(GreedyCacher):
         return None
 
     def manage_reorg(self, block):
-        print('REORG DETECTED at previous height %s and hash %s, new height %s and hash %s' % (
-            self.prev_reorg_height, self.prev_reorg_hash, block['height'], block['hash']))
+        print('REORG DETECTED at previous height %s and hash %s' % (self.prev_reorg_height, self.prev_reorg_hash))
+        if isinstance(block, dict) and 'height' in block and 'hash' in block:
+            print('new height %s and hash %s' % (block['height'], block['hash']))
 
         orm_block = model.Block.get(self.prev_reorg_hash)
         if not isinstance(orm_block, model.Block):
             print('Error in DaemonReorgManager.manage_reorg: wrong type for block', self.prev_reorg_hash, orm_block)
-            return None
+            return False
         self.prev_reorg_block = json.loads(orm_block.blob)
         common_ancestor = self.find_common_ancestor(self.prev_reorg_block, block)
         if not common_ancestor or not self.check_basic_block(common_ancestor):
