@@ -108,11 +108,14 @@ class MempoolStatsResource(ChainResource):
 
 class GetByIdResource(ChainResource):
 
-    def __init__(self, resource, chain_required_properties=[], *args, **kwargs):
+    def __init__(self, resource, model, chain_required_properties=[], uses_blob=False, *args, **kwargs):
         super(GetByIdResource, self).__init__(*args, **kwargs)
 
         self.resource = resource
+        self.model = model
         self.chain_required_properties = chain_required_properties
+        self.uses_blob = uses_blob
+        
 
     def resolve_request(self, req):
         try:
@@ -130,50 +133,37 @@ class GetByIdResource(ChainResource):
 
         if self.resource == 'blockheight':
             response = GetBlockByHeight(self.rpccaller, request['id'])
-        elif self.resource == 'chaininfo':
-            try:
-                db_result = model.Chaininfo.get(request['id'])
-                if isinstance(db_result, dict):
-                    response = db_result
-                elif isinstance(db_result, ormin.Model):
-                    response = db_result.json()
-                else:
-                    print('ERROR: getting chaininfo. db_result:', db_result)
-                    return {'error': {'message': 'Error getting chaininfo.'}}, 400
-            except Exception as e:
-                print("Error in GetByIdResource.resolve_request (resource=chaininfo):", type(e), e)
-                return {'error': {'message': 'Error getting %s from db by id %s.' % (self.resource, request['id'])}}, 400
         else:
             try:
-                if self.resource == 'block':
-                    db_result = model.Block.get(request['id'])
-                elif self.resource == 'blockstats':
-                    db_result = model.Blockstats.get(request['id'])
-                elif self.resource == 'tx':
-                    db_result = model.Tx.get(request['id'])
-                else:
-                    raise NotImplementedError
+                db_result = self.model.get(request['id'])
             except Exception as e:
-                print("Error in GetByIdBase:", type(e), e)
+                print("Error in GetByIdResource.resolve_request (resource=%s):" % self.resource, type(e), e)
                 return {'error': {'message': 'Error getting %s from db by id %s.' % (self.resource, request['id'])}}, 400
 
             if not db_result:
                 return {'error': {'message': 'No result db for %s %s.' % (self.resource, request['id'])}}, 400
-            elif isinstance(db_result, dict):
-                if 'error' in db_result:
-                    return {'error': {'message': db_result['error']}}, 400
-                else:
-                    json_result = db_result
-            elif isinstance(db_result, ormin.Model):
-                json_result = db_result.json()
-            else:
+            elif isinstance(db_result, dict) and 'error' in db_result:
+                return {'error': {'message': db_result['error']}}, 400
+
+            if not (isinstance(db_result, dict) or isinstance(db_result, ormin.Model)):
                 print('ERROR: getting %s. db_result:' % self.resource, db_result)
                 return {'error': {'message': 'Error getting %s.' % self.resource}}, 400
+            
+            if self.uses_blob:
+                if isinstance(db_result, dict):
+                    json_result = db_result
+                elif isinstance(db_result, ormin.Model):
+                    json_result = db_result.json()
 
-            if not 'blob' in json_result:
-                print('ERROR: No blob result db for %s. db_result:' % self.resource, db_result)
-                return {'error': {'message': 'No blob result db for %s.' % self.resource}}, 400
-            response = json.loads(json_result['blob'])
+                if not 'blob' in json_result:
+                    print('ERROR: No blob result db for %s. db_result:' % self.resource, db_result)
+                    return {'error': {'message': 'No blob result db for %s.' % self.resource}}, 400
+                response = json.loads(json_result['blob'])
+            else:
+                if isinstance(db_result, dict):
+                    response = db_result
+                elif isinstance(db_result, ormin.Model):
+                    response = db_result.json()
 
         if 'error' in response:
             return {'error': response['error']}, 400
@@ -275,10 +265,10 @@ API_DOMAIN = ExplorerApiDomain({
     # currently goes throught the whole block
     'address': AddressResource(),
     # cached in server and gui
-    'block': GetByIdResource('block'),
-    'blockheight': GetByIdResource('blockheight'),
-    'tx': GetByIdResource('tx'),
-    'blockstats': GetByIdResource('blockstats', ['stats_support']),
+    'block': GetByIdResource('block', model.Block, uses_blob=True),
+    'blockheight': GetByIdResource('blockheight', model.Block),
+    'tx': GetByIdResource('tx', model.Tx, uses_blob=True),
+    'blockstats': GetByIdResource('blockstats', model.Blockstats, ['stats_support'], uses_blob=True),
     # TODO handle reorgs from gui (ie use websockets)
-    'chaininfo': GetByIdResource('chaininfo'),
+    'chaininfo': GetByIdResource('chaininfo', model.Chaininfo),
 }, DB_CLIENT)
