@@ -109,7 +109,9 @@ angular.module('rpcExplorerApp')
         $scope.doPlot = function() {
             $scope.loading_stats = true;
 
-            if ($scope.plot_data && $scope.hours_ago == $scope.cached_hours_ago) {
+            if ($scope.hours_ago != SrvUtil.ParseNatural($location.search().hours_ago)) {
+                $location.search('hours_ago', $scope.hours_ago);
+            } else if ($scope.plot_data && $scope.hours_ago == $scope.cached_hours_ago) {
                 PlotCachedData();
             } else {
                 $scope.cached_hours_ago = $scope.hours_ago;
@@ -118,7 +120,6 @@ angular.module('rpcExplorerApp')
                     .then(PlotCachedData)
                     .catch(SrvUtil.errorCallbackScoped($scope));
             }
-            $location.search('hours_ago', $scope.hours_ago);
         };
 
         $scope.doPlot();
