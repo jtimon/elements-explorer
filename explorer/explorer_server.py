@@ -38,7 +38,7 @@ class ChainResource(restmin.resources.Resource):
 
     def update_chain(self, request_data):
         self.chain = None
-        if 'chain' in request_data:
+        if request_data and 'chain' in request_data:
             self.chain = request_data['chain']
             del request_data['chain']
         else:
