@@ -69,12 +69,10 @@ MEMPOOL_CACHER_PARAMS = {
     "elementsregtest": [60 * 20, 60], # every 20 min after 1 min
 }
 
-# 2 hours before starting, change after https://github.com/bitcoin/bitcoin/issues/12142 is fixed
-SECONDS_FIX_12142 = 60 * 60 * 2 # 2 hours
 MEMPOOL_SAVER_PARAMS = {
-    "bitcoin": [60, SECONDS_FIX_12142], # every 1 min after SECONDS_FIX_12142 seconds
-    "testnet3": [60, SECONDS_FIX_12142], # every 1 min after SECONDS_FIX_12142 seconds
-    "elementsregtest": [60 * 60 * 24 * 7, SECONDS_FIX_12142], # every 1 week after SECONDS_FIX_12142 seconds
+    "bitcoin": [60 * 20, 60 * 5], # every 20 min after 5 min
+    "testnet3": [60 * 20, 60 * 5], # every 20 min after 5 min
+    "elementsregtest": [60 * 60 * 24 * 7, 60 * 5], # every 1 week after 5 min
 }
 
 GREEDY_CACHER_PARAMS = {
