@@ -2,6 +2,13 @@ import utils from './utils';
 
 const has = Object.prototype.hasOwnProperty;
 
+function handleErrors(response) {
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+  return response;
+}
+
 function getChainInfo() {
   const state = store.getState();
   if (!utils.isEmpty(state.chain_info)) {
@@ -19,6 +26,7 @@ function getChainInfo() {
     }),
   };
   return fetch(url, requestParams)
+    .then(handleErrors)
     .then(response => response.json())
     .then((data) => {
       store.dispatchMerge({
@@ -47,6 +55,7 @@ function getBlockByHash(id) {
     }),
   };
   return fetch(url, requestParams)
+    .then(handleErrors)
     .then(response => response.json())
     .then((data) => {
       const { blocks } = store.getState();
@@ -77,6 +86,7 @@ function getBlockByHeight(id) {
     }),
   };
   return fetch(url, requestParams)
+    .then(handleErrors)
     .then(response => response.json())
     .then((data) => {
       const { blocks } = store.getState();
@@ -106,6 +116,7 @@ function getBlockStats(id) {
     }),
   };
   return fetch(url, requestParams)
+    .then(handleErrors)
     .then(response => response.json())
     .then((data) => {
       const { blocks } = store.getState();
@@ -135,6 +146,7 @@ function getTransaction(id) {
     }),
   };
   return fetch(url, requestParams)
+    .then(handleErrors)
     .then(response => response.json())
     .then((data) => {
       const { transactions } = store.getState();
@@ -160,6 +172,7 @@ function getAddress(address, startHeight, endHeight) {
     }),
   };
   return fetch(url, requestParams)
+    .then(handleErrors)
     .then(response => response.json());
 }
 

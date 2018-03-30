@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import api from '../utils/api';
 import format from '../utils/format';
 import utils from '../utils/utils';
 
@@ -19,6 +20,21 @@ class NavbarSearch extends Component {
       store.dispatchMerge({
         search_redirect: `/gui2/block-height/${str}`,
       });
+    } else if (utils.isValidHash(str)) {
+      api.getTransaction(str)
+        .then((tx) => {
+          store.dispatchMerge({
+            search_redirect: `/gui2/tx/${tx.txid}`,
+          });
+        })
+        .catch(() => {
+          api.getBlockByHash(str)
+            .then((block) => {
+              store.dispatchMerge({
+                search_redirect: `/gui2/block/${block.hash}`,
+              });
+            });
+        });
     }
   }
 

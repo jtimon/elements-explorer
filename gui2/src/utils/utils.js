@@ -16,8 +16,13 @@ function isNaturalNumber(s) {
   return /^(0|([1-9]\d*))$/.test(s);
 }
 
+function isValidHash(s) {
+  return /^[0-9a-f]{64}$/.test(s);
+}
+
 module.exports = {
   addBlockToStore,
   isEmpty,
   isNaturalNumber,
+  isValidHash,
 };
