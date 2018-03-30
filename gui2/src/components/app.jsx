@@ -6,6 +6,7 @@ import Footer from './footer';
 import Navbar from './navbar';
 import RecentBlocks from './recent_blocks';
 import BlockPage from './block_page';
+import BlockHeightPage from './block_height_page';
 import TransactionPage from './transaction_page';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Switch>
             <Route exact path="/gui2/" component={RecentBlocks} />
             <Route path="/gui2/block/:blockhash" component={BlockPage} />
+            <Route path="/gui2/block-height/:blockheight" component={BlockHeightPage} />
             <Route path="/gui2/tx/:txid" component={TransactionPage} />
           </Switch>
         </div>

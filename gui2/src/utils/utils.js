@@ -12,7 +12,12 @@ function addBlockToStore(obj, data) {
   return newObj;
 }
 
+function isNaturalNumber(s) {
+  return /^(0|([1-9]\d*))$/.test(s);
+}
+
 module.exports = {
   addBlockToStore,
   isEmpty,
+  isNaturalNumber,
 };
