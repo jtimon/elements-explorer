@@ -1,5 +1,9 @@
 import moment from 'moment-timezone';
 
+function trim(str) {
+  return str.replace(/^\s+|\s+$/g, '');
+}
+
 function formatNumber(num) {
   const numString = num.toString();
   const formattedNumber = [];
@@ -19,4 +23,5 @@ function formatDate(date, format = 'ddd, D MMM YYYY HH:mm:ss zz') {
 module.exports = {
   formatDate,
   formatNumber,
+  trim,
 };

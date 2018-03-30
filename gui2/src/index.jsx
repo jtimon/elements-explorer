@@ -32,6 +32,7 @@ function initStateValues() {
       stats: {},
     }),
     transactions: Immutable({}),
+    search_redirect: '',
   });
 }
 
