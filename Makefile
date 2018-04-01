@@ -15,13 +15,17 @@ staging: common-conf
 production: common-conf
 	cd docker && docker-compose up -d --build
 
-.PHONY: stop clean prune
+.PHONY: stop clean prune clean-db
 stop:
 	cd docker && docker-compose stop
 # docker-compose rm -f
 # cd docker && docker-compose down
 prune:
 	docker system prune -a
-clean: docker-prune
+
+clean-db:
+	rm -f ../explorer-data/target/schema.json
+
+clean: docker-prune clean-db
 # docker rm $(docker ps -a -q)
 # docker rmi $(docker images -q)
