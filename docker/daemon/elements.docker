@@ -12,6 +12,7 @@ RUN pip install -r requirements.txt --require-hashes
 # Install elementsd with getperblockstats
 ENV BRANCH_COMMIT=e717ca3f3d1060d440b009732f97507fe096f915
 ENV REPO_HOST=https://github.com/jtimon
+ENV REPO_NAME=elements
 ENV DAEMON_NAME=elements
 
 ADD docker/daemon/build.sh /build_docker/docker/daemon/build.sh

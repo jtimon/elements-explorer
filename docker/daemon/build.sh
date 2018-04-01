@@ -4,7 +4,7 @@
 set -e
 
 BRANCH_DIR=$DAEMON_NAME-$BRANCH_COMMIT
-BRANCH_URL=$REPO_HOST/$DAEMON_NAME/archive/$BRANCH_COMMIT.tar.gz
+BRANCH_URL=$REPO_HOST/$REPO_NAME/archive/$BRANCH_COMMIT.tar.gz
 NUM_JOBS=4
 if [ -f /proc/cpuinfo ]; then
     NUM_JOBS=$(cat /proc/cpuinfo | grep ^processor | wc -l)

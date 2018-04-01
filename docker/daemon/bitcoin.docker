@@ -12,6 +12,7 @@ RUN pip install -r requirements.txt --require-hashes
 # Install bitcoind with getperblockstats
 ENV BRANCH_COMMIT=4a856653c42c0e95f2cba7e111e620b56262e6a4
 ENV REPO_HOST=https://github.com/jtimon
+ENV REPO_NAME=bitcoin
 ENV DAEMON_NAME=bitcoin
 
 ADD docker/daemon/build.sh /build_docker/docker/daemon/build.sh
