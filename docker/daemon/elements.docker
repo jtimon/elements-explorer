@@ -9,7 +9,6 @@ RUN apt-get update && apt-get install -y python-pip
 ADD docker/daemon/requirements.txt /build_docker/requirements.txt
 RUN pip install -r requirements.txt --require-hashes
 
-# Install elementsd with getperblockstats
 ENV BRANCH_COMMIT=e717ca3f3d1060d440b009732f97507fe096f915
 ENV REPO_HOST=https://github.com/jtimon
 ENV REPO_NAME=elements
