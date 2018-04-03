@@ -10,9 +10,12 @@ if [ -f /proc/cpuinfo ]; then
     NUM_JOBS=$(cat /proc/cpuinfo | grep ^processor | wc -l)
 fi
 
+apt-get update
+apt-get install -yqq libdb-dev libdb++-dev
+
 curl -L $BRANCH_URL | tar xz
 cd $BRANCH_DIR
 ./autogen.sh
-./configure --without-gui --disable-wallet
+./configure --without-gui --with-incompatible-bdb
 make "src/"$DAEMON_NAME"d" -j$NUM_JOBS
 make "src/"$DAEMON_NAME"-cli" -j$NUM_JOBS

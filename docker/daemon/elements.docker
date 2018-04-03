@@ -14,8 +14,8 @@ ENV REPO_HOST=https://github.com/jtimon
 ENV REPO_NAME=elements
 ENV DAEMON_NAME=elements
 
-ADD docker/daemon/build.sh /build_docker/docker/daemon/build.sh
-RUN sh /build_docker/docker/daemon/build.sh
+ADD docker/daemon/build-with-wallet.sh /build_docker/docker/daemon/build-with-wallet.sh
+RUN sh /build_docker/docker/daemon/build-with-wallet.sh
 
 ADD docker/conf/$DAEMON_NAME.env /build_docker/docker/conf/$DAEMON_NAME.env
 ADD docker/conf/$DAEMON_NAME.proc /build_docker/docker/conf/$DAEMON_NAME.proc
