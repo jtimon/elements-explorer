@@ -40,6 +40,8 @@ function VIn({
   let header = null;
   if (type === 'nonstandard') {
     header = (<span>Nonstandard</span>);
+  } else if (type === 'true') {
+    header = (<span>Non-standard address</span>);
   } else {
     header = tx.scriptPubKey.addresses.map(addr => (
       <span key={addr}><a href="#addr">{addr}</a></span>
