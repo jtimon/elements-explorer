@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import api from '../utils/api';
 import dom from '../utils/dom';
 
+import VIn from './transaction_vin';
+
 class Transaction extends Component {
   constructor(props) {
     super(props);
@@ -59,40 +61,13 @@ class Transaction extends Component {
   render() {
     const { transaction } = this.props;
     const { vins } = this.state;
-    const storeTxs = store.getState().transactions;
     const showAdvanced = this.state.show_advanced;
 
     function generateVIn() {
-      return vins.map((vin, i) => {
-        if (vin.coinbase) {
-          return (
-            <div key="coinbase" className="vin">
-              <div className="vin-header">Coinbase</div>
-            </div>
-          );
-        } else if (vin.txid) {
-          const tx = storeTxs[vin.txid].vout[vin.vout];
-          const { scriptSig } = transaction.vin[i];
-          return tx.scriptPubKey.addresses.map(addr => (
-            <div key={tx.n} className={dom.classNames('vin', dom.classIf(showAdvanced, 'active'))}>
-              <div className="vin-header">
-                <a href="#addr">{addr}</a>
-              </div>
-              <div className={dom.classNames('vin-body', dom.showIf(showAdvanced))}>
-                <div>
-                  <div>scriptSig.ASM</div>
-                  <div>{scriptSig.asm}</div>
-                </div>
-                <div>
-                  <div>scriptSig.hex</div>
-                  <div>{scriptSig.hex}</div>
-                </div>
-              </div>
-            </div>
-          ));
-        }
-        return null;
-      });
+      return vins.map((vin, i) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <VIn key={i} index={i} transaction={transaction} vin={vin} showAdvanced={showAdvanced} />
+      ));
     }
 
     function generateVOut(tx) {
