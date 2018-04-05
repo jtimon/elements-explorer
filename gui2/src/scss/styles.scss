@@ -416,6 +416,9 @@ body, .navbar, .jumbotron-fluid, .content-wrap > div, footer {
         float: right;
         text-transform: uppercase;
         font-size: 14px;
+        &:focus {
+          outline: none;
+        }
         & > div:nth-child(1) {
           text-align: center;
         }
@@ -444,6 +447,9 @@ body, .navbar, .jumbotron-fluid, .content-wrap > div, footer {
         &.active {
           height: auto;
         }
+        &.peg-out {
+          border-color: $light-blue;
+        }
         & > .vin-header, .vout-header {
           padding: 0 24px;
         }
@@ -451,6 +457,7 @@ body, .navbar, .jumbotron-fluid, .content-wrap > div, footer {
           word-wrap: break-word;
           background-color: $black;
           padding: 30px 24px;
+          border-radius: 0 0 5px 5px;
           & > div {
             @include table;
             &:not(:last-child) {

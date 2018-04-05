@@ -4,11 +4,20 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import api from '../utils/api';
-import dom from '../utils/dom';
 
 import VIn from './transaction_vin';
+import VOut from './transaction_vout';
 
 class Transaction extends Component {
+  static isPegOutTx(tx) {
+    for (let i = 0; i < tx.vout.length; i += 1) {
+      if ('pegout_type' in tx.vout[i].scriptPubKey) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   constructor(props) {
     super(props);
     this.loadVIns = this.loadVIns.bind(this);
@@ -74,6 +83,7 @@ class Transaction extends Component {
     const { vins } = this.state;
     const showAdvanced = this.state.show_advanced;
     const confirmations = chainInfo.blocks - this.props.block.height;
+    const isPegOut = Transaction.isPegOutTx(transaction);
 
     function generateVIn() {
       return vins.map((vin, i) => (
@@ -83,27 +93,10 @@ class Transaction extends Component {
     }
 
     function generateVOut(tx) {
-      return tx.vout.map((vout, i) => {
-        const { scriptPubKey } = vout;
-        return (
-          // eslint-disable-next-line react/no-array-index-key
-          <div key={i} className={dom.classNames('vout', dom.classIf(showAdvanced, 'active'))}>
-            <div className="vout-header">
-              <a href="#addr">{(scriptPubKey.addresses) ? scriptPubKey.addresses[0] : 'nonstandard'}</a>
-            </div>
-            <div className={dom.classNames('vout-body', dom.showIf(showAdvanced))}>
-              <div>
-                <div>Type</div>
-                <div>{scriptPubKey.type}</div>
-              </div>
-              <div>
-                <div>scriptPubKey.hex</div>
-                <div>{scriptPubKey.hex}</div>
-              </div>
-            </div>
-          </div>
-        );
-      });
+      return tx.vout.map((vout, i) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <VOut key={i} vout={vout} showAdvanced={showAdvanced} />
+      ));
     }
 
     return (
@@ -137,7 +130,11 @@ class Transaction extends Component {
           <div>
             <div>
               <span className="helper" />
-              <img alt="" src="/gui2/static/img/icons/peg-in.svg" />
+              {(isPegOut) ? (
+                <img alt="" src="/gui2/static/img/icons/peg-out.svg" />
+              ) : (
+                <img alt="" src="/gui2/static/img/icons/peg-in.svg" />
+              )}
             </div>
           </div>
           <div className="vouts">
