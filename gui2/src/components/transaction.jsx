@@ -18,6 +18,25 @@ class Transaction extends Component {
     return false;
   }
 
+  static isConfidentialTx(tx) {
+    for (let i = 0; i < tx.vout.length; i += 1) {
+      if ('ct-bits' in tx.vout[i]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  static totalVOutValue(tx) {
+    let sum = 0;
+    for (let i = 0; i < tx.vout.length; i += 1) {
+      if (!('ct-bits' in tx.vout[i])) {
+        sum += tx.vout[i].value;
+      }
+    }
+    return sum;
+  }
+
   constructor(props) {
     super(props);
     this.loadVIns = this.loadVIns.bind(this);
@@ -84,6 +103,8 @@ class Transaction extends Component {
     const showAdvanced = this.state.show_advanced;
     const confirmations = chainInfo.blocks - this.props.block.height;
     const isPegOut = Transaction.isPegOutTx(transaction);
+    const isConfidential = Transaction.isConfidentialTx(transaction);
+    const totalValue = Transaction.totalVOutValue(transaction);
 
     function generateVIn() {
       return vins.map((vin, i) => (
@@ -149,7 +170,7 @@ class Transaction extends Component {
           <div />
           <div>
             <span>{confirmations} Confirmations</span>
-            <span />
+            <span>{(isConfidential) ? 'Confidential' : `${totalValue} Liquid`}</span>
           </div>
         </div>
       </div>

@@ -452,6 +452,12 @@ body, .navbar, .jumbotron-fluid, .content-wrap > div, footer {
         }
         & > .vin-header, .vout-header {
           padding: 0 24px;
+          & > div {
+            @include table;
+            & > *:nth-child(2) {
+              text-align: right;
+            }
+          }
         }
         & > .vin-body, .vout-body {
           word-wrap: break-word;
@@ -510,6 +516,9 @@ body, .navbar, .jumbotron-fluid, .content-wrap > div, footer {
       text-align: right;
       text-transform: uppercase;
       color: $teal;
+      & > span:nth-child(2) {
+        margin-left: 24px;
+      }
     }
   }
 }

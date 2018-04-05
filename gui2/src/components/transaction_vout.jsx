@@ -7,6 +7,7 @@ function VOut({ showAdvanced, vout }) {
   const { scriptPubKey } = vout;
   const { type } = scriptPubKey;
   const isPegOut = 'pegout_type' in scriptPubKey;
+  const isConfidential = 'ct-bits' in vout;
 
   let voutBody = null;
   if (!isPegOut && type !== 'fee') {
@@ -55,7 +56,10 @@ function VOut({ showAdvanced, vout }) {
   return (
     <div className={dom.classNames('vout', dom.classIf(isPegOut, 'peg-out'), dom.classIf(showAdvanced, 'active'))}>
       <div className="vout-header">
-        {header}
+        <div>
+          {header}
+          <span>{(isConfidential) ? 'Confidential' : vout.value}</span>
+        </div>
       </div>
       {voutBody}
     </div>
