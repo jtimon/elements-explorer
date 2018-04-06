@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import api from '../utils/api';
+import utils from '../utils/utils';
 
 class BlockHeightPage extends Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class BlockHeightPage extends Component {
     this.loadBlock = this.loadBlock.bind(this);
     this.state = {
       redirect: '',
+      return_home: false,
     };
   }
 
@@ -22,16 +24,29 @@ class BlockHeightPage extends Component {
   }
 
   loadBlock(blockheight) {
-    api.getBlockByHeight(blockheight)
-      .then((block) => {
-        this.setState({
-          redirect: block.hash,
+    if (utils.isNaturalNumber(blockheight)) {
+      const height = parseInt(blockheight, 10);
+      api.getBlockByHeight(height)
+        .then((block) => {
+          this.setState({
+            redirect: block.hash,
+          });
         });
+    } else {
+      this.setState({
+        return_home: true,
       });
+    }
   }
 
   render() {
     const { redirect } = this.state;
+    const returnHome = this.state.return_home;
+    if (returnHome) {
+      return (
+        <Redirect to="/gui2/" />
+      );
+    }
     return (redirect ? (
       <Redirect to={`/gui2/block/${redirect}`} />
     ) : null);
