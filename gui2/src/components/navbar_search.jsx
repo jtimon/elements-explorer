@@ -51,9 +51,17 @@ class NavbarSearch extends Component {
     return (searchRedirect) ? (
       <Redirect to={searchRedirect} />
     ) : (
-      <form className="form-inline my-2 my-lg-0" onSubmit={NavbarSearch.handleSubmit}>
-        <input className="form-control mr-sm-2" id="search-input" type="search" placeholder="Search" aria-label="Search" />
-        <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      <form className="form-inline" onSubmit={NavbarSearch.handleSubmit}>
+        <div className="search-bar">
+          <input
+            className="form-control search-bar-input"
+            id="search-input"
+            type="search"
+            placeholder="Search for block height, hash, tx, address, etc"
+            aria-label="Search"
+          />
+          <input className="search-bar-submit" type="image" name="submit" src="/gui2/static/img/icons/search.svg" border="0" alt="Submit" />
+        </div>
       </form>
     );
   }

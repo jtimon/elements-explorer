@@ -47,6 +47,29 @@ a, a:link, a:visited, a:hover, a:focus {
 .navbar {
     margin-bottom: calc(#{$navbar-height} * -1);
     background-color: rgba(26, 31, 38, 0.6);
+    .search-bar {
+      width: 440px;
+      height: 40px;
+      border-radius: 20px;
+      background-color: rgba(255, 255, 255, 0.05);
+      input {
+        display: inline-block;
+        height: 40px;
+        vertical-align: top;
+        &.search-bar-input {
+          width: 400px;
+          background-color: transparent;
+          border: none;
+          box-shadow: none;
+          color: #fff;
+          font-size: 14px;
+        }
+        &.search-bar-submit {
+          height: 40px;
+          width: 40px;
+        }
+      }
+    }
 }
 
 .jumbotron-fluid {
