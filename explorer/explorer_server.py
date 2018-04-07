@@ -163,7 +163,10 @@ class GetByIdResource(ChainResource):
         if not db_result:
             return {'error': {'message': 'No result db for %s %s.' % (self.resource, request['id'])}}, 400
         elif isinstance(db_result, dict) and 'error' in db_result:
-            return {'error': {'message': db_result['error']}}, 400
+            if isinstance(db_result['error'], dict) and 'message' in db_result['error']:
+                return {'error': {'message': db_result['error']['message']}}, 400
+            else:
+                return {'error': {'message': db_result['error']}}, 400
 
         if not (isinstance(db_result, dict) or isinstance(db_result, ormin.Model)):
             print('ERROR: getting %s. db_result:' % self.resource, db_result)
