@@ -25,6 +25,7 @@ function initLibraries() {
 
 function initStateValues() {
   store.dispatchMerge({
+    chain: 'testnet3',
     chain_info: Immutable({}),
     blocks: Immutable.from({
       hashes: {},

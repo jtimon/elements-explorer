@@ -11,6 +11,7 @@ function handleErrors(response) {
 
 function getChainInfo() {
   const state = store.getState();
+  const { chain } = state;
   if (!utils.isEmpty(state.chain_info)) {
     return Promise.resolve().then(() => state.chain_info);
   }
@@ -21,8 +22,8 @@ function getChainInfo() {
       'Content-type': 'application/json',
     },
     body: JSON.stringify({
-      chain: 'testnet3',
-      id: 'testnet3',
+      chain,
+      id: chain,
     }),
   };
   return fetch(url, requestParams)
@@ -38,6 +39,7 @@ function getChainInfo() {
 
 function getBlockByHash(id) {
   const state = store.getState();
+  const { chain } = state;
   if (!utils.isEmpty(state.blocks.hashes)) {
     if (has.call(state.blocks.hashes, id)) {
       return Promise.resolve().then(() => state.blocks.hashes[id]);
@@ -50,8 +52,8 @@ function getBlockByHash(id) {
       'Content-type': 'application/json',
     },
     body: JSON.stringify({
+      chain,
       id,
-      chain: 'testnet3',
     }),
   };
   return fetch(url, requestParams)
@@ -68,6 +70,7 @@ function getBlockByHash(id) {
 
 function getBlockByHeight(id) {
   const state = store.getState();
+  const { chain } = state;
   if (!utils.isEmpty(state.blocks.heights)) {
     if (has.call(state.blocks.heights, id)) {
       const blockHash = state.blocks.heights[id];
@@ -81,8 +84,8 @@ function getBlockByHeight(id) {
       'Content-type': 'application/json',
     },
     body: JSON.stringify({
+      chain,
       id,
-      chain: 'testnet3',
     }),
   };
   return fetch(url, requestParams)
@@ -99,6 +102,7 @@ function getBlockByHeight(id) {
 
 function getBlockStats(id) {
   const state = store.getState();
+  const { chain } = state;
   if (!utils.isEmpty(state.blocks.stats)) {
     if (has.call(state.blocks.stats, id)) {
       return Promise.resolve().then(() => state.blocks.stats[id]);
@@ -111,8 +115,8 @@ function getBlockStats(id) {
       'Content-type': 'application/json',
     },
     body: JSON.stringify({
+      chain,
       id,
-      chain: 'testnet3',
     }),
   };
   return fetch(url, requestParams)
@@ -129,6 +133,7 @@ function getBlockStats(id) {
 
 function getTransaction(id) {
   const state = store.getState();
+  const { chain } = state;
   if (!utils.isEmpty(state.transactions)) {
     if (has.call(state.transactions, id)) {
       return Promise.resolve().then(() => state.transactions[id]);
@@ -141,8 +146,8 @@ function getTransaction(id) {
       'Content-type': 'application/json',
     },
     body: JSON.stringify({
+      chain,
       id,
-      chain: 'testnet3',
     }),
   };
   return fetch(url, requestParams)
@@ -158,6 +163,8 @@ function getTransaction(id) {
 }
 
 function getAddress(address, startHeight, endHeight) {
+  const state = store.getState();
+  const { chain } = state;
   const url = '/api/v0/address';
   const requestParams = {
     method: 'POST',
@@ -165,10 +172,10 @@ function getAddress(address, startHeight, endHeight) {
       'Content-type': 'application/json',
     },
     body: JSON.stringify({
+      chain,
       start_height: startHeight,
       end_height: endHeight,
       addresses: [address],
-      chain: 'testnet3',
     }),
   };
   return fetch(url, requestParams)
