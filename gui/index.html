@@ -42,7 +42,7 @@
 
             <ul class="nav navbar-nav">
               <li ng-class="navClass('queue')"><a ng-href="#!/chain/{{selected_chain}}/queue?hours_ago=6">Queue</a></li>
-              <li ng-class="navClass('stats')" ng-show=chaininfo.properties.stats_support ><a ng-href="#!/chain/{{selected_chain}}/stats?start={{chaininfo.blocks-100}}&end={{chaininfo.blocks}}">Stats</a></li>
+              <li ng-class="navClass('stats')" ng-show=chaininfo.properties.stats_support ><a ng-href="#!/chain/{{selected_chain}}/stats">Stats</a></li>
               <li ng-class="navClass('address')"><a ng-href="#!/chain/{{selected_chain}}/address">Address</a></li>
             </ul>
 
