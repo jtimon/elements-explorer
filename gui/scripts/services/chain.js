@@ -12,7 +12,9 @@ angular.module('rpcExplorerApp')
 
         srv.GetAvailableChains = function() {
             if (cache['available_chains']) {
-                return SrvUtil.GetKeys(cache['available_chains']);
+                return $q(function(resolve) {
+                    resolve(SrvUtil.GetKeys(cache['available_chains']));
+                });
             } else {
                 return $http.get(BACKEND_URL + '/available_chains')
                     .then(function (response) {

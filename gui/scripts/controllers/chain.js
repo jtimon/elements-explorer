@@ -6,8 +6,6 @@ angular.module('rpcExplorerApp')
         SrvChain.GetAvailableChains()
             .then(function (available_chains) {
                 $scope.available_chains = available_chains;
-            })
-            .then(function () {
                 $rootScope.chain_properties = SrvChain.GetProperties();
             })
             .catch(SrvUtil.errorCallbackScoped($scope));
