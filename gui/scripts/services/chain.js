@@ -13,13 +13,13 @@ angular.module('rpcExplorerApp')
         srv.GetAvailableChains = function() {
             if (cache['available_chains']) {
                 return $q(function(resolve) {
-                    resolve(SrvUtil.GetKeys(cache['available_chains']));
+                    resolve(cache['available_chains']);
                 });
             } else {
                 return $http.get(BACKEND_URL + '/available_chains')
                     .then(function (response) {
                         cache['available_chains'] = response["data"]["available_chains"];
-                        return SrvUtil.GetKeys(cache['available_chains']);
+                        return cache['available_chains'];
                     });
             }
         }
@@ -55,7 +55,7 @@ angular.module('rpcExplorerApp')
                 return SetSelectedChain(_selected_chain);
             } else {
                 return srv.GetAvailableChains()
-                    .then(function() {
+                    .then(function(available_chains) {
                         return SetSelectedChain(_selected_chain);
                     })
                     .catch(SrvUtil.errorCallbackScoped($scope));
@@ -66,10 +66,6 @@ angular.module('rpcExplorerApp')
             return selected_chain;
         }
 
-        srv.GetProperties = function() {
-            return cache['available_chains'];
-        }
-        
         srv.GetChainInfo = function() {
             var resource = 'chaininfo';
             SrvUtil.PreCache(cache, srv.get(), resource);
