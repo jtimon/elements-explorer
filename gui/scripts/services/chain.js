@@ -10,6 +10,18 @@ angular.module('rpcExplorerApp')
         var selected_chain = "bitcoin";
         var cache = {};
 
+        srv.GetAvailableChains = function() {
+            if (cache['available_chains']) {
+                return SrvUtil.GetKeys(cache['available_chains']);
+            } else {
+                return $http.get(BACKEND_URL + '/available_chains')
+                    .then(function (response) {
+                        cache['available_chains'] = response["data"]["available_chains"];
+                        return SrvUtil.GetKeys(cache['available_chains']);
+                    });
+            }
+        }
+
         function SetSelectedChain(_selected_chain)
         {
             // If it's not an avilable chain, try to see if it's a
@@ -50,18 +62,6 @@ angular.module('rpcExplorerApp')
 
         srv.get = function() {
             return selected_chain;
-        }
-
-        srv.GetAvailableChains = function() {
-            if (cache['available_chains']) {
-                return SrvUtil.GetKeys(cache['available_chains']);
-            } else {
-                return $http.get(BACKEND_URL + '/available_chains')
-                    .then(function (response) {
-                        cache['available_chains'] = response["data"]["available_chains"];
-                        return SrvUtil.GetKeys(cache['available_chains']);
-                    });
-            }
         }
 
         srv.GetProperties = function() {
