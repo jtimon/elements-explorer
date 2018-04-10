@@ -15,7 +15,7 @@ angular.module('rpcExplorerApp')
         $scope.curious = $location.search().curious == 'true';
         $scope.loading_stats = false;
         $scope.cached_plot_data = {};
-        
+
         $scope.xaxis_list = [
             "height",
             "time",

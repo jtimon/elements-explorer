@@ -159,7 +159,7 @@ angular.module('rpcExplorerApp')
         };
 
         var EXAMPLE_LIST_SIZE = 4;
-        
+
         function LoadMempoolTxs()
         {
             return SrvBackend.RpcCall("getrawmempool", {})
@@ -181,7 +181,7 @@ angular.module('rpcExplorerApp')
             }
             return null;
         }
-        
+
         function LoadBlocksAndConfirmedTxs()
         {
             return SrvChain.GetChainInfo()
