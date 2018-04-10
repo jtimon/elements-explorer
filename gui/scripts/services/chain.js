@@ -65,7 +65,7 @@ angular.module('rpcExplorerApp')
         }
 
         srv.GetProperties = function() {
-            return cache[srv.get()]['chaininfo'][srv.get()]['properties'];
+            return cache['available_chains'];
         }
         
         srv.GetChainInfo = function() {
@@ -79,7 +79,6 @@ angular.module('rpcExplorerApp')
                 return $http.post(BACKEND_URL + '/' + resource, {'id': srv.get(), 'chain': srv.get()})
                     .then(function (response) {
                         var result = SrvUtil.GetResult(response);
-                        result['properties'] = cache['available_chains'][srv.get()];
                         return SrvUtil.CacheResult(cache, srv.get(), resource, srv.get())(result);
                     });
             }
