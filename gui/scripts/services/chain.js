@@ -65,22 +65,22 @@ angular.module('rpcExplorerApp')
         }
 
         srv.GetProperties = function() {
-            return cache[selected_chain]['chaininfo'][selected_chain]['properties'];
+            return cache[srv.get()]['chaininfo'][srv.get()]['properties'];
         }
         
         srv.GetChainInfo = function() {
             var resource = 'chaininfo';
-            SrvUtil.PreCache(cache, selected_chain, resource);
-            if (cache[selected_chain][resource][selected_chain]) {
+            SrvUtil.PreCache(cache, srv.get(), resource);
+            if (cache[srv.get()][resource][srv.get()]) {
                 return $q(function(resolve) {
-                    resolve(cache[selected_chain][resource][selected_chain]);
+                    resolve(cache[srv.get()][resource][srv.get()]);
                 });
             } else {
-                return $http.post(BACKEND_URL + '/' + resource, {'id': selected_chain, 'chain': selected_chain})
+                return $http.post(BACKEND_URL + '/' + resource, {'id': srv.get(), 'chain': srv.get()})
                     .then(function (response) {
                         var result = SrvUtil.GetResult(response);
-                        result['properties'] = cache['available_chains'][ selected_chain ];
-                        return SrvUtil.CacheResult(cache, selected_chain, resource, selected_chain)(result);
+                        result['properties'] = cache['available_chains'][srv.get()];
+                        return SrvUtil.CacheResult(cache, srv.get(), resource, srv.get())(result);
                     });
             }
         }
