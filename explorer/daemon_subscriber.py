@@ -414,9 +414,12 @@ class DaemonReorgManager(GreedyCacher):
                 return
 
     def _cron_loop(self):
-        chaininfo = self.rpccaller.RpcCall('getblockchaininfo', {})
-        if 'bestblockhash' in chaininfo:
-            self.update_tip(chaininfo['bestblockhash'])
+        try:
+            chaininfo = self.rpccaller.RpcCall('getblockchaininfo', {})
+            if 'bestblockhash' in chaininfo:
+                self.update_tip(chaininfo['bestblockhash'])
+        except Exception as e:
+            print("Error in DaemonReorgManager._cron_loop:", type(e), e)
 
 
 class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
