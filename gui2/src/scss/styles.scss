@@ -447,7 +447,7 @@ body, .navbar, .jumbotron-fluid, .content-wrap > div, footer {
         &.active {
           height: auto;
         }
-        &.peg-out {
+        &.peg-out, &.peg-in {
           border-color: $light-blue;
         }
         & > .vin-header, .vout-header {

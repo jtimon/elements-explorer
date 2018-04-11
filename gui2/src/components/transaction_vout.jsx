@@ -58,7 +58,7 @@ function VOut({ showAdvanced, vout }) {
       <div className="vout-header">
         <div>
           {header}
-          <span>{(isConfidential) ? 'Confidential' : vout.value}</span>
+          <span>{(isConfidential) ? 'Confidential' : `${vout.value} BTC`}</span>
         </div>
       </div>
       {voutBody}

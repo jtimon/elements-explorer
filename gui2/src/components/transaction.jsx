@@ -170,7 +170,7 @@ class Transaction extends Component {
           <div />
           <div>
             <span>{confirmations} Confirmations</span>
-            <span>{(isConfidential) ? 'Confidential' : `${totalValue} Liquid`}</span>
+            <span>{(isConfidential) ? 'Confidential' : `${totalValue} BTC`}</span>
           </div>
         </div>
       </div>

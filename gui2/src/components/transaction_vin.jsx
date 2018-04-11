@@ -10,7 +10,7 @@ function VIn({
 
   if (vin.pegin) {
     return (
-      <div className="vin">
+      <div className="vin peg-in">
         <div className="vin-header">Bitcoin address</div>
       </div>
     );
