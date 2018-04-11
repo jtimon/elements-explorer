@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
@@ -59,9 +60,11 @@ class Transaction extends Component {
   }
 
   render() {
+    const { chain_info } = this.props;
     const { transaction } = this.props;
     const { vins } = this.state;
     const showAdvanced = this.state.show_advanced;
+    const confirmations = chain_info.blocks - this.props.block.height;
 
     function generateVIn() {
       return vins.map((vin, i) => (
@@ -139,7 +142,7 @@ class Transaction extends Component {
           </div>
           <div />
           <div>
-            <span>{this.props.block.confirmations} Confirmations</span>
+            <span>{confirmations} Confirmations</span>
             <span />
           </div>
         </div>
@@ -153,6 +156,11 @@ Transaction.propTypes = {
     confirmations: PropTypes.number.isRequired,
   }).isRequired,
   time: PropTypes.string.isRequired,
+  chain_info: PropTypes.object.isRequired,
 };
 
-export default Transaction;
+const mapStateToProps = state => ({
+  chain_info: state.chain_info,
+});
+
+export default connect(mapStateToProps)(Transaction);
