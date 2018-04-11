@@ -27,11 +27,19 @@ class Transaction extends Component {
     const vins = [];
     const promises = [];
     tx.vin.forEach((vin, i) => {
-      if (vin.txid) {
+      if (vin.is_pegin) {
+        vins[i] = {
+          coinbase: false,
+          pegin: true,
+          txid: undefined,
+          vout: undefined,
+        };
+      } else if (vin.txid) {
         promises.push(Promise.resolve().then(() => (
           api.getTransaction(vin.txid).then((data) => {
             vins[i] = {
               coinbase: false,
+              pegin: false,
               txid: vin.txid,
               vout: vin.vout,
             };
@@ -41,6 +49,7 @@ class Transaction extends Component {
       } else {
         vins[i] = {
           coinbase: true,
+          pegin: false,
           txid: undefined,
           vout: undefined,
         };

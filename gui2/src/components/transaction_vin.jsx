@@ -8,7 +8,13 @@ function VIn({
 }) {
   const storeTxs = store.getState().transactions;
 
-  if (vin.coinbase) {
+  if (vin.pegin) {
+    return (
+      <div className="vin">
+        <div className="vin-header">Bitcoin address</div>
+      </div>
+    );
+  } else if (vin.coinbase) {
     return (
       <div className="vin">
         <div className="vin-header">Coinbase</div>
