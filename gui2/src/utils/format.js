@@ -20,7 +20,12 @@ function formatDate(date, format = 'ddd, D MMM YYYY HH:mm:ss zz') {
   return moment(date).tz(moment.tz.guess()).format(format).toString();
 }
 
+function capitalizeFirstLetter(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 module.exports = {
+  capitalizeFirstLetter,
   formatDate,
   formatNumber,
   trim,

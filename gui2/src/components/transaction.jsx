@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import api from '../utils/api';
+import dom from '../utils/dom';
 
 import VIn from './transaction_vin';
 import VOut from './transaction_vout';
@@ -44,6 +45,7 @@ class Transaction extends Component {
     this.state = {
       show_advanced: false,
       vins: [],
+      is_pegin: false,
     };
   }
 
@@ -54,8 +56,10 @@ class Transaction extends Component {
   loadVIns(tx) {
     const vins = [];
     const promises = [];
+    let isPegIn = false;
     tx.vin.forEach((vin, i) => {
       if (vin.is_pegin) {
+        isPegIn = true;
         vins[i] = {
           coinbase: false,
           pegin: true,
@@ -86,6 +90,7 @@ class Transaction extends Component {
     Promise.all(promises).then(() => {
       this.setState({
         vins,
+        is_pegin: isPegIn,
       });
     });
   }
@@ -102,6 +107,7 @@ class Transaction extends Component {
     const { vins } = this.state;
     const showAdvanced = this.state.show_advanced;
     const confirmations = chainInfo.blocks - this.props.block.height;
+    const isPegIn = this.state.is_pegin;
     const isPegOut = Transaction.isPegOutTx(transaction);
     const isConfidential = Transaction.isConfidentialTx(transaction);
     const totalValue = Transaction.totalVOutValue(transaction);
@@ -151,11 +157,8 @@ class Transaction extends Component {
           <div>
             <div>
               <span className="helper" />
-              {(isPegOut) ? (
-                <img alt="" src="/gui2/static/img/icons/peg-out.svg" />
-              ) : (
-                <img alt="" src="/gui2/static/img/icons/peg-in.svg" />
-              )}
+              <img className={dom.showIf(isPegOut)} alt="" src="/gui2/static/img/icons/peg-out.svg" />
+              <img className={dom.showIf(isPegIn)} alt="" src="/gui2/static/img/icons/peg-in.svg" />
             </div>
           </div>
           <div className="vouts">

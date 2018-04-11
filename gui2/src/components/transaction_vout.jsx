@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import dom from '../utils/dom';
+import format from '../utils/format';
 
 function VOut({ showAdvanced, vout }) {
   const { scriptPubKey } = vout;
@@ -43,12 +44,10 @@ function VOut({ showAdvanced, vout }) {
     header = ((scriptPubKey.pegout_addresses) ? (
       <a href="#addr">{scriptPubKey.pegout_addresses[0]}</a>
     ) : (
-      <span>Non-standard address</span>
+      <span>Nonstandard</span>
     ));
-  } else if (type === 'fee') {
-    header = (<span>Fee</span>);
-  } else if (['nonstandard', 'true'].includes(type) || !scriptPubKey.addresses) {
-    header = (<span>Non-standard address</span>);
+  } else if (!scriptPubKey.addresses) {
+    header = (<span>{format.capitalizeFirstLetter(type)}</span>);
   } else {
     header = (<a href="#addr">{scriptPubKey.addresses[0]}</a>);
   }

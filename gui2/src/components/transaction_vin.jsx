@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import dom from '../utils/dom';
+import format from '../utils/format';
 
 function VIn({
   index, showAdvanced, transaction, vin,
@@ -38,10 +39,8 @@ function VIn({
   );
 
   let header = null;
-  if (type === 'nonstandard') {
-    header = (<span>Nonstandard</span>);
-  } else if (type === 'true') {
-    header = (<span>Non-standard address</span>);
+  if (!tx.scriptPubKey.addresses) {
+    header = (<span>{format.capitalizeFirstLetter(type)}</span>);
   } else {
     header = tx.scriptPubKey.addresses.map(addr => (
       <span key={addr}><a href="#addr">{addr}</a></span>
