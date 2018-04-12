@@ -46,17 +46,18 @@ angular.module('rpcExplorerApp')
             return $scope.block["height"];
         };
 
-        function statsCallbackBlock(data) {
-            $scope.blockstats = data;
-        };
-
         function PromBlockstats(height) {
-            if (SrvChain.GetAvailableChains()[SrvChain.get()]['stats_support']) {
-                return SrvBackend.get("blockstats", height)
-                    .then(statsCallbackBlock);
-            } else {
-                return null;
-            }
+            SrvChain.GetAvailableChains()
+                .then(function (available_chains) {
+                    if (available_chains[SrvChain.get()]['stats_support']) {
+                        return SrvBackend.get("blockstats", height)
+                            .then(function(data) {
+                                $scope.blockstats = data;
+                            });
+                    } else {
+                        return null;
+                    }
+                });
         };
 
         function CreatePromBlockstats(height) {
