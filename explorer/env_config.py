@@ -81,9 +81,6 @@ GREEDY_CACHER_PARAMS = {
     "elementsregtest": [60 * 60, 60, True], # every 1 hour after 1 min, cache txs
 }
 
-def subscriber_params(chain):
-    return [AVAILABLE_CHAINS[chain]['zmq'], chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db']]
-
 def reorg_cron_params(chain):
     to_return = [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]
     to_return.extend(REORG_CRON_PARAMS[chain])
