@@ -18,7 +18,17 @@ FLAGS = gflags.FLAGS
 # ===----------------------------------------------------------------------===
 
 from explorer.daemon_subscriber import MempoolStatsCacher, MempoolSaver
-from explorer.env_config import mempool_cacher_params, mempool_saver_params
+from explorer.env_config import AVAILABLE_CHAINS
+
+def mempool_cacher_params(chain):
+    to_return = [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]
+    to_return.extend(AVAILABLE_CHAINS[chain]['proc']['mempool_cacher'])
+    return to_return
+
+def mempool_saver_params(chain):
+    to_return = [chain, AVAILABLE_CHAINS[chain]['rpc']]
+    to_return.extend(AVAILABLE_CHAINS[chain]['proc']['mempool_saver'])
+    return to_return
 
 mempool_cacher = MempoolStatsCacher(*mempool_cacher_params(FLAGS.chain))
 mempool_cacher.start()

@@ -18,7 +18,12 @@ FLAGS = gflags.FLAGS
 # ===----------------------------------------------------------------------===
 
 from explorer.daemon_subscriber import DaemonReorgManager
-from explorer.env_config import reorg_cron_params
+from explorer.env_config import AVAILABLE_CHAINS
+
+def reorg_cron_params(chain):
+    to_return = [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]
+    to_return.extend(AVAILABLE_CHAINS[chain]['proc']['reorg_cron'])
+    return to_return
 
 daemon_reorg_cron = DaemonReorgManager(*reorg_cron_params(FLAGS.chain))
 daemon_reorg_cron.start()

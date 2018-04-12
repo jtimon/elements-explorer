@@ -19,6 +19,7 @@ DB_FACTORY = minql.MinqlFactory(CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_
 DB_CLIENT = DB_FACTORY.create()
 
 AVAILABLE_CHAINS = {
+
     "bitcoin": {
         'rpc': RpcCaller(os.environ.get('BITCOIN_ADR'),
                          os.environ.get('BITCOIN_RPCUSER'),
@@ -37,6 +38,7 @@ AVAILABLE_CHAINS = {
             'greedy_cacher': [60, 60 * 60 * 2, True], # every 1 min after 2 hours, cache txs
         },
     },
+
     "testnet3": {
         'rpc': RpcCaller(os.environ.get('TESTNET3_ADR'),
                          os.environ.get('TESTNET3_RPCUSER'),
@@ -55,6 +57,7 @@ AVAILABLE_CHAINS = {
             'greedy_cacher': [60, 60 * 60, True], # every 1 min after 1 hour, cache txs
         },
     },
+
     "elementsregtest": {
         'rpc': RpcCaller(os.environ.get('ELEMENTSREGTEST_ADR'),
                          os.environ.get('ELEMENTS_RPCUSER'),
@@ -73,24 +76,5 @@ AVAILABLE_CHAINS = {
             'greedy_cacher': [60 * 60, 60, True], # every 1 hour after 1 min, cache txs
         },
     },
+
 }
-
-def reorg_cron_params(chain):
-    to_return = [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]
-    to_return.extend(AVAILABLE_CHAINS[chain]['proc']['reorg_cron'])
-    return to_return
-
-def mempool_cacher_params(chain):
-    to_return = [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]
-    to_return.extend(AVAILABLE_CHAINS[chain]['proc']['mempool_cacher'])
-    return to_return
-
-def mempool_saver_params(chain):
-    to_return = [chain, AVAILABLE_CHAINS[chain]['rpc']]
-    to_return.extend(AVAILABLE_CHAINS[chain]['proc']['mempool_saver'])
-    return to_return
-
-def greedy_cacher_params(chain):
-    to_return = [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]
-    to_return.extend(AVAILABLE_CHAINS[chain]['proc']['greedy_cacher'])
-    return to_return
