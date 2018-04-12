@@ -99,17 +99,14 @@ angular.module('rpcExplorerApp')
             StatsToGraph($scope.cached_plot_data);
         };
 
-        function successCallbackPerBlockStats(data)
-        {
-            $scope.cached_plot_data = data;
-            StatsToGraph($scope.cached_plot_data);
-            $scope.loading_stats = false;
-        };
-
         $scope.doInitialPlot = function() {
             $scope.loading_stats = true;
             return SrvBackend.GetBlockStats($scope.start_height, $scope.end_height)
-                .then(successCallbackPerBlockStats)
+                .then(function(data) {
+                    $scope.cached_plot_data = data;
+                    StatsToGraph($scope.cached_plot_data);
+                    $scope.loading_stats = false;
+                })
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
@@ -138,20 +135,22 @@ angular.module('rpcExplorerApp')
             }
         };
 
-        SrvChain.GetChainInfo().then(function(chaininfo) {
-            if ($location.search().end_height) {
-                $scope.end_height = SrvUtil.ParseIntToPositive($location.search().end_height);
-            } else {
-                $scope.end_height = chaininfo['blocks'];
-            }
-            if ($location.search().start_height) {
-                $scope.start_height = SrvUtil.ParseIntToPositive($location.search().start_height);
-            } else {
-                $scope.start_height = Math.max(1, $scope.end_height - 99);
-            }
-            if ($scope.start_height > $scope.end_height) {
-                $scope.end_height = $scope.start_height;
-            }
-        }).then($scope.doInitialPlot)
+        SrvChain.GetChainInfo()
+            .then(function(chaininfo) {
+                if ($location.search().end_height) {
+                    $scope.end_height = SrvUtil.ParseIntToPositive($location.search().end_height);
+                } else {
+                    $scope.end_height = chaininfo['blocks'];
+                }
+                if ($location.search().start_height) {
+                    $scope.start_height = SrvUtil.ParseIntToPositive($location.search().start_height);
+                } else {
+                    $scope.start_height = Math.max(1, $scope.end_height - 99);
+                }
+                if ($scope.start_height > $scope.end_height) {
+                    $scope.end_height = $scope.start_height;
+                }
+            })
+            .then($scope.doInitialPlot)
             .catch(SrvUtil.errorCallbackScoped($scope));
     });

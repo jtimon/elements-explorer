@@ -50,21 +50,23 @@ angular.module('rpcExplorerApp')
             }
         };
 
-        SrvChain.GetChainInfo().then(function(chaininfo) {
-            if ($location.search().end_height) {
-                $scope.end_height = SrvUtil.ParseNatural($location.search().end_height);
-            } else {
-                $scope.end_height = chaininfo['blocks'];
-            }
-            if ($location.search().start_height) {
-                $scope.start_height = SrvUtil.ParseNatural($location.search().start_height);
-            } else {
-                $scope.start_height = Math.max(1, $scope.end_height - 4);
-            }
-            if ($scope.start_height > $scope.end_height) {
-                $scope.end_height = $scope.start_height;
-            }
-        }).then($scope.SearchAddress)
+        SrvChain.GetChainInfo()
+            .then(function(chaininfo) {
+                if ($location.search().end_height) {
+                    $scope.end_height = SrvUtil.ParseNatural($location.search().end_height);
+                } else {
+                    $scope.end_height = chaininfo['blocks'];
+                }
+                if ($location.search().start_height) {
+                    $scope.start_height = SrvUtil.ParseNatural($location.search().start_height);
+                } else {
+                    $scope.start_height = Math.max(1, $scope.end_height - 4);
+                }
+                if ($scope.start_height > $scope.end_height) {
+                    $scope.end_height = $scope.start_height;
+                }
+            })
+            .then($scope.SearchAddress)
             .catch(SrvUtil.errorCallbackScoped($scope));
 
     });
