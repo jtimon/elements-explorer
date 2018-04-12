@@ -20,18 +20,15 @@ FLAGS = gflags.FLAGS
 from explorer.daemon_subscriber import MempoolStatsCacher, MempoolSaver
 from explorer.env_config import AVAILABLE_CHAINS
 
-def mempool_cacher_params(chain):
-    to_return = [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]
-    to_return.extend(AVAILABLE_CHAINS[chain]['proc']['mempool_cacher'])
-    return to_return
+chain = FLAGS.chain
 
-def mempool_saver_params(chain):
-    to_return = [chain, AVAILABLE_CHAINS[chain]['rpc']]
-    to_return.extend(AVAILABLE_CHAINS[chain]['proc']['mempool_saver'])
-    return to_return
-
-mempool_cacher = MempoolStatsCacher(*mempool_cacher_params(FLAGS.chain))
+mempool_cacher_params = [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]
+mempool_cacher_params.extend(AVAILABLE_CHAINS[chain]['proc']['mempool_cacher'])
+mempool_cacher = MempoolStatsCacher(*mempool_cacher_params)
 mempool_cacher.start()
 
-mempool_saver = MempoolSaver(*mempool_saver_params(FLAGS.chain))
-mempool_saver.start()
+if 'mempool_saver' in AVAILABLE_CHAINS[chain]:
+    mempool_saver_params = [chain, AVAILABLE_CHAINS[chain]['rpc']]
+    mempool_saver_params.extend(AVAILABLE_CHAINS[chain]['proc']['mempool_saver'])
+    mempool_saver = MempoolSaver(*mempool_saver_params)
+    mempool_saver.start()
