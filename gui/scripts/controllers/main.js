@@ -219,24 +219,29 @@ angular.module('rpcExplorerApp')
                 .catch(SrvUtil.errorCallbackScoped($scope));
         };
 
-        if ($routeParams.block) {
-            $scope.blockid = $routeParams.block;
-            goToBlock($routeParams.block)
-                .then(function() {
-                    $scope.loading = false;
-                })
-                .catch(SrvUtil.errorCallbackScoped($scope));
-        } else if ($routeParams.block_height) {
-            $scope.blockheight = parseInt($routeParams.block_height);
-            $scope.searchBlockByHeight()
-        } else if ($routeParams.txid) {
-            $scope.txid = $routeParams.txid;
-            goToTx($routeParams.txid)
-                .then(function() {
-                    $scope.loading = false;
-                })
-                .catch(SrvUtil.errorCallbackScoped($scope));
-        } else {
-            NothingSelectedLoad();
+        function DoMain()
+        {
+            if ($routeParams.block) {
+                $scope.blockid = $routeParams.block;
+                goToBlock($routeParams.block)
+                    .then(function() {
+                        $scope.loading = false;
+                    })
+                    .catch(SrvUtil.errorCallbackScoped($scope));
+            } else if ($routeParams.block_height) {
+                $scope.blockheight = parseInt($routeParams.block_height);
+                $scope.searchBlockByHeight()
+            } else if ($routeParams.txid) {
+                $scope.txid = $routeParams.txid;
+                goToTx($routeParams.txid)
+                    .then(function() {
+                        $scope.loading = false;
+                    })
+                    .catch(SrvUtil.errorCallbackScoped($scope));
+            } else {
+                NothingSelectedLoad();
+            }
         }
+
+        DoMain();
     });
