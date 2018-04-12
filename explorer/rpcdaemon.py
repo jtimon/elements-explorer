@@ -3,14 +3,19 @@ import requests
 import json
 
 RPC_ALLOWED_CALLS = [
-    "getblockchaininfo",
-    "getblock",
-    "getblockhash",
-    "getrawtransaction",
-    "getblockstats",
-    "getrawmempool",
-    "getmempoolentry",
+    'getblockchaininfo',
+    'getblock',
+    'getblockhash',
+    'getrawtransaction',
+    'getblockstats',
+    'getrawmempool',
+    'getmempoolentry',
     'savemempool',
+    # Only for testing regtests
+    'generate',
+    'getnewaddress',
+    'sendtoaddress',
+    'sendtomainchain',
 ]
 
 class RpcCaller(object):

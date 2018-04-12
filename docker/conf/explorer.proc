@@ -20,4 +20,5 @@ greedy_cacher_testnet3: python explorer/bin/greedy_cacher.py --chain testnet3
 mempool_elementsregtest: python explorer/bin/mempool_cacher.py --chain elementsregtest
 subscriber_elementsregtest: python explorer/bin/chain_subscriber.py --chain elementsregtest
 reorg_cron_elementsregtest: python explorer/bin/reorg_cron.py --chain elementsregtest
+generator_elementsregtest: python explorer/bin/generator.py --chain elementsregtest
 greedy_cacher_elementsregtest: python explorer/bin/greedy_cacher.py --chain elementsregtest

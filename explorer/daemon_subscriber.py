@@ -58,6 +58,37 @@ class CronCacher(ChainCacher, multiprocessing.Process):
             self._cron_loop()
             time.sleep(self.wait_time)
 
+class BlockGenerator(CronCacher):
+
+    def __init__(self, chain, rpccaller, wait_time, initial_wait_time,
+                 *args, **kwargs):
+
+        super(BlockGenerator, self).__init__(chain, rpccaller, None, wait_time, initial_wait_time,
+                                                 *args, **kwargs)
+
+    def _cron_loop(self):
+        try:
+            block_hashes = self.rpccaller.RpcCall('generate', {'nblocks': 1})
+            print('Generated block', block_hashes)
+        except Exception as e:
+            print("Error in BlockGenerator._cron_loop:", type(e), e)
+
+class TxGenerator(CronCacher):
+
+    def __init__(self, chain, rpccaller, wait_time, initial_wait_time,
+                 *args, **kwargs):
+
+        super(TxGenerator, self).__init__(chain, rpccaller, None, wait_time, initial_wait_time,
+                                                 *args, **kwargs)
+
+    def _cron_loop(self):
+        try:
+            address = self.rpccaller.RpcCall('getnewaddress', {})
+            txid = self.rpccaller.RpcCall('sendtoaddress', {'address': address, 'amount': 1})
+            print('Generated tx', txid)
+        except Exception as e:
+            print("Error in TxGenerator._cron_loop:", type(e), e)
+            
 class MempoolSaver(CronCacher):
 
     def __init__(self, chain, rpccaller, wait_time, initial_wait_time,
