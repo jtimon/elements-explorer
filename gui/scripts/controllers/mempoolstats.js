@@ -8,9 +8,7 @@
  * Controller of the rpcExplorerApp
  */
 angular.module('rpcExplorerApp')
-    .controller('MempoolStatsCtrl', function ($scope, $routeParams, $location, SrvUtil, SrvChain, SrvBackend) {
-
-        SrvChain.set($routeParams.chain, $scope);
+    .controller('MempoolStatsCtrl', function ($scope, $location, SrvUtil, SrvChain, SrvBackend) {
 
         $scope.curious = $location.search().curious == 'true';
         $scope.hours_ago = SrvUtil.ParseNatural($location.search().hours_ago);
@@ -122,8 +120,6 @@ angular.module('rpcExplorerApp')
             }
         };
 
-        $scope.doPlot();
-
         $scope.toggleStat = function(name) {
             var idx = $scope.selected_stats.indexOf(name);
 
@@ -158,4 +154,7 @@ angular.module('rpcExplorerApp')
             $scope.loading_stats = false;
         };
 
+        SrvChain.set()
+            .then($scope.doPlot)
+            .catch(SrvUtil.errorCallbackScoped($scope));
     });

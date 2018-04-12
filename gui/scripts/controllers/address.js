@@ -8,11 +8,9 @@
  * Controller of the rpcExplorerApp
  */
 angular.module('rpcExplorerApp')
-    .controller('AddressCtrl', function ($scope, $routeParams, $location, SrvUtil, SrvChain, SrvBackend) {
+    .controller('AddressCtrl', function ($scope, $location, SrvUtil, SrvChain, SrvBackend) {
 
-        SrvChain.set($routeParams.chain, $scope);
         $scope.loading = false;
-
         $scope.curious = $location.search().curious == 'true';
         $scope.address = $location.search().address;
 
@@ -50,7 +48,8 @@ angular.module('rpcExplorerApp')
             }
         };
 
-        SrvChain.GetChainInfo()
+        SrvChain.set()
+            .then(SrvChain.GetChainInfo)
             .then(function(chaininfo) {
                 if ($location.search().end_height) {
                     $scope.end_height = SrvUtil.ParseNatural($location.search().end_height);

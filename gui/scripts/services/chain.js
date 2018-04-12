@@ -2,12 +2,11 @@
 /*global $:false */
 
 angular.module('rpcExplorerApp')
-    .service('SrvChain', function SrvChain($q, $http, $rootScope, $route, SrvUtil) {
+    .service('SrvChain', function SrvChain($q, $http, $rootScope, $routeParams, $route, SrvUtil) {
 
         var BACKEND_URL = '/api/v0';
         var srv = {};
 
-        var selected_chain = "bitcoin";
         var cache = {};
 
         srv.GetAvailableChains = function() {
@@ -44,26 +43,25 @@ angular.module('rpcExplorerApp')
                     }
                 }
             }
-            selected_chain = _selected_chain;
-            $rootScope.selected_chain = selected_chain;
-            return selected_chain;
+            return _selected_chain;
         }
-        
-        srv.set = function(_selected_chain, $scope) {
 
-            if (cache['available_chains']) {
-                return SetSelectedChain(_selected_chain);
-            } else {
-                return srv.GetAvailableChains()
-                    .then(function(available_chains) {
-                        return SetSelectedChain(_selected_chain);
-                    })
-                    .catch(SrvUtil.errorCallbackScoped($scope));
+        srv.set = function() {
+            if ($routeParams.chain == $rootScope.selected_chain) {
+                return $q(function(resolve) {
+                    resolve($routeParams.chain);
+                });
             }
+
+            return srv.GetAvailableChains()
+                .then(function(available_chains) {
+                    $rootScope.selected_chain = SetSelectedChain($routeParams.chain);
+                    return $rootScope.selected_chain;
+                });
         }
 
         srv.get = function() {
-            return selected_chain;
+            return $routeParams.chain;
         }
 
         srv.GetChainInfo = function() {

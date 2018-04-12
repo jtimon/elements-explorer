@@ -10,8 +10,6 @@
 angular.module('rpcExplorerApp')
     .controller('MainCtrl', function ($scope, $routeParams, $location, SrvUtil, SrvChain, SrvBackend) {
 
-        SrvChain.set($routeParams.chain, $scope);
-
         $scope.curious = $location.search().curious == 'true';
         $scope.loading = true;
         $scope.rawhex_limit = 100;
@@ -243,5 +241,7 @@ angular.module('rpcExplorerApp')
             }
         }
 
-        DoMain();
+        SrvChain.set()
+            .then(DoMain)
+            .catch(SrvUtil.errorCallbackScoped($scope));
     });
