@@ -30,6 +30,12 @@ AVAILABLE_CHAINS = {
             'stats_support': True,
             'chain_id': '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f',
         },
+        'proc': {
+            'reorg_cron': [60, 60 * 5], # every 1 min after 5 min
+            'mempool_cacher': [60, 60], # every 1 min after 1 min
+            'mempool_saver': [60 * 20, 60 * 5], # every 20 min after 5 min
+            'greedy_cacher': [60, 60 * 60 * 2, True], # every 1 min after 2 hours, cache txs
+        },
     },
     "testnet3": {
         'rpc': RpcCaller(os.environ.get('TESTNET3_ADR'),
@@ -41,6 +47,12 @@ AVAILABLE_CHAINS = {
         'properties': {
             'stats_support': True,
             'chain_id': '0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206',
+        },
+        'proc': {
+            'reorg_cron': [60, 60 * 5], # every 1 min after 5 min
+            'mempool_cacher': [60, 60], # every 1 min after 1 min
+            'mempool_saver': [60 * 20, 60 * 5], # every 20 min after 5 min
+            'greedy_cacher': [60, 60 * 60, True], # every 1 min after 1 hour, cache txs
         },
     },
     "elementsregtest": {
@@ -54,49 +66,31 @@ AVAILABLE_CHAINS = {
             'stats_support': False,
             'chain_id': 'elementsregtest_genesis_hash',
         },
+        'proc': {
+            'reorg_cron': [60, 60 * 5], # every 1 min after 5 min
+            'mempool_cacher': [60 * 20, 60], # every 20 min after 1 min
+            'mempool_saver': [60 * 60 * 24 * 7, 60 * 5], # every 1 week after 5 min
+            'greedy_cacher': [60 * 60, 60, True], # every 1 hour after 1 min, cache txs
+        },
     },
-}
-
-REORG_CRON_PARAMS = {
-    "bitcoin": [60, 60 * 5], # every 1 min after 5 min
-    "testnet3": [60, 60 * 5], # every 1 min after 5 min
-    "elementsregtest": [60, 60 * 5], # every 1 min after 5 min
-}
-
-MEMPOOL_CACHER_PARAMS = {
-    "bitcoin": [60, 60], # every 1 min after 1 min
-    "testnet3": [60, 60], # every 1 min after 1 min
-    "elementsregtest": [60 * 20, 60], # every 20 min after 1 min
-}
-
-MEMPOOL_SAVER_PARAMS = {
-    "bitcoin": [60 * 20, 60 * 5], # every 20 min after 5 min
-    "testnet3": [60 * 20, 60 * 5], # every 20 min after 5 min
-    "elementsregtest": [60 * 60 * 24 * 7, 60 * 5], # every 1 week after 5 min
-}
-
-GREEDY_CACHER_PARAMS = {
-    "bitcoin": [60, 60 * 60 * 2, True], # every 1 min after 2 hours, cache txs
-    "testnet3": [60, 60 * 60, True], # every 1 min after 1 hour, cache txs
-    "elementsregtest": [60 * 60, 60, True], # every 1 hour after 1 min, cache txs
 }
 
 def reorg_cron_params(chain):
     to_return = [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]
-    to_return.extend(REORG_CRON_PARAMS[chain])
+    to_return.extend(AVAILABLE_CHAINS[chain]['proc']['reorg_cron'])
     return to_return
 
 def mempool_cacher_params(chain):
     to_return = [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]
-    to_return.extend(MEMPOOL_CACHER_PARAMS[chain])
+    to_return.extend(AVAILABLE_CHAINS[chain]['proc']['mempool_cacher'])
     return to_return
 
 def mempool_saver_params(chain):
     to_return = [chain, AVAILABLE_CHAINS[chain]['rpc']]
-    to_return.extend(MEMPOOL_SAVER_PARAMS[chain])
+    to_return.extend(AVAILABLE_CHAINS[chain]['proc']['mempool_saver'])
     return to_return
 
 def greedy_cacher_params(chain):
     to_return = [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]
-    to_return.extend(GREEDY_CACHER_PARAMS[chain])
+    to_return.extend(AVAILABLE_CHAINS[chain]['proc']['greedy_cacher'])
     return to_return
