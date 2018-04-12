@@ -60,11 +60,11 @@ class Transaction extends Component {
   }
 
   render() {
-    const { chain_info } = this.props;
+    const chainInfo = this.props.chain_info;
     const { transaction } = this.props;
     const { vins } = this.state;
     const showAdvanced = this.state.show_advanced;
-    const confirmations = chain_info.blocks - this.props.block.height;
+    const confirmations = chainInfo.blocks - this.props.block.height;
 
     function generateVIn() {
       return vins.map((vin, i) => (
@@ -154,9 +154,10 @@ Transaction.propTypes = {
   transaction: PropTypes.shape({}).isRequired,
   block: PropTypes.shape({
     confirmations: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
   }).isRequired,
   time: PropTypes.string.isRequired,
-  chain_info: PropTypes.object.isRequired,
+  chain_info: PropTypes.shape({}).isRequired,
 };
 
 const mapStateToProps = state => ({

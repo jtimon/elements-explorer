@@ -73,12 +73,12 @@ class BlockPage extends Component {
     const loadedTransactions = this.state.transactions;
     const blockStats = this.state.block_stats;
     const { chain } = this.props;
-    const { chain_info } = this.props;
+    const chainInfo = this.props.chain_info;
     const hasBlockStats = !['liquid', 'elementsregtest'].includes(chain);
     const time = block.mediantime;
     const formattedTime = time ? format.formatDate(time * 1000) : '';
     const transactionCount = (block.tx) ? block.tx.length : 0;
-    const confirmations = chain_info.blocks - block.height;
+    const confirmations = chainInfo.blocks - block.height;
 
     function generateTransactions() {
       return loadedTransactions.map(tx => (
@@ -247,7 +247,7 @@ BlockPage.propTypes = {
     url: PropTypes.string.isRequired,
   }).isRequired,
   chain: PropTypes.string.isRequired,
-  chain_info: PropTypes.object.isRequired,
+  chain_info: PropTypes.shape({}).isRequired,
 };
 
 const mapStateToProps = state => ({
