@@ -104,7 +104,7 @@ class BlockPage extends Component {
             </div>
             <div>
               <div>Confirmations</div>
-              <div>{confirmations}</div>
+              <div>{Number.isNaN(confirmations) ? '' : confirmations}</div>
             </div>
             <div>
               <div>Timestamp</div>
