@@ -12,19 +12,19 @@ class BlockJumbotron extends Component {
     this.handleMouseClick = this.handleMouseClick.bind(this);
     this.handleMouseClickClose = this.handleMouseClickClose.bind(this);
     this.state = {
-      show_code_tooltip: false,
+      showCodeTooltip: false,
     };
   }
 
   handleMouseClick() {
     this.setState({
-      show_code_tooltip: !this.state.show_code_tooltip,
+      showCodeTooltip: !this.state.showCodeTooltip,
     });
   }
 
   handleMouseClickClose() {
     this.setState({
-      show_code_tooltip: false,
+      showCodeTooltip: false,
     });
   }
 
@@ -33,7 +33,7 @@ class BlockJumbotron extends Component {
     const blockHeight = (block.height) ? format.formatNumber(block.height) : '';
     const previousBlock = block.previousblockhash;
     const nextBlock = block.nextblockhash;
-    const showTooltip = this.state.show_code_tooltip;
+    const { showCodeTooltip } = this.state;
     const tooltipData = {
       hash: block.hash,
       size: block.size,
@@ -56,7 +56,7 @@ class BlockJumbotron extends Component {
           <span>{(block.hash) ? block.hash : ''}</span>
           {(block.hash) ? (
             <JumbotronTooltip
-              showTooltip={showTooltip}
+              showCodeTooltip={showCodeTooltip}
               clickHandler={this.handleMouseClick}
               clickCloseHandler={this.handleMouseClickClose}
               header={`Block ${blockHeight}`}

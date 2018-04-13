@@ -43,7 +43,7 @@ class Transaction extends Component {
     this.loadVIns = this.loadVIns.bind(this);
     this.toggleAdvanced = this.toggleAdvanced.bind(this);
     this.state = {
-      show_advanced: false,
+      showAdvanced: false,
       vins: [],
       is_pegin: false,
     };
@@ -97,15 +97,13 @@ class Transaction extends Component {
 
   toggleAdvanced() {
     this.setState({
-      show_advanced: !this.state.show_advanced,
+      showAdvanced: !this.state.showAdvanced,
     });
   }
 
   render() {
-    const chainInfo = this.props.chain_info;
-    const { transaction } = this.props;
-    const { vins } = this.state;
-    const showAdvanced = this.state.show_advanced;
+    const { chainInfo, transaction } = this.props;
+    const { showAdvanced, vins } = this.state;
     const confirmations = chainInfo.blocks - this.props.block.height;
     const isPegIn = this.state.is_pegin;
     const isPegOut = Transaction.isPegOutTx(transaction);
@@ -187,11 +185,11 @@ Transaction.propTypes = {
     height: PropTypes.number.isRequired,
   }).isRequired,
   time: PropTypes.string.isRequired,
-  chain_info: PropTypes.shape({}).isRequired,
+  chainInfo: PropTypes.shape({}).isRequired,
 };
 
 const mapStateToProps = state => ({
-  chain_info: state.chain_info,
+  chainInfo: state.chainInfo,
 });
 
 export default connect(mapStateToProps)(Transaction);

@@ -26,14 +26,14 @@ function initLibraries() {
 function initStateValues() {
   store.dispatchMerge({
     chain: 'elementsregtest',
-    chain_info: Immutable({}),
+    chainInfo: Immutable({}),
     blocks: Immutable.from({
       hashes: {},
       heights: {},
       stats: {},
     }),
     transactions: Immutable({}),
-    search_redirect: '',
+    searchRedirect: '',
   });
 }
 

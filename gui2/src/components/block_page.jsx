@@ -16,7 +16,7 @@ class BlockPage extends Component {
     this.loadBlock = this.loadBlock.bind(this);
     this.state = {
       block: {},
-      block_stats: {},
+      blockStats: {},
       transactions: [],
     };
   }
@@ -33,7 +33,7 @@ class BlockPage extends Component {
     const loadedTransactions = [];
     const { chain } = this.props;
     let loadedBlock = {};
-    let blockStats = {};
+    let loadedBlockStats = {};
 
     api.getChainInfo().then(() => {
       api.getBlockByHash(blockhash)
@@ -44,7 +44,7 @@ class BlockPage extends Component {
             promise = promise.then(() => (
               api.getBlockStats(block.height)
                 .then((stats) => {
-                  blockStats = stats;
+                  loadedBlockStats = stats;
                 })
             ));
           }
@@ -61,7 +61,7 @@ class BlockPage extends Component {
         .finally(() => {
           this.setState({
             block: loadedBlock,
-            block_stats: blockStats,
+            blockStats: loadedBlockStats,
             transactions: loadedTransactions,
           });
         });
@@ -69,11 +69,9 @@ class BlockPage extends Component {
   }
 
   render() {
-    const { block } = this.state;
+    const { block, blockStats } = this.state;
     const loadedTransactions = this.state.transactions;
-    const blockStats = this.state.block_stats;
-    const { chain } = this.props;
-    const chainInfo = this.props.chain_info;
+    const { chain, chainInfo } = this.props;
     const hasBlockStats = !['liquid', 'elementsregtest'].includes(chain);
     const time = block.mediantime;
     const formattedTime = time ? format.formatDate(time * 1000) : '';
@@ -247,12 +245,12 @@ BlockPage.propTypes = {
     url: PropTypes.string.isRequired,
   }).isRequired,
   chain: PropTypes.string.isRequired,
-  chain_info: PropTypes.shape({}).isRequired,
+  chainInfo: PropTypes.shape({}).isRequired,
 };
 
 const mapStateToProps = state => ({
   chain: state.chain,
-  chain_info: state.chain_info,
+  chainInfo: state.chainInfo,
 });
 
 export default connect(mapStateToProps)(BlockPage);

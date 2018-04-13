@@ -9,26 +9,26 @@ class TransactionJumbotron extends Component {
     this.handleMouseClick = this.handleMouseClick.bind(this);
     this.handleMouseClickClose = this.handleMouseClickClose.bind(this);
     this.state = {
-      show_code_tooltip: false,
+      showCodeTooltip: false,
     };
   }
 
   handleMouseClick() {
     this.setState({
-      show_code_tooltip: !this.state.show_code_tooltip,
+      showCodeTooltip: !this.state.showCodeTooltip,
     });
   }
 
   handleMouseClickClose() {
     this.setState({
-      show_code_tooltip: false,
+      showCodeTooltip: false,
     });
   }
 
   render() {
     const { tx } = this.props;
     const tooltipData = tx.hex;
-    const showTooltip = this.state.show_code_tooltip;
+    const { showCodeTooltip } = this.state;
     return (
       <div className="container">
         <h1>Transaction</h1>
@@ -36,7 +36,7 @@ class TransactionJumbotron extends Component {
           <span>{(tx.txid) ? tx.txid : ''}</span>
           {(tx.txid) ? (
             <JumbotronTooltip
-              showTooltip={showTooltip}
+              showCodeTooltip={showCodeTooltip}
               clickHandler={this.handleMouseClick}
               clickCloseHandler={this.handleMouseClickClose}
               header={`Transaction ${tx.txid}`}

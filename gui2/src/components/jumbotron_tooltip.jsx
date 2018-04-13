@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import dom from '../utils/dom';
 
 function JumbotronTooltip({
-  showTooltip, clickHandler, clickCloseHandler, header, data,
+  showCodeTooltip, clickHandler, clickCloseHandler, header, data,
 }) {
   return (
     <div className="code-button">
@@ -17,8 +17,8 @@ function JumbotronTooltip({
       >
         <img alt="" src="/gui2/static/img/icons/code.svg" />
       </div>
-      <div className={dom.classNames('overlay', dom.classIf(!showTooltip, 'hide'))} />
-      <div className={dom.classNames('code-button-text', dom.classIf(showTooltip, 'active'))}>
+      <div className={dom.classNames('overlay', dom.classIf(!showCodeTooltip, 'hide'))} />
+      <div className={dom.classNames('code-button-text', dom.classIf(showCodeTooltip, 'active'))}>
         <h4>{header}</h4>
         <pre>{JSON.stringify(data, null, 4)}</pre>
         <div
@@ -38,7 +38,7 @@ function JumbotronTooltip({
   );
 }
 JumbotronTooltip.propTypes = {
-  showTooltip: PropTypes.bool.isRequired,
+  showCodeTooltip: PropTypes.bool.isRequired,
   clickHandler: PropTypes.func.isRequired,
   clickCloseHandler: PropTypes.func.isRequired,
   header: PropTypes.string.isRequired,

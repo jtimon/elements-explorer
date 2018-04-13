@@ -13,12 +13,12 @@ class RecentBlocks extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recent_blocks: [],
+      recentBlocks: [],
     };
   }
 
   componentDidMount() {
-    const recentBlocks = this.state.recent_blocks;
+    const { recentBlocks } = this.state;
 
     function processBlock(block) {
       recentBlocks.push({
@@ -52,15 +52,15 @@ class RecentBlocks extends Component {
         return promise;
       }).finally(() => {
         this.setState({
-          recent_blocks: recentBlocks,
+          recentBlocks,
         });
       });
   }
 
   render() {
-    const blocks = this.state.recent_blocks;
+    const { recentBlocks } = this.state;
     function generateBlocksRows() {
-      return blocks.map((block) => {
+      return recentBlocks.map((block) => {
         const time = format.formatDate(block.mediantime * 1000);
         return (
           <div className="blocks-table-row block-data" key={block.height}>

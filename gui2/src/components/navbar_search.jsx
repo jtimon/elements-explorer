@@ -18,20 +18,20 @@ class NavbarSearch extends Component {
   static search(str) {
     if (utils.isNaturalNumber(str)) {
       store.dispatchMerge({
-        search_redirect: `/gui2/block-height/${str}`,
+        searchRedirect: `/gui2/block-height/${str}`,
       });
     } else if (utils.isValidHash(str)) {
       api.getTransaction(str)
         .then((tx) => {
           store.dispatchMerge({
-            search_redirect: `/gui2/tx/${tx.txid}`,
+            searchRedirect: `/gui2/tx/${tx.txid}`,
           });
         })
         .catch(() => {
           api.getBlockByHash(str)
             .then((block) => {
               store.dispatchMerge({
-                search_redirect: `/gui2/block/${block.hash}`,
+                searchRedirect: `/gui2/block/${block.hash}`,
               });
             });
         });
@@ -41,7 +41,7 @@ class NavbarSearch extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.searchRedirect) {
       store.dispatchMerge({
-        search_redirect: '',
+        searchRedirect: '',
       });
     }
   }
@@ -71,7 +71,7 @@ NavbarSearch.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  searchRedirect: state.search_redirect,
+  searchRedirect: state.searchRedirect,
 });
 
 export default connect(mapStateToProps)(NavbarSearch);

@@ -12,8 +12,8 @@ function handleErrors(response) {
 function getChainInfo() {
   const state = store.getState();
   const { chain } = state;
-  if (!utils.isEmpty(state.chain_info)) {
-    return Promise.resolve().then(() => state.chain_info);
+  if (!utils.isEmpty(state.chainInfo)) {
+    return Promise.resolve().then(() => state.chainInfo);
   }
   const url = '/api/v0/chaininfo';
   const requestParams = {
@@ -31,7 +31,7 @@ function getChainInfo() {
     .then(response => response.json())
     .then((data) => {
       store.dispatchMerge({
-        chain_info: data,
+        chainInfo: data,
       });
       return data;
     });

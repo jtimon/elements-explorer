@@ -11,7 +11,7 @@ class BlockHeightPage extends Component {
     this.loadBlock = this.loadBlock.bind(this);
     this.state = {
       redirect: '',
-      return_home: false,
+      returnHome: false,
     };
   }
 
@@ -34,14 +34,13 @@ class BlockHeightPage extends Component {
         });
     } else {
       this.setState({
-        return_home: true,
+        returnHome: true,
       });
     }
   }
 
   render() {
-    const { redirect } = this.state;
-    const returnHome = this.state.return_home;
+    const { redirect, returnHome } = this.state;
     if (returnHome) {
       return (
         <Redirect to="/gui2/" />
