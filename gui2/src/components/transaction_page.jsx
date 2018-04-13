@@ -32,23 +32,25 @@ class TransactionPage extends Component {
     let loadedTransaction = {};
     let loadedBlock = {};
 
-    api.getTransaction(txid)
-      .then((tx) => {
-        loadedTransaction = tx;
+    api.getChainInfo().then(() => {
+      api.getTransaction(txid)
+        .then((tx) => {
+          loadedTransaction = tx;
 
-        let promise = Promise.resolve();
-        promise = promise.then(() => api.getBlockByHash(loadedTransaction.blockhash)
-          .then((block) => {
-            loadedBlock = block;
-          }));
-        return promise;
-      })
-      .then(() => {
-        this.setState({
-          transaction: loadedTransaction,
-          block: loadedBlock,
+          let promise = Promise.resolve();
+          promise = promise.then(() => api.getBlockByHash(loadedTransaction.blockhash)
+            .then((block) => {
+              loadedBlock = block;
+            }));
+          return promise;
+        })
+        .then(() => {
+          this.setState({
+            transaction: loadedTransaction,
+            block: loadedBlock,
+          });
         });
-      });
+    });
   }
 
   render() {
