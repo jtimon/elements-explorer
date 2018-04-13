@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import format from '../utils/format';
@@ -29,10 +30,11 @@ class BlockJumbotron extends Component {
   }
 
   render() {
-    const { block } = this.props;
-    const blockHeight = (block.height) ? format.formatNumber(block.height) : '';
+    const { block, chainInfo } = this.props;
+    const blockHeight = (typeof block.height !== 'undefined') ? format.formatNumber(block.height) : '';
     const previousBlock = block.previousblockhash;
-    const nextBlock = block.nextblockhash;
+    const nextBlock = (typeof chainInfo.blocks !== 'undefined' && typeof block.height !== 'undefined') ?
+      chainInfo.blocks !== block.height : false;
     const { showCodeTooltip } = this.state;
     const tooltipData = {
       hash: block.hash,
@@ -83,7 +85,7 @@ class BlockJumbotron extends Component {
           </div>
           <div>
             {(nextBlock) ? (
-              <Link to={`/gui2/block/${nextBlock}`}>
+              <Link to={`/gui2/block-height/${block.height + 1}`}>
                 <div>
                   <div>
                     <span>Next</span>
@@ -102,6 +104,11 @@ class BlockJumbotron extends Component {
 }
 BlockJumbotron.propTypes = {
   block: PropTypes.shape({}).isRequired,
+  chainInfo: PropTypes.shape({}).isRequired,
 };
 
-export default BlockJumbotron;
+const mapStateToProps = state => ({
+  chainInfo: state.chainInfo,
+});
+
+export default connect(mapStateToProps)(BlockJumbotron);
