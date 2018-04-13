@@ -157,6 +157,7 @@ class Transaction extends Component {
               <span className="helper" />
               <img className={dom.showIf(isPegOut)} alt="" src="/gui2/static/img/icons/peg-out.svg" />
               <img className={dom.showIf(isPegIn)} alt="" src="/gui2/static/img/icons/peg-in.svg" />
+              <img className={dom.showIf(!isPegIn && !isPegOut)} alt="" src="/gui2/static/img/icons/arrow-r.svg" />
             </div>
           </div>
           <div className="vouts">
