@@ -11,7 +11,7 @@ angular.module('rpcExplorerApp')
     .controller('MempoolStatsCtrl', function ($scope, $location, SrvUtil, SrvChain, SrvBackend) {
 
         $scope.curious = $location.search().curious == 'true';
-        $scope.hours_ago = SrvUtil.ParseNatural($location.search().hours_ago);
+        $scope.hours_ago = $location.search().hours_ago ? SrvUtil.ParseNatural($location.search().hours_ago) : 6;
         $scope.loading_stats = false;
         $scope.cached_mempoolstats = {};
 
