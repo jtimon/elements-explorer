@@ -88,7 +88,25 @@ class TxGenerator(CronCacher):
             print('Generated tx', txid)
         except Exception as e:
             print("Error in TxGenerator._cron_loop:", type(e), e)
-            
+
+class PegoutGenerator(CronCacher):
+
+    def __init__(self, chain, rpccaller, parent_rpccaller, wait_time, initial_wait_time,
+                 *args, **kwargs):
+
+        self.parent_rpccaller = parent_rpccaller
+
+        super(PegoutGenerator, self).__init__(chain, rpccaller, None, wait_time, initial_wait_time,
+                                                 *args, **kwargs)
+
+    def _cron_loop(self):
+        try:
+            address = self.parent_rpccaller.RpcCall('getnewaddress', {})
+            txid = self.rpccaller.RpcCall('sendtomainchain', {'address': address, 'amount': 1})
+            print('Generated pegout', txid)
+        except Exception as e:
+            print("Error in PegoutGenerator._cron_loop:", type(e), e)
+
 class MempoolSaver(CronCacher):
 
     def __init__(self, chain, rpccaller, wait_time, initial_wait_time,
@@ -184,7 +202,7 @@ class GreedyCacher(CronCacher):
                 for txid in blockblob['tx']:
                     tx = model.Tx.get(txid)
             return blockblob
-            
+
         except Exception as e:
             print("Error in GreedyCacher.cache_blockhash:", blockhash, type(e), e)
             return None

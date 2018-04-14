@@ -20,7 +20,7 @@ DB_CLIENT = DB_FACTORY.create()
 
 AVAILABLE_CHAINS = {
 
-    "bitcoin": {
+    'bitcoin': {
         'rpc': RpcCaller(os.environ.get('BITCOIN_ADR'),
                          os.environ.get('BITCOIN_RPCUSER'),
                          os.environ.get('BITCOIN_RPCPASSWORD')
@@ -39,7 +39,7 @@ AVAILABLE_CHAINS = {
         },
     },
 
-    "testnet3": {
+    'testnet3': {
         'rpc': RpcCaller(os.environ.get('TESTNET3_ADR'),
                          os.environ.get('TESTNET3_RPCUSER'),
                          os.environ.get('TESTNET3_RPCPASSWORD')
@@ -96,6 +96,7 @@ AVAILABLE_CHAINS = {
             'greedy_cacher': [60, 60 * 10, True], # every 1 min after 10 min, cache txs
             'block_gen': [60 * 5, 60], # every 5 min after 1 min
             'tx_gen': [30, 60], # every 30 secs after 1 min
+            'pegout_gen': [40, 60], # every 40 secs after 1 min
         },
     },
 

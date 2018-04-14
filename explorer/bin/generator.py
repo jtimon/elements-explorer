@@ -17,7 +17,7 @@ FLAGS = gflags.FLAGS
 
 # ===----------------------------------------------------------------------===
 
-from explorer.daemon_subscriber import BlockGenerator, TxGenerator
+from explorer.daemon_subscriber import BlockGenerator, TxGenerator, PegoutGenerator
 from explorer.env_config import AVAILABLE_CHAINS
 
 chain = FLAGS.chain
@@ -33,3 +33,10 @@ if 'tx_gen' in AVAILABLE_CHAINS[chain]['proc']:
     tx_gen_params.extend(AVAILABLE_CHAINS[chain]['proc']['tx_gen'])
     tx_generator = TxGenerator(*tx_gen_params)
     tx_generator.start()
+
+if 'pegout_gen' in AVAILABLE_CHAINS[chain]['proc'] and 'parent_chain' in AVAILABLE_CHAINS[chain]:
+    parent_chain_rpccaller = AVAILABLE_CHAINS[ AVAILABLE_CHAINS[chain]['parent_chain'] ]['rpc']
+    pegout_gen_params = [chain, AVAILABLE_CHAINS[chain]['rpc'], parent_chain_rpccaller]
+    pegout_gen_params.extend(AVAILABLE_CHAINS[chain]['proc']['pegout_gen'])
+    pegout_generator = PegoutGenerator(*pegout_gen_params)
+    pegout_generator.start()
