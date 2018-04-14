@@ -70,7 +70,7 @@ AVAILABLE_CHAINS = {
             'chain_id': 'elementsregtest_genesis_hash',
         },
         'proc': {
-            'reorg_cron': [60, 60 * 5], # every 1 min after 5 min
+            'reorg_cron': [60, 60], # every 1 min after 1 min
             'mempool_cacher': [60, 60], # every 1 min after 1 min
             'greedy_cacher': [60 * 60, 60, True], # every 1 hour after 1 min, cache txs
             'block_gen': [60 * 5, 60], # every 5 min after 1 min
