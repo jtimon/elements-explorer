@@ -21,7 +21,7 @@ class Chaininfo(RpcCachedModel):
         if 'error' in json_result:
             return json_result
 
-        chaininfo = cls(json=json_result)
+        chaininfo = cls(json_dict=json_result)
         chaininfo.id = req_id
         chaininfo.save()
         return chaininfo

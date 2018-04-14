@@ -28,11 +28,11 @@ class Model(form.Form):
     @classmethod
     def json_schema(cls):
         cls._init_relations()
-        json = {}
+        json_dict = {}
         for k, f in cls._fields.iteritems():
             if k != 'id':
-                json.update( f.json_schema(k) )
-        return {cls.get_name(): json}
+                json_dict.update( f.json_schema(k) )
+        return {cls.get_name(): json_dict}
 
     @classmethod
     def db(cls):

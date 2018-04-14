@@ -150,7 +150,7 @@ class MempoolStatsCacher(CronCacher):
             IncrementStats(stats, 'total', tx_fee, tx_size)
 
         int_time = int((datetime.datetime.now()).strftime('%s'))
-        mempoolstats = model.Mempoolstats(json={
+        mempoolstats = model.Mempoolstats(json_dict={
             'id': int_time,
             'time': int_time,
             'blob': json.dumps(stats),
@@ -225,7 +225,7 @@ class DaemonReorgManager(GreedyCacher):
         self.prev_reorg_hash = None
 
     def update_chainfo(self, block):
-        chaininfo = model.Chaininfo(json={
+        chaininfo = model.Chaininfo(json_dict={
             'bestblockhash': block['hash'],
             'blocks': block['height'],
             'mediantime': block['mediantime'],

@@ -8,7 +8,7 @@ class ValidatorError(BaseException):
 
 class Form(object):
 
-    def __init__(self, json=None, *args, **kwargs):
+    def __init__(self, json_dict=None, *args, **kwargs):
 
         self.errors = {}
 
@@ -17,9 +17,9 @@ class Form(object):
         for attr_name, attr in self.__class__._fields.iteritems():
             setattr(self, attr_name, None)
 
-        if json:
+        if json_dict:
             for attr_name, attr in self.__class__._fields.iteritems():
-                attr.from_json(self, attr_name, json)
+                attr.from_json(self, attr_name, json_dict)
 
         super(Form, self).__init__(*args, **kwargs)
 
@@ -52,21 +52,21 @@ class Form(object):
     @classmethod
     def json_schema(cls):
         cls._init_fields()
-        json = {}
+        json_dict = {}
         for k, f in cls._fields.iteritems():
-            json.update( f.json_schema(k) )
-        return {cls.get_name(): json}
+            json_dict.update( f.json_schema(k) )
+        return {cls.get_name(): json_dict}
 
     def json(self, full=True):
-        json = {}
+        json_dict = {}
         for k, f in self.__class__._fields.iteritems():
-            json.update( f.json(self, k, full) )
+            json_dict.update( f.json(self, k, full) )
 
         if hasattr(self, 'id') and self.id:
-            json['id'] = self.id 
+            json_dict['id'] = self.id 
         if self.errors:
-            json['errors'] = self.errors
-        return json
+            json_dict['errors'] = self.errors
+        return json_dict
 
     def validate(self):
         self.errors = {}
@@ -81,8 +81,8 @@ class Form(object):
     @classmethod
     def parse_json_list(cls, json_list):
         model_list = []
-        for json in json_list:
-            model_list.append(cls(json))
+        for json_dict in json_list:
+            model_list.append(cls(json_dict))
         return model_list
 
     @classmethod
