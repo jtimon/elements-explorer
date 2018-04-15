@@ -35,7 +35,7 @@ AVAILABLE_CHAINS = {
             'reorg_cron': [60, 60 * 5], # every 1 min after 5 min
             'mempool_cacher': [60, 60], # every 1 min after 1 min
             'mempool_saver': [60 * 20, 60 * 5], # every 20 min after 5 min
-            'greedy_cacher': [60, 60 * 60 * 2, True], # every 1 min after 2 hours, cache txs
+            'greedy_cacher': [60, 60 * 60, True], # every 1 min after 1 hour, cache txs
         },
     },
 
@@ -54,7 +54,7 @@ AVAILABLE_CHAINS = {
             'reorg_cron': [60, 60 * 5], # every 1 min after 5 min
             'mempool_cacher': [60, 60], # every 1 min after 1 min
             'mempool_saver': [60 * 20, 60 * 5], # every 20 min after 5 min
-            'greedy_cacher': [60, 60 * 60, True], # every 1 min after 1 hour, cache txs
+            'greedy_cacher': [60, 60 * 15, True], # every 1 min after 15 min, cache txs
         },
     },
 
@@ -72,7 +72,7 @@ AVAILABLE_CHAINS = {
         'proc': {
             'reorg_cron': [60, 60], # every 1 min after 1 min
             'mempool_cacher': [60, 60], # every 1 min after 1 min
-            'greedy_cacher': [60 * 60, 60, True], # every 1 hour after 1 min, cache txs
+            'greedy_cacher': [60, 60 * 10, True], # every 1 min after 10 min, cache txs
             'block_gen': [60 * 5, 60], # every 5 min after 1 min
             'tx_gen': [30, 60], # every 30 secs after 1 min
         },
