@@ -96,6 +96,7 @@ AVAILABLE_CHAINS = {
             'greedy_cacher': [60, 60 * 10, True], # every 1 min after 10 min, cache txs
             'block_gen': [60 * 5, 60], # every 5 min after 1 min
             'tx_gen': [30, 60], # every 30 secs after 1 min
+            'pegin_gen': [60, 60], # every 1 min after 1 min
             'pegout_gen': [40, 60], # every 40 secs after 1 min
         },
     },

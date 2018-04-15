@@ -12,11 +12,14 @@ RPC_ALLOWED_CALLS = [
     'getrawmempool',
     'getmempoolentry',
     'savemempool',
-    # Only for testing regtests
+    # Only for testing
     'generate',
     'getnewaddress',
     'sendtoaddress',
     'sendtomainchain',
+    'getpeginaddress',
+    'gettxoutproof',
+    'claimpegin',
 ]
 
 class RpcCaller(object):
