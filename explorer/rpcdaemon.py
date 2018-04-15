@@ -1,6 +1,7 @@
 
 import requests
 import json
+import time
 
 RPC_ALLOWED_CALLS = [
     'getblockchaininfo',
@@ -41,8 +42,20 @@ class RpcCaller(object):
         }
         rpcAuth = (self.user, self.password)
         rpcHeaders = {'content-type': 'application/json'}
-        response = requests.request('post', 'http://' + self.address, data=json.dumps(requestData), auth=rpcAuth, headers=rpcHeaders)
-        # response.raise_for_status()
+        response = None
+        counter = 0
+        while response == None:
+            try:
+                response = requests.request('post', 'http://' + self.address,
+                                            data=json.dumps(requestData), auth=rpcAuth, headers=rpcHeaders)
+                # response.raise_for_status()
+            except Exception as e:
+                print("Error in RpcCaller.RpcCall:", type(e), e)
+                if counter == 5:
+                    return {'error': {'message': 'Rpc connection error for method %s' % method}}
+                time.sleep(2)
+                counter = counter + 1
+                continue
 
         json_result = response.json()
         if not json_result:
