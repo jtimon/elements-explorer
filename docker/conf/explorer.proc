@@ -1,11 +1,9 @@
 web: gunicorn webflask:app -b "$WEB_HOST:$WEB_PORT" -w $WEB_WORKERS -k gevent --log-config $GUNICORN_LOG_FILE
 
 # Restart only tables when they need it:
-# Always force db restart for elementsregtest
-create_db: python explorer/bin/model2db.py --address $DB_PROXY_ADR --dbaddress $DB_BACKEND_ADR --dbtype $DB_PROXY_TYPE --dbname $DB_NAME --dbuser $DB_USER --dbpass $DB_PASS --model $ORM_MODEL --modelschema $ORM_SCHEMA --forcechains=elementsregtest
-
-# Force db restart per chain by removing $ORM_SCHEMA/schema.json:
-# create_db: python explorer/bin/model2db.py --address $DB_PROXY_ADR --dbaddress $DB_BACKEND_ADR --dbtype $DB_PROXY_TYPE --dbname $DB_NAME --dbuser $DB_USER --dbpass $DB_PASS --model $ORM_MODEL --modelschema $ORM_SCHEMA --chains=elementsregtest
+# Always force db restart per chain with --forcechains
+# Force db restart for all chains by removing $ORM_SCHEMA/schema.json:
+create_db: python explorer/bin/model2db.py --address $DB_PROXY_ADR --dbaddress $DB_BACKEND_ADR --dbtype $DB_PROXY_TYPE --dbname $DB_NAME --dbuser $DB_USER --dbpass $DB_PASS --model $ORM_MODEL --modelschema $ORM_SCHEMA --forcechains=elementsregtest,regtest
 
 mempool_bitcoin: python explorer/bin/mempool_cacher.py --chain bitcoin
 subscriber_bitcoin: python explorer/bin/chain_subscriber.py --chain bitcoin
@@ -16,6 +14,12 @@ mempool_testnet3: python explorer/bin/mempool_cacher.py --chain testnet3
 subscriber_testnet3: python explorer/bin/chain_subscriber.py --chain testnet3
 reorg_cron_testnet3: python explorer/bin/reorg_cron.py --chain testnet3
 greedy_cacher_testnet3: python explorer/bin/greedy_cacher.py --chain testnet3
+
+mempool_regtest: python explorer/bin/mempool_cacher.py --chain regtest
+reorg_cron_regtest: python explorer/bin/reorg_cron.py --chain regtest
+subscriber_regtest: python explorer/bin/chain_subscriber.py --chain regtest
+generator_regtest: python explorer/bin/generator.py --chain regtest
+greedy_cacher_regtest: python explorer/bin/greedy_cacher.py --chain regtest
 
 mempool_elementsregtest: python explorer/bin/mempool_cacher.py --chain elementsregtest
 subscriber_elementsregtest: python explorer/bin/chain_subscriber.py --chain elementsregtest

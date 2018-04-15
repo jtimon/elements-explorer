@@ -51,9 +51,11 @@ services:
     volumes:
       - ../../explorer-data/bitcoin:/root/.bitcoin
       - ../../explorer-data/testnet3:/root/.testnet3
+      - ../../explorer-data/regtest:/root/.regtest
     ports:
       - "8532:8532"
       - "18532:18532"
+      - "18534:18534"
     networks:
       main:
         aliases:

@@ -1,3 +1,5 @@
 bitcoind: ./$BITCOIN_BRANCH_DIR/src/$BITCOIN_DAEMON -rpcbind=$BITCOIN_HOST:$BITCOIN_PORT -datadir=$BITCOIN_DATADIR -rpcallowip=$BITCOIN_ALLLOWFROM -logips -logtimestamps -server -txindex -rpcuser=$BITCOIN_RPCUSER -rpcpassword=$BITCOIN_RPCPASSWORD -zmqpubhashblock=$BITCOIN_ZMQ -listen -discover -dbcache=8000 -maxmempool=8000
 
 testnet3: ./$BITCOIN_BRANCH_DIR/src/$BITCOIN_DAEMON -rpcbind=$TESTNET3_HOST:$TESTNET3_PORT -datadir=$TESTNET3_DATADIR -rpcallowip=$TESTNET3_ALLLOWFROM -rpcuser=$TESTNET3_RPCUSER -rpcpassword=$TESTNET3_RPCPASSWORD -zmqpubhashblock=$TESTNET3_ZMQ -logips -logtimestamps -server -txindex -listen -discover -dbcache=8000 -maxmempool=8000 -testnet
+
+regtest: ./$BITCOIN_BRANCH_DIR/src/$BITCOIN_DAEMON -rpcbind=$REGTEST_HOST:$REGTEST_PORT -datadir=$REGTEST_DATADIR -rpcallowip=$REGTEST_ALLLOWFROM -rpcuser=$REGTEST_RPCUSER -rpcpassword=$REGTEST_RPCPASSWORD -zmqpubhashblock=$REGTEST_ZMQ -logips -logtimestamps -server -txindex -listen -discover -dbcache=8000 -maxmempool=8000 -regtest

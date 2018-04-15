@@ -48,7 +48,7 @@ AVAILABLE_CHAINS = {
         'db': DB_FACTORY,
         'properties': {
             'stats_support': True,
-            'chain_id': '0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206',
+            'chain_id': '000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943',
         },
         'proc': {
             'reorg_cron': [60, 60 * 5], # every 1 min after 5 min
@@ -58,7 +58,28 @@ AVAILABLE_CHAINS = {
         },
     },
 
-    "elementsregtest": {
+    'regtest': {
+        'rpc': RpcCaller(os.environ.get('REGTEST_ADR'),
+                         os.environ.get('REGTEST_RPCUSER'),
+                         os.environ.get('REGTEST_RPCPASSWORD')
+        ),
+        'zmq': os.environ.get('REGTEST_ZMQ'),
+        'db': DB_FACTORY,
+        'properties': {
+            'stats_support': False,
+            'chain_id': '0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206',
+        },
+        'proc': {
+            'reorg_cron': [60, 60], # every 1 min after 1 min
+            'mempool_cacher': [60, 60], # every 1 min after 1 min
+            'greedy_cacher': [60, 60 * 5, True], # every 1 min after 5 min, cache txs
+            'block_gen': [60, 60 * 2], # every 2 min after 1 min
+            'tx_gen': [50, 60], # every 50 secs after 1 min
+        },
+    },
+
+    'elementsregtest': {
+        'parent_chain': 'regtest',
         'rpc': RpcCaller(os.environ.get('ELEMENTSREGTEST_ADR'),
                          os.environ.get('ELEMENTS_RPCUSER'),
                          os.environ.get('ELEMENTS_RPCPASSWORD')
