@@ -66,7 +66,7 @@ AVAILABLE_CHAINS = {
         'zmq': os.environ.get('REGTEST_ZMQ'),
         'db': DB_FACTORY,
         'properties': {
-            'stats_support': False,
+            'stats_support': True,
             'chain_id': '0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206',
         },
         'proc': {
