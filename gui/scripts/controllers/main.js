@@ -242,6 +242,9 @@ angular.module('rpcExplorerApp')
         }
 
         SrvChain.set()
+            .then(function (selected_chain) {
+                $scope.parent_chain = SrvChain.GetParentChain();
+            })
             .then(DoMain)
             .catch(SrvUtil.errorCallbackScoped($scope));
     });

@@ -56,12 +56,19 @@ angular.module('rpcExplorerApp')
             return srv.GetAvailableChains()
                 .then(function(available_chains) {
                     $rootScope.selected_chain = SetSelectedChain($routeParams.chain);
+                    if (cache['available_chains'][$rootScope.selected_chain]['parent_chain']) {
+                        $rootScope.selected_parent_chain = cache['available_chains'][$rootScope.selected_chain]['parent_chain'];
+                    }
                     return $rootScope.selected_chain;
                 });
         }
 
         srv.get = function() {
             return $routeParams.chain;
+        }
+
+        srv.GetParentChain = function() {
+            return $rootScope.selected_parent_chain;
         }
 
         srv.GetChainInfo = function() {

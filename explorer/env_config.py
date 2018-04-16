@@ -89,6 +89,7 @@ AVAILABLE_CHAINS = {
         'properties': {
             'stats_support': False,
             'chain_id': 'elementsregtest_genesis_hash',
+            'parent_chain': 'regtest',
         },
         'proc': {
             'reorg_cron': [60, 60], # every 1 min after 1 min

@@ -360,7 +360,8 @@
 
         <tr ng-show="input.txid">
           <td>Txid:</td>
-          <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{input.txid}}">{{ input.txid }}</a></td>
+          <td ng-show="!input.is_pegin"><a ng-href="#!/chain/{{selected_chain}}/tx/{{input.txid}}">{{ input.txid }}</a></td>
+          <td ng-show="input.is_pegin"><a ng-href="#!/chain/{{parent_chain}}/tx/{{input.txid}}">{{ input.txid }}</a></td>
         </tr>
 
         <tr ng-show="input.vout">
