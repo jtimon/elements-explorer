@@ -368,6 +368,17 @@
           <td>{{ input.vout }}</td>
         </tr>
 
+        <tr ng-show="input.is_pegin">
+          <td>Pegin witness:</td>
+          <td>
+            <table border="1">
+              <tr ng-repeat="wit in input.pegin_witness">
+                <td><pre>{{ wit | limitTo:rawhex_limit }}</pre></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
         <tr ng-show="input.scriptSig.asm">
           <td>scriptSig.asm:</td>
           <td><pre>{{ input.scriptSig.asm | limitTo:rawhex_limit }}</pre></td>
@@ -378,11 +389,11 @@
           <td><pre>{{ input.scriptSig.hex | limitTo:rawhex_limit }}</pre></td>
         </tr>
 
-        <tr ng-show="input.txinwitness">
-          <td>txinwitness:</td>
+        <tr ng-show="input.scriptWitness">
+          <td>Script Witness:</td>
           <td>
             <table border="1">
-              <tr ng-repeat="wit in input.txinwitness">
+              <tr ng-repeat="wit in input.scriptWitness">
                 <td><pre>{{ wit | limitTo:rawhex_limit }}</pre></td>
               </tr>
             </table>
