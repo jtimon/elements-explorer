@@ -15,12 +15,12 @@ staging: common-conf
 production: common-conf
 	cd docker && docker-compose up -d --build
 
-.PHONY: stop clean prune clean-db
+.PHONY: stop clean docker-prune clean-db
 stop:
 	cd docker && docker-compose stop
 # docker-compose rm -f
 # cd docker && docker-compose down
-prune:
+docker-prune:
 	docker system prune -a
 
 clean-db:
