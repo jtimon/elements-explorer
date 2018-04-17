@@ -19,6 +19,10 @@ function VOut({ showAdvanced, vout }) {
           <div>{type}</div>
         </div>
         <div>
+          <div>scriptPubKey.asm</div>
+          <div>{scriptPubKey.asm}</div>
+        </div>
+        <div>
           <div>scriptPubKey.hex</div>
           <div>{scriptPubKey.hex}</div>
         </div>
@@ -30,6 +34,10 @@ function VOut({ showAdvanced, vout }) {
         <div>
           <div>Peg-out Type</div>
           <div>{scriptPubKey.pegout_type}</div>
+        </div>
+        <div>
+          <div>Peg-out ASM</div>
+          <div>{scriptPubKey.pegout_asm}</div>
         </div>
         <div>
           <div>Peg-out Hex</div>
