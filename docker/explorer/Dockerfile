@@ -26,8 +26,7 @@ RUN npm install -g npm
 ADD docker/explorer/package.json /build_docker/gui/package.json
 RUN cd gui && npm i --production
 ADD gui2/package.json /build_docker/gui2/package.json
-RUN cd gui2 && npm i
-# RUN cd gui2 && npm i --production
+RUN cd gui2 && npm i --production
 
 ADD docker/explorer/requirements.txt /build_docker/requirements.txt
 RUN pip install -r requirements.txt --require-hashes
