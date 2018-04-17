@@ -164,8 +164,8 @@ function getTransaction(id, chainParam) {
     ({ chain } = state);
   }
   if (!utils.isEmpty(state.transactions)) {
-    if (has.call(state.transactions, id)) {
-      return Promise.resolve().then(() => state.transactions[id]);
+    if (has.call(state.transactions[chain], id)) {
+      return Promise.resolve().then(() => state.transactions[chain][id]);
     }
   }
   const url = '/api/v0/tx';
@@ -185,7 +185,7 @@ function getTransaction(id, chainParam) {
     .then((data) => {
       const { transactions } = store.getState();
       store.dispatchMerge({
-        transactions: Immutable.setIn(transactions, [id], data),
+        transactions: Immutable.setIn(transactions, [chain, id], data),
       });
       return data;
     });

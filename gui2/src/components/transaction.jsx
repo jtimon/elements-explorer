@@ -59,8 +59,7 @@ class Transaction extends Component {
     let isPegIn = false;
     tx.vin.forEach((vin, i) => {
       if (vin.is_pegin) {
-        const state = store.getState();
-        const { availableChains, chain } = state;
+        const { availableChains, chain } = this.props;
         const parentChain = availableChains[chain].parent_chain;
         isPegIn = true;
         if (parentChain) {
@@ -205,10 +204,14 @@ Transaction.propTypes = {
     height: PropTypes.number.isRequired,
   }).isRequired,
   time: PropTypes.string.isRequired,
+  availableChains: PropTypes.shape({}).isRequired,
+  chain: PropTypes.string.isRequired,
   chainInfo: PropTypes.shape({}).isRequired,
 };
 
 const mapStateToProps = state => ({
+  availableChains: state.availableChains,
+  chain: state.chain,
   chainInfo: state.chainInfo,
 });
 

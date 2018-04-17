@@ -33,7 +33,12 @@ function initStateValues() {
       heights: {},
       stats: {},
     }),
-    transactions: Immutable({}),
+    transactions: Immutable({
+      bitcoin: {},
+      elementsregtest: {},
+      regtest: {},
+      testnet3: {},
+    }),
     searchRedirect: '',
   });
 }

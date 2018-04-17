@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import dom from '../utils/dom';
 import format from '../utils/format';
 
 function VIn({
-  index, showAdvanced, transaction, vin,
+  index, showAdvanced, transaction, vin, transactions, chain,
 }) {
-  const storeTxs = store.getState().transactions;
-
   if (vin.pegin) {
     return (
       <div className={dom.classNames('vin', 'peg-in', dom.classIf(showAdvanced, 'active'))}>
@@ -32,7 +31,7 @@ function VIn({
       </div>
     );
   }
-  const tx = storeTxs[vin.txid].vout[vin.vout];
+  const tx = transactions[chain][vin.txid].vout[vin.vout];
   const { scriptSig } = transaction.vin[index];
   const { type } = tx.scriptPubKey;
   const vinBody = (
@@ -74,6 +73,13 @@ VIn.propTypes = {
     txid: PropTypes.string,
     vout: PropTypes.number,
   }).isRequired,
+  chain: PropTypes.string.isRequired,
+  transactions: PropTypes.shape({}).isRequired,
 };
 
-export default VIn;
+const mapStateToProps = state => ({
+  chain: state.chain,
+  transactions: state.transactions,
+});
+
+export default connect(mapStateToProps)(VIn);
