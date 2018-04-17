@@ -35,7 +35,7 @@ class RecentBlocks extends Component {
       return null;
     }
 
-    api.getChainInfo()
+    api.getAllChainInformation()
       .then((data) => {
         let promise = api.getBlockByHash(data.bestblockhash)
           .then(block => block)

@@ -25,6 +25,7 @@ function initLibraries() {
 
 function initStateValues() {
   store.dispatchMerge({
+    availableChains: Immutable({}),
     chain: 'elementsregtest',
     chainInfo: Immutable({}),
     blocks: Immutable.from({

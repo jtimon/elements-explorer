@@ -9,6 +9,26 @@ function handleErrors(response) {
   return response;
 }
 
+function getAvailableChains() {
+  const state = store.getState();
+  if (!utils.isEmpty(state.availableChains)) {
+    return Promise.resolve().then(() => state.availableChains);
+  }
+  const url = '/api/v0/available_chains';
+  const requestParams = {
+    method: 'GET',
+  };
+  return fetch(url, requestParams)
+    .then(handleErrors)
+    .then(response => response.json())
+    .then((data) => {
+      store.dispatchMerge({
+        availableChains: data.available_chains,
+      });
+      return data;
+    });
+}
+
 function getChainInfo() {
   const state = store.getState();
   const { chain } = state;
@@ -35,6 +55,12 @@ function getChainInfo() {
       });
       return data;
     });
+}
+
+function getAllChainInformation() {
+  return getAvailableChains().then(() => (
+    getChainInfo()
+  ));
 }
 
 function getBlockByHash(id) {
@@ -131,9 +157,12 @@ function getBlockStats(id) {
     });
 }
 
-function getTransaction(id) {
+function getTransaction(id, chainParam) {
   const state = store.getState();
-  const { chain } = state;
+  let chain = chainParam;
+  if (!chain) {
+    ({ chain } = state);
+  }
   if (!utils.isEmpty(state.transactions)) {
     if (has.call(state.transactions, id)) {
       return Promise.resolve().then(() => state.transactions[id]);
@@ -184,6 +213,8 @@ function getAddress(address, startHeight, endHeight) {
 }
 
 module.exports = {
+  getAvailableChains,
+  getAllChainInformation,
   getChainInfo,
   getBlockByHash,
   getBlockByHeight,

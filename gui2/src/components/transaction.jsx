@@ -59,13 +59,32 @@ class Transaction extends Component {
     let isPegIn = false;
     tx.vin.forEach((vin, i) => {
       if (vin.is_pegin) {
+        const state = store.getState();
+        const { availableChains, chain } = state;
+        const parentChain = availableChains[chain].parent_chain;
         isPegIn = true;
-        vins[i] = {
-          coinbase: false,
-          pegin: true,
-          txid: undefined,
-          vout: undefined,
-        };
+        if (parentChain) {
+          promises.push(Promise.resolve().then(() => (
+            api.getTransaction(vin.txid, parentChain).then((data) => {
+              const [address] = data.vout[vin.vout].scriptPubKey.addresses;
+              vins[i] = {
+                address,
+                coinbase: false,
+                pegin: true,
+                txid: vin.txid,
+                vout: vin.vout,
+              };
+              return data;
+            })
+          )));
+        } else {
+          vins[i] = {
+            coinbase: false,
+            pegin: true,
+            txid: vin.txid,
+            vout: vin.vout,
+          };
+        }
       } else if (vin.txid) {
         promises.push(Promise.resolve().then(() => (
           api.getTransaction(vin.txid).then((data) => {

@@ -11,8 +11,18 @@ function VIn({
 
   if (vin.pegin) {
     return (
-      <div className="vin peg-in">
-        <div className="vin-header">Bitcoin address</div>
+      <div className={dom.classNames('vin', 'peg-in', dom.classIf(showAdvanced, 'active'))}>
+        <div className="vin-header">{vin.address}</div>
+        <div className={dom.classNames('vin-body', dom.showIf(showAdvanced))}>
+          <div>
+            <div>txid</div>
+            <div>{vin.txid}</div>
+          </div>
+          <div>
+            <div>vout</div>
+            <div>{vin.vout}</div>
+          </div>
+        </div>
       </div>
     );
   } else if (vin.coinbase) {

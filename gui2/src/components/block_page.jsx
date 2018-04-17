@@ -35,37 +35,38 @@ class BlockPage extends Component {
     let loadedBlock = {};
     let loadedBlockStats = {};
 
-    api.getChainInfo().then(() => {
-      api.getBlockByHash(blockhash)
-        .then((block) => {
-          loadedBlock = block;
-          let promise = Promise.resolve();
-          if (!['liquid', 'elementsregtest'].includes(chain)) {
-            promise = promise.then(() => (
-              api.getBlockStats(block.height)
-                .then((stats) => {
-                  loadedBlockStats = stats;
-                })
-            ));
-          }
-          block.tx.forEach((tx) => {
-            promise = promise.then(() => (
-              api.getTransaction(tx)
-                .then(txData => (
-                  loadedTransactions.push(txData)
-                ))
-            ));
+    api.getAllChainInformation()
+      .then(() => {
+        api.getBlockByHash(blockhash)
+          .then((block) => {
+            loadedBlock = block;
+            let promise = Promise.resolve();
+            if (!['liquid', 'elementsregtest'].includes(chain)) {
+              promise = promise.then(() => (
+                api.getBlockStats(block.height)
+                  .then((stats) => {
+                    loadedBlockStats = stats;
+                  })
+              ));
+            }
+            block.tx.forEach((tx) => {
+              promise = promise.then(() => (
+                api.getTransaction(tx)
+                  .then(txData => (
+                    loadedTransactions.push(txData)
+                  ))
+              ));
+            });
+            return promise;
+          })
+          .finally(() => {
+            this.setState({
+              block: loadedBlock,
+              blockStats: loadedBlockStats,
+              transactions: loadedTransactions,
+            });
           });
-          return promise;
-        })
-        .finally(() => {
-          this.setState({
-            block: loadedBlock,
-            blockStats: loadedBlockStats,
-            transactions: loadedTransactions,
-          });
-        });
-    });
+      });
   }
 
   render() {
