@@ -77,7 +77,7 @@ class BlockPage extends Component {
     const time = block.mediantime;
     const formattedTime = time ? format.formatDate(time * 1000) : '';
     const transactionCount = (block.tx) ? block.tx.length : 0;
-    const confirmations = chainInfo.blocks - block.height;
+    const confirmations = chainInfo.blocks - block.height + 1;
 
     function generateTransactions() {
       return loadedTransactions.map(tx => (

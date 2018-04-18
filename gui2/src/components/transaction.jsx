@@ -122,7 +122,7 @@ class Transaction extends Component {
   render() {
     const { chainInfo, transaction } = this.props;
     const { showAdvanced, vins } = this.state;
-    const confirmations = chainInfo.blocks - this.props.block.height;
+    const confirmations = chainInfo.blocks - this.props.block.height + 1;
     const isPegIn = this.state.is_pegin;
     const isPegOut = Transaction.isPegOutTx(transaction);
     const isConfidential = Transaction.isConfidentialTx(transaction);
