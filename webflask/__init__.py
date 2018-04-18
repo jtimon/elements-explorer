@@ -14,25 +14,23 @@ app = create_restmin_app(app_name=__name__,
                          base_url='/api/v0/',
                          request_processor=explorer_request_processor)
 
-app.static_url_path = ''
-app.static_folder   = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'gui')
-app.add_url_rule('/gui_alt/<path:filename>',
-    endpoint  = 'static',
-    view_func = app.send_static_file)
-GUI2_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'gui2', 'public')
-
-@app.route('/gui_alt/')
-def index():
-    return app.send_static_file('index.html')
+app.static_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'gui2', 'public')
+GUI_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'gui')
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def index_gui2(path):
-    return send_from_directory(GUI2_DIRECTORY, 'index.html')
+    return app.send_static_file('index.html')
 
-@app.route('/static/<path:filename>')
-def send_file_gui2(filename):
-    return send_from_directory(GUI2_DIRECTORY, filename)
+@app.route('/gui_alt/')
+def index_gui_alt():
+    return send_from_directory(GUI_DIRECTORY, 'index.html')
+
+@app.route('/gui_alt/<path:filename>')
+def static_gui_alt(filename):
+    return send_from_directory(GUI_DIRECTORY, filename)
+
+
 
 if __name__ == '__main__':
     app.debug = True
