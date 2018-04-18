@@ -15,7 +15,7 @@ function JumbotronTooltip({
         onClick={clickHandler}
         onKeyPress={clickHandler}
       >
-        <img alt="" src="/gui2/static/img/icons/code.svg" />
+        <img alt="" src="/static/img/icons/code.svg" />
       </div>
       <div className={dom.classNames('overlay', dom.classIf(!showCodeTooltip, 'hide'))} />
       <div className={dom.classNames('code-button-text', dom.classIf(showCodeTooltip, 'active'))}>
@@ -30,7 +30,7 @@ function JumbotronTooltip({
         >
           <div>Close</div>
           <div>
-            <img alt="" src="/gui2/static/img/icons/cancel.svg" />
+            <img alt="" src="/static/img/icons/cancel.svg" />
           </div>
         </div>
       </div>

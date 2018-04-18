@@ -43,11 +43,11 @@ class BlockHeightPage extends Component {
     const { redirect, returnHome } = this.state;
     if (returnHome) {
       return (
-        <Redirect to="/gui2/" />
+        <Redirect to="/" />
       );
     }
     return (redirect ? (
-      <Redirect to={`/gui2/block/${redirect}`} />
+      <Redirect to={`/block/${redirect}`} />
     ) : null);
   }
 }

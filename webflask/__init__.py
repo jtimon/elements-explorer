@@ -16,21 +16,21 @@ app = create_restmin_app(app_name=__name__,
 
 app.static_url_path = ''
 app.static_folder   = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'gui')
-app.add_url_rule('/<path:filename>',
+app.add_url_rule('/gui_alt/<path:filename>',
     endpoint  = 'static',
     view_func = app.send_static_file)
 GUI2_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'gui2', 'public')
 
-@app.route('/')
+@app.route('/gui_alt/')
 def index():
     return app.send_static_file('index.html')
 
-@app.route('/gui2/', defaults={'path': ''})
-@app.route('/gui2/<path:path>')
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
 def index_gui2(path):
     return send_from_directory(GUI2_DIRECTORY, 'index.html')
 
-@app.route('/gui2/static/<path:filename>')
+@app.route('/static/<path:filename>')
 def send_file_gui2(filename):
     return send_from_directory(GUI2_DIRECTORY, filename)
 

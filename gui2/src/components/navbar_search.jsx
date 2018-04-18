@@ -18,20 +18,20 @@ class NavbarSearch extends Component {
   static search(str) {
     if (utils.isNaturalNumber(str)) {
       store.dispatchMerge({
-        searchRedirect: `/gui2/block-height/${str}`,
+        searchRedirect: `/block-height/${str}`,
       });
     } else if (utils.isValidHash(str)) {
       api.getTransaction(str)
         .then((tx) => {
           store.dispatchMerge({
-            searchRedirect: `/gui2/tx/${tx.txid}`,
+            searchRedirect: `/tx/${tx.txid}`,
           });
         })
         .catch(() => {
           api.getBlockByHash(str)
             .then((block) => {
               store.dispatchMerge({
-                searchRedirect: `/gui2/block/${block.hash}`,
+                searchRedirect: `/block/${block.hash}`,
               });
             });
         });
@@ -60,7 +60,7 @@ class NavbarSearch extends Component {
             placeholder="Search for block height, hash, tx, address, etc"
             aria-label="Search"
           />
-          <input className="search-bar-submit" type="image" name="submit" src="/gui2/static/img/icons/search.svg" border="0" alt="Submit" />
+          <input className="search-bar-submit" type="image" name="submit" src="/static/img/icons/search.svg" border="0" alt="Submit" />
         </div>
       </form>
     );

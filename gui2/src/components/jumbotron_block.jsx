@@ -70,10 +70,10 @@ class BlockJumbotron extends Component {
           <div>
             <div>
               {(previousBlock) ? (
-                <Link to={`/gui2/block/${previousBlock}`}>
+                <Link to={`/block/${previousBlock}`}>
                   <div>
                     <div>
-                      <img alt="" src="/gui2/static/img/icons/Arrow-left-blue.svg" />
+                      <img alt="" src="/static/img/icons/Arrow-left-blue.svg" />
                     </div>
                     <div>
                       <span>Previous</span>
@@ -85,13 +85,13 @@ class BlockJumbotron extends Component {
           </div>
           <div>
             {(nextBlock) ? (
-              <Link to={`/gui2/block-height/${block.height + 1}`}>
+              <Link to={`/block-height/${block.height + 1}`}>
                 <div>
                   <div>
                     <span>Next</span>
                   </div>
                   <div>
-                    <img alt="" src="/gui2/static/img/icons/Arrow-r-blue.svg" />
+                    <img alt="" src="/static/img/icons/Arrow-r-blue.svg" />
                   </div>
                 </div>
               </Link>

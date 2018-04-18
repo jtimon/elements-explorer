@@ -146,7 +146,7 @@ class Transaction extends Component {
       <div className="transaction-box">
         <div className="header">
           <div>
-            <Link to={`/gui2/tx/${transaction.txid}`}>{transaction.txid}</Link>
+            <Link to={`/tx/${transaction.txid}`}>{transaction.txid}</Link>
           </div>
           <div>
             <div
@@ -158,9 +158,9 @@ class Transaction extends Component {
               <div>Advanced Details</div>
               <div>
                 {(showAdvanced) ? (
-                  <img alt="" src="/gui2/static/img/icons/minus.svg" />
+                  <img alt="" src="/static/img/icons/minus.svg" />
                 ) : (
-                  <img alt="" src="/gui2/static/img/icons/plus.svg" />
+                  <img alt="" src="/static/img/icons/plus.svg" />
                 )}
               </div>
             </div>
@@ -173,9 +173,9 @@ class Transaction extends Component {
           <div>
             <div>
               <span className="helper" />
-              <img className={dom.showIf(isPegOut)} alt="" src="/gui2/static/img/icons/peg-out.svg" />
-              <img className={dom.showIf(isPegIn)} alt="" src="/gui2/static/img/icons/peg-in.svg" />
-              <img className={dom.showIf(!isPegIn && !isPegOut)} alt="" src="/gui2/static/img/icons/arrow-r.svg" />
+              <img className={dom.showIf(isPegOut)} alt="" src="/static/img/icons/peg-out.svg" />
+              <img className={dom.showIf(isPegIn)} alt="" src="/static/img/icons/peg-in.svg" />
+              <img className={dom.showIf(!isPegIn && !isPegOut)} alt="" src="/static/img/icons/arrow-r.svg" />
             </div>
           </div>
           <div className="vouts">

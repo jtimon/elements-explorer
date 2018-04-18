@@ -16,10 +16,10 @@ function App() {
         <div className="content-wrap">
           <Navbar />
           <Switch>
-            <Route exact path="/gui2/" component={RecentBlocks} />
-            <Route path="/gui2/block/:blockhash" component={BlockPage} />
-            <Route path="/gui2/block-height/:blockheight" component={BlockHeightPage} />
-            <Route path="/gui2/tx/:txid" component={TransactionPage} />
+            <Route exact path="/" component={RecentBlocks} />
+            <Route path="/block/:blockhash" component={BlockPage} />
+            <Route path="/block-height/:blockheight" component={BlockHeightPage} />
+            <Route path="/tx/:txid" component={TransactionPage} />
           </Switch>
         </div>
         <Footer />

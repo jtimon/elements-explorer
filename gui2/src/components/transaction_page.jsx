@@ -86,7 +86,7 @@ class TransactionPage extends Component {
             </div>
             <div>
               <div>Included in Block</div>
-              <div><Link to={`/gui2/block/${tx.blockhash}`}>{tx.blockhash}</Link></div>
+              <div><Link to={`/block/${tx.blockhash}`}>{tx.blockhash}</Link></div>
             </div>
             <div>
               <div>Value</div>
