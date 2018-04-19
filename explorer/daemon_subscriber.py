@@ -84,7 +84,7 @@ class TxGenerator(CronCacher):
     def _cron_loop(self):
         try:
             address = self.rpccaller.RpcCall('getnewaddress', {})
-            txid = self.rpccaller.RpcCall('sendtoaddress', {'address': address, 'amount': 1})
+            txid = self.rpccaller.RpcCall('sendtoaddress', {'address': address, 'amount': 0.01})
             print('Generated tx', txid)
         except Exception as e:
             print("Error in TxGenerator._cron_loop:", type(e), e)
@@ -110,7 +110,7 @@ class PeginGenerator(SidechainGenerator):
     def _cron_loop(self):
         try:
             pegin_address = self.rpccaller.RpcCall('getpeginaddress', {})['mainchain_address']
-            txid = self.parent_rpccaller.RpcCall('sendtoaddress', {'address': pegin_address, 'amount': 1})
+            txid = self.parent_rpccaller.RpcCall('sendtoaddress', {'address': pegin_address, 'amount': 0.01})
             self.ptxi_set.append(txid)
             print('Generated pegin candidate: pegin_address %s txid %s' % (pegin_address, txid))
         except Exception as e:
@@ -137,7 +137,7 @@ class PegoutGenerator(SidechainGenerator):
     def _cron_loop(self):
         try:
             address = self.parent_rpccaller.RpcCall('getnewaddress', {})
-            txid = self.rpccaller.RpcCall('sendtomainchain', {'address': address, 'amount': 1})
+            txid = self.rpccaller.RpcCall('sendtomainchain', {'address': address, 'amount': 0.01})
             print('Generated pegout', txid)
         except Exception as e:
             print("Error in PegoutGenerator._cron_loop:", type(e), e)
