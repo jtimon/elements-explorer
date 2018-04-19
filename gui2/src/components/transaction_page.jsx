@@ -60,6 +60,8 @@ class TransactionPage extends Component {
     const time = block.mediantime;
     const formattedTime = time ? format.formatDate(time * 1000) : '';
     const txLoaded = !utils.isEmpty(tx);
+    const txSize = (tx.size) ? tx.size / 1000 : '';
+    const txWeight = (tx.vsize) ? (tx.vsize * 4) / 1000 : '';
     return (
       <div>
         <Jumbotron
@@ -78,11 +80,11 @@ class TransactionPage extends Component {
             </div>
             <div>
               <div>Size (KB)</div>
-              <div>{tx.size}</div>
+              <div>{txSize}</div>
             </div>
             <div>
               <div>Weight (KWU)</div>
-              <div />
+              <div>{txWeight}</div>
             </div>
             <div>
               <div>Included in Block</div>

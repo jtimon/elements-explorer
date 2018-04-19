@@ -78,6 +78,8 @@ class BlockPage extends Component {
     const formattedTime = time ? format.formatDate(time * 1000) : '';
     const transactionCount = (block.tx) ? block.tx.length : 0;
     const confirmations = (chainInfo.blocks - block.height) + 1;
+    const blockSize = (block.size) ? block.size / 1000 : '';
+    const blockWeight = (block.weight) ? block.weight / 1000 : '';
 
     function generateTransactions() {
       return loadedTransactions.map(tx => (
@@ -111,11 +113,11 @@ class BlockPage extends Component {
             </div>
             <div>
               <div>Size (KB)</div>
-              <div>{block.size}</div>
+              <div>{blockSize}</div>
             </div>
             <div>
               <div>Weight (KWU)</div>
-              <div>{block.weight}</div>
+              <div>{blockWeight}</div>
             </div>
             <div>
               <div>Version</div>
