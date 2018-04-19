@@ -441,8 +441,8 @@ body, .navbar, .jumbotron-fluid, .content-wrap > div, footer {
         background-color: $dark-grey;
         border-radius: 5px;
         border: 1px solid $dark-grey;
-        height: 46px;
-        line-height: 46px;
+        min-height: 46px;
+        line-height: 20px;
         font-size: 14px;
         &.active {
           height: auto;
@@ -451,13 +451,20 @@ body, .navbar, .jumbotron-fluid, .content-wrap > div, footer {
           border-color: $light-blue;
         }
         & > .vin-header, .vout-header {
-          padding: 0 24px;
+          padding: 12px 24px;
           overflow: hidden;
           text-overflow: ellipsis;
+          min-height: 46px;
           & > div {
-            @include table;
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: flex-end;
+            & > *:nth-child(1) {
+              flex: 1;
+            }
             & > *:nth-child(2) {
               text-align: right;
+              min-width: 100px;
             }
           }
         }
