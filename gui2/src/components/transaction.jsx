@@ -123,6 +123,7 @@ class Transaction extends Component {
     const { chainInfo, transaction } = this.props;
     const { showAdvanced, vins } = this.state;
     const confirmations = (chainInfo.blocks - this.props.block.height) + 1;
+    const confirmationsString = (confirmations === 1) ? 'Confirmation' : 'Confirmations';
     const isPegIn = this.state.is_pegin;
     const isPegOut = Transaction.isPegOutTx(transaction);
     const isConfidential = Transaction.isConfidentialTx(transaction);
@@ -189,7 +190,7 @@ class Transaction extends Component {
           </div>
           <div />
           <div>
-            <span>{confirmations} Confirmations</span>
+            <span>{confirmations} {confirmationsString}</span>
             <span>{(isConfidential) ? 'Confidential' : `${totalValue} BTC`}</span>
           </div>
         </div>
