@@ -119,21 +119,10 @@ class BlockPage extends Component {
               <div>Weight (KWU)</div>
               <div>{blockWeight}</div>
             </div>
-            <div>
-              <div>Version</div>
-              <div>{block.version}</div>
-            </div>
-            {(!hasBlockStats) ? (
-              <div>
-                <div>Merkle Root</div>
-                <div>{block.merkleroot}</div>
-              </div>
-            ) : null}
           </div>
           {(hasBlockStats) ? (
             <div className="transaction-stats">
               <h3>Transaction Stats</h3>
-              <p>{block.merkleroot}</p>
               <div className="transaction-stats-boxes d-flex justify-content-between">
                 <div className="box-wrapper">
                   <div className="transaction-stats-box">
