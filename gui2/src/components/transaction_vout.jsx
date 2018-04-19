@@ -50,14 +50,14 @@ function VOut({ showAdvanced, vout }) {
   let header = null;
   if (isPegOut) {
     header = ((scriptPubKey.pegout_addresses) ? (
-      <a href="#addr">{scriptPubKey.pegout_addresses[0]}</a>
+      <span>{scriptPubKey.pegout_addresses[0]}</span>
     ) : (
       <span>Nonstandard</span>
     ));
   } else if (!scriptPubKey.addresses) {
     header = (<span>{format.capitalizeFirstLetter(type)}</span>);
   } else {
-    header = (<a href="#addr">{scriptPubKey.addresses[0]}</a>);
+    header = (<span>{scriptPubKey.addresses[0]}</span>);
   }
 
   return (

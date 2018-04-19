@@ -52,7 +52,7 @@ function VIn({
     header = (<span>{format.capitalizeFirstLetter(type)}</span>);
   } else {
     header = tx.scriptPubKey.addresses.map(addr => (
-      <span key={addr}><a href="#addr">{addr}</a></span>
+      <span key={addr}>{addr}</span>
     ));
   }
   return (
