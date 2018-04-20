@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import dom from '../utils/dom';
 import format from '../utils/format';
+import utils from '../utils/utils';
 
 import JumbotronTooltip from './jumbotron_tooltip';
 
@@ -51,26 +53,30 @@ class BlockJumbotron extends Component {
       tooltipData.previousblockhash = previousBlock;
     }
 
+    const isLoading = utils.isEmpty(block);
+
     return (
       <div className="container">
-        <h1>Block {blockHeight}</h1>
-        <div className="block-hash">
-          <span>{(block.hash) ? block.hash : ''}</span>
-          {(block.hash) ? (
+        <div className={dom.classNames('jumbotron-loading', dom.showIf(isLoading))}>
+          <img alt="" src="/static/img/Loading.gif" />
+        </div>
+        <div className={dom.showIf(!isLoading)}>
+          <h1>Block {blockHeight}</h1>
+          <div className="block-hash">
+            <span>{(block.hash) ? block.hash : ''}</span>
             <JumbotronTooltip
+              className={dom.showIf(block.hash)}
               showCodeTooltip={showCodeTooltip}
               clickHandler={this.handleMouseClick}
               clickCloseHandler={this.handleMouseClickClose}
               header={`Block ${blockHeight}`}
               data={tooltipData}
             />
-          ) : null}
-        </div>
-        <div className="prev-next-blocks-btns">
-          <div>
+          </div>
+          <div className="prev-next-blocks-btns">
             <div>
-              {(previousBlock) ? (
-                <Link to={`/block/${previousBlock}`}>
+              <div>
+                <Link className={dom.showIf(previousBlock)} to={`/block/${previousBlock}`}>
                   <div>
                     <div>
                       <img alt="" src="/static/img/icons/Arrow-left-blue.svg" />
@@ -80,12 +86,10 @@ class BlockJumbotron extends Component {
                     </div>
                   </div>
                 </Link>
-              ) : null}
+              </div>
             </div>
-          </div>
-          <div>
-            {(nextBlock) ? (
-              <Link to={`/block-height/${block.height + 1}`}>
+            <div>
+              <Link className={dom.showIf(nextBlock)} to={`/block-height/${block.height + 1}`}>
                 <div>
                   <div>
                     <span>Next</span>
@@ -95,7 +99,7 @@ class BlockJumbotron extends Component {
                   </div>
                 </div>
               </Link>
-            ) : null}
+            </div>
           </div>
         </div>
       </div>

@@ -80,6 +80,14 @@ a, a:link, a:visited, a:hover, a:focus {
     background-size: cover;
     padding-top: calc(#{$navbar-height} + 64px);
     margin-bottom: 3.5rem;
+    .jumbotron-loading {
+      img {
+        display: block;
+        margin: auto;
+        width: 142px;
+        height: 142px;
+      }
+    }
     &.block-page {
       background-image: url("../img/Header-b-HD.png");
     }
