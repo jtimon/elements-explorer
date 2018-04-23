@@ -158,12 +158,11 @@ a, a:link, a:visited, a:hover, a:focus {
                 background: transparent;
             }
             &:not(.active) {
-                visibility: hidden;
+                display: none;
                 z-index: -1;
                 opacity: 0;
             }
             &.active {
-                visibility: visible;
                 z-index: 1;
                 opacity: 1;
             }
@@ -395,6 +394,15 @@ body, .navbar, .jumbotron-fluid, .content-wrap > div, footer {
 
 .transactions {
   margin-top: 84px;
+  & > h3, & > img {
+    display: inline-block;
+  }
+  & > img {
+    width: 33px;
+    height: 33px;
+    margin-left: 12px;
+    vertical-align: top;
+  }
 }
 
 .transaction-box:not(:first-of-type) {
@@ -404,6 +412,15 @@ body, .navbar, .jumbotron-fluid, .content-wrap > div, footer {
   background-color: $black;
   padding: 0 24px;
   border-radius: 5px;
+  &.loading-transaction {
+    padding: 12px;
+    img {
+      display: block;
+      margin: auto;
+      height: 75px;
+      width: 75px;
+    }
+  }
   & > .header {
     @include table;
     height: 88px;

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import api from '../utils/api';
+import dom from '../utils/dom';
 import format from '../utils/format';
 
 import Jumbotron from './jumbotron';
@@ -26,45 +27,55 @@ class BlockPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.loadBlock(nextProps.match.params.blockhash);
+    if (nextProps.match.params.blockhash !== this.props.match.params.blockhash) {
+      this.loadBlock(nextProps.match.params.blockhash);
+    }
   }
 
   loadBlock(blockhash) {
-    const loadedTransactions = [];
     const { chain } = this.props;
-    let loadedBlock = {};
-    let loadedBlockStats = {};
+    const transactions = [];
 
     api.getAllChainInformation()
       .then(() => {
         api.getBlockByHash(blockhash)
           .then((block) => {
-            loadedBlock = block;
+            this.setState({
+              block,
+            });
             let promise = Promise.resolve();
             if (!['liquid', 'elementsregtest'].includes(chain)) {
               promise = promise.then(() => (
                 api.getBlockStats(block.height)
-                  .then((stats) => {
-                    loadedBlockStats = stats;
+                  .then((blockStats) => {
+                    this.setState({
+                      blockStats,
+                    });
+                    return blockStats;
                   })
               ));
             }
             block.tx.forEach((tx) => {
               promise = promise.then(() => (
                 api.getTransaction(tx)
-                  .then(txData => (
-                    loadedTransactions.push(txData)
-                  ))
+                  .then((txData) => {
+                    let hasTx = false;
+                    for (let i = 0; i < transactions.length; i += 1) {
+                      if (transactions[i] === txData) {
+                        hasTx = true;
+                      }
+                    }
+                    if (!hasTx) {
+                      transactions.push(txData);
+                    }
+                    this.setState({
+                      transactions,
+                    });
+                    return txData;
+                  })
               ));
             });
             return promise;
-          })
-          .finally(() => {
-            this.setState({
-              block: loadedBlock,
-              blockStats: loadedBlockStats,
-              transactions: loadedTransactions,
-            });
           });
       });
   }
@@ -80,6 +91,8 @@ class BlockPage extends Component {
     const confirmations = (chainInfo.blocks - block.height) + 1;
     const blockSize = (block.size) ? block.size / 1000 : '';
     const blockWeight = (block.weight) ? block.weight / 1000 : '';
+
+    const isLoading = !block.tx || (block.tx.length !== loadedTransactions.length);
 
     function generateTransactions() {
       return loadedTransactions.map(tx => (
@@ -222,7 +235,11 @@ class BlockPage extends Component {
           ) : null}
           <div className="transactions">
             <h3>{transactionCount} Transactions</h3>
+            <img className={dom.showIf(isLoading)} alt="" src="/static/img/Loading.gif" />
             {generateTransactions()}
+            <div className={dom.classNames('transaction-box', 'loading-transaction', dom.showIf(isLoading))}>
+              <img alt="" src="/static/img/Loading.gif" />
+            </div>
           </div>
         </div>
       </div>
