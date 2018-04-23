@@ -178,6 +178,13 @@ a, a:link, a:visited, a:hover, a:focus {
               white-space: pre-wrap;
               overflow-wrap: break-word;
             }
+            .close-button-top {
+              @include clickable;
+              position: absolute;
+              right: 60px;
+              height: 45px;
+              width: 45px;
+            }
             .close-button {
                 @include table;
                 @include clickable;

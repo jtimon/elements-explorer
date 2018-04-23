@@ -19,6 +19,15 @@ function JumbotronTooltip({
       </div>
       <div className={dom.classNames('overlay', dom.classIf(!showCodeTooltip, 'hide'))} />
       <div className={dom.classNames('code-button-text', dom.classIf(showCodeTooltip, 'active'))}>
+        <div
+          className="close-button-top"
+          role="button"
+          tabIndex={0}
+          onClick={clickCloseHandler}
+          onKeyPress={clickCloseHandler}
+        >
+          <img alt="" src="/static/img/icons/cancel.svg" />
+        </div>
         <h4>{header}</h4>
         <pre>{JSON.stringify(data, null, 4)}</pre>
         <div
