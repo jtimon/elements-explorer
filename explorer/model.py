@@ -69,7 +69,7 @@ class Blockstats(RpcCachedModel):
 
     @classmethod
     def truth_src_get(cls, req_id):
-        json_result = super(Blockstats, cls)._rpccaller.RpcCall('getblockstats', {'height': req_id})
+        json_result = super(Blockstats, cls)._rpccaller.RpcCall('getblockstats', {'hash_or_height': req_id})
         if 'error' in json_result:
             return json_result
 
