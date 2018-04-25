@@ -1,5 +1,8 @@
+function isEmptyArray(arr) {
+  return arr === undefined || arr.length === 0;
+}
 
-function isEmpty(obj) {
+function isEmptyObject(obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
 
@@ -22,7 +25,8 @@ function isValidHash(s) {
 
 module.exports = {
   addBlockToStore,
-  isEmpty,
+  isEmptyArray,
+  isEmptyObject,
   isNaturalNumber,
   isValidHash,
 };

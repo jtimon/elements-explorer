@@ -59,7 +59,7 @@ class TransactionPage extends Component {
     const { block } = this.state;
     const time = block.mediantime;
     const formattedTime = time ? format.formatDate(time * 1000) : '';
-    const txLoaded = !utils.isEmpty(tx);
+    const txLoaded = !utils.isEmptyObject(tx);
     const txSize = (tx.size) ? tx.size / 1000 : '';
     const txWeight = (tx.vsize) ? tx.vsize / 1000 : '';
     return (

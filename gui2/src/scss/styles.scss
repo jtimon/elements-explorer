@@ -325,12 +325,21 @@ body, .navbar, .jumbotron-fluid, .content-wrap > div, footer {
         }
         &.block-data {
             border-top: 1px $dark-grey solid;
-            &:hover {
+            &:not(.loading):hover {
               background-color: rgba(255, 255, 255, 0.05);
             }
             & > * {
                 font-size: 16px;
             }
+        }
+        &.loading {
+          img {
+            display: block;
+            margin: auto;
+            height: 45px;
+            width: 45px;
+            padding: 3px 0;
+          }
         }
         & > div:nth-child(1) {
           width: 150px;
@@ -340,6 +349,48 @@ body, .navbar, .jumbotron-fluid, .content-wrap > div, footer {
           width: 350px;
         }
     }
+}
+
+.newer-older-blocks-btns {
+  @include table;
+  margin-top: 24px;
+  div > .blocks-btn {
+    @include table;
+    @include clickable;
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 400;
+    width: 140px !important;
+    height: 40px;
+    border: 1px solid $light-blue;
+    border-radius: 5px;
+    background-color: $dark-grey;
+    &.newer-btn {
+      & > div:nth-child(1) {
+        width: 30px;
+        img {
+          width: 30px;
+        }
+      }
+      & > *:nth-child(2) {
+        text-align: center;
+      }
+    }
+    &.older-btn {
+      float: right;
+      & > *:nth-child(1) {
+        text-align: center;
+      }
+      & > div:nth-child(2) {
+        width: 30px;
+        img {
+          width: 30px;
+        }
+      }
+    }
+  }
 }
 
 .block-stats-table {

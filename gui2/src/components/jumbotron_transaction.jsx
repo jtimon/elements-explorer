@@ -32,7 +32,7 @@ class TransactionJumbotron extends Component {
     const { tx } = this.props;
     const tooltipData = tx.hex;
     const { showCodeTooltip } = this.state;
-    const isLoading = utils.isEmpty(tx);
+    const isLoading = utils.isEmptyObject(tx);
 
     return (
       <div className="container">

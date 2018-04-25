@@ -53,7 +53,7 @@ class BlockJumbotron extends Component {
       tooltipData.previousblockhash = previousBlock;
     }
 
-    const isLoading = utils.isEmpty(block);
+    const isLoading = utils.isEmptyObject(block);
 
     return (
       <div className="container">

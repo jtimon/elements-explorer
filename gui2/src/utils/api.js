@@ -11,7 +11,7 @@ function handleErrors(response) {
 
 function getAvailableChains() {
   const state = store.getState();
-  if (!utils.isEmpty(state.availableChains)) {
+  if (!utils.isEmptyObject(state.availableChains)) {
     return Promise.resolve().then(() => state.availableChains);
   }
   const url = '/api/v0/available_chains';
@@ -32,7 +32,7 @@ function getAvailableChains() {
 function getChainInfo() {
   const state = store.getState();
   const { chain } = state;
-  if (!utils.isEmpty(state.chainInfo)) {
+  if (!utils.isEmptyObject(state.chainInfo)) {
     return Promise.resolve().then(() => state.chainInfo);
   }
   const url = '/api/v0/chaininfo';
@@ -66,7 +66,7 @@ function getAllChainInformation() {
 function getBlockByHash(id) {
   const state = store.getState();
   const { chain } = state;
-  if (!utils.isEmpty(state.blocks.hashes)) {
+  if (!utils.isEmptyObject(state.blocks.hashes)) {
     if (has.call(state.blocks.hashes, id)) {
       return Promise.resolve().then(() => state.blocks.hashes[id]);
     }
@@ -97,7 +97,7 @@ function getBlockByHash(id) {
 function getBlockByHeight(id) {
   const state = store.getState();
   const { chain } = state;
-  if (!utils.isEmpty(state.blocks.heights)) {
+  if (!utils.isEmptyObject(state.blocks.heights)) {
     if (has.call(state.blocks.heights, id)) {
       const blockHash = state.blocks.heights[id];
       return Promise.resolve().then(() => state.blocks.hashes[blockHash]);
@@ -129,7 +129,7 @@ function getBlockByHeight(id) {
 function getBlockStats(id) {
   const state = store.getState();
   const { chain } = state;
-  if (!utils.isEmpty(state.blocks.stats)) {
+  if (!utils.isEmptyObject(state.blocks.stats)) {
     if (has.call(state.blocks.stats, id)) {
       return Promise.resolve().then(() => state.blocks.stats[id]);
     }
@@ -163,7 +163,7 @@ function getTransaction(id, chainParam) {
   if (!chain) {
     ({ chain } = state);
   }
-  if (!utils.isEmpty(state.transactions)) {
+  if (!utils.isEmptyObject(state.transactions)) {
     if (has.call(state.transactions[chain], id)) {
       return Promise.resolve().then(() => state.transactions[chain][id]);
     }
