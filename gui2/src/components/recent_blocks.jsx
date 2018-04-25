@@ -26,8 +26,8 @@ class RecentBlocks extends Component {
             <div className="blocks-table-cell"><Link to={`/block/${block.hash}`}>{block.height}</Link></div>
             <div className="blocks-table-cell">{time}</div>
             <div className="blocks-table-cell">{block.txCount}</div>
-            <div className="blocks-table-cell">{block.size}</div>
-            <div className="blocks-table-cell">{block.weight}</div>
+            <div className="blocks-table-cell">{block.size / 1000}</div>
+            <div className="blocks-table-cell">{block.weight / 1000}</div>
           </div>
         );
       });
