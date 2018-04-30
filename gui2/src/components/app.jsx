@@ -8,6 +8,7 @@ import RecentBlocksPage from './recent_blocks_page';
 import BlockPage from './block_page';
 import BlockHeightPage from './block_height_page';
 import TransactionPage from './transaction_page';
+import NotFoundPage from './not_found_page';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/block/:blockhash" component={BlockPage} />
             <Route path="/block-height/:blockheight" component={BlockHeightPage} />
             <Route path="/tx/:txid" component={TransactionPage} />
+            <Route component={NotFoundPage} />
           </Switch>
         </div>
         <Footer />

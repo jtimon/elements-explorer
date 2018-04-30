@@ -9,6 +9,7 @@ import utils from '../utils/utils';
 import Jumbotron from './jumbotron';
 import TransactionJumbotron from './jumbotron_transaction';
 import Transaction from './transaction';
+import NotFoundPage from './not_found_page';
 
 class TransactionPage extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class TransactionPage extends Component {
     this.state = {
       block: {},
       transaction: {},
+      notFound: false,
     };
   }
 
@@ -50,13 +52,25 @@ class TransactionPage extends Component {
               transaction: loadedTransaction,
               block: loadedBlock,
             });
+          })
+          .catch(() => {
+            // TODO: Handle specific errors.
+            this.setState({
+              notFound: true,
+            });
           });
       });
   }
 
   render() {
     const tx = this.state.transaction;
-    const { block } = this.state;
+    const { block, notFound } = this.state;
+
+    if (notFound) {
+      return (
+        <NotFoundPage />
+      );
+    }
     const time = block.mediantime;
     const formattedTime = time ? format.formatDate(time * 1000) : '';
     const txLoaded = !utils.isEmptyObject(tx);

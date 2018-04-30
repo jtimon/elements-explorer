@@ -3,10 +3,11 @@ import utils from './utils';
 const has = Object.prototype.hasOwnProperty;
 
 function handleErrors(response) {
-  if (!response.ok) {
-    throw Error(response.statusText);
+  const resp = response.json();
+  if (response.ok) {
+    return Promise.resolve(resp);
   }
-  return response;
+  return resp.then(json => Promise.reject(json));
 }
 
 function getAvailableChains() {
@@ -20,7 +21,6 @@ function getAvailableChains() {
   };
   return fetch(url, requestParams)
     .then(handleErrors)
-    .then(response => response.json())
     .then((data) => {
       store.dispatchMerge({
         availableChains: data.available_chains,
@@ -48,7 +48,6 @@ function getChainInfo() {
   };
   return fetch(url, requestParams)
     .then(handleErrors)
-    .then(response => response.json())
     .then((data) => {
       store.dispatchMerge({
         chainInfo: data,
@@ -84,7 +83,6 @@ function getBlockByHash(id) {
   };
   return fetch(url, requestParams)
     .then(handleErrors)
-    .then(response => response.json())
     .then((data) => {
       const { blocks } = store.getState();
       store.dispatchMerge({
@@ -116,7 +114,6 @@ function getBlockByHeight(id) {
   };
   return fetch(url, requestParams)
     .then(handleErrors)
-    .then(response => response.json())
     .then((data) => {
       const { blocks } = store.getState();
       store.dispatchMerge({
@@ -147,7 +144,6 @@ function getBlockStats(id) {
   };
   return fetch(url, requestParams)
     .then(handleErrors)
-    .then(response => response.json())
     .then((data) => {
       const { blocks } = store.getState();
       store.dispatchMerge({
@@ -181,7 +177,6 @@ function getTransaction(id, chainParam) {
   };
   return fetch(url, requestParams)
     .then(handleErrors)
-    .then(response => response.json())
     .then((data) => {
       const { transactions } = store.getState();
       store.dispatchMerge({
@@ -208,8 +203,7 @@ function getAddress(address, startHeight, endHeight) {
     }),
   };
   return fetch(url, requestParams)
-    .then(handleErrors)
-    .then(response => response.json());
+    .then(handleErrors);
 }
 
 module.exports = {

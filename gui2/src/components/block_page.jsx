@@ -10,6 +10,7 @@ import format from '../utils/format';
 import Jumbotron from './jumbotron';
 import BlockJumbotron from './jumbotron_block';
 import Transaction from './transaction';
+import NotFoundPage from './not_found_page';
 
 class BlockPage extends Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class BlockPage extends Component {
       block: {},
       blockStats: {},
       transactions: [],
+      notFound: false,
     };
   }
 
@@ -76,12 +78,27 @@ class BlockPage extends Component {
               ));
             });
             return promise;
+          })
+          .catch((err) => {
+            const { error } = err;
+            if (error && error.message === 'Block not found') {
+              this.setState({
+                notFound: true,
+              });
+            }
           });
       });
   }
 
   render() {
-    const { block, blockStats } = this.state;
+    const { block, blockStats, notFound } = this.state;
+
+    if (notFound) {
+      return (
+        <NotFoundPage />
+      );
+    }
+
     const loadedTransactions = this.state.transactions;
     const { chain, chainInfo } = this.props;
     const hasBlockStats = !['liquid', 'elementsregtest'].includes(chain);
