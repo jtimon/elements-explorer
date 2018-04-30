@@ -8,13 +8,6 @@ import format from '../utils/format';
 import utils from '../utils/utils';
 
 class NavbarSearch extends Component {
-  static handleSubmit(event) {
-    event.preventDefault();
-    const input = event.target.querySelector('#search-input');
-    const value = format.trim(input.value.toLowerCase());
-    NavbarSearch.search(value);
-  }
-
   static search(str) {
     if (utils.isNaturalNumber(str)) {
       store.dispatchMerge({
@@ -38,6 +31,11 @@ class NavbarSearch extends Component {
     }
   }
 
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.searchRedirect) {
       store.dispatchMerge({
@@ -46,18 +44,24 @@ class NavbarSearch extends Component {
     }
   }
 
+  handleSubmit(event) {
+    event.preventDefault();
+    const value = format.trim(this.searchInput.value.toLowerCase());
+    NavbarSearch.search(value);
+  }
+
   render() {
     const { searchRedirect } = this.props;
     return (searchRedirect) ? (
       <Redirect to={searchRedirect} />
     ) : (
-      <form className="form-inline" onSubmit={NavbarSearch.handleSubmit}>
+      <form className="form-inline" onSubmit={this.handleSubmit}>
         <div className="search-bar">
           <input
             className="form-control search-bar-input"
-            id="search-input"
+            ref={(ref) => { this.searchInput = ref; }}
             type="search"
-            placeholder="Search for block height, hash, tx, address, etc"
+            placeholder="Search for block height, hash, or tx"
             aria-label="Search"
           />
           <input className="search-bar-submit" type="image" name="submit" src="/static/img/icons/search.svg" border="0" alt="Submit" />
