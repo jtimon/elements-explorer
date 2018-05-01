@@ -59,6 +59,8 @@ migration_schema = {}
 migration_diff = {}
 CHAINS = FLAGS.chains.split(',')
 FORCE_CHAINS = FLAGS.forcechains.split(',')
+if len(FORCE_CHAINS) == 1 and FORCE_CHAINS[0] == '':
+    FORCE_CHAINS = []
 
 ddb = minql.ZmqMinqlServer(
     FLAGS.dbtype,
