@@ -24,5 +24,5 @@ chain = FLAGS.chain
 
 daemon_subscriber = DaemonSubscriber(AVAILABLE_CHAINS[chain]['zmq'],
                                      chain, AVAILABLE_CHAINS[chain]['rpc'],
-                                     AVAILABLE_CHAINS[chain]['db'])
+                                     AVAILABLE_CHAINS[chain]['db'], cache_stats=AVAILABLE_CHAINS[chain]['properties']['stats_support'])
 daemon_subscriber.start()

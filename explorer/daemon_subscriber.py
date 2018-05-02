@@ -217,12 +217,13 @@ class MempoolStatsCacher(CronCacher):
 
 class GreedyCacher(CronCacher):
 
-    def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time, cache_txs):
+    def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time, cache_txs, cache_stats):
 
         super(GreedyCacher, self).__init__(chain, rpccaller, db_client, wait_time, initial_wait_time)
 
         self.last_cached_height = -1
         self.cache_txs = cache_txs
+        self.cache_stats = cache_stats
 
     def cache_blockhash(self, blockhash):
         try:
@@ -231,7 +232,9 @@ class GreedyCacher(CronCacher):
                 print("Error in GreedyCacher.cache_blockhash: wrong type for block", blockhash, block)
                 return None
 
-            model.Blockstats.get(block.height)
+            if self.cache_stats:
+                model.Blockstats.get(block.height)
+
             blockblob = json.loads(block.blob)
             if self.cache_txs and 'tx' in blockblob:
                 for txid in blockblob['tx']:
@@ -270,9 +273,9 @@ class GreedyCacher(CronCacher):
 
 class DaemonReorgManager(GreedyCacher):
 
-    def __init__(self, chain, rpccaller, db_client, wait_time=60, initial_wait_time=60, cache_txs=False):
+    def __init__(self, chain, rpccaller, db_client, wait_time=60, initial_wait_time=60, cache_txs=False, cache_stats=True):
 
-        super(DaemonReorgManager, self).__init__(chain, rpccaller, db_client, wait_time, initial_wait_time, cache_txs)
+        super(DaemonReorgManager, self).__init__(chain, rpccaller, db_client, wait_time, initial_wait_time, cache_txs, cache_stats)
 
         self.prev_reorg_height = -1
         self.prev_reorg_hash = None
@@ -515,11 +518,13 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
                  db_factory,
                  silent=False,
                  worker_id='DaemonSubscriber',
+                 cache_stats=True,
                  *args, **kwargs):
 
         self.chain = chain
         self.rpccaller = rpccaller
         self.db_factory = db_factory
+        self.cache_stats = cache_stats
 
         if (silent):
             import sys
@@ -537,7 +542,7 @@ class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
 
     def _init_process(self):
         super(DaemonSubscriber, self)._init_process()
-        self.reorg_man = DaemonReorgManager(self.chain, self.rpccaller, self.db_factory.create())
+        self.reorg_man = DaemonReorgManager(self.chain, self.rpccaller, self.db_factory.create(), cache_stats=self.cache_stats)
 
     def _loop(self):
         while True:

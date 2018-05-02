@@ -32,10 +32,10 @@ AVAILABLE_CHAINS = {
             'chain_id': '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f',
         },
         'proc': {
-            'reorg_cron': [60, 60 * 5], # every 1 min after 5 min
+            'reorg_cron': [60, 60 * 5, False, True], # every 1 min after 5 min, don't cache txs, cache stats
             'mempool_cacher': [60, 60], # every 1 min after 1 min
             'mempool_saver': [60 * 20, 60 * 5], # every 20 min after 5 min
-            'greedy_cacher': [60, 60 * 60, True], # every 1 min after 1 hour, cache txs
+            'greedy_cacher': [60, 60 * 60, True, True], # every 1 min after 1 hour, cache txs, cache stats
         },
     },
 
@@ -51,10 +51,10 @@ AVAILABLE_CHAINS = {
             'chain_id': '000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943',
         },
         'proc': {
-            'reorg_cron': [60, 60 * 5], # every 1 min after 5 min
+            'reorg_cron': [60, 60 * 5, False, True], # every 1 min after 5 min, don't cache txs, cache stats
             'mempool_cacher': [60, 60], # every 1 min after 1 min
             'mempool_saver': [60 * 20, 60 * 5], # every 20 min after 5 min
-            'greedy_cacher': [60, 60 * 15, True], # every 1 min after 15 min, cache txs
+            'greedy_cacher': [60, 60 * 15, True, True], # every 1 min after 15 min, cache txs, cache stats
         },
     },
 
@@ -70,9 +70,9 @@ AVAILABLE_CHAINS = {
             'chain_id': '0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206',
         },
         'proc': {
-            'reorg_cron': [60, 60], # every 1 min after 1 min
+            'reorg_cron': [60, 60, False, True], # every 1 min after 1 min, don't cache txs, cache stats
             'mempool_cacher': [60, 60], # every 1 min after 1 min
-            'greedy_cacher': [60, 60 * 5, True], # every 1 min after 5 min, cache txs
+            'greedy_cacher': [60, 60 * 5, True, True], # every 1 min after 5 min, cache txs, cache stats
             'block_gen': [60, 60 * 2], # every 2 min after 1 min
             'tx_gen': [50, 60], # every 50 secs after 1 min
         },
@@ -92,9 +92,9 @@ AVAILABLE_CHAINS = {
             'parent_chain': 'regtest',
         },
         'proc': {
-            'reorg_cron': [60, 60], # every 1 min after 1 min
+            'reorg_cron': [60, 60, False, False], # every 1 min after 1 min, don't cache txs, don't cache stats
             'mempool_cacher': [60, 60], # every 1 min after 1 min
-            'greedy_cacher': [60, 60 * 10, True], # every 1 min after 10 min, cache txs
+            'greedy_cacher': [60, 60 * 10, True, False], # every 1 min after 10 min, cache txs, don't cache stats
             'block_gen': [60 * 5, 60], # every 5 min after 1 min
             'tx_gen': [30, 60], # every 30 secs after 1 min
             'pegin_gen': [60, 60], # every 1 min after 1 min
