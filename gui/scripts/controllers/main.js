@@ -37,11 +37,11 @@ angular.module('rpcExplorerApp')
 
         function successCallbackBlock(data) {
             $scope.block = data;
-            $scope.blockid = $scope.block["hash"];
-            $scope.blockheight = $scope.block["height"];
+            $scope.blockid = $scope.block['id'];
+            $scope.blockheight = $scope.block['height'];
             $scope.blockjson = JSON.stringify($scope.block, null, 4);
 
-            return $scope.block["height"];
+            return $scope.block['height'];
         };
 
         function PromBlockstats(height) {
@@ -173,7 +173,7 @@ angular.module('rpcExplorerApp')
                 'mediantime': block['mediantime'],
                 'size': block['size'],
                 'tx_count': block['tx'].length,
-                'hash': block['hash']
+                'hash': block['id']
             });
             if (block.hasOwnProperty('previousblockhash')) {
                 return block['previousblockhash'];

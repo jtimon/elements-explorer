@@ -18,18 +18,18 @@ def GetBlockByHeight(rpccaller, height):
     if len(block_by_height) > 1:
         return {'error': {'message': 'More than one block cached for height %s' % height}}
     if len(block_by_height) == 1:
-        return json.loads(block_by_height[0].blob)
+        return block_by_height[0]
 
     blockhash = rpccaller.RpcCall('getblockhash', {'height': height})
     if 'error' in blockhash:
         return blockhash
-    orm_block = model.Block.get(blockhash)
-    if isinstance(orm_block, dict) and 'error' in orm_block:
-        return orm_block
-    elif not isinstance(orm_block, model.Block):
-        print('Error in GetBlockByHeight: wrong type for block', blockhash, orm_block)
+    block = model.Block.get(blockhash)
+    if isinstance(block, dict) and 'error' in block:
+        return block
+    elif not isinstance(block, model.Block):
+        print('Error in GetBlockByHeight: wrong type for block', blockhash, block)
         return {'error': {'message': 'Error getting block %s (by height %s)' % (blockhash, height)}}
-    return json.loads(orm_block.blob)
+    return block
 
 class UnknownChainError(BaseException):
     pass
@@ -123,7 +123,7 @@ class BlockheightResource(ChainResource):
         if not 'id' in request:
             return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}, 400
 
-        response = GetBlockByHeight(self.rpccaller, request['id'])
+        response = GetBlockByHeight(self.rpccaller, request['id']).json()
 
         if 'error' in response:
             return {'error': response['error']}, 400
@@ -198,12 +198,13 @@ class AddressResource(ChainResource):
     def search_by_address(self, height, addresses):
 
         block = GetBlockByHeight(self.rpccaller, height)
-        if 'error' in block:
+        if isinstance(block, dict) and 'error' in block:
             return block
 
         receipts = []
         expenditures = []
-        for txid in block['tx']:
+        tx_ids = json.loads(block.tx)
+        for txid in tx_ids:
             orm_tx = model.Tx.get(txid)
             if isinstance(orm_tx, dict) and 'error' in orm_tx:
                 return orm_tx
@@ -215,7 +216,7 @@ class AddressResource(ChainResource):
             for output in tx['vout']:
                 for address in addresses:
                     if 'addresses' in output['scriptPubKey'] and address in output['scriptPubKey']['addresses']:
-                        receipts.append({'output': output, 'txid': txid, 'height': block['height']})
+                        receipts.append({'output': output, 'txid': txid, 'height': block.height})
 
             for tx_input in tx['vin']:
                 if 'txid' in tx_input and 'vout' in tx_input:
@@ -230,7 +231,7 @@ class AddressResource(ChainResource):
                     output = tx_in['vout'][ tx_input['vout'] ]
                     for address in addresses:
                         if 'addresses' in output['scriptPubKey'] and address in output['scriptPubKey']['addresses']:
-                            expenditures.append({'input': tx_input, 'prev_output': output, 'txid': tx['txid'], 'height': block['height']})
+                            expenditures.append({'input': tx_input, 'prev_output': output, 'txid': tx['txid'], 'height': block.height})
 
         return {'expenditures': expenditures, 'receipts': receipts}
 
@@ -288,7 +289,7 @@ API_DOMAIN = ExplorerApiDomain({
     # currently goes throught the whole block
     'address': AddressResource(),
     # cached in server and gui
-    'block': GetByIdResource('block', model.Block, uses_blob=True),
+    'block': GetByIdResource('block', model.Block),
     'blockheight': BlockheightResource(),
     'tx': GetByIdResource('tx', model.Tx, uses_blob=True),
     'blockstats': GetByIdResource('blockstats', model.Blockstats, ['stats_support'], uses_blob=True),

@@ -39,7 +39,7 @@ class BlockJumbotron extends Component {
       chainInfo.blocks !== block.height : false;
     const { showCodeTooltip } = this.state;
     const tooltipData = {
-      hash: block.hash,
+      hash: block.id,
       size: block.size,
       height: block.height,
       version: block.version,
@@ -63,9 +63,9 @@ class BlockJumbotron extends Component {
         <div className={dom.showIf(!isLoading)}>
           <h1>Block {blockHeight}</h1>
           <div className="block-hash">
-            <span>{(block.hash) ? block.hash : ''}</span>
+            <span>{(block.id) ? block.id : ''}</span>
             <JumbotronTooltip
-              className={dom.showIf(block.hash)}
+              className={dom.showIf(block.id)}
               showCodeTooltip={showCodeTooltip}
               clickHandler={this.handleMouseClick}
               clickCloseHandler={this.handleMouseClickClose}

@@ -131,7 +131,7 @@ class BlockPage extends Component {
           <div className="block-stats-table">
             <div>
               <div>Height</div>
-              <div><Link to={`/block/${block.hash}`}>{block.height}</Link></div>
+              <div><Link to={`/block/${block.id}`}>{block.height}</Link></div>
             </div>
             <div>
               <div>Confirmations</div>

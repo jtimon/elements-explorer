@@ -15,7 +15,7 @@ class RecentBlocks extends Component {
     } = this.props;
     const bestBlockHash = chainInfo.bestblockhash;
     const hasBlocks = !utils.isEmptyArray(blocks);
-    const hasNewer = hasBlocks && blocks[0].hash !== bestBlockHash;
+    const hasNewer = hasBlocks && blocks[0].id !== bestBlockHash;
     const hasOlder = hasBlocks && blocks[blocks.length - 1].previousBlockHash;
 
     function generateBlocksRows() {
@@ -23,7 +23,7 @@ class RecentBlocks extends Component {
         const time = format.formatDate(block.mediantime * 1000);
         return (
           <div className="blocks-table-row block-data" key={block.height}>
-            <div className="blocks-table-cell"><Link to={`/block/${block.hash}`}>{block.height}</Link></div>
+            <div className="blocks-table-cell"><Link to={`/block/${block.id}`}>{block.height}</Link></div>
             <div className="blocks-table-cell">{time}</div>
             <div className="blocks-table-cell">{block.txCount}</div>
             <div className="blocks-table-cell">{block.size / 1000}</div>
@@ -45,7 +45,7 @@ class RecentBlocks extends Component {
         const newestBlock = blocks[0];
         api.getBlockByHeight(newestBlock.height + 10)
           .then((block) => {
-            loadBlocks(block.hash);
+            loadBlocks(block.id);
           });
       }
     }

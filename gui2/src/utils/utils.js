@@ -7,7 +7,7 @@ function isEmptyObject(obj) {
 }
 
 function addBlockToStore(obj, data) {
-  const blockHash = data.hash;
+  const blockHash = data.id;
   const blockHeight = data.height;
   let newObj = obj;
   newObj = Immutable.setIn(newObj, ['hashes', blockHash], data);

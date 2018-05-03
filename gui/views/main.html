@@ -104,23 +104,13 @@
       </tr>
 
       <tr>
-        <td>Confirmations last cached:</td>
-        <td>{{ block.confirmations }}</td>
-      </tr>
-
-      <tr>
         <td>Hash:</td>
-        <td><a ng-href="#!/chain/{{selected_chain}}/block/{{block.hash}}">{{ block.hash }}</a></td>
+        <td><a ng-href="#!/chain/{{selected_chain}}/block/{{block.id}}">{{ block.id }}</a></td>
       </tr>
 
       <tr>
         <td>Previous block hash:</td>
         <td><a ng-href="#!/chain/{{selected_chain}}/block/{{block.previousblockhash}}">{{ block.previousblockhash }}</a></td>
-      </tr>
-
-      <tr>
-        <td>Stripped size (bytes):</td>
-        <td>{{ block.strippedsize }}</td>
       </tr>
 
       <tr>
@@ -131,11 +121,6 @@
       <tr>
         <td>Weight:</td>
         <td>{{ block.weight }}</td>
-      </tr>
-
-      <tr>
-        <td>Version:</td>
-        <td>{{ block.version }}</td>
       </tr>
 
       <tr>

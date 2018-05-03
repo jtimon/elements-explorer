@@ -84,6 +84,7 @@ function getBlockByHash(id) {
   return fetch(url, requestParams)
     .then(handleErrors)
     .then((data) => {
+      data['tx'] = JSON.parse(data['tx']);
       const { blocks } = store.getState();
       store.dispatchMerge({
         blocks: utils.addBlockToStore(blocks, data),
@@ -115,6 +116,7 @@ function getBlockByHeight(id) {
   return fetch(url, requestParams)
     .then(handleErrors)
     .then((data) => {
+      data['tx'] = JSON.parse(data['tx']);
       const { blocks } = store.getState();
       store.dispatchMerge({
         blocks: utils.addBlockToStore(blocks, data),

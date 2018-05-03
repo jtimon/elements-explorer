@@ -34,7 +34,7 @@ class BlockHeightPage extends Component {
         .then((block) => {
           this.setState({
             loading: false,
-            redirect: block.hash,
+            redirect: block.id,
           });
         })
         .catch((err) => {

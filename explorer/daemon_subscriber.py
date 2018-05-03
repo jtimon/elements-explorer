@@ -235,11 +235,12 @@ class GreedyCacher(CronCacher):
             if self.cache_stats:
                 model.Blockstats.get(block.height)
 
-            blockblob = json.loads(block.blob)
-            if self.cache_txs and 'tx' in blockblob:
-                for txid in blockblob['tx']:
+            if self.cache_txs:
+                tx_ids = json.loads(block.tx)
+                for txid in tx_ids:
                     tx = model.Tx.get(txid)
-            return blockblob
+
+            return block
 
         except Exception as e:
             print("Error in GreedyCacher.cache_blockhash:", blockhash, type(e), e)
@@ -258,8 +259,8 @@ class GreedyCacher(CronCacher):
             if not block:
                 print('Error in GreedyCacher._cron_loop: no block %s %s' % (height, blockhash))
                 return
-            elif 'previousblockhash' in block:
-                blockhash = block['previousblockhash']
+            elif block.previousblockhash:
+                blockhash = block.previousblockhash
             elif height == 0:
                 # the genesis block doesn't have a previous block
                 break
@@ -282,9 +283,9 @@ class DaemonReorgManager(GreedyCacher):
 
     def update_chainfo(self, block):
         chaininfo = model.Chaininfo(json_dict={
-            'bestblockhash': block['hash'],
-            'blocks': block['height'],
-            'mediantime': block['mediantime'],
+            'bestblockhash': block.id,
+            'blocks': block.height,
+            'mediantime': block.mediantime,
         })
         chaininfo.id = self.chain
         try:
@@ -339,8 +340,8 @@ class DaemonReorgManager(GreedyCacher):
             pass
 
     def commit_new_prev(self, block):
-        self.prev_reorg_hash = block['hash']
-        self.prev_reorg_height = block['height']
+        self.prev_reorg_hash = block.id
+        self.prev_reorg_height = block.height
         self.cache_blockhash(self.prev_reorg_hash)
 
         if not self.update_chainfo(block):
@@ -351,11 +352,11 @@ class DaemonReorgManager(GreedyCacher):
 
     def get_ascendant(self, block, target_height):
 
-        if not block or not 'hash' in block or not 'height' in block or target_height < 0:
+        if not block or not block.id or not block.height or target_height < 0:
             return None
 
-        block_height = block['height']
-        block_hash = block['hash']
+        block_height = block.height
+        block_hash = block.id
 
         if target_height > block_height:
             return None
@@ -363,24 +364,23 @@ class DaemonReorgManager(GreedyCacher):
         while target_height < block_height:
             print('get_ascendant loop height %s hash %s', block_height, block_hash)
 
-            if not 'previousblockhash' in block:
+            if not block.previousblockhash:
                 return None
-            block_hash = block['previousblockhash']
+            block_hash = block.previousblockhash
             block_height = block_height - 1
             try:
-                orm_block = model.Block.get(block_hash)
-                if not isinstance(orm_block, model.Block):
-                    print('Error in DaemonReorgManager.get_ascendant: wrong type for block', block_hash, orm_block)
+                block = model.Block.get(block_hash)
+                if not isinstance(block, model.Block):
+                    print('Error in DaemonReorgManager.get_ascendant: wrong type for block', block_hash, block)
                     return None
-                block = json.loads(orm_block.blob)
             except Exception as e:
-                print('FAILED DaemonReorgManager.get_ascendant: block.get(%s)' % block_hash, type(e), e, block)
+                print('FAILED DaemonReorgManager.get_ascendant: block.get(%s)' % block_hash, type(e), e, block.json())
                 return None
 
         return block
 
     def check_basic_block(self, block):
-        return block and 'hash' in block and 'height' in block and 'previousblockhash' in block
+        return block and block.id and block.height and block.previousblockhash
 
     def find_common_ancestor(self, block_A, block_B):
         if not self.check_basic_block(block_A):
@@ -392,52 +392,51 @@ class DaemonReorgManager(GreedyCacher):
             return block_A
 
         try:
-            if block_A['hash'] == block_B['hash']:
+            if block_A.id == block_B.id:
                 return block_A
-            elif block_A['height'] > block_B['height']:
+            elif block_A.height > block_B.height:
                 return self.find_common_ancestor(block_B, block_A)
-            elif block_A['height'] < block_B['height']:
-                ascendant = self.get_ascendant(block_B, block_A['height'])
+            elif block_A.height < block_B.height:
+                ascendant = self.get_ascendant(block_B, block_A.height)
                 if not ascendant:
                     print('FAILED calling get_ascendant in find_common_ancestor A: %s %s B: %s %s' % (
-                        block_A['height'], block_A['hash'], block_B['height'], block_B['hash']))
+                        block_A.height, block_A.id, block_B.height, block_B.id))
                     return None
                 return self.find_common_ancestor(block_A, ascendant)
-            elif block_A['height'] == block_B['height']:
-                ascendantA = self.get_ascendant(block_A, block_A['height'] - 1)
-                ascendantB = self.get_ascendant(block_B, block_A['height'] - 1)
+            elif block_A.height == block_B.height:
+                ascendantA = self.get_ascendant(block_A, block_A.height - 1)
+                ascendantB = self.get_ascendant(block_B, block_A.height - 1)
                 if not ascendantA or not ascendantB:
                     print('FAILED finding common_ancestor A: %s %s B: %s %s' % (
-                        block_A['height'], block_A['hash'], block_B['height'], block_B['hash']))
+                        block_A.height, block_A.id, block_B.height, block_B.id))
                     return None
                 return self.find_common_ancestor(ascendantA, ascendantB)
 
         except Exception as e:
             print("Error in DaemonReorgManager.find_common_ancestor:", type(e), e)
             print('FAILED calling find_common_ancestor A: %s %s B: %s %s' % (
-                block_A['height'], block_A['hash'], block_B['height'], block_B['hash']))
+                block_A.height, block_A.id, block_B.height, block_B.id))
 
         return None
 
     def manage_reorg(self, block):
         print('REORG DETECTED at previous height %s and hash %s' % (self.prev_reorg_height, self.prev_reorg_hash))
-        if isinstance(block, dict) and 'height' in block and 'hash' in block:
-            print('new height %s and hash %s' % (block['height'], block['hash']))
+        if isinstance(block, model.Block) and block.id and block.height:
+            print('new height %s and hash %s' % (block.height, block.id))
 
-        orm_block = model.Block.get(self.prev_reorg_hash)
-        if not isinstance(orm_block, model.Block):
-            print('Error in DaemonReorgManager.manage_reorg: wrong type for block', self.prev_reorg_hash, orm_block)
+        prev_reorg_block = model.Block.get(self.prev_reorg_hash)
+        if not isinstance(prev_reorg_block, model.Block):
+            print('Error in DaemonReorgManager.manage_reorg: wrong type for block', self.prev_reorg_hash, prev_reorg_block)
             return False
-        self.prev_reorg_block = json.loads(orm_block.blob)
-        common_ancestor = self.find_common_ancestor(self.prev_reorg_block, block)
+        common_ancestor = self.find_common_ancestor(prev_reorg_block, block)
         if not common_ancestor or not self.check_basic_block(common_ancestor):
-            print('FAILED HANDLING REORG calling find_common_ancestor %s' % block['height'], common_ancestor)
-            common_ancestor = self.get_ascendant(block, block['height'] - 100)
-            print('Reorging to new common ancestor, old common ancestor:', self.prev_reorg_block)
+            print('FAILED HANDLING REORG calling find_common_ancestor %s' % block.height, common_ancestor)
+            common_ancestor = self.get_ascendant(block, block.height - 100)
+            print('Reorging to new common ancestor, old common ancestor:', prev_reorg_block)
             print('new common ancestor:', common_ancestor)
 
         try:
-            block_height = common_ancestor['height'] + 1
+            block_height = common_ancestor.height + 1
             self.delete_from_height(block_height)
             print('HANDLING REORG SUCCESS for delete_from_height %s' % block_height)
         except Exception as e:
@@ -450,20 +449,18 @@ class DaemonReorgManager(GreedyCacher):
             return False
 
         print('HANDLING REORG SUCCESS at previous height %s and hash %s, new height %s and hash %s' % (
-            self.prev_reorg_block['height'], self.prev_reorg_block['hash'], block['height'], block['hash']))
+            prev_reorg_block.height, prev_reorg_block.id, block.height, block.id))
         return True
 
     def update_tip(self, block_hash):
         print('update_tip from reorg height %s hash %s to %s' % (self.prev_reorg_height, self.prev_reorg_hash, block_hash))
 
         try:
-            orm_block = model.Block.get(block_hash)
-            if not isinstance(orm_block, model.Block):
-                print('Error in DaemonReorgManager.update_tip: wrong type for block', block_hash, orm_block)
+            block = model.Block.get(block_hash)
+            if not isinstance(block, model.Block):
+                print('Error in DaemonReorgManager.update_tip: wrong type for block', block_hash, block)
                 return
-            block = json.loads(orm_block.blob)
-            assert(block and 'hash' in block and block['hash'] == block_hash and
-                   'height' in block and 'mediantime' in block)
+            assert(block and block.id and block.id == block_hash and block.height and block.mediantime)
         except Exception as e:
             print("Error in DaemonReorgManager.update_tip:", type(e), e)
             print('FAILED update_tip block.get(%s)' % block_hash)
@@ -473,12 +470,12 @@ class DaemonReorgManager(GreedyCacher):
             print('FAILED update_tip block.get(%s) returned empty block' % block_hash)
             return
 
-        block_height = block['height']
+        block_height = block.height
 
         if not self.prev_reorg_hash:
             # Only commit new tip if the first call
             if not self.commit_new_prev(block):
-                print('FAILED update_chainfo in commit_new_prev in update_tip', block)
+                print('FAILED update_chainfo in commit_new_prev in update_tip', block.json())
                 return
 
             print('START update_tip with block', block_height, block_hash)
@@ -494,7 +491,7 @@ class DaemonReorgManager(GreedyCacher):
             return
 
         ascendant = self.get_ascendant(block, self.prev_reorg_height)
-        if ascendant and 'hash' in ascendant and ascendant['hash'] == self.prev_reorg_hash:
+        if ascendant and ascendant.id and ascendant.id == self.prev_reorg_hash:
             self.commit_new_prev(block)
         else:
             if not self.manage_reorg(ascendant):

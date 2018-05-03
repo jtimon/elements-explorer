@@ -28,7 +28,21 @@ class Chaininfo(RpcCachedModel):
 
 class Block(RpcCachedModel):
     height = ormin.IntField(index=True, unique=True)
-    blob = ormin.TextField()
+    previousblockhash = ormin.StringField(index=True)
+    # bits = ormin.IntField(required=False) TODO don't show the challenge in bits in elements
+    # chainwork = ormin.StringField(required=False)
+    # difficulty = ormin.IntField(required=False)
+    # hash = ormin.StringField() TODO Use the id instead
+    mediantime = ormin.IntField()
+    merkleroot = ormin.StringField()
+    # nonce = ormin.IntField(required=False)
+    size = ormin.IntField()
+    # strippedsize = ormin.IntField()
+    time = ormin.IntField()
+    # version = ormin.IntField()
+    # versionhex = ormin.StringField()
+    weight = ormin.IntField()
+    tx = ormin.TextField()
 
     @classmethod
     def truth_src_get(cls, req_id):
@@ -36,9 +50,8 @@ class Block(RpcCachedModel):
         if 'error' in json_result:
             return json_result
 
-        block = Block()
-        block.height = json_result['height']
-        block.blob = json.dumps(json_result)
+        json_result['tx'] = json.dumps(json_result['tx'])
+        block = Block(json_dict=json_result)
         block.id = req_id
         block.save()
         return block

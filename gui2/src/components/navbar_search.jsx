@@ -24,7 +24,7 @@ class NavbarSearch extends Component {
           api.getBlockByHash(str)
             .then((block) => {
               store.dispatchMerge({
-                searchRedirect: `/block/${block.hash}`,
+                searchRedirect: `/block/${block.id}`,
               });
             });
         });

@@ -39,7 +39,7 @@ class RecentBlocksPage extends Component {
         mediantime: block.mediantime,
         size: block.size,
         txCount: block.tx.length,
-        hash: block.hash,
+        id: block.id,
         weight: block.weight,
         previousBlockHash: block.previousblockhash,
       });
