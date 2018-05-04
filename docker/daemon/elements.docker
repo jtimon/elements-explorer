@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y python-pip
 ADD docker/daemon/requirements.txt /build_docker/requirements.txt
 RUN pip install -r requirements.txt --require-hashes
 
-ENV BRANCH_COMMIT=9f17022c5d6a0a1127566786fbf8eca8976b3fe1
+ENV BRANCH_COMMIT=879aa66019cec25020e54a658ac0c5fb1ea598c6
 ENV REPO_HOST=https://github.com/jtimon
 ENV REPO_NAME=elements
 ENV DAEMON_NAME=elements
