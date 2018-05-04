@@ -28,11 +28,10 @@ class Chaininfo(RpcCachedModel):
 
 class Block(RpcCachedModel):
     height = ormin.IntField(index=True, unique=True)
-    previousblockhash = ormin.StringField(index=True)
+    previousblockhash = ormin.StringField(index=True, required=False)
     # bits = ormin.IntField(required=False) TODO don't show the challenge in bits in elements
     # chainwork = ormin.StringField(required=False)
     # difficulty = ormin.IntField(required=False)
-    # hash = ormin.StringField() TODO Use the id instead
     mediantime = ormin.IntField()
     merkleroot = ormin.StringField()
     # nonce = ormin.IntField(required=False)

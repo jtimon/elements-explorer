@@ -24,6 +24,9 @@ class Field(object):
         }
 
     def json(self, model, name, full=False):
+        value = getattr(model, '_' + name)
+        if value == None and not self.required:
+            return {}
         return { name: getattr(model, '_' + name) }
 
     def from_json(self, model, name, json):
