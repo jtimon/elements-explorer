@@ -84,12 +84,13 @@ function getBlockByHash(id) {
   return fetch(url, requestParams)
     .then(handleErrors)
     .then((data) => {
-      data['tx'] = JSON.parse(data['tx']);
+      const blockData = data;
+      blockData.tx = JSON.parse(blockData.tx);
       const { blocks } = store.getState();
       store.dispatchMerge({
-        blocks: utils.addBlockToStore(blocks, data),
+        blocks: utils.addBlockToStore(blocks, blockData),
       });
-      return data;
+      return blockData;
     });
 }
 
@@ -116,12 +117,13 @@ function getBlockByHeight(id) {
   return fetch(url, requestParams)
     .then(handleErrors)
     .then((data) => {
-      data['tx'] = JSON.parse(data['tx']);
+      const blockData = data;
+      blockData.tx = JSON.parse(blockData.tx);
       const { blocks } = store.getState();
       store.dispatchMerge({
-        blocks: utils.addBlockToStore(blocks, data),
+        blocks: utils.addBlockToStore(blocks, blockData),
       });
-      return data;
+      return blockData;
     });
 }
 
