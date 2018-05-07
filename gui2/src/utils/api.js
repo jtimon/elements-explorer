@@ -18,6 +18,7 @@ function getAvailableChains() {
   const url = '/api/v0/available_chains';
   const requestParams = {
     method: 'GET',
+    credentials: 'include',
   };
   return fetch(url, requestParams)
     .then(handleErrors)
@@ -38,6 +39,7 @@ function getChainInfo() {
   const url = '/api/v0/chaininfo';
   const requestParams = {
     method: 'POST',
+    credentials: 'include',
     headers: {
       'Content-type': 'application/json',
     },
@@ -73,6 +75,7 @@ function getBlockByHash(id) {
   const url = '/api/v0/block';
   const requestParams = {
     method: 'POST',
+    credentials: 'include',
     headers: {
       'Content-type': 'application/json',
     },
@@ -106,6 +109,7 @@ function getBlockByHeight(id) {
   const url = '/api/v0/blockheight';
   const requestParams = {
     method: 'POST',
+    credentials: 'include',
     headers: {
       'Content-type': 'application/json',
     },
@@ -138,6 +142,7 @@ function getBlockStats(id) {
   const url = '/api/v0/blockstats';
   const requestParams = {
     method: 'POST',
+    credentials: 'include',
     headers: {
       'Content-type': 'application/json',
     },
@@ -171,6 +176,7 @@ function getTransaction(id, chainParam) {
   const url = '/api/v0/tx';
   const requestParams = {
     method: 'POST',
+    credentials: 'include',
     headers: {
       'Content-type': 'application/json',
     },
@@ -196,6 +202,7 @@ function getAddress(address, startHeight, endHeight) {
   const url = '/api/v0/address';
   const requestParams = {
     method: 'POST',
+    credentials: 'include',
     headers: {
       'Content-type': 'application/json',
     },
