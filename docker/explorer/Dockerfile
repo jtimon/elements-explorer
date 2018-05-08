@@ -23,23 +23,23 @@ RUN npm install -g n
 RUN n 10.0.0
 RUN npm install -g npm@6.0.0
 
-ADD docker/explorer/package.json /build_docker/gui/package.json
+COPY docker/explorer/package.json /build_docker/gui/package.json
 RUN cd gui && npm i --production
-ADD gui2/package.json /build_docker/gui2/package.json
+COPY gui2/package.json /build_docker/gui2/package.json
 RUN cd gui2 && npm i --production
 
-ADD docker/explorer/requirements.txt /build_docker/requirements.txt
+COPY docker/explorer/requirements.txt /build_docker/requirements.txt
 RUN pip install -r requirements.txt --require-hashes
 
-ADD mintools /build_docker/mintools
-ADD explorer /build_docker/explorer
-ADD setup.py /build_docker/setup.py
+COPY mintools /build_docker/mintools
+COPY explorer /build_docker/explorer
+COPY setup.py /build_docker/setup.py
 RUN python /build_docker/setup.py develop
-ADD webflask /build_docker/webflask
-ADD gui /build_docker/gui
-ADD gui2 /build_docker/gui2
+COPY webflask /build_docker/webflask
+COPY gui /build_docker/gui
+COPY gui2 /build_docker/gui2
 RUN cd gui2 && npm run build
 
-ADD docker/conf/explorer.proc /build_docker/docker/conf/explorer.proc
-ADD docker/conf/explorer.env /build_docker/docker/conf/explorer.env
+COPY docker/conf/explorer.proc /build_docker/docker/conf/explorer.proc
+COPY docker/conf/explorer.env /build_docker/docker/conf/explorer.env
 CMD honcho start -e docker/conf/explorer.env -f docker/conf/explorer.proc
