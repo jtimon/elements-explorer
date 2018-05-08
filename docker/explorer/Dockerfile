@@ -20,8 +20,8 @@ RUN ln -s /usr/bin/nodejs /usr/bin/node
 # upgrade node (need to downgrade npm first)
 RUN npm install -g npm@4.6.1
 RUN npm install -g n
-RUN n stable
-RUN npm install -g npm
+RUN n 10.0.0
+RUN npm install -g npm@6.0.0
 
 ADD docker/explorer/package.json /build_docker/gui/package.json
 RUN cd gui && npm i --production
