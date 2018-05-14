@@ -87,14 +87,14 @@ AVAILABLE_CHAINS = {
         'zmq': os.environ.get('ELEMENTSREGTEST_ZMQ'),
         'db': DB_FACTORY,
         'properties': {
-            'stats_support': False,
+            'stats_support': True,
             'chain_id': 'elementsregtest_genesis_hash',
             'parent_chain': 'regtest',
         },
         'proc': {
-            'reorg_cron': [60, 60, False, False], # every 1 min after 1 min, don't cache txs, don't cache stats
+            'reorg_cron': [60, 60, False, True], # every 1 min after 1 min, don't cache txs, cache stats
             'mempool_cacher': [60, 60], # every 1 min after 1 min
-            'greedy_cacher': [60, 60 * 10, True, False], # every 1 min after 10 min, cache txs, don't cache stats
+            'greedy_cacher': [60, 60 * 10, True, True], # every 1 min after 10 min, cache txs, cache stats
             'block_gen': [60 * 5, 60], # every 5 min after 1 min
             'tx_gen': [30, 60], # every 30 secs after 1 min
             'pegin_gen': [60, 60], # every 1 min after 1 min

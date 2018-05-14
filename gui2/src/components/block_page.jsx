@@ -101,7 +101,7 @@ class BlockPage extends Component {
 
     const loadedTransactions = this.state.transactions;
     const { chain, chainInfo } = this.props;
-    const hasBlockStats = !['liquid', 'elementsregtest'].includes(chain);
+    const hasBlockStats = !['liquid'].includes(chain);
     const time = block.mediantime;
     const formattedTime = time ? format.formatDate(time * 1000) : '';
     const transactionCount = (block.tx) ? block.tx.length : 0;
