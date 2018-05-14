@@ -524,7 +524,15 @@ body, .navbar, .jumbotron-fluid, .content-wrap > div, footer {
       vertical-align: top;
     }
     & > .vins, .vouts {
-      & > div {
+      & > .vin-loading {
+        img {
+          display: block;
+          margin: auto;
+          height: 46px;
+          width: 46px;
+        }
+      }
+      & > div:not(.vin-loading) {
         &:not(:first-child) {
           margin-top: 12px;
         }

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import api from '../utils/api';
 import dom from '../utils/dom';
+import utils from '../utils/utils';
 
 import VIn from './transaction_vin';
 import VOut from './transaction_vout';
@@ -130,6 +131,13 @@ class Transaction extends Component {
     const totalValue = Transaction.totalVOutValue(transaction);
 
     function generateVIn() {
+      if (utils.isEmptyArray(vins)) {
+        return (
+          <div className="vin-loading">
+            <img alt="" src="/static/img/Loading.gif" />
+          </div>
+        );
+      }
       return vins.map((vin, i) => (
         // eslint-disable-next-line react/no-array-index-key
         <VIn key={i} index={i} transaction={transaction} vin={vin} showAdvanced={showAdvanced} />
@@ -201,7 +209,7 @@ class Transaction extends Component {
 Transaction.propTypes = {
   transaction: PropTypes.shape({}).isRequired,
   block: PropTypes.shape({
-    confirmations: PropTypes.number.isRequired,
+    confirmations: PropTypes.number,
     height: PropTypes.number.isRequired,
   }).isRequired,
   time: PropTypes.string.isRequired,
