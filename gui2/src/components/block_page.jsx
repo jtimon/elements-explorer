@@ -46,7 +46,7 @@ class BlockPage extends Component {
               block,
             });
             let promise = Promise.resolve();
-            if (!['liquid', 'elementsregtest'].includes(chain)) {
+            if (!['liquid'].includes(chain)) {
               promise = promise.then(() => (
                 api.getBlockStats(block.height)
                   .then((blockStats) => {
