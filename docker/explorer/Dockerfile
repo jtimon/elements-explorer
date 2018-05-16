@@ -17,26 +17,27 @@ WORKDIR /build_docker
 # Or install nodejs-legacy to avoid the symlink
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 
+COPY docker/explorer/requirements.txt /build_docker/requirements.txt
+RUN pip install -r requirements.txt --require-hashes
+
 # upgrade node (need to downgrade npm first)
 RUN npm install -g npm@4.6.1
 RUN npm install -g n
 RUN n 10.0.0
 RUN npm install -g npm@6.0.0
 
-COPY docker/explorer/package.json /build_docker/gui/package.json
-RUN cd gui && npm i --production
+COPY docker/explorer/package.json /build_docker/gui_alt/package.json
+RUN cd gui_alt && npm i --production
 COPY gui2/package.json /build_docker/gui2/package.json
 RUN cd gui2 && npm i --production
-
-COPY docker/explorer/requirements.txt /build_docker/requirements.txt
-RUN pip install -r requirements.txt --require-hashes
 
 COPY mintools /build_docker/mintools
 COPY explorer /build_docker/explorer
 COPY setup.py /build_docker/setup.py
 RUN python /build_docker/setup.py develop
+
 COPY webflask /build_docker/webflask
-COPY gui /build_docker/gui
+COPY gui_alt /build_docker/gui_alt
 COPY gui2 /build_docker/gui2
 RUN cd gui2 && npm run build
 

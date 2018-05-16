@@ -15,7 +15,7 @@ app = create_restmin_app(app_name=__name__,
                          request_processor=explorer_request_processor)
 
 app.static_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'gui2', 'public')
-GUI_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'gui')
+GUI_DIRECTORY = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'gui_alt')
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
