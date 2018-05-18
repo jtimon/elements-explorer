@@ -123,7 +123,8 @@ class Transaction extends Component {
   render() {
     const { chainInfo, transaction } = this.props;
     const { showAdvanced, vins } = this.state;
-    const confirmations = (chainInfo.blocks - this.props.block.height) + 1;
+    const confirmations = (this.props.block.height) ?
+      (chainInfo.blocks - this.props.block.height) + 1 : 0;
     const confirmationsString = (confirmations === 1) ? 'Confirmation' : 'Confirmations';
     const isPegIn = this.state.is_pegin;
     const isPegOut = Transaction.isPegOutTx(transaction);
@@ -210,12 +211,18 @@ Transaction.propTypes = {
   transaction: PropTypes.shape({}).isRequired,
   block: PropTypes.shape({
     confirmations: PropTypes.number,
-    height: PropTypes.number.isRequired,
-  }).isRequired,
+    height: PropTypes.number,
+  }),
   time: PropTypes.string.isRequired,
   availableChains: PropTypes.shape({}).isRequired,
   chain: PropTypes.string.isRequired,
   chainInfo: PropTypes.shape({}).isRequired,
+};
+Transaction.defaultProps = {
+  block: {
+    confirmations: 0,
+    height: undefined,
+  },
 };
 
 const mapStateToProps = state => ({

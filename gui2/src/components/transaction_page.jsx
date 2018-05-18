@@ -39,12 +39,13 @@ class TransactionPage extends Component {
         api.getTransaction(txid)
           .then((tx) => {
             loadedTransaction = tx;
-
             let promise = Promise.resolve();
-            promise = promise.then(() => api.getBlockByHash(loadedTransaction.blockhash)
-              .then((block) => {
-                loadedBlock = block;
-              }));
+            if (tx.blockhash) {
+              promise = promise.then(() => api.getBlockByHash(loadedTransaction.blockhash)
+                .then((block) => {
+                  loadedBlock = block;
+                }));
+            }
             return promise;
           })
           .then(() => {
