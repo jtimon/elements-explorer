@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import api from '../utils/api';
 import dom from '../utils/dom';
 import format from '../utils/format';
+import utils from '../utils/utils';
 
 import Jumbotron from './jumbotron';
 import BlockJumbotron from './jumbotron_block';
@@ -46,7 +47,8 @@ class BlockPage extends Component {
               block,
             });
             let promise = Promise.resolve();
-            if (!['liquid'].includes(chain)) {
+            const { availableChains } = this.props;
+            if (availableChains[chain].stats_support) {
               promise = promise.then(() => (
                 api.getBlockStats(block.height)
                   .then((blockStats) => {
@@ -100,8 +102,9 @@ class BlockPage extends Component {
     }
 
     const loadedTransactions = this.state.transactions;
-    const { chain, chainInfo } = this.props;
-    const hasBlockStats = !['liquid'].includes(chain);
+    const { availableChains, chain, chainInfo } = this.props;
+    const hasBlockStats = (!utils.isEmptyObject(availableChains)) ?
+      availableChains[chain].stats_support : false;
     const time = block.mediantime;
     const formattedTime = time ? format.formatDate(time * 1000) : '';
     const transactionCount = (block.tx) ? block.tx.length : 0;
@@ -270,11 +273,13 @@ BlockPage.propTypes = {
     path: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
   }).isRequired,
+  availableChains: PropTypes.shape({}).isRequired,
   chain: PropTypes.string.isRequired,
   chainInfo: PropTypes.shape({}).isRequired,
 };
 
 const mapStateToProps = state => ({
+  availableChains: state.availableChains,
   chain: state.chain,
   chainInfo: state.chainInfo,
 });
