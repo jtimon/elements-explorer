@@ -3,7 +3,7 @@
 # Causes the shell to exit if any subcommand or pipeline returns a non-zero status
 set -e
 
-BRANCH_DIR=$DAEMON_NAME-$BRANCH_COMMIT
+BRANCH_DIR=$REPO_NAME-$BRANCH_COMMIT
 BRANCH_URL=$REPO_HOST/$REPO_NAME/archive/$BRANCH_COMMIT.tar.gz
 NUM_JOBS=4
 if [ -f /proc/cpuinfo ]; then
