@@ -5,6 +5,8 @@ angular.module('rpcExplorerApp')
     .service('SrvBackend', function SrvBackend($q, $http, SrvChain, SrvUtil) {
 
         var BACKEND_URL = '/api/v0';
+        var MAX_PARALLEL_IT = 5;
+
         var srv = {};
         var cache = {};
 
@@ -64,8 +66,6 @@ angular.module('rpcExplorerApp')
             }
             return retPromise;
         };
-
-        var MAX_PARALLEL_IT = 500;
 
         srv.GetBlockStats = function(start, end) {
             var chain = SrvChain.get();
