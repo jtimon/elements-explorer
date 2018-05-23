@@ -123,10 +123,14 @@ class BlockheightResource(ChainResource):
         if not 'id' in request:
             return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}, 400
 
-        response = GetBlockByHeight(self.rpccaller, request['id']).json()
-
-        if 'error' in response:
+        response = GetBlockByHeight(self.rpccaller, request['id'])
+        if isinstance(response, dict) and 'error' in response:
             return {'error': response['error']}, 400
+
+        response = response.json()
+        if isinstance(response, dict) and 'errors' in response:
+            return {'error': response['errors']}, 400
+        
         return response, 200
 
 
@@ -190,6 +194,8 @@ class GetByIdResource(ChainResource):
 
         if 'error' in response:
             return {'error': response['error']}, 400
+        if 'errors' in response:
+            return {'error': response['errors']}, 400
         return response, 200
 
 
