@@ -37,6 +37,8 @@ services:
       dockerfile: docker/daemon/elements.docker
     volumes:
       - ../../explorer-data/elementsregtest:/root/.elements
+      - ../../explorer-data/elementsparent:/root/.elementsparent
+      - ../../explorer-data/elementside:/root/.elementside
     networks:
       main:
         aliases:

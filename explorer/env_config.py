@@ -102,4 +102,48 @@ AVAILABLE_CHAINS = {
         },
     },
 
+    'elementsparent': {
+        'rpc': RpcCaller(os.environ.get('ELEMENTSPARENT_ADR'),
+                         os.environ.get('ELEMENTSPARENT_RPCUSER'),
+                         os.environ.get('ELEMENTSPARENT_RPCPASSWORD')
+        ),
+        'zmq': os.environ.get('ELEMENTSPARENT_ZMQ'),
+        'db': DB_FACTORY,
+        'properties': {
+            'stats_support': True,
+            'chain_id': 'elementsparent_genesis_hash',
+        },
+        'proc': {
+            'reorg_cron': [60, 60, False, True], # every 1 min after 1 min, don't cache txs, cache stats
+            'mempool_cacher': [60, 60], # every 1 min after 1 min
+            'greedy_cacher': [60, 60 * 60 * 24, True, True], # every 1 min after 24 hours, cache txs, cache stats
+            'block_gen': [60, 60 * 2], # every 2 min after 1 min
+            'tx_gen': [50, 60], # every 50 secs after 1 min
+        },
+    },
+
+    'elementside': {
+        'parent_chain': 'elementsparent',
+        'rpc': RpcCaller(os.environ.get('ELEMENTSIDE_ADR'),
+                         os.environ.get('ELEMENTSIDE_RPCUSER'),
+                         os.environ.get('ELEMENTSIDE_RPCPASSWORD')
+        ),
+        'zmq': os.environ.get('ELEMENTSIDE_ZMQ'),
+        'db': DB_FACTORY,
+        'properties': {
+            'stats_support': True,
+            'chain_id': 'elementside_genesis_hash',
+            'parent_chain': 'elementsparent',
+        },
+        'proc': {
+            'reorg_cron': [60, 60, False, True], # every 1 min after 1 min, don't cache txs, cache stats
+            'mempool_cacher': [60, 60], # every 1 min after 1 min
+            'greedy_cacher': [60, 60 * 10, True, True], # every 1 min after 10 min, cache txs, cache stats
+            'block_gen': [60 * 5, 60], # every 5 min after 1 min
+            'tx_gen': [30, 60], # every 30 secs after 1 min
+            'pegin_gen': [60, 60], # every 1 min after 1 min
+            'pegout_gen': [40, 60], # every 40 secs after 1 min
+        },
+    },
+    
 }
