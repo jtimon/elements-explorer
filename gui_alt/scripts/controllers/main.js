@@ -245,6 +245,9 @@ angular.module('rpcExplorerApp')
             .then(function (selected_chain) {
                 $scope.parent_chain = SrvChain.GetParentChain();
             })
-            .then(DoMain)
+            .then(SrvChain.GetChainInfo)
+            .then(function(chaininfo) {
+                $scope.chaininfo = chaininfo;
+            }).then(DoMain)
             .catch(SrvUtil.errorCallbackScoped($scope));
     });
