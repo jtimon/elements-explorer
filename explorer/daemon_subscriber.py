@@ -282,12 +282,14 @@ class DaemonReorgManager(GreedyCacher):
         self.prev_reorg_hash = None
 
     def update_chainfo(self, block):
-        chaininfo = model.Chaininfo(json_dict={
-            'bestblockhash': block.id,
-            'blocks': block.height,
-            'mediantime': block.mediantime,
-        })
-        chaininfo.id = self.chain
+        
+        chaininfo = model.Chaininfo.get(self.chain)
+        if not isinstance(chaininfo, model.Chaininfo):
+            chaininfo = model.Chaininfo()
+            chaininfo.id = self.chain
+        chaininfo.bestblockhash = block.id
+        chaininfo.blocks = block.height
+        chaininfo.mediantime = block.mediantime
         try:
             chaininfo.save()
             if chaininfo.errors:

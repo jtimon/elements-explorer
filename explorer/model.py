@@ -14,6 +14,8 @@ class Chaininfo(RpcCachedModel):
     bestblockhash = ormin.StringField()
     blocks = ormin.IntField()
     mediantime = ormin.IntField()
+    signblock_asm = ormin.StringField(required=False)
+    signblock_hex = ormin.StringField(required=False)
 
     @classmethod
     def truth_src_get(cls, req_id):
@@ -32,6 +34,8 @@ class Block(RpcCachedModel):
     # bits = ormin.IntField(required=False) TODO don't show the challenge in bits in elements
     # chainwork = ormin.StringField(required=False)
     # difficulty = ormin.IntField(required=False)
+    signblock_witness_asm = ormin.StringField(required=False)
+    signblock_witness_hex = ormin.StringField(required=False)
     mediantime = ormin.IntField()
     merkleroot = ormin.StringField()
     # nonce = ormin.IntField(required=False)
