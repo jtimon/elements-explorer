@@ -448,8 +448,11 @@ class DaemonReorgManager(GreedyCacher):
             print('FAILED update_chainfo in commit_new_prev in manage_reorg', common_ancestor)
             return False
 
-        print('HANDLING REORG SUCCESS at previous height %s and hash %s, new height %s and hash %s' % (
-            prev_reorg_block.height, prev_reorg_block.id, block.height, block.id))
+        print('SUCCESS HANDLING REORG')
+        if isinstance(block, model.Block) and block.id and block.height:
+            print('new height %s and hash %s' % (block.height, block.id))
+        if isinstance(prev_reorg_block, model.Block) and prev_reorg_block.id and prev_reorg_block.height:
+            print('previous height %s and hash %s' % (prev_reorg_block.height, prev_reorg_block.id))
         return True
 
     def update_tip(self, block_hash):
