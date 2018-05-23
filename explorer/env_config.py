@@ -81,8 +81,8 @@ AVAILABLE_CHAINS = {
     'elementsregtest': {
         'parent_chain': 'regtest',
         'rpc': RpcCaller(os.environ.get('ELEMENTSREGTEST_ADR'),
-                         os.environ.get('ELEMENTS_RPCUSER'),
-                         os.environ.get('ELEMENTS_RPCPASSWORD')
+                         os.environ.get('ELEMENTSREGTEST_RPCUSER'),
+                         os.environ.get('ELEMENTSREGTEST_RPCPASSWORD')
         ),
         'zmq': os.environ.get('ELEMENTSREGTEST_ZMQ'),
         'db': DB_FACTORY,
