@@ -37,8 +37,6 @@ services:
       dockerfile: docker/daemon/elements.docker
     volumes:
       - ../../explorer-data/elementsregtest:/root/.elements
-    ports:
-      - "7041:7041"
     networks:
       main:
         aliases:
@@ -52,10 +50,6 @@ services:
       - ../../explorer-data/bitcoin:/root/.bitcoin
       - ../../explorer-data/testnet3:/root/.testnet3
       - ../../explorer-data/regtest:/root/.regtest
-    ports:
-      - "8532:8532"
-      - "18532:18532"
-      - "18534:18534"
     networks:
       main:
         aliases:
