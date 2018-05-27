@@ -51,6 +51,8 @@ class PostgresqlMinqlClient(SqlMinqlClient):
                 attr += 'REAL'
             elif value['type'] == 'int':
                 attr += 'INT'
+            elif value['type'] == 'bigint':
+                attr += 'BIGINT'
             elif value['type'] == 'text':
                 attr += 'TEXT'
             else:

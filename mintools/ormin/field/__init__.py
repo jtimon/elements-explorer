@@ -9,4 +9,4 @@ from .base import Field
 from .number import NumericField
 from .string import StringField, TextField
 from .float import FloatField
-from .integer import IntField
+from .integer import IntField, BigIntField
