@@ -298,7 +298,7 @@ API_DOMAIN = ExplorerApiDomain({
     'block': GetByIdResource('block', model.Block),
     'blockheight': BlockheightResource(),
     'tx': GetByIdResource('tx', model.Tx, uses_blob=True),
-    'blockstats': GetByIdResource('blockstats', model.Blockstats, ['stats_support'], uses_blob=True),
+    'blockstats': GetByIdResource('blockstats', model.Blockstats, ['stats_support']),
     # TODO handle reorgs from gui (ie use websockets)
     'chaininfo': GetByIdResource('chaininfo', model.Chaininfo),
 }, DB_CLIENT)
