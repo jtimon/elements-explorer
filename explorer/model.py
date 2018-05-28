@@ -82,6 +82,7 @@ class Tx(RpcCachedModel):
 class Blockstats(RpcCachedModel):
     height = ormin.IntField(index=True)
 
+    subsidy = ormin.BigIntField()
     total_out = ormin.BigIntField()
 
     avgfee = ormin.IntField()
@@ -99,7 +100,6 @@ class Blockstats(RpcCachedModel):
     minfeerate = ormin.IntField()
     mintxsize = ormin.IntField()
     outs = ormin.IntField()
-    subsidy = ormin.IntField()
     swtotal_size = ormin.IntField()
     swtotal_weight = ormin.IntField()
     swtxs = ormin.IntField()
