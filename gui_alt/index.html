@@ -41,8 +41,8 @@
           <div class="collapse navbar-collapse" id="js-navbar-collapse">
 
             <ul class="nav navbar-nav">
-              <li ng-class="navClass('queue')"><a ng-href="#!/chain/{{selected_chain}}/queue">Queue</a></li>
               <li ng-class="navClass('stats')" ng-show=chain_properties[selected_chain].stats_support ><a ng-href="#!/chain/{{selected_chain}}/stats">Stats</a></li>
+              <li ng-class="navClass('queue')"><a ng-href="#!/chain/{{selected_chain}}/queue">Queue</a></li>
               <li ng-class="navClass('address')"><a ng-href="#!/chain/{{selected_chain}}/address">Address</a></li>
             </ul>
 
