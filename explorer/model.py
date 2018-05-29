@@ -126,4 +126,9 @@ class Blockstats(RpcCachedModel):
 
 class Mempoolstats(ormin.Model):
     time = ormin.IntField(index=True)
+    stat_type = ormin.StringField(index=True)
+    
     blob = ormin.TextField()
+
+    def new_id(self):
+        self.id = '%s_%s' % (self.time, self.stat_type)

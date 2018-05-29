@@ -174,6 +174,21 @@ class MempoolStatsCacher(CronCacher):
         self.stats_types = ['count', 'fee', 'vsize']
         self.stats_intervals = MEMPOOL_STATS_INTERVALS
 
+    def mempoolstats_insert(self, stat_type, int_time, stats):
+        mempoolstats_elem = model.Mempoolstats(json_dict={
+            'time': int_time,
+            'stat_type': stat_type,
+            'blob': json.dumps(stats[stat_type]),
+        })
+        mempoolstats_elem.new_id() # TODO This should be called from Ormin.Model.insert()
+
+        try:
+            mempoolstats_elem.insert()
+            print('SUCCESS caching %s in chain %s stat_type %s' % ('mempoolstats', self.chain, stat_type))
+        except Exception as e:
+            print("Error in MempoolStatsCacher.mempoolstats_insert:", type(e), e)
+            print('FAILED caching %s in chain %s %s' % ('mempoolstats', self.chain, json.dumps(mempoolstats_elem.json())))
+
     def _cron_loop(self):
         mempool_state = self.rpccaller.RpcCall('getrawmempool', {'verbose': True})
         if 'error' in mempool_state and mempool_state['error']:
@@ -203,17 +218,9 @@ class MempoolStatsCacher(CronCacher):
             IncrementStats(stats, 'total', tx_fee, tx_size)
 
         int_time = int((datetime.datetime.now()).strftime('%s'))
-        mempoolstats = model.Mempoolstats(json_dict={
-            'id': int_time,
-            'time': int_time,
-            'blob': json.dumps(stats),
-        })
-        try:
-            mempoolstats.insert()
-            print('SUCCESS caching %s in chain %s' % ('mempoolstats', self.chain))
-        except Exception as e:
-            print("Error in MempoolStatsCacher._cron_loop:", type(e), e)
-            print('FAILED caching %s in chain %s %s' % ('mempoolstats', self.chain, json.dumps(mempoolstats.json())))
+        for stat_type in self.stats_types:
+            self.mempoolstats_insert(stat_type, int_time, stats)
+
 
 class GreedyCacher(CronCacher):
 
@@ -282,7 +289,7 @@ class DaemonReorgManager(GreedyCacher):
         self.prev_reorg_hash = None
 
     def update_chainfo(self, block):
-        
+
         chaininfo = model.Chaininfo.get(self.chain)
         if not isinstance(chaininfo, model.Chaininfo):
             chaininfo = model.Chaininfo()

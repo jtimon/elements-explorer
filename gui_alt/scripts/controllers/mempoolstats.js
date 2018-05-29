@@ -11,12 +11,14 @@ angular.module('rpcExplorerApp')
     .controller('MempoolStatsCtrl', function ($scope, $location, SrvUtil, SrvChain, SrvBackend) {
 
         $scope.curious = $location.search().curious == 'true';
-        $scope.hours_ago = $location.search().hours_ago ? SrvUtil.ParseNatural($location.search().hours_ago) : 6;
-        $scope.loading_stats = false;
-        $scope.cached_mempoolstats = {};
-
         $scope.stats_types = ['count', 'fee', 'vsize'];
-        $scope.sel_stats_type = $scope.stats_types[0];
+
+        $scope.hours_ago = $location.search().hours_ago ? SrvUtil.ParseNatural($location.search().hours_ago) : 6;
+        $scope.sel_stats_type = $location.search().stats_type ? $location.search().stats_type : $scope.stats_types[0];
+        $scope.loading_stats = false;
+        // TODO caching should be done on a service
+        $scope.plot_data = {}
+        $scope.cached_mempoolstats = {};
 
         $scope.valid_stats = [
             '1', '2', '3', '4', '5',
@@ -56,24 +58,13 @@ angular.module('rpcExplorerApp')
                 var xaxis_data = [];
                 var yaxis_data = [];
                 for (var key in data) {
-                    if (data.hasOwnProperty(key)) {
-                        xaxis_data.push(new Date(parseInt(key) * 1000));
-                        yaxis_data.push(data[key][stats_type][val_stat]);
-                    }
+                    xaxis_data.push(new Date(parseInt(key) * 1000));
+                    yaxis_data.push(data[key][val_stat]);
                 }
                 plot_data[val_stat] = {'x': xaxis_data, 'y': yaxis_data};
             }
             return plot_data;
         }
-
-        var GetPlotData = function(stats_types, valid_stats, data) {
-
-            var plot_data = {};
-            for (var i = 0; i < stats_types.length; i++) {
-                plot_data[i] = CalculatePlotData(stats_types[i], valid_stats, data);
-            }
-            return plot_data;
-        };
 
         function StatsToGraph(selected_stats, plot_data)
         {
@@ -88,19 +79,13 @@ angular.module('rpcExplorerApp')
 
         function CachePlotData(_data)
         {
-            var data = _data['data'];
-            $scope.plot_data = GetPlotData($scope.stats_types, $scope.valid_stats, data);
+            $scope.plot_data[$scope.sel_stats_type] = CalculatePlotData($scope.sel_stats_type, $scope.valid_stats, _data['data']);
         }
 
         function PlotCachedData()
         {
-            $scope.cached_mempoolstats = {};
-            for (var i = 0; i < $scope.stats_types.length; i++) {
-                $scope.cached_mempoolstats[$scope.stats_types[i]] = StatsToGraph($scope.selected_stats, $scope.plot_data[i]);
-            }
-
+            $scope.cached_mempoolstats[$scope.sel_stats_type] = StatsToGraph($scope.selected_stats, $scope.plot_data[$scope.sel_stats_type]);
             $scope.graphPlots = $scope.cached_mempoolstats[$scope.sel_stats_type];
-
             $scope.loading_stats = false;
         };
 
@@ -109,11 +94,15 @@ angular.module('rpcExplorerApp')
 
             if ($scope.hours_ago != SrvUtil.ParseNatural($location.search().hours_ago)) {
                 $location.search('hours_ago', $scope.hours_ago);
-            } else if ($scope.plot_data && $scope.hours_ago == $scope.cached_hours_ago) {
+            }
+            else if ($scope.sel_stats_type != $location.search().stats_type) {
+                $location.search('stats_type', $scope.sel_stats_type);
+            }
+            else if ($scope.plot_data[$scope.sel_stats_type] && $scope.hours_ago == $scope.cached_hours_ago) {
                 PlotCachedData();
             } else {
                 $scope.cached_hours_ago = $scope.hours_ago;
-                SrvBackend.RpcCall('mempoolstats', {'hours_ago': $scope.hours_ago })
+                SrvBackend.RpcCall('mempoolstats', {'hours_ago': $scope.hours_ago, 'stat_type': $scope.sel_stats_type})
                     .then(CachePlotData)
                     .then(PlotCachedData)
                     .catch(SrvUtil.errorCallbackScoped($scope));
@@ -149,9 +138,7 @@ angular.module('rpcExplorerApp')
             if ($scope.stats_types.indexOf(name) > -1) {
                 $scope.sel_stats_type = name;
             }
-            $scope.graphPlots = $scope.cached_mempoolstats[$scope.sel_stats_type];
-
-            $scope.loading_stats = false;
+            $scope.doPlot();
         };
 
         SrvChain.set()

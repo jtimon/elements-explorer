@@ -75,6 +75,7 @@ class RpcCallerResource(ChainResource):
 
 
 class MempoolStatsResource(ChainResource):
+    ALLOWED_MEMPOOL_STATS_TYPES = ['count', 'fee', 'vsize']
 
     def resolve_request(self, req):
         try:
@@ -85,11 +86,18 @@ class MempoolStatsResource(ChainResource):
         request = req['json']
         if not 'hours_ago' in request:
             return {'error': {'message': 'No hours_ago specified to get %s in request %s' % ('mempoolstats', request)}}, 400
+        if not 'stat_type' in request:
+            return {'error': {'message': 'No stat_type specified to get %s in request %s' % ('mempoolstats', request)}}, 400
+        if request['stat_type'] not in self.ALLOWED_MEMPOOL_STATS_TYPES:
+            return {'error': {'message':
+                              'No stat_type=%s not allowed in request %s, allowed values %s' % (
+                                  'mempoolstats', request, self.ALLOWED_MEMPOOL_STATS_TYPES)}}, 400
 
         seconds_ago = request['hours_ago'] * 60 * 60
         min_epoch = int((datetime.datetime.now() - datetime.timedelta(seconds=seconds_ago)).strftime('%s'))
         try:
-            db_result = model.Mempoolstats.search({'time': {'ge': min_epoch}})
+            db_result = {}
+            db_result = model.Mempoolstats.search({'stat_type': request['stat_type'], 'time': {'ge': min_epoch}})
         except minql.NotFoundError:
             return {'error': {'message': 'No mempoolstats in the last %s hours.' % hours_ago}}, 400
         except Exception as e:
@@ -97,11 +105,11 @@ class MempoolStatsResource(ChainResource):
             return {'error': {'message': 'Error getting %s from db.' % ('mempoolstats')}}, 400
 
         if not db_result:
-            return {'error': {'message': 'No result db for %s.' % 'mempoolstats'}}, 400
+            return {'error': {'message': 'No result db for %s type %s' % ('mempoolstats', request['stat_type'])}}, 400
 
         json_result = {}
-        for db_elem in db_result:
-            json_result[db_elem.id] = json.loads(db_elem.blob)
+        for mempoolstats in db_result:
+            json_result[mempoolstats.time] = json.loads(mempoolstats.blob)
 
         return json_result, 200
 
@@ -130,7 +138,7 @@ class BlockheightResource(ChainResource):
         response = response.json()
         if isinstance(response, dict) and 'errors' in response:
             return {'error': response['errors']}, 400
-        
+
         return response, 200
 
 
