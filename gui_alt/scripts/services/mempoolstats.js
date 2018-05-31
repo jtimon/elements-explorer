@@ -2,7 +2,7 @@
 /*global $:false */
 
 angular.module('rpcExplorerApp')
-    .service('SrvMempoolstats', function SrvMempoolstats(SrvChain) {
+    .service('SrvMempoolstats', function SrvMempoolstats(SrvChain, SrvUtil) {
 
         var srv = {};
 
@@ -28,34 +28,43 @@ angular.module('rpcExplorerApp')
             'total'
         ];
 
-        srv.DEFAULT_SELECTED_STATS = [
+        srv.selected_stats = [
             '1',
             '10', '20', '30', '50', '70',
             '100', '120', '200', '300', '500', '700',
             'total'
         ];
 
-        srv.DEFAULT_HOURS_AGO = 6;
+        srv.cached_hours_ago = 6;
+        srv.plot_data = {};
 
-        srv.CalculatePlotData = function(stats_type, valid_stats, data)
+        // TODO Use current time to avoid forcing user to reload or change hours_ago
+        srv.IsCached = function(hours_ago, stat_type)
         {
-            var plot_data = {};
+            var chain = SrvChain.get();
+            SrvUtil.PreCache(srv.plot_data, chain, stat_type);
+            return (srv.plot_data[chain][stat_type] && !angular.equals(srv.plot_data[chain][stat_type], {}) && hours_ago == srv.cached_hours_ago);
+        };
+
+        srv.CalculatePlotData = function(stat_type, data)
+        {
+            var chain = SrvChain.get();
+            SrvUtil.PreCache(srv.plot_data, chain, stat_type);
 
             var xaxis_data = [];
             for (var key in data) {
                 xaxis_data.push(new Date(parseInt(key) * 1000));
             }
 
-            for (var i = 0; i < valid_stats.length; i++) {
-                var val_stat = valid_stats[i];
+            for (var i = 0; i < srv.VALID_STATS.length; i++) {
+                var val_stat = srv.VALID_STATS[i];
                 var yaxis_data = [];
                 for (var key in data) {
                     yaxis_data.push(data[key][val_stat]);
                 }
-                plot_data[val_stat] = {'x': xaxis_data, 'y': yaxis_data};
+                srv.plot_data[chain][stat_type][val_stat] = {'x': xaxis_data, 'y': yaxis_data};
             }
-
-            return plot_data;
+            return srv.plot_data[chain][stat_type];
         };
 
         // Functions for presentations to plotly.js
