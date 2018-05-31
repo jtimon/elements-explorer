@@ -8,83 +8,29 @@
  * Controller of the rpcExplorerApp
  */
 angular.module('rpcExplorerApp')
-    .controller('MempoolStatsCtrl', function ($scope, $location, SrvUtil, SrvChain, SrvBackend) {
+    .controller('MempoolStatsCtrl', function ($scope, $location, SrvUtil, SrvChain, SrvBackend, SrvMempoolstats) {
 
         $scope.curious = $location.search().curious == 'true';
-        $scope.stats_types = ['count', 'fee', 'vsize'];
+        $scope.hours_ago = $location.search().hours_ago ? SrvUtil.ParseNatural($location.search().hours_ago) : SrvMempoolstats.DEFAULT_HOURS_AGO;
+        $scope.sel_stats_type = $location.search().stats_type ? $location.search().stats_type : SrvMempoolstats.GetDefaultStatType();
 
-        $scope.hours_ago = $location.search().hours_ago ? SrvUtil.ParseNatural($location.search().hours_ago) : 6;
-        $scope.sel_stats_type = $location.search().stats_type ? $location.search().stats_type : $scope.stats_types[0];
         $scope.loading_stats = false;
+        $scope.stats_types = SrvMempoolstats.STAT_TYPES;
+        $scope.valid_stats = SrvMempoolstats.VALID_STATS;
+        $scope.selected_stats = SrvMempoolstats.DEFAULT_SELECTED_STATS;
+
         // TODO caching should be done on a service
         $scope.plot_data = {}
         $scope.cached_mempoolstats = {};
 
-        $scope.valid_stats = [
-            '1', '2', '3', '4', '5',
-            '10', '15', '20', '25', '30',
-            '40', '50', '60', '70', '80', '90',
-            '100', '120', '140', '160', '180',
-            '200', '250', '300', '350', '400', '450',
-            '500', '600', '700', '800', '900',
-            '1000', '1500', '2000',
-            'total'
-        ];
-
-        $scope.selected_stats = [
-            '1',
-            '10', '20', '30', '50', '70',
-            '100', '120', '200', '300', '500', '700',
-            'total'];
-
-        function CreateTrace(key, xaxis_data, yaxis_data)
-        {
-            return {
-                name: key,
-                x: xaxis_data,
-                y: yaxis_data,
-                fill: 'tonexty',
-                type: 'scatter'
-            };
-        }
-
-        function CalculatePlotData(stats_type, valid_stats, data)
-        {
-            var plot_data = {};
-
-            for (var i = 0; i < valid_stats.length; i++) {
-
-                var val_stat = valid_stats[i];
-                var xaxis_data = [];
-                var yaxis_data = [];
-                for (var key in data) {
-                    xaxis_data.push(new Date(parseInt(key) * 1000));
-                    yaxis_data.push(data[key][val_stat]);
-                }
-                plot_data[val_stat] = {'x': xaxis_data, 'y': yaxis_data};
-            }
-            return plot_data;
-        }
-
-        function StatsToGraph(selected_stats, plot_data)
-        {
-            var graph_list = [];
-
-            for (var i = 0; i < selected_stats.length; i++) {
-                var sel_stat = selected_stats[i];
-                graph_list.push(CreateTrace(sel_stat, plot_data[sel_stat]['x'], plot_data[sel_stat]['y']));
-            }
-            return graph_list;
-        };
-
         function CachePlotData(_data)
         {
-            $scope.plot_data[$scope.sel_stats_type] = CalculatePlotData($scope.sel_stats_type, $scope.valid_stats, _data['data']);
+            $scope.plot_data[$scope.sel_stats_type] = SrvMempoolstats.CalculatePlotData($scope.sel_stats_type, $scope.valid_stats, _data['data']);
         }
 
         function PlotCachedData()
         {
-            $scope.cached_mempoolstats[$scope.sel_stats_type] = StatsToGraph($scope.selected_stats, $scope.plot_data[$scope.sel_stats_type]);
+            $scope.cached_mempoolstats[$scope.sel_stats_type] = SrvMempoolstats.StatsToGraph($scope.selected_stats, $scope.plot_data[$scope.sel_stats_type]);
             $scope.graphPlots = $scope.cached_mempoolstats[$scope.sel_stats_type];
             $scope.loading_stats = false;
         };
