@@ -16,7 +16,7 @@ angular.module('rpcExplorerApp')
         {
             return srv.STAT_TYPES[0];
         };
-        
+
         srv.VALID_STATS = [
             '1', '2', '3', '4', '5',
             '10', '15', '20', '25', '30',
@@ -41,19 +41,22 @@ angular.module('rpcExplorerApp')
         {
             var plot_data = {};
 
-            for (var i = 0; i < valid_stats.length; i++) {
+            var xaxis_data = [];
+            for (var key in data) {
+                xaxis_data.push(new Date(parseInt(key) * 1000));
+            }
 
+            for (var i = 0; i < valid_stats.length; i++) {
                 var val_stat = valid_stats[i];
-                var xaxis_data = [];
                 var yaxis_data = [];
                 for (var key in data) {
-                    xaxis_data.push(new Date(parseInt(key) * 1000));
                     yaxis_data.push(data[key][val_stat]);
                 }
                 plot_data[val_stat] = {'x': xaxis_data, 'y': yaxis_data};
             }
+
             return plot_data;
-        }
+        };
 
         // Functions for presentations to plotly.js
         function CreateTrace(key, xaxis_data, yaxis_data)
@@ -65,7 +68,7 @@ angular.module('rpcExplorerApp')
                 fill: 'tonexty',
                 type: 'scatter'
             };
-        }
+        };
 
         srv.StatsToGraph = function(selected_stats, plot_data)
         {
