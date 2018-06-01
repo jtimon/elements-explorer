@@ -7,7 +7,7 @@ import time
 
 from mintools import zmqmin, minql, ormin
 
-from explorer import model
+from explorer import model, models
 
 MEMPOOL_STATS_INTERVALS = (
     range(1, 5) + range(5, 30, 5) + range(30, 100, 10) +
@@ -175,7 +175,7 @@ class MempoolStatsCacher(CronCacher):
         self.stats_intervals = MEMPOOL_STATS_INTERVALS
 
     def mempoolstats_insert(self, stat_type, int_time, stats):
-        mempoolstats_elem = model.Mempoolstats(json_dict={
+        mempoolstats_elem = models.stats.Mempoolstats(json_dict={
             'time': int_time,
             'stat_type': stat_type,
             'blob': json.dumps(stats[stat_type]),
@@ -240,7 +240,7 @@ class GreedyCacher(CronCacher):
                 return None
 
             if self.cache_stats:
-                model.Blockstats.get(block.height)
+                models.stats.Blockstats.get(block.height)
 
             if self.cache_txs:
                 tx_ids = json.loads(block.tx)
@@ -341,10 +341,10 @@ class DaemonReorgManager(GreedyCacher):
             pass
 
         try:
-            stats_to_delete = model.Blockstats.search(criteria)
+            stats_to_delete = models.stats.Blockstats.search(criteria)
             print('stats_to_delete', len(stats_to_delete))
             if stats_to_delete:
-                model.Blockstats.delete(criteria)
+                models.stats.Blockstats.delete(criteria)
         except minql.NotFoundError:
             pass
 

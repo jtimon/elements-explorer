@@ -5,6 +5,7 @@ import datetime
 from mintools import minql, restmin, ormin
 
 from explorer import model
+from explorer import models
 from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
 
 def GetBlockByHeight(rpccaller, height):
@@ -97,7 +98,7 @@ class MempoolStatsResource(ChainResource):
         min_epoch = int((datetime.datetime.now() - datetime.timedelta(seconds=seconds_ago)).strftime('%s'))
         try:
             db_result = {}
-            db_result = model.Mempoolstats.search({'stat_type': request['stat_type'], 'time': {'ge': min_epoch}})
+            db_result = models.stats.Mempoolstats.search({'stat_type': request['stat_type'], 'time': {'ge': min_epoch}})
         except minql.NotFoundError:
             return {'error': {'message': 'No mempoolstats in the last %s hours.' % hours_ago}}, 400
         except Exception as e:
@@ -306,7 +307,7 @@ API_DOMAIN = ExplorerApiDomain({
     'block': GetByIdResource('block', model.Block),
     'blockheight': BlockheightResource(),
     'tx': GetByIdResource('tx', model.Tx, uses_blob=True),
-    'blockstats': GetByIdResource('blockstats', model.Blockstats, ['stats_support']),
+    'blockstats': GetByIdResource('blockstats', models.stats.Blockstats, ['stats_support']),
     # TODO handle reorgs from gui (ie use websockets)
     'chaininfo': GetByIdResource('chaininfo', model.Chaininfo),
 }, DB_CLIENT)
