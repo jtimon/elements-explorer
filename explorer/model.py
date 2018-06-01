@@ -2,13 +2,7 @@
 import json
 
 from mintools import ormin
-
-class RpcCachedModel(ormin.CachedModel):
-
-    @classmethod
-    def set_rpccaller(cls, value):
-        cls._rpccaller = value
-
+from explorer.models.rpc_cached import RpcCachedModel
 
 class Chaininfo(RpcCachedModel):
     bestblockhash = ormin.StringField()
