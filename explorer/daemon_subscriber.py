@@ -245,7 +245,7 @@ class GreedyCacher(CronCacher):
             if self.cache_txs:
                 tx_ids = json.loads(block.tx)
                 for txid in tx_ids:
-                    tx = model.Tx.get(txid)
+                    tx = models.transaction.Tx.get(txid)
 
             return block
 
@@ -317,10 +317,10 @@ class DaemonReorgManager(GreedyCacher):
 
             tx_criteria = {'blockhash': blockhash}
             try:
-                txs_to_delete = model.Tx.search(tx_criteria)
+                txs_to_delete = models.transaction.Tx.search(tx_criteria)
                 print('txs_to_delete', txs_to_delete)
                 if txs_to_delete:
-                    model.Tx.delete(tx_criteria)
+                    models.transaction.Tx.delete(tx_criteria)
             except minql.NotFoundError:
                 pass
 

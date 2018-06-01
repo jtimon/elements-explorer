@@ -220,10 +220,10 @@ class AddressResource(ChainResource):
         expenditures = []
         tx_ids = json.loads(block.tx)
         for txid in tx_ids:
-            orm_tx = model.Tx.get(txid)
+            orm_tx = models.transaction.Tx.get(txid)
             if isinstance(orm_tx, dict) and 'error' in orm_tx:
                 return orm_tx
-            elif not isinstance(orm_tx, model.Tx):
+            elif not isinstance(orm_tx, models.transaction.Tx):
                 print('Error in AddressResource.search_by_address: wrong type for tx', txid, orm_tx)
                 return {'error': {'message': 'Error getting tx %s (address)' % txid}}
             tx = json.loads(orm_tx.blob)
@@ -235,10 +235,10 @@ class AddressResource(ChainResource):
 
             for tx_input in tx['vin']:
                 if 'txid' in tx_input and 'vout' in tx_input:
-                    orm_tx_in = model.Tx.get(tx_input['txid'])
+                    orm_tx_in = models.transaction.Tx.get(tx_input['txid'])
                     if isinstance(orm_tx_in, dict) and 'error' in orm_tx_in:
                         return orm_tx_in
-                    elif not isinstance(orm_tx_in, model.Tx):
+                    elif not isinstance(orm_tx_in, models.transaction.Tx):
                         print('Error in AddressResource.search_by_address_ascendant: wrong type for tx', tx_input['txid'], orm_tx_in)
                         return {'error': {'message': 'Error getting tx %s (address)' % tx_input['txid']}}
                     tx_in = json.loads(orm_tx_in.blob)
@@ -306,7 +306,7 @@ API_DOMAIN = ExplorerApiDomain({
     # cached in server and gui
     'block': GetByIdResource('block', model.Block),
     'blockheight': BlockheightResource(),
-    'tx': GetByIdResource('tx', model.Tx, uses_blob=True),
+    'tx': GetByIdResource('tx', models.transaction.Tx, uses_blob=True),
     'blockstats': GetByIdResource('blockstats', models.stats.Blockstats, ['stats_support']),
     # TODO handle reorgs from gui (ie use websockets)
     'chaininfo': GetByIdResource('chaininfo', model.Chaininfo),
