@@ -34,4 +34,5 @@ API_DOMAIN = ExplorerApiDomain({
     'blockstats': resources.generic.GetByIdResource('blockstats', models.stats.Blockstats, ['stats_support']),
     # TODO handle reorgs from gui (ie use websockets)
     'chaininfo': resources.generic.GetByIdResource('chaininfo', models.Chaininfo),
+    'faucetinfo': resources.generic.GetByIdResource('faucetinfo', models.faucet.Faucetinfo),
 }, DB_CLIENT)
