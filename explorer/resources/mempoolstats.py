@@ -43,6 +43,6 @@ class MempoolStatsResource(ChainResource):
 
         json_result = {}
         for mempoolstats in db_result:
-            json_result[mempoolstats.time] = json.loads(mempoolstats.blob)
+            json_result[mempoolstats.time] = mempoolstats.json(full=True)['blob']
 
         return json_result, 200

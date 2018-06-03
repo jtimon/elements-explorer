@@ -194,7 +194,7 @@ class MempoolStatsCacher(CronCacher):
         mempoolstats_elem = models.stats.Mempoolstats(json_dict={
             'time': int_time,
             'stat_type': stat_type,
-            'blob': json.dumps(stats[stat_type]),
+            'blob': stats[stat_type],
         })
 
         try:
