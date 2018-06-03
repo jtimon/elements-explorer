@@ -19,7 +19,6 @@ angular.module('rpcExplorerApp')
         {
             return function (response) {
                 var block = GetResult(response);
-                block['tx'] = JSON.parse(block['tx']);
                 cache[chain]['block'][ block['id'] ] = block;
                 cache[chain]['blockheight'][ block['height'] ] = block['id'];
                 return block;

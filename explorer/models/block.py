@@ -34,3 +34,9 @@ class Block(RpcCachedModel):
         block.id = req_id
         block.save()
         return block
+
+    def json(self, full=True):
+        json_dict = super(Block, self).json(full)
+        if full:
+            json_dict['tx'] = json.loads(json_dict['tx'])
+        return json_dict
