@@ -27,7 +27,7 @@ class Block(RpcCachedModel):
     # versionhex = ormin.StringField()
     weight = ormin.IntField()
 
-    tx = ormin.TextField()
+    tx = ormin.BlobField()
 
     @classmethod
     def truth_src_get(cls, req_id):
@@ -35,14 +35,7 @@ class Block(RpcCachedModel):
         if 'error' in json_result:
             return json_result
 
-        json_result['tx'] = json.dumps(json_result['tx'])
         block = Block(json_dict=json_result)
         block.id = req_id
         block.save()
         return block
-
-    def json(self, full=True):
-        json_dict = super(Block, self).json(full)
-        if full:
-            json_dict['tx'] = json.loads(json_dict['tx'])
-        return json_dict
