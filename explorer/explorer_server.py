@@ -4,13 +4,12 @@ import datetime
 
 from mintools import minql, restmin, ormin
 
-from explorer import model
 from explorer import models
 from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
 
 def GetBlockByHeight(rpccaller, height):
     try:
-        block_by_height = model.Block.search({'height': height})
+        block_by_height = models.Block.search({'height': height})
     except minql.NotFoundError:
         block_by_height = []
     except Exception as e:
@@ -24,10 +23,10 @@ def GetBlockByHeight(rpccaller, height):
     blockhash = rpccaller.RpcCall('getblockhash', {'height': height})
     if 'error' in blockhash:
         return blockhash
-    block = model.Block.get(blockhash)
+    block = models.Block.get(blockhash)
     if isinstance(block, dict) and 'error' in block:
         return block
-    elif not isinstance(block, model.Block):
+    elif not isinstance(block, models.Block):
         print('Error in GetBlockByHeight: wrong type for block', blockhash, block)
         return {'error': {'message': 'Error getting block %s (by height %s)' % (blockhash, height)}}
     return block
@@ -304,7 +303,7 @@ API_DOMAIN = ExplorerApiDomain({
     # currently goes throught the whole block
     'address': AddressResource(),
     # cached in server and gui
-    'block': GetByIdResource('block', model.Block),
+    'block': GetByIdResource('block', models.Block),
     'blockheight': BlockheightResource(),
     'tx': GetByIdResource('tx', models.transaction.Tx, uses_blob=True),
     'blockstats': GetByIdResource('blockstats', models.stats.Blockstats, ['stats_support']),
