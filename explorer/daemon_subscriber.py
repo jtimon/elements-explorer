@@ -180,7 +180,6 @@ class MempoolStatsCacher(CronCacher):
             'stat_type': stat_type,
             'blob': json.dumps(stats[stat_type]),
         })
-        mempoolstats_elem.new_id() # TODO This should be called from Ormin.Model.insert()
 
         try:
             mempoolstats_elem.insert()
