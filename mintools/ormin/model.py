@@ -94,7 +94,7 @@ class Model(form.Form):
         return result
 
     def insert(self):
-        if not hasattr(self, 'id'):
+        if not hasattr(self, 'id') or self.id == None:
             self.new_id()
         obj = self.db().insert(self.get_name(), self.json(False))
         print('Inserted...', self.get_name(), self.id)
@@ -106,7 +106,7 @@ class Model(form.Form):
         return self.__class__(obj)
 
     def put(self):
-        if not hasattr(self, 'id'):
+        if not hasattr(self, 'id') or self.id == None:
             self.new_id()
         obj = self.db().put(self.get_name(), self.json(False))
         print('Put...', self.get_name(), self.id)
