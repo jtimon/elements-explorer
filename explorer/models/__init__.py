@@ -1,4 +1,5 @@
 
+from .chaininfo import Chaininfo
 from .stats import (
     Blockstats,
     Mempoolstats,

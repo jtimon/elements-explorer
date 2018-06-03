@@ -253,8 +253,8 @@ class GreedyCacher(CronCacher):
             return None
 
     def _cron_loop(self):
-        chaininfo = model.Chaininfo.get(self.chain)
-        if not isinstance(chaininfo, model.Chaininfo):
+        chaininfo = models.Chaininfo.get(self.chain)
+        if not isinstance(chaininfo, models.Chaininfo):
             print("Error in GreedyCacher._cron_loop: wrong type for chaininfo", chaininfo)
             return
 
@@ -289,9 +289,9 @@ class DaemonReorgManager(GreedyCacher):
 
     def update_chainfo(self, block):
 
-        chaininfo = model.Chaininfo.get(self.chain)
-        if not isinstance(chaininfo, model.Chaininfo):
-            chaininfo = model.Chaininfo()
+        chaininfo = models.Chaininfo.get(self.chain)
+        if not isinstance(chaininfo, models.Chaininfo):
+            chaininfo = models.Chaininfo()
             chaininfo.id = self.chain
         chaininfo.bestblockhash = block.id
         chaininfo.blocks = block.height
