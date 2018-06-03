@@ -16,7 +16,7 @@ class OneToManyField(Relation):
     def json(self, model, name, full=False):
         if full:
             json = []
-            models = getattr(model, '_' + name)
+            models = getattr(model, name)
             if models:
                 for m in models:
                     json.append(m.json(full and self._cascade))
@@ -44,12 +44,12 @@ class OneToManyField(Relation):
             for m in models:
                 # If the parent doesn't have id, set a dummy key temporarily to avoid the error
                 if model.id:
-                    setattr(m, model.get_name() + '_id', model.id)
+                    setattr(m, self._index_field, model.id)
                 else:
-                    setattr(m, model.get_name() + '_id', 'dummy')
+                    setattr(m, self._index_field, 'dummy')
                 m.validate()
                 if not model.id:
-                    setattr(m, model.get_name() + '_id', None)
+                    setattr(m, self._index_field, None)
                 if m.errors:
                     raise FieldError(m.errors)
 
@@ -60,7 +60,7 @@ class OneToManyField(Relation):
         models = getattr(model, '_' + name)
         if models:
             for m in models:
-                setattr(m, model.get_name() + '_id', model.id)
+                setattr(m, self._index_field, model.id)
                 m.save()
 
     def add_property(self, model_class, name):
