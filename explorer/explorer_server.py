@@ -49,7 +49,7 @@ class ChainResource(restmin.resources.Resource):
 
         ormin.Form.set_namespace(self.chain)
         self.rpccaller = AVAILABLE_CHAINS[self.chain]['rpc']
-        model.RpcCachedModel.set_rpccaller(self.rpccaller)
+        models.RpcCachedModel.set_rpccaller(self.rpccaller)
 
         return request_data
 
