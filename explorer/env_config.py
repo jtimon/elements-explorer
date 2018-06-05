@@ -84,7 +84,6 @@ AVAILABLE_CHAINS = {
     },
 
     'elementsregtest': {
-        'parent_chain': 'regtest',
         'rpc': RpcCaller(os.environ.get('ELEMENTSREGTEST_ADR'),
                          os.environ.get('ELEMENTSREGTEST_RPCUSER'),
                          os.environ.get('ELEMENTSREGTEST_RPCPASSWORD')
@@ -93,8 +92,9 @@ AVAILABLE_CHAINS = {
         'db': DB_FACTORY,
         'properties': {
             'stats_support': True,
-            'chain_id': 'elementsregtest_genesis_hash',
+            'chain_id': 'b69af98be45cf3fb1d992b716a1d6156835c059f6944620d81dcc2487bb5cc8c',
             'parent_chain': 'regtest',
+            'parent_chain_has_CT': False,
         },
         'proc': {
             'reorg_cron': [60, InitTime(60), False, True], # every 1 min after 1 min, don't cache txs, cache stats
@@ -116,7 +116,7 @@ AVAILABLE_CHAINS = {
         'db': DB_FACTORY,
         'properties': {
             'stats_support': True,
-            'chain_id': 'elementsparent_genesis_hash',
+            'chain_id': '5d5e0aefb7734b1371ff236f5c6b5c8cfbcc4f156795d3d23849610202aac6c9',
         },
         'proc': {
             'reorg_cron': [60, InitTime(60), False, True], # every 1 min after 1 min, don't cache txs, cache stats
@@ -128,7 +128,6 @@ AVAILABLE_CHAINS = {
     },
 
     'elementside': {
-        'parent_chain': 'elementsparent',
         'rpc': RpcCaller(os.environ.get('ELEMENTSIDE_ADR'),
                          os.environ.get('ELEMENTSIDE_RPCUSER'),
                          os.environ.get('ELEMENTSIDE_RPCPASSWORD')
@@ -137,8 +136,9 @@ AVAILABLE_CHAINS = {
         'db': DB_FACTORY,
         'properties': {
             'stats_support': True,
-            'chain_id': 'elementside_genesis_hash',
+            'chain_id': '8d497636488f8ea97d51cf23de95d888009f672a00ba79c8758373fc47c2cdf3',
             'parent_chain': 'elementsparent',
+            'parent_chain_has_CT': True,
         },
         'proc': {
             'reorg_cron': [60, InitTime(60), False, True], # every 1 min after 1 min, don't cache txs, cache stats

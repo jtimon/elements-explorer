@@ -34,16 +34,17 @@ if 'tx_gen' in AVAILABLE_CHAINS[chain]['proc']:
     tx_generator = TxGenerator(*tx_gen_params)
     tx_generator.start()
 
-if 'pegin_gen' in AVAILABLE_CHAINS[chain]['proc'] and 'parent_chain' in AVAILABLE_CHAINS[chain]:
-    parent_chain_rpccaller = AVAILABLE_CHAINS[ AVAILABLE_CHAINS[chain]['parent_chain'] ]['rpc']
+if 'pegin_gen' in AVAILABLE_CHAINS[chain]['proc'] and 'parent_chain' in AVAILABLE_CHAINS[chain]['properties']:
+    parent_chain_rpccaller = AVAILABLE_CHAINS[ AVAILABLE_CHAINS[chain]['properties']['parent_chain'] ]['rpc']
     pegin_gen_params = [chain, AVAILABLE_CHAINS[chain]['rpc'], parent_chain_rpccaller]
     pegin_gen_params.extend(AVAILABLE_CHAINS[chain]['proc']['pegin_gen'])
     pegin_generator = PeginGenerator(*pegin_gen_params)
     pegin_generator.start()
 
-if 'pegout_gen' in AVAILABLE_CHAINS[chain]['proc'] and 'parent_chain' in AVAILABLE_CHAINS[chain]:
-    parent_chain_rpccaller = AVAILABLE_CHAINS[ AVAILABLE_CHAINS[chain]['parent_chain'] ]['rpc']
-    pegout_gen_params = [chain, AVAILABLE_CHAINS[chain]['rpc'], parent_chain_rpccaller]
+if 'pegout_gen' in AVAILABLE_CHAINS[chain]['proc'] and 'parent_chain' in AVAILABLE_CHAINS[chain]['properties']:
+    parent_chain_rpccaller = AVAILABLE_CHAINS[ AVAILABLE_CHAINS[chain]['properties']['parent_chain'] ]['rpc']
+    parent_chain_has_CT = AVAILABLE_CHAINS[chain]['properties']['parent_chain_has_CT']
+    pegout_gen_params = [chain, AVAILABLE_CHAINS[chain]['rpc'], parent_chain_rpccaller, parent_chain_has_CT]
     pegout_gen_params.extend(AVAILABLE_CHAINS[chain]['proc']['pegout_gen'])
     pegout_generator = PegoutGenerator(*pegout_gen_params)
     pegout_generator.start()

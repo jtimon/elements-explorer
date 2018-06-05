@@ -15,6 +15,7 @@ RPC_ALLOWED_CALLS = [
     # Only for testing
     'generate',
     'getnewaddress',
+    'validateaddress',
     'sendtoaddress',
     'sendtomainchain',
     'getpeginaddress',
