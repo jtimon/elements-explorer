@@ -111,8 +111,11 @@ class PeginGenerator(SidechainGenerator):
         try:
             pegin_address = self.rpccaller.RpcCall('getpeginaddress', {})['mainchain_address']
             txid = self.parent_rpccaller.RpcCall('sendtoaddress', {'address': pegin_address, 'amount': 0.01})
-            self.ptxi_set.append(txid)
-            print('Generated pegin candidate: pegin_address %s txid %s' % (pegin_address, txid))
+            if 'error' in txid:
+                print('Error Generating pegin candidate:', txid['error'])
+            else:
+                self.ptxi_set.append(txid)
+                print('Generated pegin candidate: pegin_address %s txid %s' % (pegin_address, txid))
         except Exception as e:
             print("Error in PeginGenerator._cron_loop (1, candidate):", type(e), e)
 
@@ -124,8 +127,11 @@ class PeginGenerator(SidechainGenerator):
                     continue
                 raw = self.parent_rpccaller.RpcCall('getrawtransaction', {'txid': txid})
                 claimtxid = self.rpccaller.RpcCall('claimpegin', {'bitcoinT': raw, 'txoutproof': proof})
-                self.ptxi_set.remove(txid)
-                print('Generated pegin claim: txid %s claimtxid %s' % (txid, claimtxid))
+                if 'error' in claimtxid:
+                    print('Error claiming pegin:', claimtxid['error'])
+                else:
+                    self.ptxi_set.remove(txid)
+                    print('Generated pegin claim: txid %s claimtxid %s' % (txid, claimtxid))
         except Exception as e:
             print("Error in PeginGenerator._cron_loop (2, claim):", type(e), e)
 
