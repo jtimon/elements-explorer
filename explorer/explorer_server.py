@@ -3,7 +3,7 @@ import json
 
 from mintools import minql, restmin, ormin
 
-from explorer import models, service, resource
+from explorer import models, services, resource
 from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
 
 
@@ -24,7 +24,7 @@ class BlockheightResource(resource.ChainResource):
         if not 'id' in request:
             return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}, 400
 
-        response = service.GetBlockByHeight(self.rpccaller, request['id'])
+        response = services.GetBlockByHeight(self.rpccaller, request['id'])
         if isinstance(response, dict) and 'error' in response:
             return {'error': response['error']}, 400
 
@@ -104,7 +104,7 @@ class AddressResource(resource.ChainResource):
 
     def search_by_address(self, height, addresses):
 
-        block = service.GetBlockByHeight(self.rpccaller, height)
+        block = services.GetBlockByHeight(self.rpccaller, height)
         if isinstance(block, dict) and 'error' in block:
             return block
 
