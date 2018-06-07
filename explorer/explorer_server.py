@@ -4,32 +4,8 @@ import datetime
 
 from mintools import minql, restmin, ormin
 
-from explorer import models
+from explorer import models, service
 from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
-
-def GetBlockByHeight(rpccaller, height):
-    try:
-        block_by_height = models.Block.search({'height': height})
-    except minql.NotFoundError:
-        block_by_height = []
-    except Exception as e:
-        print("Error in GetBlockByHeight:", type(e), e)
-        return {'error': {'message': 'Error getting block from db by height %s' % height}}
-    if len(block_by_height) > 1:
-        return {'error': {'message': 'More than one block cached for height %s' % height}}
-    if len(block_by_height) == 1:
-        return block_by_height[0]
-
-    blockhash = rpccaller.RpcCall('getblockhash', {'height': height})
-    if 'error' in blockhash:
-        return blockhash
-    block = models.Block.get(blockhash)
-    if isinstance(block, dict) and 'error' in block:
-        return block
-    elif not isinstance(block, models.Block):
-        print('Error in GetBlockByHeight: wrong type for block', blockhash, block)
-        return {'error': {'message': 'Error getting block %s (by height %s)' % (blockhash, height)}}
-    return block
 
 class UnknownChainError(BaseException):
     pass
@@ -131,7 +107,7 @@ class BlockheightResource(ChainResource):
         if not 'id' in request:
             return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}, 400
 
-        response = GetBlockByHeight(self.rpccaller, request['id'])
+        response = service.GetBlockByHeight(self.rpccaller, request['id'])
         if isinstance(response, dict) and 'error' in response:
             return {'error': response['error']}, 400
 
@@ -211,7 +187,7 @@ class AddressResource(ChainResource):
 
     def search_by_address(self, height, addresses):
 
-        block = GetBlockByHeight(self.rpccaller, height)
+        block = service.GetBlockByHeight(self.rpccaller, height)
         if isinstance(block, dict) and 'error' in block:
             return block
 
