@@ -4,32 +4,10 @@ import datetime
 
 from mintools import minql, restmin, ormin
 
-from explorer import models, service
+from explorer import models, service, resource
 from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
 
-class UnknownChainError(BaseException):
-    pass
-
-class ChainResource(restmin.resources.Resource):
-
-    def update_chain(self, request_data):
-        self.chain = None
-        if request_data and 'chain' in request_data:
-            self.chain = request_data['chain']
-            del request_data['chain']
-        else:
-            self.chain = DEFAULT_CHAIN
-        if not self.chain in AVAILABLE_CHAINS:
-            raise UnknownChainError
-
-        ormin.Form.set_namespace(self.chain)
-        self.rpccaller = AVAILABLE_CHAINS[self.chain]['rpc']
-        models.RpcCachedModel.set_rpccaller(self.rpccaller)
-
-        return request_data
-
-
-class RpcCallerResource(ChainResource):
+class RpcCallerResource(resource.ChainResource):
     def __init__(self, resource, limit_array_result=0):
         self.resource = resource
         self.limit_array_result = limit_array_result
@@ -37,7 +15,7 @@ class RpcCallerResource(ChainResource):
     def resolve_request(self, req):
         try:
             req['json'] = self.update_chain(req['json'])
-        except UnknownChainError:
+        except resource.UnknownChainError:
             return {'error': {'message': 'Chain "%s" not supported.' % self.chain}}, 400
 
         json_result = self.rpccaller.RpcCall(self.resource, req['json'])
@@ -50,13 +28,13 @@ class RpcCallerResource(ChainResource):
             return {'result': json_result}, 200
 
 
-class MempoolStatsResource(ChainResource):
+class MempoolStatsResource(resource.ChainResource):
     ALLOWED_MEMPOOL_STATS_TYPES = ['count', 'fee', 'vsize']
 
     def resolve_request(self, req):
         try:
             req['json'] = self.update_chain(req['json'])
-        except UnknownChainError:
+        except resource.UnknownChainError:
             return {'error': {'message': 'Chain "%s" not supported.' % self.chain}}, 400
 
         request = req['json']
@@ -90,7 +68,7 @@ class MempoolStatsResource(ChainResource):
         return json_result, 200
 
 
-class BlockheightResource(ChainResource):
+class BlockheightResource(resource.ChainResource):
 
     def __init__(self, *args, **kwargs):
         super(BlockheightResource, self).__init__(*args, **kwargs)
@@ -100,7 +78,7 @@ class BlockheightResource(ChainResource):
     def resolve_request(self, req):
         try:
             req['json'] = self.update_chain(req['json'])
-        except UnknownChainError:
+        except resource.UnknownChainError:
             return {'error': {'message': 'Chain "%s" not supported.' % self.chain}}, 400
 
         request = req['json']
@@ -118,7 +96,7 @@ class BlockheightResource(ChainResource):
         return response, 200
 
 
-class GetByIdResource(ChainResource):
+class GetByIdResource(resource.ChainResource):
 
     def __init__(self, resource, model, chain_required_properties=[], uses_blob=False, *args, **kwargs):
         super(GetByIdResource, self).__init__(*args, **kwargs)
@@ -131,7 +109,7 @@ class GetByIdResource(ChainResource):
     def resolve_request(self, req):
         try:
             req['json'] = self.update_chain(req['json'])
-        except UnknownChainError:
+        except resource.UnknownChainError:
             return {'error': {'message': 'Chain "%s" not supported.' % self.chain}}, 400
 
         for required_property in self.chain_required_properties:
@@ -183,7 +161,7 @@ class GetByIdResource(ChainResource):
         return response, 200
 
 
-class AddressResource(ChainResource):
+class AddressResource(resource.ChainResource):
 
     def search_by_address(self, height, addresses):
 
@@ -228,7 +206,7 @@ class AddressResource(ChainResource):
     def resolve_request(self, req):
         try:
             req['json'] = self.update_chain(req['json'])
-        except UnknownChainError:
+        except resource.UnknownChainError:
             return {'error': {'message': 'Chain "%s" not supported.' % self.chain}}, 400
 
         request = req['json']
