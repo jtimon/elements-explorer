@@ -1,10 +1,8 @@
 
-import json
+from mintools import restmin, ormin
 
-from mintools import minql, restmin, ormin
-
-from explorer import models, services, resources
-from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
+from explorer import models, resources
+from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS
 
 def get_available_chains(**kwargs):
     available_chains = {}
