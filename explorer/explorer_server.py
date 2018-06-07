@@ -3,11 +3,11 @@ import json
 
 from mintools import minql, restmin, ormin
 
-from explorer import models, services, resource
+from explorer import models, services, resources
 from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
 
 
-class BlockheightResource(resource.ChainResource):
+class BlockheightResource(resources.ChainResource):
 
     def __init__(self, *args, **kwargs):
         super(BlockheightResource, self).__init__(*args, **kwargs)
@@ -17,7 +17,7 @@ class BlockheightResource(resource.ChainResource):
     def resolve_request(self, req):
         try:
             req['json'] = self.update_chain(req['json'])
-        except resource.UnknownChainError:
+        except resources.UnknownChainError:
             return {'error': {'message': 'Chain "%s" not supported.' % self.chain}}, 400
 
         request = req['json']
@@ -35,7 +35,7 @@ class BlockheightResource(resource.ChainResource):
         return response, 200
 
 
-class GetByIdResource(resource.ChainResource):
+class GetByIdResource(resources.ChainResource):
 
     def __init__(self, resource, model, chain_required_properties=[], uses_blob=False, *args, **kwargs):
         super(GetByIdResource, self).__init__(*args, **kwargs)
@@ -48,7 +48,7 @@ class GetByIdResource(resource.ChainResource):
     def resolve_request(self, req):
         try:
             req['json'] = self.update_chain(req['json'])
-        except resource.UnknownChainError:
+        except resources.UnknownChainError:
             return {'error': {'message': 'Chain "%s" not supported.' % self.chain}}, 400
 
         for required_property in self.chain_required_properties:
@@ -100,7 +100,7 @@ class GetByIdResource(resource.ChainResource):
         return response, 200
 
 
-class AddressResource(resource.ChainResource):
+class AddressResource(resources.ChainResource):
 
     def search_by_address(self, height, addresses):
 
@@ -145,7 +145,7 @@ class AddressResource(resource.ChainResource):
     def resolve_request(self, req):
         try:
             req['json'] = self.update_chain(req['json'])
-        except resource.UnknownChainError:
+        except resources.UnknownChainError:
             return {'error': {'message': 'Chain "%s" not supported.' % self.chain}}, 400
 
         request = req['json']
@@ -189,10 +189,10 @@ class ExplorerApiDomain(restmin.Domain):
 API_DOMAIN = ExplorerApiDomain({
     'available_chains': restmin.resources.FunctionResource(get_available_chains),
     # never cached, always hits the node
-    'getmempoolentry': resource.rpccaller.RpcCallerResource('getmempoolentry'),
-    'getrawmempool': resource.rpccaller.RpcCallerResource('getrawmempool', limit_array_result=4),
+    'getmempoolentry': resources.rpccaller.RpcCallerResource('getmempoolentry'),
+    'getrawmempool': resources.rpccaller.RpcCallerResource('getrawmempool', limit_array_result=4),
     # Data from db, independent from reorgs
-    'mempoolstats': resource.mempoolstats.MempoolStatsResource(),
+    'mempoolstats': resources.mempoolstats.MempoolStatsResource(),
     # currently goes throught the whole block
     'address': AddressResource(),
     # cached in server and gui
