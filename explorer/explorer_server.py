@@ -7,26 +7,6 @@ from mintools import minql, restmin, ormin
 from explorer import models, service, resource
 from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
 
-class RpcCallerResource(resource.ChainResource):
-    def __init__(self, resource, limit_array_result=0):
-        self.resource = resource
-        self.limit_array_result = limit_array_result
-
-    def resolve_request(self, req):
-        try:
-            req['json'] = self.update_chain(req['json'])
-        except resource.UnknownChainError:
-            return {'error': {'message': 'Chain "%s" not supported.' % self.chain}}, 400
-
-        json_result = self.rpccaller.RpcCall(self.resource, req['json'])
-        if 'error' in json_result and json_result['error']:
-            return {'error': json_result['error']}, 400
-
-        if self.limit_array_result:
-            return {'result': json_result[:self.limit_array_result]}, 200
-        else:
-            return {'result': json_result}, 200
-
 
 class MempoolStatsResource(resource.ChainResource):
     ALLOWED_MEMPOOL_STATS_TYPES = ['count', 'fee', 'vsize']
@@ -250,8 +230,8 @@ class ExplorerApiDomain(restmin.Domain):
 API_DOMAIN = ExplorerApiDomain({
     'available_chains': restmin.resources.FunctionResource(get_available_chains),
     # never cached, always hits the node
-    'getmempoolentry': RpcCallerResource('getmempoolentry'),
-    'getrawmempool': RpcCallerResource('getrawmempool', limit_array_result=4),
+    'getmempoolentry': resource.rpccaller.RpcCallerResource('getmempoolentry'),
+    'getrawmempool': resource.rpccaller.RpcCallerResource('getrawmempool', limit_array_result=4),
     # Data from db, independent from reorgs
     'mempoolstats': MempoolStatsResource(),
     # currently goes throught the whole block
