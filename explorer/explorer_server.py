@@ -1,51 +1,10 @@
 
 import json
-import datetime
 
 from mintools import minql, restmin, ormin
 
 from explorer import models, service, resource
 from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS, DEFAULT_CHAIN
-
-
-class MempoolStatsResource(resource.ChainResource):
-    ALLOWED_MEMPOOL_STATS_TYPES = ['count', 'fee', 'vsize']
-
-    def resolve_request(self, req):
-        try:
-            req['json'] = self.update_chain(req['json'])
-        except resource.UnknownChainError:
-            return {'error': {'message': 'Chain "%s" not supported.' % self.chain}}, 400
-
-        request = req['json']
-        if not 'hours_ago' in request:
-            return {'error': {'message': 'No hours_ago specified to get %s in request %s' % ('mempoolstats', request)}}, 400
-        if not 'stat_type' in request:
-            return {'error': {'message': 'No stat_type specified to get %s in request %s' % ('mempoolstats', request)}}, 400
-        if request['stat_type'] not in self.ALLOWED_MEMPOOL_STATS_TYPES:
-            return {'error': {'message':
-                              'No stat_type=%s not allowed in request %s, allowed values %s' % (
-                                  'mempoolstats', request, self.ALLOWED_MEMPOOL_STATS_TYPES)}}, 400
-
-        seconds_ago = request['hours_ago'] * 60 * 60
-        min_epoch = int((datetime.datetime.now() - datetime.timedelta(seconds=seconds_ago)).strftime('%s'))
-        try:
-            db_result = {}
-            db_result = models.stats.Mempoolstats.search({'stat_type': request['stat_type'], 'time': {'ge': min_epoch}})
-        except minql.NotFoundError:
-            return {'error': {'message': 'No mempoolstats in the last %s hours.' % hours_ago}}, 400
-        except Exception as e:
-            print("Error in MempoolStatsResource.resolve_request:", type(e), e)
-            return {'error': {'message': 'Error getting %s from db.' % ('mempoolstats')}}, 400
-
-        if not db_result:
-            return {'error': {'message': 'No result db for %s type %s' % ('mempoolstats', request['stat_type'])}}, 400
-
-        json_result = {}
-        for mempoolstats in db_result:
-            json_result[mempoolstats.time] = json.loads(mempoolstats.blob)
-
-        return json_result, 200
 
 
 class BlockheightResource(resource.ChainResource):
@@ -233,7 +192,7 @@ API_DOMAIN = ExplorerApiDomain({
     'getmempoolentry': resource.rpccaller.RpcCallerResource('getmempoolentry'),
     'getrawmempool': resource.rpccaller.RpcCallerResource('getrawmempool', limit_array_result=4),
     # Data from db, independent from reorgs
-    'mempoolstats': MempoolStatsResource(),
+    'mempoolstats': resource.mempoolstats.MempoolStatsResource(),
     # currently goes throught the whole block
     'address': AddressResource(),
     # cached in server and gui
