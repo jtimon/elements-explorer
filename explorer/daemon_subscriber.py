@@ -290,6 +290,7 @@ class GreedyCacher(CronCacher):
                 print('Error in GreedyCacher._cron_loop: no previousblockhash in block %s %s' % (height, blockhash), block)
                 return
             height = height - 1
+            time.sleep(self.wait_time)
 
         self.last_cached_height = chaininfo.blocks
 
