@@ -7,6 +7,6 @@ class FieldError(BaseException):
 
 from .base import Field
 from .number import NumericField
-from .string import StringField, TextField
+from .string import StringField, TextField, BlobField
 from .float import FloatField
 from .integer import IntField, BigIntField

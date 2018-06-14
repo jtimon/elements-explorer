@@ -1,4 +1,6 @@
 
+import json
+
 from .base import Field
 
 class StringField(Field):
@@ -41,3 +43,23 @@ class TextField(Field):
             return None
 
         return value
+
+class BlobField(TextField):
+
+    def _clean_value(self, value):
+        return value
+
+    def json(self, model, name, full=False):
+        value = getattr(model, '_' + name)
+        if value == None and not self.required:
+            return {}
+        if full and value != None and isinstance(value, basestring):
+            return { name: json.loads(value) }
+        return { name: value }
+
+    def from_json(self, model, name, json_dict):
+        if name in json_dict and json_dict[ name ] != None:
+            if isinstance(json_dict[ name ], basestring):
+                setattr(model, '_' + name, json_dict[ name ])
+            elif isinstance(json_dict[ name ], dict) or isinstance(json_dict[ name ], list):
+                setattr(model, '_' + name, json.dumps(json_dict[ name ]))
