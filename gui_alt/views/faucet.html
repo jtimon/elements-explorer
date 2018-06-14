@@ -1,0 +1,77 @@
+
+<div ng-show="error" class="alert alert-danger" border="1">
+  <strong>Error:</strong>
+  <nobr ng-show="error.message">{{error.message}}</nobr>
+  <!-- <nobr ng-show="!error.message">{{ error }}</nobr> -->
+  <nobr ng-show="!error.message">
+    <p></p>
+    <pre>
+      {{ error }}
+    </pre>
+  </nobr>
+  <p></p>
+</div>
+
+<table border="1" ng-show="faucet_info" >
+
+  <tr>
+    <td>Faucet donation address:</td>
+    <td>{{ faucet_info.donation_address }}</td>
+  </tr>
+
+  <tr>
+    <td>Faucet balance:</td>
+    <td>{{ faucet_info.balance }}</td>
+  </tr>
+
+  <tr>
+    <td>Amount per giveaway sent:</td>
+    <td>{{ faucet_info.amount }}</td>
+  </tr>
+
+  <tr>
+    <td>Faucet time:</td>
+    <td>{{ faucet_info.time }}</td>
+  </tr>
+
+</table>
+<p></p>
+
+<div class="container">
+  <input ng-disabled="loading" ng-model="address" placeholder="Address">
+  <button ng-disabled="loading" ng-click="Freecoins();">
+    Get free coins
+  </button>
+</div>
+
+<table border="1" ng-show="freecoins" >
+
+  <tr>
+    <td>Amount received:</td>
+    <td>{{ freecoins.amount }}</td>
+  </tr>
+
+  <tr>
+    <td>Received in address:</td>
+    <td>{{ freecoins.address }}</td>
+  </tr>
+
+  <tr>
+    <td>Txid:</td>
+    <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{freecoins.txid}}">{{ freecoins.txid }}</a></td>
+  </tr>
+
+  <tr>
+    <td>Time:</td>
+    <td>{{ freecoins.time }}</td>
+  </tr>
+
+</table>
+<p></p>
+
+<p></p>
+<div class="container" ng-show="curious">
+  <pre>
+    You're curious.
+  </pre>
+</div>
