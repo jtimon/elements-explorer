@@ -27,7 +27,7 @@ class Field(object):
         value = getattr(model, '_' + name)
         if value == None and not self.required:
             return {}
-        return { name: getattr(model, '_' + name) }
+        return { name: value }
 
     def from_json(self, model, name, json):
         if name in json:
