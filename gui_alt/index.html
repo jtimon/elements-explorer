@@ -44,6 +44,7 @@
               <li ng-class="navClass('stats')" ng-show=chain_properties[selected_chain].stats_support ><a ng-href="#!/chain/{{selected_chain}}/stats">Stats</a></li>
               <li ng-class="navClass('queue')"><a ng-href="#!/chain/{{selected_chain}}/queue">Queue</a></li>
               <li ng-class="navClass('address')"><a ng-href="#!/chain/{{selected_chain}}/address">Address</a></li>
+              <li ng-class="navClass('faucet')"><a ng-href="#!/chain/{{selected_chain}}/faucet">Faucet</a></li>
             </ul>
 
             <form class="navbar-form navbar-right" ng-controller="ChainCtrl" ng-cloak>
@@ -98,6 +99,7 @@
         <script src="scripts/controllers/navigation.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/address.js"></script>
+        <script src="scripts/controllers/faucet.js"></script>
         <script src="scripts/controllers/mempoolstats.js"></script>
         <script src="scripts/controllers/stats.js"></script>
         <script src="scripts/directives/graph-plotter.js"></script>

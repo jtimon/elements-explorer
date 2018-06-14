@@ -51,6 +51,10 @@ angular
         templateUrl: 'views/address.html',
         controller: 'AddressCtrl',
       })
+      .when('/chain/:chain/faucet', {
+        templateUrl: 'views/faucet.html',
+        controller: 'FaucetCtrl',
+      })
       .when('/chain/:chain/about', {
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl',

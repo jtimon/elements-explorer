@@ -1,0 +1,47 @@
+
+<div ng-show="error" class="alert alert-danger" border="1">
+  <strong>Error:</strong>
+  <nobr ng-show="error.message">{{error.message}}</nobr>
+  <!-- <nobr ng-show="!error.message">{{ error }}</nobr> -->
+  <nobr ng-show="!error.message">
+    <p></p>
+    <pre>
+      {{ error }}
+    </pre>
+  </nobr>
+  <p></p>
+</div>
+
+<table border="1" ng-show="true || faucet_info" >
+
+  <tr>
+    <td>Faucet donation address:</td>
+    <td>{{ faucet_info.donation_address || "fakeaddress"}}</td>
+  </tr>
+
+  <tr>
+    <td>Faucet balance:</td>
+    <td>{{ faucet_info.balance || "fakebalnce"}}</td>
+  </tr>
+
+  <tr>
+    <td>Faucet time:</td>
+    <td>{{ faucet_info.time  || "faketime"}}</td>
+  </tr>
+
+</table>
+<p></p>
+  
+<div class="container">
+  <input ng-disabled="loading" ng-model="address" placeholder="Address">
+  <button ng-disabled="loading" ng-click="Freecoins();">
+    Free coins only for selling your soul (don't read the contract)
+  </button>
+</div>
+
+<p></p>
+<div class="container" ng-show="curious">
+  <pre>
+    You're curious.
+  </pre>
+</div>
