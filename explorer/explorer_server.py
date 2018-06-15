@@ -23,6 +23,7 @@ API_DOMAIN = ExplorerApiDomain({
     # never cached, always hits the node
     'getmempoolentry': resources.rpccaller.RpcCallerResource('getmempoolentry'),
     'getrawmempool': resources.rpccaller.RpcCallerResource('getrawmempool', limit_array_result=4),
+    'faucetinfo': resources.faucet.FaucetInfoResource(),
     # Data from db, independent from reorgs
     'mempoolstats': resources.mempoolstats.MempoolStatsResource(),
     # currently goes throught the whole block

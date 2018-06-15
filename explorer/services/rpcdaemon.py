@@ -12,7 +12,7 @@ RPC_ALLOWED_CALLS = [
     'getrawmempool',
     'getmempoolentry',
     'savemempool',
-    # Only for testing
+    'getbalance',
     'generate',
     'getnewaddress',
     'validateaddress',
