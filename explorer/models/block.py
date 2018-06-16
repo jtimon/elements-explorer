@@ -7,14 +7,19 @@ from explorer.models.rpc_cached import RpcCachedModel
 class Block(RpcCachedModel):
     height = ormin.IntField(index=True, unique=True)
     previousblockhash = ormin.StringField(index=True, required=False)
-    # bits = ormin.IntField(required=False) TODO don't show the challenge in bits in elements
-    # chainwork = ormin.StringField(required=False)
-    # difficulty = ormin.IntField(required=False)
+
+    # For chains with pow (optional)
+    bits = ormin.StringField(required=False)
+    nonce = ormin.IntField(required=False)
+    chainwork = ormin.StringField(required=False)
+    difficulty = ormin.IntField(required=False)
+
+    # For chains with signed blocks (optional)
     signblock_witness_asm = ormin.StringField(required=False)
     signblock_witness_hex = ormin.StringField(required=False)
+
     mediantime = ormin.IntField()
     merkleroot = ormin.StringField()
-    # nonce = ormin.IntField(required=False)
     size = ormin.IntField()
     # strippedsize = ormin.IntField()
     time = ormin.IntField()
