@@ -155,6 +155,7 @@
         <td>{{ block.mediantime }}  ( {{block.mediantime * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
       </tr>
 
+      <!-- block signed params -->
       <tr ng-show="block.signblock_witness_asm">
         <td>Signblock Witness Asm:</td>
         <td>{{ block.signblock_witness_asm }}</td>
@@ -163,6 +164,27 @@
       <tr ng-show="block.signblock_witness_hex">
         <td>Signblock Witness Hex:</td>
         <td>{{ block.signblock_witness_hex }}</td>
+      </tr>
+
+      <!-- pow params -->
+      <tr ng-show="block.bits">
+        <td>Bits:</td>
+        <td>{{ block.bits }}</td>
+      </tr>
+
+      <tr ng-show="block.nonce">
+        <td>Nonce:</td>
+        <td>{{ block.nonce }}</td>
+      </tr>
+
+      <tr ng-show="block.chainwork">
+        <td>Chainwork:</td>
+        <td>{{ block.chainwork }}</td>
+      </tr>
+
+      <tr ng-show="block.difficulty">
+        <td>Difficulty:</td>
+        <td>{{ block.difficulty }}</td>
       </tr>
 
       <tr>
