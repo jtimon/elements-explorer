@@ -24,6 +24,7 @@ API_DOMAIN = ExplorerApiDomain({
     'getmempoolentry': resources.rpccaller.RpcCallerResource('getmempoolentry'),
     'getrawmempool': resources.rpccaller.RpcCallerResource('getrawmempool', limit_array_result=4),
     'faucetinfo': resources.faucet.FaucetInfoResource(),
+    'freecoins': resources.faucet.FreeCoinsResource(),
     # Data from db, independent from reorgs
     'mempoolstats': resources.mempoolstats.MempoolStatsResource(),
     # currently goes throught the whole block
