@@ -10,9 +10,9 @@ class Block(RpcCachedModel):
 
     # For chains with pow (optional)
     bits = ormin.StringField(required=False)
-    nonce = ormin.IntField(required=False)
     chainwork = ormin.StringField(required=False)
-    difficulty = ormin.IntField(required=False)
+    difficulty = ormin.BigIntField(required=False)
+    nonce = ormin.BigIntField(required=False)
 
     # For chains with signed blocks (optional)
     signblock_witness_asm = ormin.StringField(required=False)
@@ -26,6 +26,7 @@ class Block(RpcCachedModel):
     # version = ormin.IntField()
     # versionhex = ormin.StringField()
     weight = ormin.IntField()
+
     tx = ormin.TextField()
 
     @classmethod
