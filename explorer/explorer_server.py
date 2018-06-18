@@ -32,7 +32,7 @@ API_DOMAIN = ExplorerApiDomain({
     # cached in server and gui
     'block': resources.generic.GetByIdResource('block', models.Block),
     'blockheight': resources.blockheight.BlockheightResource(),
-    'tx': resources.generic.GetByIdResource('tx', models.transaction.Tx, uses_blob=True),
+    'tx': resources.generic.GetByIdResource('tx', models.transaction.Tx),
     'blockstats': resources.generic.GetByIdResource('blockstats', models.stats.Blockstats, ['stats_support']),
     # TODO handle reorgs from gui (ie use websockets)
     'chaininfo': resources.generic.GetByIdResource('chaininfo', models.Chaininfo),
