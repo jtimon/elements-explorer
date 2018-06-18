@@ -86,7 +86,7 @@ angular.module('rpcExplorerApp')
                 return goToBlock($scope.blockid);
             } else {
                 cleanBlock();
-                return goToEntry($scope.transaction['txid']);
+                return goToEntry($scope.transaction['id']);
             }
         };
 

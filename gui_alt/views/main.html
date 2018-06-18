@@ -313,12 +313,7 @@
 
       <tr>
         <td>Txid:</td>
-        <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{transaction.txid}}">{{ transaction.txid }}</a></td>
-      </tr>
-
-      <tr>
-        <td>Hash:</td>
-        <td>{{ transaction.hash }}</td>
+        <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{transaction.id}}">{{ transaction.id }}</a></td>
       </tr>
 
       <tr>
@@ -335,18 +330,8 @@
       </tr>
 
       <tr ng-show="transaction.blockhash">
-        <td>Confirmations last cached:</td>
-        <td>{{ transaction.confirmations }}</td>
-      </tr>
-
-      <tr ng-show="transaction.blockhash">
         <td>Time:</td>
         <td>{{ transaction.time }}  ( {{transaction.time * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
-      </tr>
-
-      <tr ng-show="transaction.blockhash">
-        <td>Blocktime:</td>
-        <td>{{ transaction.blocktime }}  ( {{transaction.blocktime * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'}} ) </td>
       </tr>
 
       <tr>
@@ -362,11 +347,6 @@
       <tr>
         <td>Vsize:</td>
         <td>{{ transaction.vsize }}</td>
-      </tr>
-
-      <tr>
-        <td>Fee:</td>
-        <td>{{ transaction.fee }}</td>
       </tr>
 
       <tr>
