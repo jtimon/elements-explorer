@@ -21,6 +21,8 @@ RPC_ALLOWED_CALLS = [
     'getpeginaddress',
     'gettxoutproof',
     'claimpegin',
+    # Exclusively for 1-of-1 multisig support in process.generator.block
+    'importprivkey',
 ]
 
 class RpcCaller(object):

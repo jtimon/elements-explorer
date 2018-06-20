@@ -21,6 +21,7 @@ services:
       dockerfile: docker/explorer/Dockerfile
     volumes:
       - ../../../explorer-data/target:/root/target
+      - ../../../explorer-data/keys:/root/keys
     ports:
       - "5000:5000"
     networks:
