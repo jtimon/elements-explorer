@@ -37,6 +37,9 @@ gflags.DEFINE_string('chains', u"bitcoin,testnet3,elementsregtest",
 gflags.DEFINE_string('forcechains', u"",
     u"Chains to restart the db for")
 
+gflags.DEFINE_string('forcetables', u"",
+    u"Tables to restart the db for")
+
 try:
     import sys
     argv = gflags.FLAGS(sys.argv)
@@ -58,9 +61,15 @@ time.sleep(1)
 migration_schema = {}
 migration_diff = {}
 CHAINS = FLAGS.chains.split(',')
+
 FORCE_CHAINS = FLAGS.forcechains.split(',')
 if len(FORCE_CHAINS) == 1 and FORCE_CHAINS[0] == '':
     FORCE_CHAINS = []
+
+FORCE_TABLES = FLAGS.forcetables.split(',')
+print('FORCE_TABLES', FORCE_TABLES)
+if len(FORCE_TABLES) == 1 and FORCE_TABLES[0] == '':
+    FORCE_TABLES = []
 
 ddb = minql.ZmqMinqlServer(
     FLAGS.dbtype,
@@ -129,6 +138,18 @@ if FORCE_CHAINS:
 
     print('forced_chains_schema', forced_chains_schema)
     db_client.put_schema(forced_chains_schema)
+
+if FORCE_TABLES:
+    print('FORCE_TABLES', FORCE_TABLES)
+    force_tables_schema = {}
+    for table_name in FORCE_TABLES:
+        assert(table_name in new_schema)
+        print('table_name', 'new_schema', table_name, new_schema)
+        for chain in CHAINS:
+            force_tables_schema[chain + "_" + table_name] = new_schema[table_name]
+
+    print('force_tables_schema', force_tables_schema)
+    db_client.put_schema(force_tables_schema)
 
 if FLAGS.dataset:
     db_client.put_dataset_from_file(FLAGS.dataset)
