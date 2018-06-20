@@ -4,9 +4,9 @@
     "elementside": {
         "proc": {
             "block_gen": [
-                300,
+                60,
                 180,
-                "regtestlike"
+                "onesigner"
             ],
             "greedy_cacher": [
                 60,
@@ -50,8 +50,8 @@
         "proc": {
             "block_gen": [
                 60,
-                240,
-                "regtestlike"
+                180,
+                "onesigner"
             ],
             "greedy_cacher": [
                 60,
@@ -75,7 +75,7 @@
             ]
         },
         "properties": {
-            "chain_id": "5d5e0aefb7734b1371ff236f5c6b5c8cfbcc4f156795d3d23849610202aac6c9",
+            "chain_id": "e34a37cff130f0844b11047127e3069b72ac95b000d380d2cee2b91e34f1762a",
             "stats_support": true
         },
         "zmq": "tcp://elements:7046"

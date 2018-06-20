@@ -48,4 +48,5 @@ AVAILABLE_RPCS = {
                              os.environ.get('ELEMENTSIDE_RPCUSER'),
                              os.environ.get('ELEMENTSIDE_RPCPASSWORD')
     ),
+
 }
