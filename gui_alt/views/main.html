@@ -86,19 +86,19 @@
 </div>
 
 <div ng-show="chaininfo.signblock_asm || chaininfo.signblock_hex" border="1">
-  Signed Blocks Data:
+  Signed Blocks challenge/ScriptPubKey:
   <p></p>
 
   <table border="1">
 
     <tr ng-show="chaininfo.signblock_asm">
-      <td>Signblock Witness Asm:</td>
-      <td>{{ chaininfo.signblock_asm }}</td>
+      <td>Signblock Asm:</td>
+      <td style="overflow-wrap: break-word; max-width: 550px;">{{ chaininfo.signblock_asm }}</td>
     </tr>
 
     <tr ng-show="chaininfo.signblock_hex">
-      <td>Signblock Witness Hex:</td>
-      <td>{{ chaininfo.signblock_hex }}</td>
+      <td>Signblock Hex:</td>
+      <td style="overflow-wrap: break-word; max-width: 550px;">{{ chaininfo.signblock_hex }}</td>
     </tr>
 
   </table>
@@ -158,12 +158,12 @@
       <!-- block signed params -->
       <tr ng-show="block.signblock_witness_asm">
         <td>Signblock Witness Asm:</td>
-        <td>{{ block.signblock_witness_asm }}</td>
+        <td style="overflow-wrap: break-word; max-width: 550px;">{{ block.signblock_witness_asm }}</td>
       </tr>
 
       <tr ng-show="block.signblock_witness_hex">
         <td>Signblock Witness Hex:</td>
-        <td>{{ block.signblock_witness_hex }}</td>
+        <td style="overflow-wrap: break-word; max-width: 550px;">{{ block.signblock_witness_hex }}</td>
       </tr>
 
       <!-- pow params -->
