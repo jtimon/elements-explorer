@@ -116,18 +116,16 @@ if migration_schema:
 
     per_chain_schema = {}
     for table_name in migration_schema:
-        table_schema = migration_schema[table_name]
         for chain in CHAINS:
-            per_chain_schema[chain + "_" + table_name] = table_schema
+            per_chain_schema[chain + "_" + table_name] = migration_schema[table_name]
 
     db_client.put_schema(per_chain_schema)
 
 if FORCE_CHAINS:
     forced_chains_schema = {}
     for table_name in new_schema:
-        table_schema = new_schema[table_name]
         for chain in FORCE_CHAINS:
-            forced_chains_schema[chain + "_" + table_name] = table_schema
+            forced_chains_schema[chain + "_" + table_name] = new_schema[table_name]
 
     print('forced_chains_schema', forced_chains_schema)
     db_client.put_schema(forced_chains_schema)
