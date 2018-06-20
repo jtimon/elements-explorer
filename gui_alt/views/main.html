@@ -28,14 +28,6 @@
   </div>
   <p></p>
 
-  <div class="container">
-    <label>
-      Limit Raw hexadecimal strings to:
-      <input type="number" step="1" ng-model="rawhex_limit">
-    </label>
-  </div>
-  <p></p>
-
 </div> <!-- container -->
 
 <div class="container" ng-show="!blockheight && !blockid && !txid">
@@ -356,7 +348,7 @@
 
       <tr>
         <td>Hex:</td>
-        <td><pre>{{ transaction.hex | limitTo:rawhex_limit }}</pre></td>
+        <td style="overflow-wrap: break-word; max-width: 550px;">{{ transaction.hex }}</td>
       </tr>
 
     </table>
@@ -374,7 +366,7 @@
 
         <tr ng-show="input.coinbase">
           <td>Coinbase:</td>
-          <td><pre>{{ input.coinbase | limitTo:rawhex_limit }}</pre></td>
+          <td style="overflow-wrap: break-word; max-width: 550px;">{{ input.coinbase }}</td>
         </tr>
 
         <tr ng-show="input.txid">
@@ -393,7 +385,7 @@
           <td>
             <table border="1">
               <tr ng-repeat="wit in input.pegin_witness">
-                <td><pre>{{ wit | limitTo:rawhex_limit }}</pre></td>
+                <td style="overflow-wrap: break-word; max-width: 550px;">{{ wit }}</td>
               </tr>
             </table>
           </td>
@@ -401,12 +393,12 @@
 
         <tr ng-show="input.scriptSig.asm">
           <td>scriptSig.asm:</td>
-          <td><pre>{{ input.scriptSig.asm | limitTo:rawhex_limit }}</pre></td>
+          <td style="overflow-wrap: break-word; max-width: 550px;">{{ input.scriptSig.asm }}</td>
         </tr>
 
         <tr ng-show="input.scriptSig.hex">
           <td>scriptSig.hex:</td>
-          <td><pre>{{ input.scriptSig.hex | limitTo:rawhex_limit }}</pre></td>
+          <td style="overflow-wrap: break-word; max-width: 550px;">{{ input.scriptSig.hex }}</td>
         </tr>
 
         <tr ng-show="input.scriptWitness">
@@ -414,7 +406,7 @@
           <td>
             <table border="1">
               <tr ng-repeat="wit in input.scriptWitness">
-                <td><pre>{{ wit | limitTo:rawhex_limit }}</pre></td>
+                <td style="overflow-wrap: break-word; max-width: 550px;">{{ wit }}</td>
               </tr>
             </table>
           </td>

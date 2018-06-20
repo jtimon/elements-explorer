@@ -12,7 +12,6 @@ angular.module('rpcExplorerApp')
 
         $scope.curious = $location.search().curious == 'true';
         $scope.loading = true;
-        $scope.rawhex_limit = 100;
 
         function cleanTx() {
             $scope.txid = "";
