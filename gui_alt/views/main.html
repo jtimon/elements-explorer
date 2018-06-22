@@ -450,56 +450,51 @@
           <td>{{ output.amountcommitment }}</td>
         </tr>
 
-        <tr ng-show="IsCTOut(output) && output.serValue">
-          <td>serValue:</td>
-          <td>{{ output.serValue }}</td>
-        </tr>
-
         <tr ng-show="IsCTOut(output);">
           <td>ct-bits:</td>
-          <td>{{ output["ct-bits"] }} <nobr ng-show="!IsCTOut(output);">non-CT</nobr></td>
+          <td>{{ output["ct_bits"] }} <nobr ng-show="!IsCTOut(output);">non-CT</nobr></td>
         </tr>
 
         <tr ng-show="IsCTOut(output);">
           <td>ct-exponent:</td>
-          <td>{{ output["ct-exponent"] }} <nobr ng-show="!IsCTOut(output);">non-CT</nobr></td>
+          <td>{{ output["ct_exponent"] }} <nobr ng-show="!IsCTOut(output);">non-CT</nobr></td>
         </tr>
 
         <tr ng-show="IsCTOut(output);">
           <td>value-minimum:</td>
-          <td>{{ output["value-minimum"] }} <nobr ng-show="!IsCTOut(output);">non-CT</nobr></td>
+          <td>{{ output["value_minimum"] }} <nobr ng-show="!IsCTOut(output);">non-CT</nobr></td>
         </tr>
 
         <tr ng-show="IsCTOut(output);">
           <td>value-maximum:</td>
-          <td>{{ output["value-maximum"] }} <nobr ng-show="!IsCTOut(output);">non-CT</nobr></td>
+          <td>{{ output["value_maximum"] }} <nobr ng-show="!IsCTOut(output);">non-CT</nobr></td>
         </tr>
 
-        <tr ng-show="output.scriptPubKey.asm">
+        <tr ng-show="output.scriptpubkey_asm">
           <td>scriptPubKey.asm:</td>
-          <td>{{ output.scriptPubKey.asm }}</td>
+          <td>{{ output.scriptpubkey_asm }}</td>
         </tr>
 
-        <tr ng-show="output.scriptPubKey.hex">
+        <tr ng-show="output.scriptpubkey_hex">
           <td>scriptPubKey.hex:</td>
-          <td>{{ output.scriptPubKey.hex }}</td>
+          <td>{{ output.scriptpubkey_hex }}</td>
         </tr>
 
-        <tr ng-show="output.scriptPubKey.reqSigs">
+        <tr ng-show="output.scriptpubkey_reqsigs">
           <td>scriptPubKey.reqSigs:</td>
-          <td>{{ output.scriptPubKey.reqSigs }}</td>
+          <td>{{ output.scriptpubkey_reqsigs }}</td>
         </tr>
 
-        <tr ng-show="output.scriptPubKey.type">
+        <tr ng-show="output.scriptpubkey_type">
           <td>scriptPubKey.type:</td>
-          <td>{{ output.scriptPubKey.type }}</td>
+          <td>{{ output.scriptpubkey_type }}</td>
         </tr>
 
-        <tr ng-show="output.scriptPubKey.addresses">
+        <tr ng-show="output.scriptpubkey_addresses.length">
           <td>scriptPubKey.addresses:</td>
           <td>
             <table border="1">
-              <tr ng-repeat="addr in output.scriptPubKey.addresses">
+              <tr ng-repeat="addr in output.scriptpubkey_addresses">
                 <td>
                   <a ng-href="#!/chain/{{selected_chain}}/address?address={{addr}}&start_height={{blockheight}}&end_height={{blockheight}}">{{ addr }}</a>
                 </td>
@@ -508,38 +503,38 @@
           </td>
         </tr>
 
-        <tr ng-show="output.scriptPubKey.pegout_chain">
+        <tr ng-show="output.pegout_chain">
           <td>scriptPubKey.pegout_chain:</td>
-          <td>{{ output.scriptPubKey.pegout_chain }}</td>
+          <td>{{ output.pegout_chain }}</td>
         </tr>
 
-        <tr ng-show="output.scriptPubKey.pegout_asm">
+        <tr ng-show="output.pegout_scriptpubkey_asm">
           <td>scriptPubKey.pegout_asm:</td>
-          <td>{{ output.scriptPubKey.pegout_asm }}</td>
+          <td>{{ output.pegout_scriptpubkey_asm }}</td>
         </tr>
 
-        <tr ng-show="output.scriptPubKey.pegout_hex">
+        <tr ng-show="output.pegout_scriptpubkey_hex">
           <td>scriptPubKey.pegout_hex:</td>
-          <td>{{ output.scriptPubKey.pegout_hex }}</td>
+          <td>{{ output.pegout_scriptpubkey_hex }}</td>
         </tr>
 
-        <tr ng-show="output.scriptPubKey.pegout_reqSigs">
+        <tr ng-show="output.pegout_scriptpubkey_reqsigs">
           <td>scriptPubKey.pegout_reqSigs:</td>
-          <td>{{ output.scriptPubKey.pegout_reqSigs }}</td>
+          <td>{{ output.pegout_scriptpubkey_reqsigs }}</td>
         </tr>
 
-        <tr ng-show="output.scriptPubKey.pegout_type">
+        <tr ng-show="output.pegout_scriptpubkey_type">
           <td>scriptPubKey.pegout_type:</td>
-          <td>{{ output.scriptPubKey.pegout_type }}</td>
+          <td>{{ output.pegout_scriptpubkey_type }}</td>
         </tr>
 
-        <tr ng-show="output.scriptPubKey.pegout_addresses">
+        <tr ng-show="output.pegout_scriptpubkey_type.length">
           <td>scriptPubKey.pegout_addresses:</td>
           <td>
             <table border="1">
-              <tr ng-repeat="addr in output.scriptPubKey.pegout_addresses">
+              <tr ng-repeat="addr in output.pegout_scriptpubkey_type">
                 <td>
-                  <a ng-href="#!/chain/{{output.scriptPubKey.pegout_chain}}/address?address={{addr}}">{{ addr }}</a>
+                  <a ng-href="#!/chain/{{output.pegout_chain}}/address?address={{addr}}">{{ addr }}</a>
                 </td>
               </tr>
             </table>
