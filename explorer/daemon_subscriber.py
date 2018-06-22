@@ -122,21 +122,6 @@ class PegoutGenerator(SidechainGenerator):
         except Exception as e:
             print("Error in PegoutGenerator._cron_loop:", type(e), e)
 
-class MempoolSaver(process.base.CronCacher):
-
-    def __init__(self, chain, rpccaller, wait_time, initial_wait_time,
-                 *args, **kwargs):
-
-        super(MempoolSaver, self).__init__(chain, rpccaller, None, wait_time, initial_wait_time,
-                                                 *args, **kwargs)
-
-    def _cron_loop(self):
-        try:
-            self.rpccaller.RpcCall('savemempool', {})
-            print('Success saving mempool...')
-        except Exception as e:
-            print("Error in MempoolSaver._cron_loop:", type(e), e)
-
 
 def IncrementStats(stats, interval, tx_fee, tx_size):
     stats['count'][interval] = stats['count'][interval] + 1

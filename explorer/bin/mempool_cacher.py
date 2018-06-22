@@ -17,7 +17,9 @@ FLAGS = gflags.FLAGS
 
 # ===----------------------------------------------------------------------===
 
-from explorer.daemon_subscriber import MempoolStatsCacher, MempoolSaver
+from explorer import process
+
+from explorer.daemon_subscriber import MempoolStatsCacher
 from explorer.env_config import AVAILABLE_CHAINS
 
 chain = FLAGS.chain
@@ -30,5 +32,5 @@ mempool_cacher.start()
 if 'mempool_saver' in AVAILABLE_CHAINS[chain]:
     mempool_saver_params = [chain, AVAILABLE_CHAINS[chain]['rpc']]
     mempool_saver_params.extend(AVAILABLE_CHAINS[chain]['proc']['mempool_saver'])
-    mempool_saver = MempoolSaver(*mempool_saver_params)
+    mempool_saver = process.mempoolsaver.MempoolSaver(*mempool_saver_params)
     mempool_saver.start()
