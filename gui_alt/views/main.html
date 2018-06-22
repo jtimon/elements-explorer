@@ -380,7 +380,7 @@
           <td>{{ input.vout }}</td>
         </tr>
 
-        <tr ng-show="input.is_pegin">
+        <tr ng-show="input.pegin_witness.length">
           <td>Pegin witness:</td>
           <td>
             <table border="1">
@@ -391,21 +391,21 @@
           </td>
         </tr>
 
-        <tr ng-show="input.scriptSig.asm">
+        <tr ng-show="input.scriptsig_asm">
           <td>scriptSig.asm:</td>
-          <td style="overflow-wrap: break-word; max-width: 550px;">{{ input.scriptSig.asm }}</td>
+          <td style="overflow-wrap: break-word; max-width: 550px;">{{ input.scriptsig_asm }}</td>
         </tr>
 
-        <tr ng-show="input.scriptSig.hex">
+        <tr ng-show="input.scriptsig_hex">
           <td>scriptSig.hex:</td>
-          <td style="overflow-wrap: break-word; max-width: 550px;">{{ input.scriptSig.hex }}</td>
+          <td style="overflow-wrap: break-word; max-width: 550px;">{{ input.scriptsig_hex }}</td>
         </tr>
 
-        <tr ng-show="input.scriptWitness">
+        <tr ng-show="input.scriptwitness.length">
           <td>Script Witness:</td>
           <td>
             <table border="1">
-              <tr ng-repeat="wit in input.scriptWitness">
+              <tr ng-repeat="wit in input.scriptwitness">
                 <td style="overflow-wrap: break-word; max-width: 550px;">{{ wit }}</td>
               </tr>
             </table>
