@@ -19,14 +19,13 @@ FLAGS = gflags.FLAGS
 
 from explorer import process
 
-from explorer.daemon_subscriber import MempoolStatsCacher
 from explorer.env_config import AVAILABLE_CHAINS
 
 chain = FLAGS.chain
 
 mempool_cacher_params = [chain, AVAILABLE_CHAINS[chain]['rpc'], AVAILABLE_CHAINS[chain]['db'].create()]
 mempool_cacher_params.extend(AVAILABLE_CHAINS[chain]['proc']['mempool_cacher'])
-mempool_cacher = MempoolStatsCacher(*mempool_cacher_params)
+mempool_cacher = process.mempoolstats.MempoolStatsCacher(*mempool_cacher_params)
 mempool_cacher.start()
 
 if 'mempool_saver' in AVAILABLE_CHAINS[chain]:
