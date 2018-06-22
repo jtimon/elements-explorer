@@ -2,12 +2,11 @@
 import binascii
 import datetime
 import json
-import multiprocessing
 import time
 
-from mintools import zmqmin, minql, ormin
+from mintools import zmqmin, minql
 
-from explorer import models
+from explorer import models, process
 
 MEMPOOL_STATS_INTERVALS = (
     range(1, 5) + range(5, 30, 5) + range(30, 100, 10) +
@@ -23,42 +22,7 @@ def FeerateFromBtcFeeStrAndVsize(btc_str, vsize):
     fee_sat = BtcStrToSatInt(btc_str)
     return int(fee_sat / vsize)
 
-class RpcCacher(object):
-
-    def __init__(self, rpccaller, db_client):
-        super(RpcCacher, self).__init__()
-
-        self.rpccaller = rpccaller
-        models.RpcCachedModel.set_rpccaller(rpccaller)
-        self.db_client = db_client
-        ormin.Model.set_db(db_client)
-
-class ChainCacher(RpcCacher):
-
-    def __init__(self, chain, rpccaller, db_client):
-
-        super(ChainCacher, self).__init__(rpccaller, db_client)
-
-        self.chain = chain
-        ormin.Form.set_namespace(self.chain)
-
-class CronCacher(ChainCacher, multiprocessing.Process):
-
-    def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time,
-                 *args, **kwargs):
-
-        super(CronCacher, self).__init__(chain, rpccaller, db_client)
-
-        self.wait_time = wait_time
-        self.initial_wait_time = initial_wait_time
-
-    def run(self):
-        time.sleep(self.initial_wait_time)
-        while True:
-            self._cron_loop()
-            time.sleep(self.wait_time)
-
-class BlockGenerator(CronCacher):
+class BlockGenerator(process.base.CronCacher):
 
     def __init__(self, chain, rpccaller, wait_time, initial_wait_time,
                  *args, **kwargs):
@@ -73,7 +37,7 @@ class BlockGenerator(CronCacher):
         except Exception as e:
             print("Error in BlockGenerator._cron_loop:", type(e), e)
 
-class TxGenerator(CronCacher):
+class TxGenerator(process.base.CronCacher):
 
     def __init__(self, chain, rpccaller, wait_time, initial_wait_time,
                  *args, **kwargs):
@@ -89,7 +53,7 @@ class TxGenerator(CronCacher):
         except Exception as e:
             print("Error in TxGenerator._cron_loop:", type(e), e)
 
-class SidechainGenerator(CronCacher):
+class SidechainGenerator(process.base.CronCacher):
 
     def __init__(self, chain, rpccaller, parent_rpccaller, wait_time, initial_wait_time,
                  *args, **kwargs):
@@ -158,7 +122,7 @@ class PegoutGenerator(SidechainGenerator):
         except Exception as e:
             print("Error in PegoutGenerator._cron_loop:", type(e), e)
 
-class MempoolSaver(CronCacher):
+class MempoolSaver(process.base.CronCacher):
 
     def __init__(self, chain, rpccaller, wait_time, initial_wait_time,
                  *args, **kwargs):
@@ -179,7 +143,7 @@ def IncrementStats(stats, interval, tx_fee, tx_size):
     stats['fee'][interval] = stats['fee'][interval] + BtcStrToSatInt(tx_fee)
     stats['vsize'][interval] = stats['vsize'][interval] + tx_size
 
-class MempoolStatsCacher(CronCacher):
+class MempoolStatsCacher(process.base.CronCacher):
 
     def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time,
                  *args, **kwargs):
@@ -237,7 +201,7 @@ class MempoolStatsCacher(CronCacher):
             self.mempoolstats_insert(stat_type, int_time, stats)
 
 
-class GreedyCacher(CronCacher):
+class GreedyCacher(process.base.CronCacher):
 
     def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time, cache_txs, cache_stats, wait_time_greedy=5):
 
