@@ -70,6 +70,36 @@ class Output(ormin.Model):
         self.id = "%s_%s" % (self.tx_id, self.n)
 
 
+class Input(ormin.Model):
+    in_pos = ormin.IntField()
+
+    coinbase = ormin.StringField(required=False)
+    txid = ormin.StringField(required=False)
+    vout = ormin.IntField(required=False)
+    scriptsig_asm = ormin.TextField(required=False)
+    scriptsig_hex = ormin.TextField(required=False)
+    scriptwitness = ormin.BlobField(required=False)
+    pegin_witness = ormin.BlobField(required=False)
+    sequence = ormin.BigIntField(required=False)
+
+    def __init__(self, json_dict=None, *args, **kwargs):
+
+        if 'scriptWitness' in json_dict:
+            json_dict['scriptwitness'] = json.dumps(json_dict['scriptWitness'])
+
+        if 'pegin_witness' in json_dict:
+            json_dict['pegin_witness'] = json_dict['pegin_witness']
+
+        if 'scriptSig' in json_dict:
+            json_dict['scriptsig_asm'] = json_dict['scriptSig']['asm']
+            json_dict['scriptsig_hex'] = json_dict['scriptSig']['hex']
+
+        super(Input, self).__init__(json_dict=json_dict, *args, **kwargs)
+
+    def new_id(self):
+        self.id = "%s_%s" % (self.tx_id, self.in_pos)
+
+
 class Tx(RpcCachedModel):
     blockhash = ormin.StringField(index=True)
     time = ormin.IntField(required=False)
@@ -79,7 +109,7 @@ class Tx(RpcCachedModel):
     version = ormin.IntField()
     locktime = ormin.BigIntField()
 
-    vin = ormin.BlobField()
+    vin = ormin.OneToManyField(Input, 'tx_id', cascade=True)
     vout = ormin.OneToManyField(Output, 'tx_id', cascade=True)
 
     @classmethod
@@ -87,6 +117,13 @@ class Tx(RpcCachedModel):
         json_result = super(Tx, cls)._rpccaller.RpcCall('getrawtransaction', {'txid': req_id, 'verbose': 1})
         if 'error' in json_result:
             return json_result
+
+        # TODO Return this from the daemons?
+        # Even if the numbers were wrong due to json non-specified "magic",
+        # we should be fine since this is only needed for guaranteeing
+        # a unique id for inputs
+        for it in xrange(len(json_result['vin'])):
+            json_result['vin'][it]['in_pos'] = it
 
         tx = Tx(json_dict=json_result)
         tx.id = req_id

@@ -6,4 +6,4 @@ from .stats import (
     Blockstats,
     Mempoolstats,
 )
-from .transaction import Output, Tx
+from .transaction import Output, Input, Tx
