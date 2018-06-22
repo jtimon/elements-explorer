@@ -90,8 +90,8 @@ class TransactionPage extends Component {
         <div className="container">
           <div className="block-stats-table">
             <div>
-              <div>Timestamp</div>
-              <div />
+              <div>Included in Block</div>
+              <div><Link to={`/block/${tx.blockhash}`}>{tx.blockhash}</Link></div>
             </div>
             <div>
               <div>Size (KB)</div>
@@ -100,10 +100,6 @@ class TransactionPage extends Component {
             <div>
               <div>Virtual size</div>
               <div>{txWeight}</div>
-            </div>
-            <div>
-              <div>Included in Block</div>
-              <div><Link to={`/block/${tx.blockhash}`}>{tx.blockhash}</Link></div>
             </div>
           </div>
           {(txLoaded) ? (

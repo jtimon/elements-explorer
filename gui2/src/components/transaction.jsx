@@ -156,7 +156,7 @@ class Transaction extends Component {
       <div className="transaction-box">
         <div className="header">
           <div>
-            <Link to={`/tx/${transaction.txid}`}>{transaction.txid}</Link>
+            <Link to={`/tx/${transaction.id}`}>{transaction.id}</Link>
           </div>
           <div>
             <div
