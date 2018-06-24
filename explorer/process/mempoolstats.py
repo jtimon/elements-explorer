@@ -1,8 +1,8 @@
 
 import datetime
 
-from explorer import models
-from explorer.process import base
+from explorer.models.stats import Mempoolstats
+from explorer.process.base import CronCacher
 
 MEMPOOL_STATS_INTERVALS = (
     range(1, 5) + range(5, 30, 5) + range(30, 100, 10) +
@@ -23,7 +23,7 @@ def IncrementStats(stats, interval, tx_fee, tx_size):
     stats['fee'][interval] = stats['fee'][interval] + BtcStrToSatInt(tx_fee)
     stats['vsize'][interval] = stats['vsize'][interval] + tx_size
 
-class MempoolStatsCacher(base.CronCacher):
+class MempoolStatsCacher(CronCacher):
 
     def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time,
                  *args, **kwargs):
@@ -35,7 +35,7 @@ class MempoolStatsCacher(base.CronCacher):
         self.stats_intervals = MEMPOOL_STATS_INTERVALS
 
     def mempoolstats_insert(self, stat_type, int_time, stats):
-        mempoolstats_elem = models.stats.Mempoolstats(json_dict={
+        mempoolstats_elem = Mempoolstats(json_dict={
             'time': int_time,
             'stat_type': stat_type,
             'blob': stats[stat_type],
