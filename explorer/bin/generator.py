@@ -17,7 +17,8 @@ FLAGS = gflags.FLAGS
 
 # ===----------------------------------------------------------------------===
 
-from explorer.daemon_subscriber import BlockGenerator, TxGenerator, PegoutGenerator, PeginGenerator
+from explorer.process.generator.block import BlockGenerator
+from explorer.daemon_subscriber import TxGenerator, PegoutGenerator, PeginGenerator
 from explorer.env_config import AVAILABLE_CHAINS
 
 chain = FLAGS.chain
