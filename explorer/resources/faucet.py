@@ -1,10 +1,6 @@
 
 import datetime
 
-from mintools import minql
-
-from explorer import models
-
 from .chain import UnknownChainError, ChainResource
 
 COIN = 100000000
