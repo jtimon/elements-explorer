@@ -5,9 +5,10 @@ import time
 
 from mintools import zmqmin, minql
 
-from explorer import models, process
+from explorer import models
+from explorer.process.base import CronCacher
 
-class BlockGenerator(process.base.CronCacher):
+class BlockGenerator(CronCacher):
 
     def __init__(self, chain, rpccaller, wait_time, initial_wait_time,
                  *args, **kwargs):
@@ -22,7 +23,7 @@ class BlockGenerator(process.base.CronCacher):
         except Exception as e:
             print("Error in BlockGenerator._cron_loop:", type(e), e)
 
-class TxGenerator(process.base.CronCacher):
+class TxGenerator(CronCacher):
 
     def __init__(self, chain, rpccaller, wait_time, initial_wait_time,
                  *args, **kwargs):
@@ -38,7 +39,7 @@ class TxGenerator(process.base.CronCacher):
         except Exception as e:
             print("Error in TxGenerator._cron_loop:", type(e), e)
 
-class SidechainGenerator(process.base.CronCacher):
+class SidechainGenerator(CronCacher):
 
     def __init__(self, chain, rpccaller, parent_rpccaller, wait_time, initial_wait_time,
                  *args, **kwargs):
@@ -108,7 +109,7 @@ class PegoutGenerator(SidechainGenerator):
             print("Error in PegoutGenerator._cron_loop:", type(e), e)
 
 
-class GreedyCacher(process.base.CronCacher):
+class GreedyCacher(CronCacher):
 
     def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time, cache_txs, cache_stats, wait_time_greedy=5):
 

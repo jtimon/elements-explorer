@@ -4,7 +4,7 @@ import time
 
 from mintools import ormin
 
-from explorer import models
+from explorer.models.rpc_cached import RpcCachedModel
 
 class RpcCacher(object):
 
@@ -12,7 +12,7 @@ class RpcCacher(object):
         super(RpcCacher, self).__init__()
 
         self.rpccaller = rpccaller
-        models.RpcCachedModel.set_rpccaller(rpccaller)
+        RpcCachedModel.set_rpccaller(rpccaller)
         self.db_client = db_client
         ormin.Model.set_db(db_client)
 
