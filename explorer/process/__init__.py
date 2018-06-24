@@ -1,3 +1,2 @@
 
-import mempoolsaver
 import mempoolstats

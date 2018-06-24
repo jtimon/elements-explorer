@@ -1,7 +1,7 @@
 
-from explorer.process import base
+from explorer.process.base import CronCacher
 
-class MempoolSaver(base.CronCacher):
+class MempoolSaver(CronCacher):
 
     def __init__(self, chain, rpccaller, wait_time, initial_wait_time,
                  *args, **kwargs):
