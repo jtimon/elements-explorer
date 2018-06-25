@@ -17,7 +17,7 @@ FLAGS = gflags.FLAGS
 
 # ===----------------------------------------------------------------------===
 
-from explorer.daemon_subscriber import DaemonReorgManager
+from explorer.process.subscriber import DaemonReorgManager
 from explorer.env_config import AVAILABLE_CHAINS
 
 chain = FLAGS.chain
