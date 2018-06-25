@@ -1,7 +1,8 @@
 
 import json
 
-from explorer import models, services
+from explorer.models.transaction import Tx
+from explorer.services import GetBlockByHeight
 
 from .chain import UnknownChainError, ChainResource
 
@@ -9,7 +10,7 @@ class AddressResource(ChainResource):
 
     def search_by_address(self, height, addresses):
 
-        block = services.GetBlockByHeight(self.rpccaller, height)
+        block = GetBlockByHeight(self.rpccaller, height)
         if isinstance(block, dict) and 'error' in block:
             return block
 
