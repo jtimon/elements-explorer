@@ -1,7 +1,7 @@
 
 import os
 
-from mintools import minql
+from mintools.minql import MinqlFactory
 
 from explorer.services.rpcdaemon import RpcCaller
 
@@ -15,7 +15,7 @@ CONFIG = {
     'DB_PASS': os.environ.get('DB_PASS'),
 }
 
-DB_FACTORY = minql.MinqlFactory(CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'])
+DB_FACTORY = MinqlFactory(CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'])
 DB_CLIENT = DB_FACTORY.create()
 
 INIT_DB_TIME = 120
