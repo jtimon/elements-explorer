@@ -1,12 +1,16 @@
 
 from mintools import ormin
 
-from explorer import models
+from explorer.models.block import Block
+from explorer.models.chaininfo import Chaininfo
+from explorer.models.stats import Blockstats
+from explorer.models.stats import Mempoolstats
+from explorer.models.transaction import Tx
 
 ORMIN_DOMAIN = ormin.Domain([
-    models.Chaininfo,
-    models.Block,
-    models.transaction.Tx,
-    models.stats.Blockstats,
-    models.stats.Mempoolstats,
+    Block,
+    Blockstats,
+    Chaininfo,
+    Mempoolstats,
+    Tx,
 ])
