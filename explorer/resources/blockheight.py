@@ -1,5 +1,5 @@
 
-from explorer import services
+from explorer.services.blockheight import GetBlockByHeight
 
 from .chain import UnknownChainError, ChainResource
 
@@ -20,7 +20,7 @@ class BlockheightResource(ChainResource):
         if not 'id' in request:
             return {'error': {'message': 'No id specified to get %s by id.' % self.resource}}, 400
 
-        response = services.GetBlockByHeight(self.rpccaller, request['id'])
+        response = GetBlockByHeight(self.rpccaller, request['id'])
         if isinstance(response, dict) and 'error' in response:
             return {'error': response['error']}, 400
 

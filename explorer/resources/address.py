@@ -2,7 +2,7 @@
 import json
 
 from explorer.models.transaction import Tx
-from explorer.services import GetBlockByHeight
+from explorer.services.blockheight import GetBlockByHeight
 
 from .chain import UnknownChainError, ChainResource
 
