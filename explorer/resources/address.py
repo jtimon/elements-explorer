@@ -18,10 +18,10 @@ class AddressResource(ChainResource):
         expenditures = []
         tx_ids = json.loads(block.tx)
         for txid in tx_ids:
-            orm_tx = models.transaction.Tx.get(txid)
+            orm_tx = Tx.get(txid)
             if isinstance(orm_tx, dict) and 'error' in orm_tx:
                 return orm_tx
-            elif not isinstance(orm_tx, models.transaction.Tx):
+            elif not isinstance(orm_tx, Tx):
                 print('Error in AddressResource.search_by_address: wrong type for tx', txid, orm_tx)
                 return {'error': {'message': 'Error getting tx %s (address)' % txid}}
             tx = orm_tx.json()
@@ -33,10 +33,10 @@ class AddressResource(ChainResource):
 
             for tx_input in tx['vin']:
                 if 'txid' in tx_input and 'vout' in tx_input:
-                    orm_tx_in = models.transaction.Tx.get(tx_input['txid'])
+                    orm_tx_in = Tx.get(tx_input['txid'])
                     if isinstance(orm_tx_in, dict) and 'error' in orm_tx_in:
                         return orm_tx_in
-                    elif not isinstance(orm_tx_in, models.transaction.Tx):
+                    elif not isinstance(orm_tx_in, Tx):
                         print('Error in AddressResource.search_by_address_ascendant: wrong type for tx', tx_input['txid'], orm_tx_in)
                         return {'error': {'message': 'Error getting tx %s (address)' % tx_input['txid']}}
                     tx_in = orm_tx_in.json()
