@@ -1,11 +1,11 @@
 
 from mintools import minql
 
-from explorer import models
+from explorer.models.block import Block
 
 def GetBlockByHeight(rpccaller, height):
     try:
-        block_by_height = models.Block.search({'height': height})
+        block_by_height = Block.search({'height': height})
     except minql.NotFoundError:
         block_by_height = []
     except Exception as e:
@@ -19,10 +19,10 @@ def GetBlockByHeight(rpccaller, height):
     blockhash = rpccaller.RpcCall('getblockhash', {'height': height})
     if 'error' in blockhash:
         return blockhash
-    block = models.Block.get(blockhash)
+    block = Block.get(blockhash)
     if isinstance(block, dict) and 'error' in block:
         return block
-    elif not isinstance(block, models.Block):
+    elif not isinstance(block, Block):
         print('Error in GetBlockByHeight: wrong type for block', blockhash, block)
         return {'error': {'message': 'Error getting block %s (by height %s)' % (blockhash, height)}}
     return block
