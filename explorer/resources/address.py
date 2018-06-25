@@ -28,7 +28,7 @@ class AddressResource(ChainResource):
 
             for output in tx['vout']:
                 for address in addresses:
-                    if 'addresses' in output['scriptPubKey'] and address in output['scriptPubKey']['addresses']:
+                    if 'scriptpubkey_addresses' in output and address in output['scriptpubkey_addresses']:
                         receipts.append({'output': output, 'txid': txid, 'height': block.height})
 
             for tx_input in tx['vin']:
@@ -43,7 +43,7 @@ class AddressResource(ChainResource):
                     print('tx_in', tx_in, "tx_input['vout']", tx_input['vout'])
                     output = tx_in['vout'][ tx_input['vout'] ]
                     for address in addresses:
-                        if 'addresses' in output['scriptPubKey'] and address in output['scriptPubKey']['addresses']:
+                        if 'scriptpubkey_addresses' in output and address in output['scriptpubkey_addresses']:
                             expenditures.append({'input': tx_input, 'prev_output': output, 'txid': tx['txid'], 'height': block.height})
 
         return {'expenditures': expenditures, 'receipts': receipts}
