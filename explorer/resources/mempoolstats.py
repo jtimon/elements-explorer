@@ -2,9 +2,9 @@
 import json
 import datetime
 
-from mintools import minql
+from mintools.minql import NotFoundError
 
-from explorer import models
+from explorer.models.stats import Mempoolstats
 
 from .chain import UnknownChainError, ChainResource
 
@@ -31,8 +31,8 @@ class MempoolStatsResource(ChainResource):
         min_epoch = int((datetime.datetime.now() - datetime.timedelta(seconds=seconds_ago)).strftime('%s'))
         try:
             db_result = {}
-            db_result = models.stats.Mempoolstats.search({'stat_type': request['stat_type'], 'time': {'ge': min_epoch}})
-        except minql.NotFoundError:
+            db_result = Mempoolstats.search({'stat_type': request['stat_type'], 'time': {'ge': min_epoch}})
+        except NotFoundError:
             return {'error': {'message': 'No mempoolstats in the last %s hours.' % hours_ago}}, 400
         except Exception as e:
             print("Error in MempoolStatsResource.resolve_request:", type(e), e)
