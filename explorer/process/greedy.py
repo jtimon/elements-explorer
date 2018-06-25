@@ -3,7 +3,7 @@ from explorer.process.base import CronCacher
 
 class GreedyCacher(CronCacher):
 
-    def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time, cache_txs, cache_stats, wait_time_greedy=5):
+    def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time, cache_txs, cache_stats, wait_time_greedy=2):
 
         super(GreedyCacher, self).__init__(chain, rpccaller, db_client, wait_time, initial_wait_time)
 
