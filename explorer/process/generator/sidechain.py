@@ -1,0 +1,12 @@
+
+from explorer.process.base import CronCacher
+
+class SidechainGenerator(CronCacher):
+
+    def __init__(self, chain, rpccaller, parent_rpccaller, wait_time, initial_wait_time,
+                 *args, **kwargs):
+
+        self.parent_rpccaller = parent_rpccaller
+
+        super(SidechainGenerator, self).__init__(chain, rpccaller, None, wait_time, initial_wait_time,
+                                                 *args, **kwargs)

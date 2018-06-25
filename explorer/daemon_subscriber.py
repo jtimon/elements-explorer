@@ -9,17 +9,9 @@ from explorer.models.block import Block
 from explorer.models.chaininfo import Chaininfo
 from explorer.models.stats import Blockstats
 from explorer.models.transaction import Tx
+
 from explorer.process.base import CronCacher
-
-class SidechainGenerator(CronCacher):
-
-    def __init__(self, chain, rpccaller, parent_rpccaller, wait_time, initial_wait_time,
-                 *args, **kwargs):
-
-        self.parent_rpccaller = parent_rpccaller
-
-        super(SidechainGenerator, self).__init__(chain, rpccaller, None, wait_time, initial_wait_time,
-                                                 *args, **kwargs)
+from explorer.process.generator.sidechain import SidechainGenerator
 
 class PeginGenerator(SidechainGenerator):
 
