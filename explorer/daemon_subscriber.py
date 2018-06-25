@@ -5,7 +5,10 @@ import time
 
 from mintools import zmqmin, minql
 
-from explorer import models
+from explorer.models.block import Block
+from explorer.models.chaininfo import Chaininfo
+from explorer.models.stats import Blockstats
+from explorer.models.transaction import Tx
 from explorer.process.base import CronCacher
 
 class TxGenerator(CronCacher):
@@ -107,18 +110,18 @@ class GreedyCacher(CronCacher):
 
     def cache_blockhash(self, blockhash):
         try:
-            block = models.Block.get(blockhash)
-            if not isinstance(block, models.Block):
+            block = Block.get(blockhash)
+            if not isinstance(block, Block):
                 print("Error in GreedyCacher.cache_blockhash: wrong type for block", blockhash, block)
                 return None
 
             if self.cache_stats:
-                models.stats.Blockstats.get(block.height)
+                Blockstats.get(block.height)
 
             if self.cache_txs:
                 tx_ids = json.loads(block.tx)
                 for txid in tx_ids:
-                    tx = models.transaction.Tx.get(txid)
+                    tx = Tx.get(txid)
 
             return block
 
@@ -127,8 +130,8 @@ class GreedyCacher(CronCacher):
             return None
 
     def _cron_loop(self):
-        chaininfo = models.Chaininfo.get(self.chain)
-        if not isinstance(chaininfo, models.Chaininfo):
+        chaininfo = Chaininfo.get(self.chain)
+        if not isinstance(chaininfo, Chaininfo):
             print("Error in GreedyCacher._cron_loop: wrong type for chaininfo", chaininfo)
             return
 
@@ -164,9 +167,9 @@ class DaemonReorgManager(GreedyCacher):
 
     def update_chainfo(self, block):
 
-        chaininfo = models.Chaininfo.get(self.chain)
-        if not isinstance(chaininfo, models.Chaininfo):
-            chaininfo = models.Chaininfo()
+        chaininfo = Chaininfo.get(self.chain)
+        if not isinstance(chaininfo, Chaininfo):
+            chaininfo = Chaininfo()
             chaininfo.id = self.chain
         chaininfo.bestblockhash = block.id
         chaininfo.blocks = block.height
@@ -191,10 +194,10 @@ class DaemonReorgManager(GreedyCacher):
 
             tx_criteria = {'blockhash': blockhash}
             try:
-                txs_to_delete = models.transaction.Tx.search(tx_criteria)
+                txs_to_delete = Tx.search(tx_criteria)
                 print('txs_to_delete', txs_to_delete)
                 if txs_to_delete:
-                    models.transaction.Tx.delete(tx_criteria)
+                    Tx.delete(tx_criteria)
             except minql.NotFoundError:
                 pass
 
@@ -202,7 +205,7 @@ class DaemonReorgManager(GreedyCacher):
 
         criteria = {'height': {'ge': block_height}}
         try:
-            blocks_to_delete = models.Block.search(criteria)
+            blocks_to_delete = Block.search(criteria)
             if blocks_to_delete:
                 try:
                     self.delete_txs_from_blocks(blocks_to_delete)
@@ -210,15 +213,15 @@ class DaemonReorgManager(GreedyCacher):
                     print("Error in DaemonReorgManager.delete_from_height:", type(e), e)
                     print('ERROR with blocks_to_delete', len(blocks_to_delete))
                     # return False
-                models.Block.delete(criteria)
+                Block.delete(criteria)
         except minql.NotFoundError:
             pass
 
         try:
-            stats_to_delete = models.stats.Blockstats.search(criteria)
+            stats_to_delete = Blockstats.search(criteria)
             print('stats_to_delete', len(stats_to_delete))
             if stats_to_delete:
-                models.stats.Blockstats.delete(criteria)
+                Blockstats.delete(criteria)
         except minql.NotFoundError:
             pass
 
@@ -252,8 +255,8 @@ class DaemonReorgManager(GreedyCacher):
             block_hash = block.previousblockhash
             block_height = block_height - 1
             try:
-                block = models.Block.get(block_hash)
-                if not isinstance(block, models.Block):
+                block = Block.get(block_hash)
+                if not isinstance(block, Block):
                     print('Error in DaemonReorgManager.get_ascendant: wrong type for block', block_hash, block)
                     return None
             except Exception as e:
@@ -304,11 +307,11 @@ class DaemonReorgManager(GreedyCacher):
 
     def manage_reorg(self, block):
         print('REORG DETECTED at previous height %s and hash %s' % (self.prev_reorg_height, self.prev_reorg_hash))
-        if isinstance(block, models.Block) and block.id and block.height:
+        if isinstance(block, Block) and block.id and block.height:
             print('new height %s and hash %s' % (block.height, block.id))
 
-        prev_reorg_block = models.Block.get(self.prev_reorg_hash)
-        if not isinstance(prev_reorg_block, models.Block):
+        prev_reorg_block = Block.get(self.prev_reorg_hash)
+        if not isinstance(prev_reorg_block, Block):
             print('Error in DaemonReorgManager.manage_reorg: wrong type for block', self.prev_reorg_hash, prev_reorg_block)
             return False
         common_ancestor = self.find_common_ancestor(prev_reorg_block, block)
@@ -332,9 +335,9 @@ class DaemonReorgManager(GreedyCacher):
             return False
 
         print('SUCCESS HANDLING REORG')
-        if isinstance(block, models.Block) and block.id and block.height:
+        if isinstance(block, Block) and block.id and block.height:
             print('new height %s and hash %s' % (block.height, block.id))
-        if isinstance(prev_reorg_block, models.Block) and prev_reorg_block.id and prev_reorg_block.height:
+        if isinstance(prev_reorg_block, Block) and prev_reorg_block.id and prev_reorg_block.height:
             print('previous height %s and hash %s' % (prev_reorg_block.height, prev_reorg_block.id))
         return True
 
@@ -342,8 +345,8 @@ class DaemonReorgManager(GreedyCacher):
         print('update_tip from reorg height %s hash %s to %s' % (self.prev_reorg_height, self.prev_reorg_hash, block_hash))
 
         try:
-            block = models.Block.get(block_hash)
-            if not isinstance(block, models.Block):
+            block = Block.get(block_hash)
+            if not isinstance(block, Block):
                 print('Error in DaemonReorgManager.update_tip: wrong type for block', block_hash, block)
                 return
             assert(block and block.id and block.id == block_hash and block.height and block.mediantime)
