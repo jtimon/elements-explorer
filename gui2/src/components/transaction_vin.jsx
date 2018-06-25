@@ -33,7 +33,7 @@ function VIn({
   }
   const tx = transactions[chain][vin.txid].vout[vin.vout];
   const { scriptSig } = transaction.vin[index];
-  const { type } = tx.scriptPubKey;
+  const { scriptpubkey_type } = tx;
   const vinBody = (
     <div className={dom.classNames('vin-body', dom.showIf(showAdvanced))}>
       <div>
@@ -48,10 +48,10 @@ function VIn({
   );
 
   let header = null;
-  if (!tx.scriptPubKey.addresses) {
-    header = (<span>{format.capitalizeFirstLetter(type)}</span>);
+  if (!tx.scriptpubkey_addresses) {
+    header = (<span>{format.capitalizeFirstLetter(scriptpubkey_type)}</span>);
   } else {
-    header = tx.scriptPubKey.addresses.map(addr => (
+    header = tx.scriptpubkey_addresses.map(addr => (
       <span key={addr}>{addr}</span>
     ));
   }

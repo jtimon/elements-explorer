@@ -13,7 +13,7 @@ import VOut from './transaction_vout';
 class Transaction extends Component {
   static isPegOutTx(tx) {
     for (let i = 0; i < tx.vout.length; i += 1) {
-      if ('pegout_type' in tx.vout[i].scriptPubKey) {
+      if ('pegout_scriptpubkey_type' in tx.vout[i]) {
         return true;
       }
     }
@@ -22,7 +22,7 @@ class Transaction extends Component {
 
   static isConfidentialTx(tx) {
     for (let i = 0; i < tx.vout.length; i += 1) {
-      if ('ct-bits' in tx.vout[i]) {
+      if ('ct_bits' in tx.vout[i]) {
         return true;
       }
     }
@@ -32,11 +32,11 @@ class Transaction extends Component {
   static totalVOutValue(tx) {
     let sum = 0;
     for (let i = 0; i < tx.vout.length; i += 1) {
-      if (!('ct-bits' in tx.vout[i])) {
-        sum += tx.vout[i].value;
+      if (!('ct_bits' in tx.vout[i])) {
+        sum += Number(tx.vout[i].value);
       }
     }
-    return sum;
+    return Number(sum.toFixed(8));
   }
 
   constructor(props) {
@@ -66,7 +66,7 @@ class Transaction extends Component {
         if (parentChain) {
           promises.push(Promise.resolve().then(() => (
             api.getTransaction(vin.txid, parentChain).then((data) => {
-              const [address] = data.vout[vin.vout].scriptPubKey.addresses;
+              const [address] = data.vout[vin.vout].scriptpubkey_addresses;
               vins[i] = {
                 address,
                 coinbase: false,
