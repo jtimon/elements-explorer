@@ -59,7 +59,7 @@ class Transaction extends Component {
     const promises = [];
     let isPegIn = false;
     tx.vin.forEach((vin, i) => {
-      if (vin.is_pegin) {
+      if (vin.pegin_witness && vin.pegin_witness.length > 0) {
         const { availableChains, chain } = this.props;
         const parentChain = availableChains[chain].parent_chain;
         isPegIn = true;
@@ -75,6 +75,13 @@ class Transaction extends Component {
                 vout: vin.vout,
               };
               return data;
+            }).catch(function(){
+              vins[i] = {
+                coinbase: false,
+                pegin: true,
+                txid: vin.txid,
+                vout: vin.vout,
+              };
             })
           )));
         } else {

@@ -9,9 +9,13 @@ function VIn({
   index, showAdvanced, transaction, vin, transactions, chain,
 }) {
   if (vin.pegin) {
+    let address = 'Output in parent chain';
+    if (vin.address) {
+      address = vin.address;
+    }
     return (
       <div className={dom.classNames('vin', 'peg-in', dom.classIf(showAdvanced, 'active'))}>
-        <div className="vin-header">{vin.address}</div>
+        <div className="vin-header">{address}</div>
         <div className={dom.classNames('vin-body', dom.showIf(showAdvanced))}>
           <div>
             <div>txid</div>
@@ -32,17 +36,18 @@ function VIn({
     );
   }
   const tx = transactions[chain][vin.txid].vout[vin.vout];
-  const { scriptSig } = transaction.vin[index];
+  const { scriptsig_asm } = transaction.vin[index];
+  const { scriptsig_hex } = transaction.vin[index];
   const { scriptpubkey_type } = tx;
   const vinBody = (
     <div className={dom.classNames('vin-body', dom.showIf(showAdvanced))}>
       <div>
         <div>scriptSig.ASM</div>
-        <div>{scriptSig.asm}</div>
+        <div>{scriptsig_asm}</div>
       </div>
       <div>
         <div>scriptSig.hex</div>
-        <div>{scriptSig.hex}</div>
+        <div>{scriptsig_hex}</div>
       </div>
     </div>
   );
