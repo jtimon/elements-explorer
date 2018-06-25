@@ -1,8 +1,20 @@
 
 from mintools import restmin, ormin
 
-from explorer import models, resources
 from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS
+
+from explorer.models.block import Block
+from explorer.models.chaininfo import Chaininfo
+from explorer.models.stats import Blockstats
+from explorer.models.transaction import Tx
+
+from explorer.resources.address import AddressResource
+from explorer.resources.blockheight import BlockheightResource
+from explorer.resources.faucet import FaucetInfoResource
+from explorer.resources.faucet import FreeCoinsResource
+from explorer.resources.generic import GetByIdResource
+from explorer.resources.mempoolstats import MempoolStatsResource
+from explorer.resources.rpccaller import RpcCallerResource
 
 def get_available_chains(**kwargs):
     available_chains = {}
@@ -21,19 +33,19 @@ class ExplorerApiDomain(restmin.Domain):
 API_DOMAIN = ExplorerApiDomain({
     'available_chains': restmin.resources.FunctionResource(get_available_chains),
     # never cached, always hits the node
-    'getmempoolentry': resources.rpccaller.RpcCallerResource('getmempoolentry'),
-    'getrawmempool': resources.rpccaller.RpcCallerResource('getrawmempool', limit_array_result=4),
-    'faucetinfo': resources.faucet.FaucetInfoResource(),
-    'freecoins': resources.faucet.FreeCoinsResource(),
+    'getmempoolentry': RpcCallerResource('getmempoolentry'),
+    'getrawmempool': RpcCallerResource('getrawmempool', limit_array_result=4),
+    'faucetinfo': FaucetInfoResource(),
+    'freecoins': FreeCoinsResource(),
     # Data from db, independent from reorgs
-    'mempoolstats': resources.mempoolstats.MempoolStatsResource(),
+    'mempoolstats': MempoolStatsResource(),
     # currently goes throught the whole block
-    'address': resources.address.AddressResource(),
+    'address': AddressResource(),
     # cached in server and gui
-    'block': resources.generic.GetByIdResource('block', models.Block),
-    'blockheight': resources.blockheight.BlockheightResource(),
-    'tx': resources.generic.GetByIdResource('tx', models.transaction.Tx),
-    'blockstats': resources.generic.GetByIdResource('blockstats', models.stats.Blockstats, ['stats_support']),
+    'block': GetByIdResource('block', Block),
+    'blockheight': BlockheightResource(),
+    'tx': GetByIdResource('tx', Tx),
+    'blockstats': GetByIdResource('blockstats', Blockstats, ['stats_support']),
     # TODO handle reorgs from gui (ie use websockets)
-    'chaininfo': resources.generic.GetByIdResource('chaininfo', models.Chaininfo),
+    'chaininfo': GetByIdResource('chaininfo', Chaininfo),
 }, DB_CLIENT)
