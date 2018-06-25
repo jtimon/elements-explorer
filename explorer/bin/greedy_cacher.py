@@ -17,7 +17,7 @@ FLAGS = gflags.FLAGS
 
 # ===----------------------------------------------------------------------===
 
-from explorer.daemon_subscriber import GreedyCacher
+from explorer.process.greedy import GreedyCacher
 from explorer.env_config import AVAILABLE_CHAINS
 
 chain = FLAGS.chain
