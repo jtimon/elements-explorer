@@ -17,10 +17,10 @@ FLAGS = gflags.FLAGS
 
 # ===----------------------------------------------------------------------===
 
-from explorer.daemon_subscriber import PegoutGenerator
 from explorer.env_config import AVAILABLE_CHAINS
 from explorer.process.generator.block import BlockGenerator
 from explorer.process.generator.pegin import PeginGenerator
+from explorer.process.generator.pegout import PegoutGenerator
 from explorer.process.generator.transaction import TxGenerator
 
 chain = FLAGS.chain
