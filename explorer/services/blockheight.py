@@ -1,12 +1,12 @@
 
-from mintools import minql
+from mintools.minql import NotFoundError
 
 from explorer.models.block import Block
 
 def GetBlockByHeight(rpccaller, height):
     try:
         block_by_height = Block.search({'height': height})
-    except minql.NotFoundError:
+    except NotFoundError:
         block_by_height = []
     except Exception as e:
         print("Error in GetBlockByHeight:", type(e), e)
