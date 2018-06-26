@@ -32,7 +32,14 @@ class AddressResource(ChainResource):
                         receipts.append({'output': output, 'txid': txid, 'height': block.height})
 
             for tx_input in tx['vin']:
-                if 'txid' in tx_input and 'vout' in tx_input:
+                pegin_witness = []
+                if 'pegin_witness' in tx_input and tx_input['pegin_witness']:
+                    if isinstance(tx_input['pegin_witness'], basestring):
+                        pegin_witness = json.loads(tx_input['pegin_witness'])
+                    else:
+                        pegin_witness = tx_input['pegin_witness']
+
+                if 'txid' in tx_input and 'vout' in tx_input and len(pegin_witness) == 0:
                     orm_tx_in = Tx.get(tx_input['txid'])
                     if isinstance(orm_tx_in, dict) and 'error' in orm_tx_in:
                         return orm_tx_in
@@ -40,11 +47,13 @@ class AddressResource(ChainResource):
                         print('Error in AddressResource.search_by_address_ascendant: wrong type for tx', tx_input['txid'], orm_tx_in)
                         return {'error': {'message': 'Error getting tx %s (address)' % tx_input['txid']}}
                     tx_in = orm_tx_in.json()
-                    print('tx_in', tx_in, "tx_input['vout']", tx_input['vout'])
-                    output = tx_in['vout'][ tx_input['vout'] ]
-                    for address in addresses:
-                        if 'scriptpubkey_addresses' in output and address in output['scriptpubkey_addresses']:
-                            expenditures.append({'input': tx_input, 'prev_output': output, 'txid': tx['txid'], 'height': block.height})
+                    if tx_input['vout'] < len(tx_in['vout']):
+                        output = tx_in['vout'][ tx_input['vout'] ]
+                        for address in addresses:
+                            if 'scriptpubkey_addresses' in output and address in output['scriptpubkey_addresses']:
+                                expenditures.append({'input': tx_input, 'prev_output': output, 'txid': tx['id'], 'height': block.height})
+                    else:
+                        print('Error in search by address, index out of range', tx_input, tx_in)
 
         return {'expenditures': expenditures, 'receipts': receipts}
 
@@ -67,7 +76,12 @@ class AddressResource(ChainResource):
 
         json_result = {'expenditures': [], 'receipts': []}
         for height in xrange(request['start_height'], request['end_height'] + 1):
-            address_block_result = self.search_by_address(height, request['addresses'])
+            address_block_result = {}
+            try:
+                address_block_result = self.search_by_address(height, request['addresses'])
+            except Exception as e:
+                print("Error in AddressResource.resolve_request:", type(e), e)
+                return {'error': {'message': 'Error while searching by address'}}, 400
             if 'error' in address_block_result:
                 return {'error': address_block_result['error']}, 400
             if 'expenditures' in address_block_result:
