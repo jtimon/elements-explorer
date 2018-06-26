@@ -1,4 +1,4 @@
-web: gunicorn webflask:app -b "$WEB_HOST:$WEB_PORT" -w $WEB_WORKERS -k gevent --log-config $GUNICORN_LOG_FILE
+web: gunicorn webflask:app -b "$WEB_HOST:$WEB_PORT" -w $WEB_WORKERS -k gevent --log-config $GUNICORN_LOG_FILE --timeout $WEB_TIMEOUT
 
 # Restart only tables when they need it:
 # Always force db restart per chain with --forcechains
