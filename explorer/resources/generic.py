@@ -1,7 +1,8 @@
 
 import json
 
-from mintools import ormin
+from mintools.ormin import Model as ormin_model
+
 from explorer.env_config import AVAILABLE_CHAINS
 
 from .chain import UnknownChainError, ChainResource
@@ -39,7 +40,7 @@ class GetByIdResource(ChainResource):
             return {'error': {'message': 'No result db for %s %s.' % (self.resource, request['id'])}}, 400
         elif isinstance(db_result, dict):
             response = db_result
-        elif isinstance(db_result, ormin.Model):
+        elif isinstance(db_result, ormin_model):
             response = db_result.json()
         else:
             print('ERROR: getting %s. db_result:' % self.resource, db_result)
