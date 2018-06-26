@@ -1,11 +1,14 @@
 
 import binascii
 
-from mintools import zmqmin
+from mintools.zmqmin import (
+    Process,
+    Subscriber,
+)
 
 from explorer.process.reorg import DaemonReorgManager
 
-class DaemonSubscriber(zmqmin.Subscriber, zmqmin.Process):
+class DaemonSubscriber(Subscriber, Process):
 
     def __init__(self,
                  address,

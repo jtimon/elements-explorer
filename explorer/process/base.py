@@ -2,7 +2,8 @@
 import multiprocessing
 import time
 
-from mintools import ormin
+from mintools.ormin import Form as ormin_form
+from mintools.ormin import Model as ormin_model
 
 from explorer.models.rpc_cached import RpcCachedModel
 
@@ -14,7 +15,7 @@ class RpcCacher(object):
         self.rpccaller = rpccaller
         RpcCachedModel.set_rpccaller(rpccaller)
         self.db_client = db_client
-        ormin.Model.set_db(db_client)
+        ormin_model.set_db(db_client)
 
 
 class ChainCacher(RpcCacher):
@@ -24,7 +25,7 @@ class ChainCacher(RpcCacher):
         super(ChainCacher, self).__init__(rpccaller, db_client)
 
         self.chain = chain
-        ormin.Form.set_namespace(self.chain)
+        ormin_form.set_namespace(self.chain)
 
 
 class CronCacher(ChainCacher, multiprocessing.Process):

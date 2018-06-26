@@ -1,7 +1,7 @@
 
 import json
 
-from mintools import minql
+from mintools.minql import NotFoundError
 
 from explorer.models.block import Block
 from explorer.models.chaininfo import Chaininfo
@@ -52,7 +52,7 @@ class DaemonReorgManager(GreedyCacher):
                 print('txs_to_delete', txs_to_delete)
                 if txs_to_delete:
                     Tx.delete(tx_criteria)
-            except minql.NotFoundError:
+            except NotFoundError:
                 pass
 
     def delete_from_height(self, block_height):
@@ -68,7 +68,7 @@ class DaemonReorgManager(GreedyCacher):
                     print('ERROR with blocks_to_delete', len(blocks_to_delete))
                     # return False
                 Block.delete(criteria)
-        except minql.NotFoundError:
+        except NotFoundError:
             pass
 
         try:
@@ -76,7 +76,7 @@ class DaemonReorgManager(GreedyCacher):
             print('stats_to_delete', len(stats_to_delete))
             if stats_to_delete:
                 Blockstats.delete(criteria)
-        except minql.NotFoundError:
+        except NotFoundError:
             pass
 
     def commit_new_prev(self, block):
