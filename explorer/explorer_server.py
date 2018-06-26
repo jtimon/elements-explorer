@@ -1,5 +1,7 @@
 
-from mintools import restmin, ormin
+from mintools.ormin import Model as ormin_model
+from mintools.restmin import Domain as restmin_domain
+from mintools.restmin.resources import FunctionResource
 
 from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS
 
@@ -22,16 +24,16 @@ def get_available_chains(**kwargs):
         available_chains[k] = v['properties']
     return available_chains, 200
 
-class ExplorerApiDomain(restmin.Domain):
+class ExplorerApiDomain(restmin_domain):
 
     def __init__(self, domain, db_client, *args, **kwargs):
 
-        ormin.Model.set_db( db_client )
+        ormin_model.set_db( db_client )
 
         super(ExplorerApiDomain, self).__init__(domain, *args, **kwargs)
 
 API_DOMAIN = ExplorerApiDomain({
-    'available_chains': restmin.resources.FunctionResource(get_available_chains),
+    'available_chains': FunctionResource(get_available_chains),
     # never cached, always hits the node
     'getmempoolentry': RpcCallerResource('getmempoolentry'),
     'getrawmempool': RpcCallerResource('getrawmempool', limit_array_result=4),
