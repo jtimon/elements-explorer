@@ -52,8 +52,12 @@ FLAGS = gflags.FLAGS
 
 import json
 
-from mintools import zmqmin
-from mintools import minql
+from mintools.minql import (
+    MinqlClientFactory,
+    ZmqMinqlServer,
+    get_migration_schema,
+    write_json,
+)
 
 import time
 time.sleep(1)
@@ -71,7 +75,7 @@ print('FORCE_TABLES', FORCE_TABLES)
 if len(FORCE_TABLES) == 1 and FORCE_TABLES[0] == '':
     FORCE_TABLES = []
 
-ddb = minql.ZmqMinqlServer(
+ddb = ZmqMinqlServer(
     FLAGS.dbtype,
     single=True,
     address=FLAGS.address,
@@ -82,14 +86,14 @@ ddb = minql.ZmqMinqlServer(
     worker_id='ZmqServer')
 ddb.start()
 
-db_client = minql.MinqlClientFactory('zmq')(FLAGS.address)
+db_client = MinqlClientFactory('zmq')(FLAGS.address)
 
 if FLAGS.model and FLAGS.modelschema:
     try:
         old_file = open(FLAGS.modelschema, 'r').read()
         old_schema = json.loads(old_file)
         print('old_schema', old_schema)
-        minql.write_json(FLAGS.modelschema + '.old.json', old_schema)
+        write_json(FLAGS.modelschema + '.old.json', old_schema)
     except IOError:
         old_schema = None
 
@@ -98,11 +102,11 @@ if FLAGS.model and FLAGS.modelschema:
     print('Exporting the following schema to %s ...' % (FLAGS.modelschema))
     new_schema = model_module.ORMIN_DOMAIN.json_schema()
     print('new_schema', new_schema)
-    minql.write_json(FLAGS.modelschema, new_schema)
+    write_json(FLAGS.modelschema, new_schema)
 
     if old_schema:
-        migration_diff = minql.get_migration_schema(new_schema, old_schema)
-        minql.write_json(FLAGS.modelschema + '.migration_diff.json', migration_diff)
+        migration_diff = get_migration_schema(new_schema, old_schema)
+        write_json(FLAGS.modelschema + '.migration_diff.json', migration_diff)
 
         if 'drop' in migration_diff:
             for table_name in migration_diff['drop']:
@@ -121,7 +125,7 @@ if FLAGS.model and FLAGS.modelschema:
 
 print('migration_schema', migration_schema)
 if migration_schema:
-    minql.write_json(FLAGS.modelschema + '.last_migration.json', migration_schema)
+    write_json(FLAGS.modelschema + '.last_migration.json', migration_schema)
 
     per_chain_schema = {}
     for table_name in migration_schema:
