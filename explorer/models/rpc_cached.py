@@ -1,7 +1,7 @@
 
-from mintools import ormin
+from mintools.ormin.model import CachedModel
 
-class RpcCachedModel(ormin.CachedModel):
+class RpcCachedModel(CachedModel):
 
     @classmethod
     def set_rpccaller(cls, value):
