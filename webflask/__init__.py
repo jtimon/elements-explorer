@@ -4,7 +4,7 @@ import os
 from flask import send_from_directory
 
 from mintools.restmin.impl.flask import create_restmin_app
-from explorer.explorer_server import API_DOMAIN
+from explorer.domain.api_domain import API_DOMAIN
 
 def explorer_request_processor(app, req):
     return API_DOMAIN.resolve_request(req)
