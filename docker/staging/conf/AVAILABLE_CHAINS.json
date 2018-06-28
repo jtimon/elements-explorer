@@ -35,7 +35,8 @@
         "proc": {
             "block_gen": [
                 300,
-                180
+                180,
+                "regtestlike"
             ],
             "greedy_cacher": [
                 60,
@@ -79,7 +80,8 @@
         "proc": {
             "block_gen": [
                 60,
-                240
+                240,
+                "regtestlike"
             ],
             "greedy_cacher": [
                 60,
@@ -113,7 +115,8 @@
         "proc": {
             "block_gen": [
                 300,
-                180
+                180,
+                "regtestlike"
             ],
             "greedy_cacher": [
                 60,
@@ -157,7 +160,8 @@
         "proc": {
             "block_gen": [
                 60,
-                240
+                240,
+                "regtestlike"
             ],
             "greedy_cacher": [
                 60,

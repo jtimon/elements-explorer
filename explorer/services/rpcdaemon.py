@@ -23,6 +23,10 @@ RPC_ALLOWED_CALLS = [
     'claimpegin',
     # Exclusively for 1-of-1 multisig support in process.generator.block
     'importprivkey',
+    'getnewblockhex',
+    'signblock',
+    'combineblocksigs',
+    'submitblock',
 ]
 
 class RpcCaller(object):
