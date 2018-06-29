@@ -77,7 +77,7 @@ AVAILABLE_CHAINS = {
         'proc': {
             'reorg_cron': [60, InitTime(60), False, True], # every 1 min after 1 min, don't cache txs, cache stats
             'mempool_cacher': [60, InitTime(60)], # every 1 min after 1 min
-            'greedy_cacher': [60, InitTime(60 * 60 * 24), True, True], # every 1 min after 24 hours, cache txs, cache stats
+            'greedy_cacher': [60, InitTime(60 * 5), True, True], # every 1 min after 5 mins, cache txs, cache stats
             'block_gen': [60, InitTime(60 * 2)], # every 2 min after 1 min
             'tx_gen': [50, InitTime(60)], # every 50 secs after 1 min
         },
@@ -121,7 +121,7 @@ AVAILABLE_CHAINS = {
         'proc': {
             'reorg_cron': [60, InitTime(60), False, True], # every 1 min after 1 min, don't cache txs, cache stats
             'mempool_cacher': [60, InitTime(60)], # every 1 min after 1 min
-            'greedy_cacher': [60, InitTime(60 * 60 * 24), True, True], # every 1 min after 24 hours, cache txs, cache stats
+            'greedy_cacher': [60, InitTime(60 * 5), True, True], # every 1 min after 5 mins, cache txs, cache stats
             'block_gen': [60, InitTime(60 * 2)], # every 2 min after 1 min
             'tx_gen': [50, InitTime(60)], # every 50 secs after 1 min
         },
