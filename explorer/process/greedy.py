@@ -15,7 +15,6 @@ class GreedyCacher(CronCacher):
 
         super(GreedyCacher, self).__init__(chain, rpccaller, db_client, wait_time, initial_wait_time)
 
-        self.last_cached_height = -1
         self.cache_txs = cache_txs
         self.cache_stats = cache_stats
         self.wait_time_greedy = wait_time_greedy
@@ -49,7 +48,8 @@ class GreedyCacher(CronCacher):
 
         height = chaininfo.blocks
         blockhash = chaininfo.bestblockhash
-        while height > self.last_cached_height:
+        next_cached_blocks = height
+        while height > chaininfo.cached_blocks:
             block = self.cache_blockhash(blockhash)
             if not block:
                 print('Error in GreedyCacher._cron_loop: no block %s %s' % (height, blockhash))
@@ -62,7 +62,13 @@ class GreedyCacher(CronCacher):
             else:
                 print('Error in GreedyCacher._cron_loop: no previousblockhash in block %s %s' % (height, blockhash), block)
                 return
+
             height = height - 1
             time.sleep(self.wait_time_greedy)
 
-        self.last_cached_height = chaininfo.blocks
+        chaininfo = Chaininfo.get(self.chain)
+        if not isinstance(chaininfo, Chaininfo):
+            print("Error in GreedyCacher._cron_loop: wrong type for chaininfo", chaininfo)
+            return
+        chaininfo.cached_blocks = next_cached_blocks
+        chaininfo.save()

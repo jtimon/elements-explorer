@@ -25,6 +25,8 @@ class DaemonReorgManager(GreedyCacher):
         if not isinstance(chaininfo, Chaininfo):
             chaininfo = Chaininfo()
             chaininfo.id = self.chain
+            chaininfo.start_caching_progress()
+
         chaininfo.bestblockhash = block.id
         chaininfo.blocks = block.height
         chaininfo.mediantime = block.mediantime
