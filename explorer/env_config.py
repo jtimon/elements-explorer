@@ -40,7 +40,7 @@ AVAILABLE_CHAINS = {
             'reorg_cron': [60, InitTime(60 * 5), False, True], # every 1 min after 5 min, don't cache txs, cache stats
             'mempool_cacher': [60, InitTime(60)], # every 1 min after 1 min
             'mempool_saver': [60 * 20, InitTime(60 * 5)], # every 20 min after 5 min
-            'greedy_cacher': [60, InitTime(60 * 60 * 2), True, True], # every 1 min after 1 hours, cache txs, cache stats
+            'greedy_cacher': [60, InitTime(60 * 60 * 2), True, True], # every 1 min after 2 hours, cache txs, cache stats
         },
     },
 
