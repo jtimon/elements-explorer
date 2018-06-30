@@ -7,6 +7,9 @@ class Chaininfo(RpcCachedModel):
     blocks = ormin.IntField()
     mediantime = ormin.IntField()
     cached_blocks = ormin.IntField()
+    caching_first = ormin.IntField()
+    caching_blockhash = ormin.StringField()
+    caching_last = ormin.IntField()
     signblock_asm = ormin.StringField(required=False)
     signblock_hex = ormin.StringField(required=False)
 
@@ -22,5 +25,11 @@ class Chaininfo(RpcCachedModel):
         chaininfo.save()
         return chaininfo
 
+    def clean_caching_progress_fields(self):
+        self.caching_first = -1
+        self.caching_blockhash = ''
+        self.caching_last = -1
+
     def start_caching_progress(self):
         self.cached_blocks = -1
+        self.clean_caching_progress_fields()

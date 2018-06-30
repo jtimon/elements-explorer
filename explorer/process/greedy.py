@@ -46,9 +46,18 @@ class GreedyCacher(CronCacher):
             print("Error in GreedyCacher._cron_loop: wrong type for chaininfo", chaininfo)
             return
 
-        height = chaininfo.blocks
-        blockhash = chaininfo.bestblockhash
-        next_cached_blocks = height
+        if chaininfo.caching_first == -1 or chaininfo.caching_last == -1 or chaininfo.caching_blockhash == '':
+            height = chaininfo.blocks
+            blockhash = chaininfo.bestblockhash
+            chaininfo.caching_first = height
+            chaininfo.caching_blockhash = blockhash
+            chaininfo.caching_last = height
+            chaininfo.save()
+        else:
+            height = chaininfo.caching_first
+            blockhash = chaininfo.caching_blockhash
+
+        next_cached_blocks = chaininfo.caching_last
         while height > chaininfo.cached_blocks:
             block = self.cache_blockhash(blockhash)
             if not block:
@@ -64,6 +73,14 @@ class GreedyCacher(CronCacher):
                 return
 
             height = height - 1
+            chaininfo = Chaininfo.get(self.chain)
+            if not isinstance(chaininfo, Chaininfo):
+                print("Error in GreedyCacher._cron_loop: wrong type for chaininfo", chaininfo)
+                return
+
+            chaininfo.caching_first = height
+            chaininfo.caching_blockhash = blockhash
+            chaininfo.save()
             time.sleep(self.wait_time_greedy)
 
         chaininfo = Chaininfo.get(self.chain)
@@ -71,4 +88,5 @@ class GreedyCacher(CronCacher):
             print("Error in GreedyCacher._cron_loop: wrong type for chaininfo", chaininfo)
             return
         chaininfo.cached_blocks = next_cached_blocks
+        chaininfo.clean_caching_progress_fields()
         chaininfo.save()
