@@ -1,6 +1,7 @@
 
 import json
 
+from explorer.models.chaininfo import Chaininfo
 from explorer.models.transaction import Tx
 from explorer.services.blockheight import GetBlockByHeight
 
@@ -65,15 +66,27 @@ class AddressResource(ChainResource):
 
         request = req['json']
         if not 'addresses' in request:
-            return {'error': {'message': 'No addresses specified for %s with request %s' % ('address', request)}}, 400
+            return {'error': {'message': '%s: No addresses specified in request %s' % ('address', request)}}, 400
         if not 'start_height' in request:
-            return {'error': {'message': 'No start_height specified for %s with request %s' % ('address', request)}}, 400
+            return {'error': {'message': '%s: No start_height specified in request %s' % ('address', request)}}, 400
         if not 'end_height' in request:
-            return {'error': {'message': 'No end_height specified for %s with request %s' % ('address', request)}}, 400
+            return {'error': {'message': '%s: No end_height specified in request %s' % ('address', request)}}, 400
 
         if request['start_height'] < 1 or request['end_height'] < 1:
-            return {'error': {'message': 'Minimum height is 1 for %s' % ('address')}}, 400
+            return {'error': {'message': '%s: Minimum height is 1 for %s' % ('address')}}, 400
 
+        if request['start_height'] > request['end_height']:
+            return {'error': {'message': '%s: start_height cannot be grater than end_height' % ('address')}}, 400
+
+        chaininfo = Chaininfo.get(self.chain)
+        if not isinstance(chaininfo, Chaininfo):
+            print("Error in AddressResource.resolve_request: wrong type for chaininfo", chaininfo)
+            return {'error': {'message': '%s: Error getting chaininfo for chain %s' % ('address', self.chain)}}, 400
+        
+        if request['end_height'] > chaininfo.cached_blocks:
+            return {'error': {'message': '%s: end_height (%s) cannot be grater than chaininfo.cached_blocks (%s)' % (
+                'address', request['end_height'], chaininfo.cached_blocks)}}, 400
+        
         json_result = {'expenditures': [], 'receipts': []}
         for height in xrange(request['start_height'], request['end_height'] + 1):
             address_block_result = {}
