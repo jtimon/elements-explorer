@@ -29,6 +29,9 @@ class DaemonReorgManager(GreedyCacher):
 
         chaininfo.bestblockhash = block.id
         chaininfo.blocks = block.height
+        if chaininfo.blocks < chaininfo.cached_blocks:
+            chaininfo.cached_blocks = chaininfo.blocks
+            chaininfo.clean_caching_progress_fields()
         chaininfo.mediantime = block.mediantime
         try:
             chaininfo.save()
