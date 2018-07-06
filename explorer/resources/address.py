@@ -82,11 +82,21 @@ class AddressResource(ChainResource):
         if not isinstance(chaininfo, Chaininfo):
             print("Error in AddressResource.resolve_request: wrong type for chaininfo", chaininfo)
             return {'error': {'message': '%s: Error getting chaininfo for chain %s' % ('address', self.chain)}}, 400
-        
-        if request['end_height'] > chaininfo.cached_blocks:
-            return {'error': {'message': '%s: end_height (%s) cannot be grater than chaininfo.cached_blocks (%s)' % (
-                'address', request['end_height'], chaininfo.cached_blocks)}}, 400
-        
+
+        if request['end_height'] > chaininfo.cached_blocks and (
+                chaininfo.caching_first == chaininfo.caching_last
+                or request['start_height'] < chaininfo.caching_first
+                or request['end_height'] < chaininfo.caching_first
+                or request['end_height'] > chaininfo.caching_last):
+            return {'error': {'message': '%s: end_height (%s) cannot be grater than chaininfo.cached_blocks (%s). Currently caching from %s to %s in chain %s' % (
+                'address',
+                request['end_height'],
+                chaininfo.cached_blocks,
+                chaininfo.caching_first,
+                chaininfo.caching_last,
+                self.chain,
+            )}}, 400
+
         json_result = {'expenditures': [], 'receipts': []}
         for height in xrange(request['start_height'], request['end_height'] + 1):
             address_block_result = {}
