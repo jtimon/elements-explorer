@@ -29,7 +29,7 @@ class AddressResource(ChainResource):
             for output in tx['vout']:
                 for address in addresses:
                     if 'scriptpubkey_addresses' in output and address in output['scriptpubkey_addresses']:
-                        receipts.append({'output': output, 'txid': txid, 'height': block.height})
+                        receipts.append({'output': output, 'txid': txid, 'height': height})
 
             for tx_input in tx['vin']:
                 pegin_witness = []
@@ -51,7 +51,7 @@ class AddressResource(ChainResource):
                         output = tx_in['vout'][ tx_input['vout'] ]
                         for address in addresses:
                             if 'scriptpubkey_addresses' in output and address in output['scriptpubkey_addresses']:
-                                expenditures.append({'input': tx_input, 'prev_output': output, 'txid': tx['id'], 'height': block.height})
+                                expenditures.append({'input': tx_input, 'prev_output': output, 'txid': tx['id'], 'height': height})
                     else:
                         print('Error in search by address, index out of range', tx_input, tx_in)
 
