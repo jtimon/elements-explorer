@@ -205,7 +205,7 @@ class DaemonReorgManager(GreedyCacher):
             if not isinstance(block, Block):
                 print('Error in DaemonReorgManager.update_tip: wrong type for block', block_hash, block)
                 return
-            assert(block and block.id and block.id == block_hash and block.height and block.mediantime)
+            assert(block and block.id and block.id == block_hash and block.height != None and block.mediantime)
         except Exception as e:
             print("Error in DaemonReorgManager.update_tip:", type(e), e)
             print('FAILED update_tip block.get(%s)' % block_hash)
