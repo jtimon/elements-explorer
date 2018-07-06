@@ -40,7 +40,7 @@ AVAILABLE_CHAINS = {
             'reorg_cron': [60, InitTime(60 * 5), False, True], # every 1 min after 5 min, don't cache txs, cache stats
             'mempool_cacher': [60, InitTime(60)], # every 1 min after 1 min
             'mempool_saver': [60 * 20, InitTime(60 * 5)], # every 20 min after 5 min
-            'greedy_cacher': [60, InitTime(60 * 60 * 2), True, True], # every 1 min after 2 hours, cache txs, cache stats
+            'greedy_cacher': [60, InitTime(60 * 30), True, True], # every 1 min after 30 mins, cache txs, cache stats
         },
     },
 
@@ -59,7 +59,7 @@ AVAILABLE_CHAINS = {
             'reorg_cron': [60, InitTime(60 * 5), False, True], # every 1 min after 5 min, don't cache txs, cache stats
             'mempool_cacher': [60, InitTime(60)], # every 1 min after 1 min
             'mempool_saver': [60 * 20, InitTime(60 * 5)], # every 20 min after 5 min
-            'greedy_cacher': [60, InitTime(60 * 60), True, True], # every 1 min after 1 hour, cache txs, cache stats
+            'greedy_cacher': [60, InitTime(60 * 10), True, True], # every 1 min after 10 mins, cache txs, cache stats
         },
     },
 
@@ -77,7 +77,7 @@ AVAILABLE_CHAINS = {
         'proc': {
             'reorg_cron': [60, InitTime(60), False, True], # every 1 min after 1 min, don't cache txs, cache stats
             'mempool_cacher': [60, InitTime(60)], # every 1 min after 1 min
-            'greedy_cacher': [60, InitTime(60 * 5), True, True], # every 1 min after 5 mins, cache txs, cache stats
+            'greedy_cacher': [60, InitTime(60 * 3), True, True], # every 1 min after 3 mins, cache txs, cache stats
             'block_gen': [60, InitTime(60 * 2)], # every 2 min after 1 min
             'tx_gen': [50, InitTime(60)], # every 50 secs after 1 min
         },
@@ -99,7 +99,7 @@ AVAILABLE_CHAINS = {
         'proc': {
             'reorg_cron': [60, InitTime(60), False, True], # every 1 min after 1 min, don't cache txs, cache stats
             'mempool_cacher': [60, InitTime(60)], # every 1 min after 1 min
-            'greedy_cacher': [60, InitTime(60 * 10), True, True], # every 1 min after 10 min, cache txs, cache stats
+            'greedy_cacher': [60, InitTime(60 * 3), True, True], # every 1 min after 3 min, cache txs, cache stats
             'block_gen': [60 * 5, InitTime(60)], # every 5 min after 1 min
             'tx_gen': [30, InitTime(60)], # every 30 secs after 1 min
             'pegin_gen': [60, InitTime(60)], # every 1 min after 1 min
@@ -143,7 +143,7 @@ AVAILABLE_CHAINS = {
         'proc': {
             'reorg_cron': [60, InitTime(60), False, True], # every 1 min after 1 min, don't cache txs, cache stats
             'mempool_cacher': [60, InitTime(60)], # every 1 min after 1 min
-            'greedy_cacher': [60, InitTime(60 * 10), True, True], # every 1 min after 10 min, cache txs, cache stats
+            'greedy_cacher': [60, InitTime(60 * 5), True, True], # every 1 min after 5 min, cache txs, cache stats
             'block_gen': [60 * 5, InitTime(60)], # every 5 min after 1 min
             'tx_gen': [30, InitTime(60)], # every 30 secs after 1 min
             'pegin_gen': [60, InitTime(60)], # every 1 min after 1 min
