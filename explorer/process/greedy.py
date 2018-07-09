@@ -33,6 +33,7 @@ class GreedyCacher(CronCacher):
                 tx_ids = json.loads(block.tx)
                 for txid in tx_ids:
                     tx = Tx.get(txid)
+                    time.sleep(self.wait_time_greedy)
 
             return block
 
@@ -81,7 +82,6 @@ class GreedyCacher(CronCacher):
             chaininfo.caching_first = height
             chaininfo.caching_blockhash = blockhash
             chaininfo.save()
-            time.sleep(self.wait_time_greedy)
 
         chaininfo = Chaininfo.get(self.chain)
         if not isinstance(chaininfo, Chaininfo):
