@@ -4,7 +4,7 @@ services:
 
   # dummydb:
   #   build:
-  #     context: ../
+  #     context: ../../
   #     dockerfile: docker/dummydb/Dockerfile
   #   ports:
   #     - "1984:1984"
@@ -15,10 +15,10 @@ services:
 
   explorer:
     build:
-      context: ../
+      context: ../../
       dockerfile: docker/explorer/Dockerfile
     volumes:
-      - ../../explorer-data/target:/root/target
+      - ../../../explorer-data/target:/root/target
     ports:
       - "5000:5000"
     networks:
@@ -33,12 +33,12 @@ services:
 
   elements:
     build:
-      context: ../
+      context: ../../
       dockerfile: docker/daemon/elements.docker
     volumes:
-      - ../../explorer-data/elementsregtest:/root/.elements
-      - ../../explorer-data/elementsparent:/root/.elementsparent
-      - ../../explorer-data/elementside:/root/.elementside
+      - ../../../explorer-data/elementsregtest:/root/.elements
+      - ../../../explorer-data/elementsparent:/root/.elementsparent
+      - ../../../explorer-data/elementside:/root/.elementside
     networks:
       main:
         aliases:
@@ -46,12 +46,12 @@ services:
 
   bitcoin:
     build:
-      context: ../
+      context: ../../
       dockerfile: docker/daemon/bitcoin.docker
     volumes:
-      - ../../explorer-data/bitcoin:/root/.bitcoin
-      - ../../explorer-data/testnet3:/root/.testnet3
-      - ../../explorer-data/regtest:/root/.regtest
+      - ../../../explorer-data/bitcoin:/root/.bitcoin
+      - ../../../explorer-data/testnet3:/root/.testnet3
+      - ../../../explorer-data/regtest:/root/.regtest
     networks:
       main:
         aliases:
@@ -61,7 +61,7 @@ services:
     restart: "no"
     image: postgres:9.6
     volumes:
-      - ../../explorer-data/db/postgresql:/var/lib/postgresql/data
+      - ../../../explorer-data/db/postgresql:/var/lib/postgresql/data
     command: "true"
 
   postgres:

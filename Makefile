@@ -9,15 +9,15 @@ all: dev
 common-conf: docker/conf/explorer.env docker/conf/explorer.proc
 
 dev: common-conf
-	cd docker && docker-compose up --build
+	cd docker/staging && docker-compose up --build
 staging: common-conf
-	cd docker && docker-compose up -d --build
+	cd docker/staging && docker-compose up -d --build
 production: common-conf
-	cd docker && docker-compose up -d --build
+	cd docker/staging && docker-compose up -d --build
 
 .PHONY: stop clean docker-prune clean-db
 stop:
-	cd docker && docker-compose stop
+	cd docker/staging ; docker-compose stop
 # docker-compose rm -f
 # cd docker && docker-compose down
 docker-prune:
