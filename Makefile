@@ -7,22 +7,22 @@ all: dev
 
 .PHONY: dev-conf stating-conf production-conf
 
-dev-conf: docker/dev/conf/*.env docker/dev/conf/*.proc
-	rm -rf docker/conf
-	cp -r ./docker/dev/conf ./docker/conf
-staging-conf: docker/staging/conf/*.env docker/staging/conf/*.proc
-	rm -rf docker/conf
-	cp -r ./docker/staging/conf ./docker/conf
-production-conf: docker/production/conf/*.env docker/production/conf/*.proc
-	rm -rf docker/conf
-	cp -r ./docker/production/conf ./docker/conf
+dev-conf:
+	sudo rm -rf docker/conf
+	sudo cp -r ./docker/dev/conf ./docker/conf
+staging-conf:
+	sudo rm -rf docker/conf
+	sudo cp -r ./docker/staging/conf ./docker/conf
+production-conf:
+	sudo rm -rf docker/conf
+	sudo cp -r ./docker/production/conf ./docker/conf
 
 dev: dev-conf
-	cd docker/staging && docker-compose up --build
+	cd docker/dev && docker-compose up --build
 staging: staging-conf
 	cd docker/staging && docker-compose up -d --build
 production: production-conf
-	cd docker/staging && docker-compose up -d --build
+	cd docker/production && docker-compose up -d --build
 
 .PHONY: stop clean docker-prune clean-db
 stop:
