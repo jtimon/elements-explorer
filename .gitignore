@@ -9,3 +9,4 @@
 /.build
 .explorer-data
 .DS_Store
+/docker/conf
