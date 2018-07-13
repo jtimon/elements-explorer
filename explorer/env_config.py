@@ -8,15 +8,13 @@ from explorer.services.rpcdaemon import RpcCaller
 
 DEFAULT_CHAIN = 'bitcoin'
 
-CONFIG = {
-    'DB_TYPE': os.environ.get('DB_TYPE'),
-    'DB_ADR': os.environ.get('DB_ADR'),
-    'DB_NAME': os.environ.get('DB_NAME'),
-    'DB_USER': os.environ.get('DB_USER'),
-    'DB_PASS': os.environ.get('DB_PASS'),
-}
-
-DB_FACTORY = MinqlFactory(CONFIG['DB_TYPE'], CONFIG['DB_ADR'], CONFIG['DB_NAME'], CONFIG['DB_USER'], CONFIG['DB_PASS'])
+DB_FACTORY = MinqlFactory(
+    os.environ.get('DB_TYPE'),
+    os.environ.get('DB_ADR'),
+    os.environ.get('DB_NAME'),
+    os.environ.get('DB_USER'),
+    os.environ.get('DB_PASS')
+)
 
 AVAILABLE_RPCS = {
 
