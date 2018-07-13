@@ -5,16 +5,20 @@
 .PHONY: dev staging production
 all: dev
 
-.PHONY: common-conf
-common-conf: docker/staging/conf/explorer.env docker/staging/conf/explorer.proc docker/staging/conf/elements.env docker/staging/conf/elements.proc docker/staging/conf/bitcoin.env docker/staging/conf/bitcoin.proc
+.PHONY: dev-conf stating-conf
+
+dev-conf: docker/dev/conf/*.env docker/dev/conf/*.proc
+	rm -rf docker/conf
+	cp -r ./docker/dev/conf ./docker/conf
+stating-conf: docker/staging/conf/*.env docker/staging/conf/*.proc
 	rm -rf docker/conf
 	cp -r ./docker/staging/conf ./docker/conf
 
-dev: common-conf
+dev: dev-conf
 	cd docker/staging && docker-compose up --build
-staging: common-conf
+staging: stating-conf
 	cd docker/staging && docker-compose up -d --build
-production: common-conf
+production: stating-conf
 	cd docker/staging && docker-compose up -d --build
 
 .PHONY: stop clean docker-prune clean-db
