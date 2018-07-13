@@ -3,7 +3,7 @@ from mintools.ormin import Model as ormin_model
 from mintools.restmin import Domain as restmin_domain
 from mintools.restmin.resources import FunctionResource
 
-from explorer.env_config import DB_CLIENT, AVAILABLE_CHAINS
+from explorer.env_config import DB_FACTORY, AVAILABLE_CHAINS
 
 from explorer.models.block import Block
 from explorer.models.chaininfo import Chaininfo
@@ -50,4 +50,4 @@ API_DOMAIN = ExplorerApiDomain({
     'blockstats': GetByIdResource('blockstats', Blockstats, ['stats_support']),
     # TODO handle reorgs from gui (ie use websockets)
     'chaininfo': GetByIdResource('chaininfo', Chaininfo),
-}, DB_CLIENT)
+}, DB_FACTORY.create())
