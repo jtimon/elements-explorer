@@ -2,7 +2,7 @@
 from mintools.ormin import Form as ormin_form
 from mintools.restmin.resources import Resource as restmin_resource
 
-from explorer.env_config import AVAILABLE_CHAINS, DEFAULT_CHAIN, AVAILABLE_RPCS
+from explorer.env_config import AVAILABLE_CHAINS, AVAILABLE_RPCS
 from explorer.models.rpc_cached import RpcCachedModel
 
 class UnknownChainError(BaseException):
@@ -16,7 +16,7 @@ class ChainResource(restmin_resource):
             self.chain = request_data['chain']
             del request_data['chain']
         else:
-            self.chain = DEFAULT_CHAIN
+            self.chain = AVAILABLE_CHAINS['DEFAULT_CHAIN']
         if not self.chain in AVAILABLE_CHAINS:
             raise UnknownChainError
 

@@ -1,4 +1,6 @@
 {
+    "DEFAULT_CHAIN": "bitcoin",
+
     "bitcoin": {
         "proc": {
             "greedy_cacher": [
@@ -28,6 +30,7 @@
         },
         "zmq": "tcp://bitcoin:8534"
     },
+
     "elementside": {
         "proc": {
             "block_gen": [
@@ -71,6 +74,7 @@
         },
         "zmq": "tcp://elements:7049"
     },
+
     "elementsparent": {
         "proc": {
             "block_gen": [
@@ -104,6 +108,7 @@
         },
         "zmq": "tcp://elements:7046"
     },
+
     "elementsregtest": {
         "proc": {
             "block_gen": [
@@ -147,6 +152,7 @@
         },
         "zmq": "tcp://elements:7043"
     },
+
     "regtest": {
         "proc": {
             "block_gen": [
@@ -180,6 +186,7 @@
         },
         "zmq": "tcp://bitcoin:18537"
     },
+
     "testnet3": {
         "proc": {
             "greedy_cacher": [
@@ -209,4 +216,5 @@
         },
         "zmq": "tcp://bitcoin:18534"
     }
+
 }

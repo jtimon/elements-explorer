@@ -6,8 +6,6 @@ from mintools.minql import MinqlFactory
 
 from explorer.services.rpcdaemon import RpcCaller
 
-DEFAULT_CHAIN = 'bitcoin'
-
 DB_FACTORY = MinqlFactory(
     os.environ.get('DB_TYPE'),
     os.environ.get('DB_ADR'),

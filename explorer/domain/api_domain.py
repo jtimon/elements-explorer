@@ -21,6 +21,8 @@ from explorer.resources.rpccaller import RpcCallerResource
 def get_available_chains(**kwargs):
     available_chains = {}
     for k, v in AVAILABLE_CHAINS.iteritems():
+        if k == 'DEFAULT_CHAIN':
+            continue
         available_chains[k] = v['properties']
     return available_chains, 200
 
