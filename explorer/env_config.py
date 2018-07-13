@@ -31,7 +31,6 @@ AVAILABLE_CHAINS = {
                          os.environ.get('BITCOIN_RPCPASSWORD')
         ),
         'zmq': os.environ.get('BITCOIN_ZMQ'),
-        'db': DB_FACTORY,
         'properties': {
             'stats_support': True,
             'chain_id': '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f',
@@ -50,7 +49,6 @@ AVAILABLE_CHAINS = {
                          os.environ.get('TESTNET3_RPCPASSWORD')
         ),
         'zmq': os.environ.get('TESTNET3_ZMQ'),
-        'db': DB_FACTORY,
         'properties': {
             'stats_support': True,
             'chain_id': '000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943',
@@ -69,7 +67,6 @@ AVAILABLE_CHAINS = {
                          os.environ.get('REGTEST_RPCPASSWORD')
         ),
         'zmq': os.environ.get('REGTEST_ZMQ'),
-        'db': DB_FACTORY,
         'properties': {
             'stats_support': True,
             'chain_id': '0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206',
@@ -89,7 +86,6 @@ AVAILABLE_CHAINS = {
                          os.environ.get('ELEMENTSREGTEST_RPCPASSWORD')
         ),
         'zmq': os.environ.get('ELEMENTSREGTEST_ZMQ'),
-        'db': DB_FACTORY,
         'properties': {
             'stats_support': True,
             'chain_id': 'b69af98be45cf3fb1d992b716a1d6156835c059f6944620d81dcc2487bb5cc8c',
@@ -113,7 +109,6 @@ AVAILABLE_CHAINS = {
                          os.environ.get('ELEMENTSPARENT_RPCPASSWORD')
         ),
         'zmq': os.environ.get('ELEMENTSPARENT_ZMQ'),
-        'db': DB_FACTORY,
         'properties': {
             'stats_support': True,
             'chain_id': '5d5e0aefb7734b1371ff236f5c6b5c8cfbcc4f156795d3d23849610202aac6c9',
@@ -133,7 +128,6 @@ AVAILABLE_CHAINS = {
                          os.environ.get('ELEMENTSIDE_RPCPASSWORD')
         ),
         'zmq': os.environ.get('ELEMENTSIDE_ZMQ'),
-        'db': DB_FACTORY,
         'properties': {
             'stats_support': True,
             'chain_id': '8d497636488f8ea97d51cf23de95d888009f672a00ba79c8758373fc47c2cdf3',
