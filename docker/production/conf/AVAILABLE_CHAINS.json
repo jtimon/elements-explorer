@@ -1,0 +1,212 @@
+{
+    "bitcoin": {
+        "proc": {
+            "greedy_cacher": [
+                60,
+                1920,
+                true,
+                true
+            ],
+            "mempool_cacher": [
+                60,
+                180
+            ],
+            "mempool_saver": [
+                1200,
+                420
+            ],
+            "reorg_cron": [
+                60,
+                420,
+                false,
+                true
+            ]
+        },
+        "properties": {
+            "chain_id": "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+            "stats_support": true
+        },
+        "zmq": "tcp://bitcoin:8534"
+    },
+    "elementside": {
+        "proc": {
+            "block_gen": [
+                300,
+                180
+            ],
+            "greedy_cacher": [
+                60,
+                420,
+                true,
+                true
+            ],
+            "mempool_cacher": [
+                60,
+                180
+            ],
+            "pegin_gen": [
+                60,
+                180
+            ],
+            "pegout_gen": [
+                40,
+                180
+            ],
+            "reorg_cron": [
+                60,
+                180,
+                false,
+                true
+            ],
+            "tx_gen": [
+                30,
+                180
+            ]
+        },
+        "properties": {
+            "chain_id": "8d497636488f8ea97d51cf23de95d888009f672a00ba79c8758373fc47c2cdf3",
+            "parent_chain": "elementsparent",
+            "parent_chain_has_CT": true,
+            "stats_support": true
+        },
+        "zmq": "tcp://elements:7049"
+    },
+    "elementsparent": {
+        "proc": {
+            "block_gen": [
+                60,
+                240
+            ],
+            "greedy_cacher": [
+                60,
+                420,
+                true,
+                true
+            ],
+            "mempool_cacher": [
+                60,
+                180
+            ],
+            "reorg_cron": [
+                60,
+                180,
+                false,
+                true
+            ],
+            "tx_gen": [
+                50,
+                180
+            ]
+        },
+        "properties": {
+            "chain_id": "5d5e0aefb7734b1371ff236f5c6b5c8cfbcc4f156795d3d23849610202aac6c9",
+            "stats_support": true
+        },
+        "zmq": "tcp://elements:7046"
+    },
+    "elementsregtest": {
+        "proc": {
+            "block_gen": [
+                300,
+                180
+            ],
+            "greedy_cacher": [
+                60,
+                420,
+                true,
+                true
+            ],
+            "mempool_cacher": [
+                60,
+                180
+            ],
+            "pegin_gen": [
+                60,
+                180
+            ],
+            "pegout_gen": [
+                40,
+                180
+            ],
+            "reorg_cron": [
+                60,
+                180,
+                false,
+                true
+            ],
+            "tx_gen": [
+                30,
+                180
+            ]
+        },
+        "properties": {
+            "chain_id": "b69af98be45cf3fb1d992b716a1d6156835c059f6944620d81dcc2487bb5cc8c",
+            "parent_chain": "regtest",
+            "parent_chain_has_CT": false,
+            "stats_support": true
+        },
+        "zmq": "tcp://elements:7043"
+    },
+    "regtest": {
+        "proc": {
+            "block_gen": [
+                60,
+                240
+            ],
+            "greedy_cacher": [
+                60,
+                420,
+                true,
+                true
+            ],
+            "mempool_cacher": [
+                60,
+                180
+            ],
+            "reorg_cron": [
+                60,
+                180,
+                false,
+                true
+            ],
+            "tx_gen": [
+                50,
+                180
+            ]
+        },
+        "properties": {
+            "chain_id": "0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206",
+            "stats_support": true
+        },
+        "zmq": "tcp://bitcoin:18537"
+    },
+    "testnet3": {
+        "proc": {
+            "greedy_cacher": [
+                60,
+                1020,
+                true,
+                true
+            ],
+            "mempool_cacher": [
+                60,
+                180
+            ],
+            "mempool_saver": [
+                1200,
+                420
+            ],
+            "reorg_cron": [
+                60,
+                420,
+                false,
+                true
+            ]
+        },
+        "properties": {
+            "chain_id": "000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943",
+            "stats_support": true
+        },
+        "zmq": "tcp://bitcoin:18534"
+    }
+}
