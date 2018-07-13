@@ -29,7 +29,7 @@ services:
         aliases:
           - explorer
     depends_on:
-      - bitcoin
+      # - bitcoin
       - elements
       - postgres
 
@@ -48,20 +48,20 @@ services:
         aliases:
           - elements
 
-  bitcoin:
-    build:
-      context: ../../
-      args:
-        - ENV_NAME
-      dockerfile: docker/daemon/bitcoin.docker
-    volumes:
-      - ../../../explorer-data/bitcoin:/root/.bitcoin
-      - ../../../explorer-data/testnet3:/root/.testnet3
-      - ../../../explorer-data/regtest:/root/.regtest
-    networks:
-      main:
-        aliases:
-          - bitcoin
+  # bitcoin:
+  #   build:
+  #     context: ../../
+  #     args:
+  #       - ENV_NAME
+  #     dockerfile: docker/daemon/bitcoin.docker
+  #   volumes:
+  #     - ../../../explorer-data/bitcoin:/root/.bitcoin
+  #     - ../../../explorer-data/testnet3:/root/.testnet3
+  #     - ../../../explorer-data/regtest:/root/.regtest
+  #   networks:
+  #     main:
+  #       aliases:
+  #         - bitcoin
 
   data:
     restart: "no"
