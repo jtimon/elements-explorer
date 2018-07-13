@@ -6,7 +6,9 @@
 all: dev
 
 .PHONY: common-conf
-common-conf: docker/conf/explorer.env docker/conf/explorer.proc
+common-conf: docker/staging/conf/explorer.env docker/staging/conf/explorer.proc docker/staging/conf/elements.env docker/staging/conf/elements.proc docker/staging/conf/bitcoin.env docker/staging/conf/bitcoin.proc
+	rm -rf docker/conf
+	cp -r ./docker/staging/conf ./docker/conf
 
 dev: common-conf
 	cd docker/staging && docker-compose up --build
