@@ -16,6 +16,8 @@ services:
   explorer:
     build:
       context: ../../
+      args:
+        - ENV_NAME
       dockerfile: docker/explorer/Dockerfile
     volumes:
       - ../../../explorer-data/target:/root/target
@@ -34,6 +36,8 @@ services:
   elements:
     build:
       context: ../../
+      args:
+        - ENV_NAME
       dockerfile: docker/daemon/elements.docker
     volumes:
       - ../../../explorer-data/elementsregtest:/root/.elements
@@ -47,6 +51,8 @@ services:
   bitcoin:
     build:
       context: ../../
+      args:
+        - ENV_NAME
       dockerfile: docker/daemon/bitcoin.docker
     volumes:
       - ../../../explorer-data/bitcoin:/root/.bitcoin

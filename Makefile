@@ -7,21 +7,11 @@ all: dev
 
 .PHONY: dev-conf stating-conf production-conf
 
-dev-conf:
-	sudo rm -rf docker/conf
-	sudo cp -r ./docker/dev/conf ./docker/conf
-staging-conf:
-	sudo rm -rf docker/conf
-	sudo cp -r ./docker/staging/conf ./docker/conf
-production-conf:
-	sudo rm -rf docker/conf
-	sudo cp -r ./docker/production/conf ./docker/conf
-
-dev: dev-conf
+dev:
 	cd docker/dev && docker-compose up --build
-staging: staging-conf
+staging:
 	cd docker/staging && docker-compose up -d --build
-production: production-conf
+production:
 	cd docker/production && docker-compose up -d --build
 
 .PHONY: stop clean docker-prune clean-db

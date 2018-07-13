@@ -17,6 +17,7 @@ ENV DAEMON_NAME=elements
 COPY docker/daemon/build-with-wallet.sh /build_docker/docker/daemon/build-with-wallet.sh
 RUN sh /build_docker/docker/daemon/build-with-wallet.sh
 
-COPY docker/conf/$DAEMON_NAME.env /build_docker/docker/conf/$DAEMON_NAME.env
-COPY docker/conf/$DAEMON_NAME.proc /build_docker/docker/conf/$DAEMON_NAME.proc
+ARG ENV_NAME
+COPY docker/$ENV_NAME/conf/$DAEMON_NAME.env /build_docker/docker/conf/$DAEMON_NAME.env
+COPY docker/$ENV_NAME/conf/$DAEMON_NAME.proc /build_docker/docker/conf/$DAEMON_NAME.proc
 CMD honcho start -e docker/conf/$DAEMON_NAME.env -f docker/conf/$DAEMON_NAME.proc
