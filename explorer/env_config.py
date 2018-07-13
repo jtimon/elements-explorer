@@ -23,13 +23,42 @@ INIT_NODES_TIME = 120
 def InitTime(init_time):
     return max(INIT_DB_TIME, INIT_NODES_TIME) + init_time
 
+AVAILABLE_RPCS = {
+
+    'bitcoin': RpcCaller(os.environ.get('BITCOIN_ADR'),
+                         os.environ.get('BITCOIN_RPCUSER'),
+                         os.environ.get('BITCOIN_RPCPASSWORD')
+    ),
+
+    'testnet3': RpcCaller(os.environ.get('TESTNET3_ADR'),
+                          os.environ.get('TESTNET3_RPCUSER'),
+                          os.environ.get('TESTNET3_RPCPASSWORD')
+    ),
+
+    'regtest': RpcCaller(os.environ.get('REGTEST_ADR'),
+                         os.environ.get('REGTEST_RPCUSER'),
+                         os.environ.get('REGTEST_RPCPASSWORD')
+    ),
+
+    'elementsregtest': RpcCaller(os.environ.get('ELEMENTSREGTEST_ADR'),
+                                 os.environ.get('ELEMENTSREGTEST_RPCUSER'),
+                                 os.environ.get('ELEMENTSREGTEST_RPCPASSWORD')
+    ),
+
+    'elementsparent': RpcCaller(os.environ.get('ELEMENTSPARENT_ADR'),
+                                os.environ.get('ELEMENTSPARENT_RPCUSER'),
+                                os.environ.get('ELEMENTSPARENT_RPCPASSWORD')
+    ),
+
+    'elementside': RpcCaller(os.environ.get('ELEMENTSIDE_ADR'),
+                             os.environ.get('ELEMENTSIDE_RPCUSER'),
+                             os.environ.get('ELEMENTSIDE_RPCPASSWORD')
+    ),
+}
+
 AVAILABLE_CHAINS = {
 
     'bitcoin': {
-        'rpc': RpcCaller(os.environ.get('BITCOIN_ADR'),
-                         os.environ.get('BITCOIN_RPCUSER'),
-                         os.environ.get('BITCOIN_RPCPASSWORD')
-        ),
         'zmq': os.environ.get('BITCOIN_ZMQ'),
         'properties': {
             'stats_support': True,
@@ -44,10 +73,6 @@ AVAILABLE_CHAINS = {
     },
 
     'testnet3': {
-        'rpc': RpcCaller(os.environ.get('TESTNET3_ADR'),
-                         os.environ.get('TESTNET3_RPCUSER'),
-                         os.environ.get('TESTNET3_RPCPASSWORD')
-        ),
         'zmq': os.environ.get('TESTNET3_ZMQ'),
         'properties': {
             'stats_support': True,
@@ -62,10 +87,6 @@ AVAILABLE_CHAINS = {
     },
 
     'regtest': {
-        'rpc': RpcCaller(os.environ.get('REGTEST_ADR'),
-                         os.environ.get('REGTEST_RPCUSER'),
-                         os.environ.get('REGTEST_RPCPASSWORD')
-        ),
         'zmq': os.environ.get('REGTEST_ZMQ'),
         'properties': {
             'stats_support': True,
@@ -81,10 +102,6 @@ AVAILABLE_CHAINS = {
     },
 
     'elementsregtest': {
-        'rpc': RpcCaller(os.environ.get('ELEMENTSREGTEST_ADR'),
-                         os.environ.get('ELEMENTSREGTEST_RPCUSER'),
-                         os.environ.get('ELEMENTSREGTEST_RPCPASSWORD')
-        ),
         'zmq': os.environ.get('ELEMENTSREGTEST_ZMQ'),
         'properties': {
             'stats_support': True,
@@ -104,10 +121,6 @@ AVAILABLE_CHAINS = {
     },
 
     'elementsparent': {
-        'rpc': RpcCaller(os.environ.get('ELEMENTSPARENT_ADR'),
-                         os.environ.get('ELEMENTSPARENT_RPCUSER'),
-                         os.environ.get('ELEMENTSPARENT_RPCPASSWORD')
-        ),
         'zmq': os.environ.get('ELEMENTSPARENT_ZMQ'),
         'properties': {
             'stats_support': True,
@@ -123,10 +136,6 @@ AVAILABLE_CHAINS = {
     },
 
     'elementside': {
-        'rpc': RpcCaller(os.environ.get('ELEMENTSIDE_ADR'),
-                         os.environ.get('ELEMENTSIDE_RPCUSER'),
-                         os.environ.get('ELEMENTSIDE_RPCPASSWORD')
-        ),
         'zmq': os.environ.get('ELEMENTSIDE_ZMQ'),
         'properties': {
             'stats_support': True,
@@ -144,5 +153,5 @@ AVAILABLE_CHAINS = {
             'pegout_gen': [40, InitTime(60)], # every 40 secs after 1 min
         },
     },
-    
+
 }

@@ -20,17 +20,17 @@ FLAGS = gflags.FLAGS
 from explorer.process.mempoolsaver import MempoolSaver
 from explorer.process.mempoolstats import MempoolStatsCacher
 
-from explorer.env_config import AVAILABLE_CHAINS, DB_FACTORY
+from explorer.env_config import AVAILABLE_CHAINS, DB_FACTORY, AVAILABLE_RPCS
 
 chain = FLAGS.chain
 
-mempool_cacher_params = [chain, AVAILABLE_CHAINS[chain]['rpc'], DB_FACTORY.create()]
+mempool_cacher_params = [chain, AVAILABLE_RPCS[chain], DB_FACTORY.create()]
 mempool_cacher_params.extend(AVAILABLE_CHAINS[chain]['proc']['mempool_cacher'])
 mempool_cacher = MempoolStatsCacher(*mempool_cacher_params)
 mempool_cacher.start()
 
 if 'mempool_saver' in AVAILABLE_CHAINS[chain]:
-    mempool_saver_params = [chain, AVAILABLE_CHAINS[chain]['rpc']]
+    mempool_saver_params = [chain, AVAILABLE_RPCS[chain]]
     mempool_saver_params.extend(AVAILABLE_CHAINS[chain]['proc']['mempool_saver'])
     mempool_saver = MempoolSaver(*mempool_saver_params)
     mempool_saver.start()

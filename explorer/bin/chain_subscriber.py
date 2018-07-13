@@ -18,11 +18,11 @@ FLAGS = gflags.FLAGS
 # ===----------------------------------------------------------------------===
 
 from explorer.process.subscriber import DaemonSubscriber
-from explorer.env_config import AVAILABLE_CHAINS, DB_FACTORY
+from explorer.env_config import AVAILABLE_CHAINS, DB_FACTORY, AVAILABLE_RPCS
 
 chain = FLAGS.chain
 
 daemon_subscriber = DaemonSubscriber(AVAILABLE_CHAINS[chain]['zmq'],
-                                     chain, AVAILABLE_CHAINS[chain]['rpc'],
+                                     chain, AVAILABLE_RPCS[chain],
                                      DB_FACTORY, cache_stats=AVAILABLE_CHAINS[chain]['properties']['stats_support'])
 daemon_subscriber.start()

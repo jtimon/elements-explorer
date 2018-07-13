@@ -18,11 +18,11 @@ FLAGS = gflags.FLAGS
 # ===----------------------------------------------------------------------===
 
 from explorer.process.greedy import GreedyCacher
-from explorer.env_config import AVAILABLE_CHAINS, DB_FACTORY
+from explorer.env_config import AVAILABLE_CHAINS, DB_FACTORY, AVAILABLE_RPCS
 
 chain = FLAGS.chain
 
-greedy_cacher_params = [chain, AVAILABLE_CHAINS[chain]['rpc'], DB_FACTORY.create()]
+greedy_cacher_params = [chain, AVAILABLE_RPCS[chain], DB_FACTORY.create()]
 greedy_cacher_params.extend(AVAILABLE_CHAINS[chain]['proc']['greedy_cacher'])
 greedy_cacher = GreedyCacher(*greedy_cacher_params)
 greedy_cacher.start()
