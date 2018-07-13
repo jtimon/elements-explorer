@@ -1,0 +1,84 @@
+version: '2'
+
+services:
+
+  # dummydb:
+  #   build:
+  #     context: ../../
+  #     dockerfile: docker/dummydb/Dockerfile
+  #   ports:
+  #     - "1984:1984"
+  #   networks:
+  #     main:
+  #       aliases:
+  #         - dummydb
+
+  explorer:
+    build:
+      context: ../../
+      dockerfile: docker/explorer/Dockerfile
+    volumes:
+      - ../../../explorer-data/target:/root/target
+    ports:
+      - "5000:5000"
+    networks:
+      main:
+        ipv4_address: 10.5.0.5
+        aliases:
+          - explorer
+    depends_on:
+      - bitcoin
+      - elements
+      - postgres
+
+  elements:
+    build:
+      context: ../../
+      dockerfile: docker/daemon/elements.docker
+    volumes:
+      - ../../../explorer-data/elementsregtest:/root/.elements
+      - ../../../explorer-data/elementsparent:/root/.elementsparent
+      - ../../../explorer-data/elementside:/root/.elementside
+    networks:
+      main:
+        aliases:
+          - elements
+
+  bitcoin:
+    build:
+      context: ../../
+      dockerfile: docker/daemon/bitcoin.docker
+    volumes:
+      - ../../../explorer-data/bitcoin:/root/.bitcoin
+      - ../../../explorer-data/testnet3:/root/.testnet3
+      - ../../../explorer-data/regtest:/root/.regtest
+    networks:
+      main:
+        aliases:
+          - bitcoin
+
+  data:
+    restart: "no"
+    image: postgres:9.6
+    volumes:
+      - ../../../explorer-data/db/postgresql:/var/lib/postgresql/data
+    command: "true"
+
+  postgres:
+    restart: "always"
+    image: postgres:9.6
+    volumes_from:
+      - data
+    ports:
+      - "5432:5432"
+    networks:
+      main:
+        aliases:
+          - postgresalias
+
+networks:
+  main:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 10.5.0.0/16

@@ -5,20 +5,23 @@
 .PHONY: dev staging production
 all: dev
 
-.PHONY: dev-conf stating-conf
+.PHONY: dev-conf stating-conf production-conf
 
 dev-conf: docker/dev/conf/*.env docker/dev/conf/*.proc
 	rm -rf docker/conf
 	cp -r ./docker/dev/conf ./docker/conf
-stating-conf: docker/staging/conf/*.env docker/staging/conf/*.proc
+staging-conf: docker/staging/conf/*.env docker/staging/conf/*.proc
 	rm -rf docker/conf
 	cp -r ./docker/staging/conf ./docker/conf
+production-conf: docker/production/conf/*.env docker/production/conf/*.proc
+	rm -rf docker/conf
+	cp -r ./docker/production/conf ./docker/conf
 
 dev: dev-conf
 	cd docker/staging && docker-compose up --build
-staging: stating-conf
+staging: staging-conf
 	cd docker/staging && docker-compose up -d --build
-production: stating-conf
+production: production-conf
 	cd docker/staging && docker-compose up -d --build
 
 .PHONY: stop clean docker-prune clean-db
