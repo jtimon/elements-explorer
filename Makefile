@@ -3,20 +3,33 @@
 #  mkdir mv printf pwd rm rmdir sed sleep sort tar test touch tr true
 
 .PHONY: dev staging production
-all: dev
+all: dev-nod
 
 .PHONY: dev-conf stating-conf production-conf
 
 dev:
+	cd docker/dev && docker-compose up -d --build
+dev-nod:
 	cd docker/dev && docker-compose up --build
 staging:
 	cd docker/staging && docker-compose up -d --build
+staging-nod:
+	cd docker/staging && docker-compose up --build
 production:
 	cd docker/production && docker-compose up -d --build
+production-nod:
+	cd docker/production && docker-compose up --build
 
-.PHONY: stop clean docker-prune clean-db
-stop:
+.PHONY: stop stop-dev stop-staging stop-production
+stop-dev:
+	cd docker/dev ; docker-compose stop
+stop-staging:
 	cd docker/staging ; docker-compose stop
+stop-production:
+	cd docker/production ; docker-compose stop
+stop: stop-dev stop-staging stop-production
+
+.PHONY: clean docker-prune clean-db
 # docker-compose rm -f
 # cd docker && docker-compose down
 docker-prune:
