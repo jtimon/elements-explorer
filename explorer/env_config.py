@@ -6,6 +6,9 @@ from mintools.minql import MinqlFactory
 
 from explorer.services.rpcdaemon import RpcCaller
 
+file = open('/root/conf/AVAILABLE_CHAINS.json', 'r').read()
+AVAILABLE_CHAINS = json.loads(file)
+
 DB_FACTORY = MinqlFactory(
     os.environ.get('DB_TYPE'),
     os.environ.get('DB_ADR'),
@@ -46,6 +49,3 @@ AVAILABLE_RPCS = {
                              os.environ.get('ELEMENTSIDE_RPCPASSWORD')
     ),
 }
-
-file = open('/root/conf/AVAILABLE_CHAINS.json', 'r').read()
-AVAILABLE_CHAINS = json.loads(file)
