@@ -18,6 +18,9 @@ from explorer.resources.generic import GetByIdResource
 from explorer.resources.mempoolstats import MempoolStatsResource
 from explorer.resources.rpccaller import RpcCallerResource
 
+def get_default_chain(**kwargs):
+    return AVAILABLE_CHAINS['DEFAULT_CHAIN']
+
 def get_available_chains(**kwargs):
     available_chains = {}
     for k, v in AVAILABLE_CHAINS.iteritems():
@@ -35,6 +38,7 @@ class ExplorerApiDomain(restmin_domain):
         super(ExplorerApiDomain, self).__init__(domain, *args, **kwargs)
 
 API_DOMAIN = ExplorerApiDomain({
+    'default_chain': FunctionResource(get_default_chain),
     'available_chains': FunctionResource(get_available_chains),
     # never cached, always hits the node
     'getmempoolentry': RpcCallerResource('getmempoolentry'),
