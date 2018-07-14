@@ -1,5 +1,5 @@
 {
-    "DEFAULT_CHAIN": "bitcoin",
+    "DEFAULT_CHAIN": "elementsregtest",
 
     "elementside": {
         "proc": {
