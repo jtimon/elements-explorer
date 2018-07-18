@@ -1,0 +1,33 @@
+web: gunicorn webflask:app -b "$WEB_HOST:$WEB_PORT" -w $WEB_WORKERS -k gevent --log-config $GUNICORN_LOG_FILE --timeout $WEB_TIMEOUT
+
+# Restart only tables when they need it:
+# Always force db restart per chain with --forcechains
+# Force db restart for all chains by removing $ORM_SCHEMA/schema.json:
+# --forcechains=elementside,elementsparent --forcetables=chaininfo,tx,input,output
+
+create_db: python explorer/bin/model2db.py --address $DB_PROXY_ADR --dbaddress $DB_BACKEND_ADR --dbtype $DB_PROXY_TYPE --dbname $DB_NAME --dbuser $DB_USER --dbpass $DB_PASS --model $ORM_MODEL --modelschema $ORM_SCHEMA --chains=bitcoin,testnet3,regtest,elementsregtest,elementsparent,elementside --forcechains=elementside,elementsparent
+
+
+mempool_regtest: python explorer/bin/mempool_cacher.py --chain regtest
+# subscriber_regtest: python explorer/bin/chain_subscriber.py --chain regtest
+reorg_cron_regtest: python explorer/bin/reorg_cron.py --chain regtest
+generator_regtest: python explorer/bin/generator.py --chain regtest
+greedy_cacher_regtest: python explorer/bin/greedy_cacher.py --chain regtest
+
+mempool_elementsregtest: python explorer/bin/mempool_cacher.py --chain elementsregtest
+# subscriber_elementsregtest: python explorer/bin/chain_subscriber.py --chain elementsregtest
+reorg_cron_elementsregtest: python explorer/bin/reorg_cron.py --chain elementsregtest
+generator_elementsregtest: python explorer/bin/generator.py --chain elementsregtest
+greedy_cacher_elementsregtest: python explorer/bin/greedy_cacher.py --chain elementsregtest
+
+mempool_elementsparent: python explorer/bin/mempool_cacher.py --chain elementsparent
+# subscriber_elementsparent: python explorer/bin/chain_subscriber.py --chain elementsparent
+reorg_cron_elementsparent: python explorer/bin/reorg_cron.py --chain elementsparent
+generator_elementsparent: python explorer/bin/generator.py --chain elementsparent
+greedy_cacher_elementsparent: python explorer/bin/greedy_cacher.py --chain elementsparent
+
+mempool_elementside: python explorer/bin/mempool_cacher.py --chain elementside
+# subscriber_elementside: python explorer/bin/chain_subscriber.py --chain elementside
+reorg_cron_elementside: python explorer/bin/reorg_cron.py --chain elementside
+generator_elementside: python explorer/bin/generator.py --chain elementside
+greedy_cacher_elementside: python explorer/bin/greedy_cacher.py --chain elementside

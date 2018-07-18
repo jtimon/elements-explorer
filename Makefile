@@ -22,6 +22,11 @@ production:
 production-nod:
 	cd docker/production && docker-compose up --build
 
+.PHONY: test-sql-postgres
+
+test-sql-postgres:
+	cd docker/test-sql-postgres ; docker-compose up --build
+
 .PHONY: stop stop-dev stop-staging stop-production
 stop-dev:
 	cd docker/dev ; docker-compose stop
