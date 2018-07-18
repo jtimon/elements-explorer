@@ -2,7 +2,7 @@
 #  awk cat cmp cp diff echo egrep expr false grep install-info ln ls
 #  mkdir mv printf pwd rm rmdir sed sleep sort tar test touch tr true
 
-.PHONY: dev staging production
+.PHONY: dev dev-nod staging staging-nod production production-nod
 all: dev-nod
 
 .PHONY: dev-conf stating-conf production-conf
