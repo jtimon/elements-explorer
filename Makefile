@@ -2,6 +2,8 @@
 #  awk cat cmp cp diff echo egrep expr false grep install-info ln ls
 #  mkdir mv printf pwd rm rmdir sed sleep sort tar test touch tr true
 
+# TODO FIX s/sudo //
+
 .PHONY: dev dev-nod staging staging-nod production production-nod
 all: dev-nod
 
@@ -36,7 +38,7 @@ docker-prune:
 	docker system prune -a
 
 clean-db:
-	rm -f ../explorer-data/target/schema.json
+	sudo rm -f ../explorer-data/target/schema.json
 
 clean: docker-prune clean-db
 # docker rm $(docker ps -a -q)
