@@ -20,8 +20,8 @@ services:
         - ENV_NAME
       dockerfile: docker/explorer/Dockerfile
     volumes:
-      - ../../../explorer-data/target:/root/target
-      - ../../../explorer-data/keys:/root/keys
+      - /tmp/test-explorer-sql-postgres/target:/root/target
+      - /tmp/test-explorer-sql-postgres/keys:/root/keys
     ports:
       - "5000:5000"
     networks:
@@ -41,9 +41,9 @@ services:
         - ENV_NAME
       dockerfile: docker/daemon/elements.docker
     volumes:
-      - ../../../explorer-data/elementsregtest:/root/.elements
-      - ../../../explorer-data/elementsparent:/root/.elementsparent
-      - ../../../explorer-data/elementside:/root/.elementside
+      - /tmp/test-explorer-sql-postgres/elementsregtest:/root/.elements
+      - /tmp/test-explorer-sql-postgres/elementsparent:/root/.elementsparent
+      - /tmp/test-explorer-sql-postgres/elementside:/root/.elementside
     networks:
       main:
         aliases:
@@ -56,9 +56,9 @@ services:
         - ENV_NAME
       dockerfile: docker/daemon/bitcoin.docker
     volumes:
-      - ../../../explorer-data/bitcoin:/root/.bitcoin
-      - ../../../explorer-data/testnet3:/root/.testnet3
-      - ../../../explorer-data/regtest:/root/.regtest
+      - /tmp/test-explorer-sql-postgres/bitcoin:/root/.bitcoin
+      - /tmp/test-explorer-sql-postgres/testnet3:/root/.testnet3
+      - /tmp/test-explorer-sql-postgres/regtest:/root/.regtest
     networks:
       main:
         aliases:
@@ -68,7 +68,7 @@ services:
     restart: "no"
     image: postgres:9.6
     volumes:
-      - ../../../explorer-data/db/postgresql:/var/lib/postgresql/data
+      - /tmp/test-explorer-sql-postgres/db/postgresql:/var/lib/postgresql/data
     command: "true"
 
   postgres:

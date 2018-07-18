@@ -22,10 +22,14 @@ production:
 production-nod:
 	cd docker/production && docker-compose up --build
 
-.PHONY: test-sql-postgres
+.PHONY: check test-sql-postgres
+check: test-sql-postgres
 
 test-sql-postgres:
+	sudo rm -rf /tmp/test-explorer-sql-postgres
+	mkdir /tmp/test-explorer-sql-postgres
 	cd docker/test-sql-postgres ; docker-compose up --build
+	sudo rm -rf /tmp/test-explorer-sql-postgres
 
 .PHONY: stop stop-dev stop-staging stop-production
 stop-dev:
