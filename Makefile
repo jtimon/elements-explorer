@@ -2,6 +2,10 @@
 #  awk cat cmp cp diff echo egrep expr false grep install-info ln ls
 #  mkdir mv printf pwd rm rmdir sed sleep sort tar test touch tr true
 
+.PHONY: check
+check:
+	python3 ./test/run_tests.py
+
 .PHONY: dev dev-nod staging staging-nod production production-nod
 all: dev-nod
 
