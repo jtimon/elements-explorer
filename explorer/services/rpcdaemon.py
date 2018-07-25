@@ -34,8 +34,14 @@ class RpcCaller(object):
     def __init__(self, address, user, password,
                  **kwargs):
 
+        if not address:
+            raise Exception('RpcCaller.__init__: No address provided')
         self.address = address
+        if not user:
+            raise Exception('RpcCaller.__init__: No user provided')
         self.user = user
+        if not password:
+            raise Exception('RpcCaller.__init__: No password provided')
         self.password = password
 
         super(RpcCaller, self).__init__(**kwargs)
