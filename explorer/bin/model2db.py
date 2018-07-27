@@ -60,7 +60,7 @@ from mintools.minql import (
 )
 
 import time
-time.sleep(1)
+time.sleep(12)
 
 migration_schema = {}
 migration_diff = {}
