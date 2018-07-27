@@ -11,7 +11,7 @@ from explorer.models.transaction import Tx
 
 class GreedyCacher(CronCacher):
 
-    def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time, cache_txs, cache_stats, wait_time_greedy=1):
+    def __init__(self, chain, rpccaller, db_client, wait_time, initial_wait_time, cache_txs, cache_stats, wait_time_greedy=0.1):
 
         super(GreedyCacher, self).__init__(chain, rpccaller, db_client, wait_time, initial_wait_time)
 
