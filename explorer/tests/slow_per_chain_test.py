@@ -25,6 +25,7 @@ from explorer.process.generator.pegin import PeginGenerator
 from explorer.process.generator.pegout import PegoutGenerator
 from explorer.process.generator.transaction import TxGenerator
 from explorer.process.greedy import GreedyCacher
+from explorer.process.subscriber import DaemonReorgManager
 
 block_gen_params = [chain, AVAILABLE_RPCS[chain]]
 block_gen_params.extend(AVAILABLE_CHAINS[chain]['proc']['block_gen'])
@@ -34,9 +35,15 @@ tx_gen_params = [chain, AVAILABLE_RPCS[chain]]
 tx_gen_params.extend(AVAILABLE_CHAINS[chain]['proc']['tx_gen'])
 tx_generator = TxGenerator(*tx_gen_params)
 
-greedy_cacher_params = [chain, AVAILABLE_RPCS[chain], DB_FACTORY.create()]
+DB_CLIENT = DB_FACTORY.create()
+
+greedy_cacher_params = [chain, AVAILABLE_RPCS[chain], DB_CLIENT]
 greedy_cacher_params.extend(AVAILABLE_CHAINS[chain]['proc']['greedy_cacher'])
 greedy_cacher = GreedyCacher(*greedy_cacher_params, wait_time_greedy=0)
+
+reorg_cron_params = [chain, AVAILABLE_RPCS[chain], DB_CLIENT]
+reorg_cron_params.extend(AVAILABLE_CHAINS[chain]['proc']['reorg_cron'])
+daemon_reorg_cron = DaemonReorgManager(*reorg_cron_params)
 
 for i in xrange(101):
     block_generator._cron_loop()
@@ -49,4 +56,9 @@ for i in xrange(5):
     block_generator._cron_loop()
 
 # Shouldn't cache anything else because greedy_cacher doesn't handle tip changes
+greedy_cacher._cron_loop()
+
+daemon_reorg_cron._cron_loop()
+
+# After calling reorg cron, it should cache more things again
 greedy_cacher._cron_loop()
