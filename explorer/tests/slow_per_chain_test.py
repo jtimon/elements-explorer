@@ -19,11 +19,12 @@ print('Running %s for chain %s' % (__file__, chain))
 
 # ===----------------------------------------------------------------------===
 
-from explorer.env_config import AVAILABLE_CHAINS, AVAILABLE_RPCS
+from explorer.env_config import AVAILABLE_CHAINS, AVAILABLE_RPCS, DB_FACTORY
 from explorer.process.generator.block import BlockGenerator
 from explorer.process.generator.pegin import PeginGenerator
 from explorer.process.generator.pegout import PegoutGenerator
 from explorer.process.generator.transaction import TxGenerator
+from explorer.process.greedy import GreedyCacher
 
 block_gen_params = [chain, AVAILABLE_RPCS[chain]]
 block_gen_params.extend(AVAILABLE_CHAINS[chain]['proc']['block_gen'])
@@ -33,10 +34,19 @@ tx_gen_params = [chain, AVAILABLE_RPCS[chain]]
 tx_gen_params.extend(AVAILABLE_CHAINS[chain]['proc']['tx_gen'])
 tx_generator = TxGenerator(*tx_gen_params)
 
+greedy_cacher_params = [chain, AVAILABLE_RPCS[chain], DB_FACTORY.create()]
+greedy_cacher_params.extend(AVAILABLE_CHAINS[chain]['proc']['greedy_cacher'])
+greedy_cacher = GreedyCacher(*greedy_cacher_params, wait_time_greedy=0)
+
 for i in xrange(101):
     block_generator._cron_loop()
 
+greedy_cacher._cron_loop()
+    
 for i in xrange(5):
     for j in xrange(5):
         tx_generator._cron_loop()
     block_generator._cron_loop()
+
+# Shouldn't cache anything else because greedy_cacher doesn't handle tip changes
+greedy_cacher._cron_loop()

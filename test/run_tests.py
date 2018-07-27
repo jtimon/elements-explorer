@@ -47,6 +47,7 @@ def test_function_for_chain_with_db(chain, db, test_file, env_file_export):
     print('%s: %s: Running file %s' % (chain, db, test_file))
 
     status = 1
+    time.sleep(20) # Wait for db to start and be created from scratch
     func_init_time = time.time()
     try:
         # status = call("docker exec -it rpcexplorer_explorer_1 bash", shell=True)
@@ -68,10 +69,10 @@ def test_function_for_chain_with_db(chain, db, test_file, env_file_export):
     if status != 0:
         status2 = call('docker ps -a', shell=True)
         status2 = call('docker logs rpcexplorer_explorer_1', shell=True)
+        # status2 = call('docker logs rpcexplorer_postgres_1', shell=True)
         # status2 = call('docker logs rpcexplorer_bitcoin_1', shell=True)
         # status2 = call('docker logs rpcexplorer_elements_1', shell=True)
         status2 = call('docker ps -a', shell=True)
-
 
     try:
         call(['docker-compose', 'stop'], cwd='./docker/test-%s' % db)
