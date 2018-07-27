@@ -7,6 +7,7 @@
 from subprocess import call
 import json
 import os
+import subprocess
 import time
 
 file = open('./test/AVAILABLE_CHAINS.json', 'r').read()
@@ -37,7 +38,7 @@ def test_function_for_chain_with_db(chain, db, test_file, env_file_export):
     call(['ls', '-F'])
 
     try:
-        call(['docker-compose', 'up', '--build', '-d'], cwd='./docker/test-%s' % db)
+        call(['docker-compose', 'up', '--build', '-d'], cwd='./docker/test-%s' % db, stdout=subprocess.PIPE)
     except Exception as e:
         print("docker-compose: Error in %s:" % (test_file), type(e), e)
         return False
