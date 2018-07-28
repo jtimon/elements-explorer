@@ -10,12 +10,6 @@ import os
 import subprocess
 import time
 
-file = open('./test/AVAILABLE_CHAINS.json', 'r').read()
-AVAILABLE_CHAINS = json.loads(file)
-del AVAILABLE_CHAINS['DEFAULT_CHAIN']
-AVAILABLE_CHAINS_ITEMS = AVAILABLE_CHAINS.items()
-print('AVAILABLE_CHAINS:', AVAILABLE_CHAINS)
-
 AVAILABLE_DBS = {
     'postgres' : {},
 }
@@ -30,12 +24,10 @@ my_env["PATH"] = "/usr/sbin:/sbin:" + my_env["PATH"]
 
 # A common function that destroys, starts and stops docker for testing
 # individual functions for a given db
-def test_function_for_chain_with_db(chain, db, test_file, env_file_export):
+def test_function_with_db(db, test_file, env_file_export):
     # TODO Remove use of sudo
     call(['sudo', 'rm', '-rf', '/tmp/test-elemements-explorer'])
     call(['mkdir', '/tmp/test-elemements-explorer'])
-    call(['pwd'])
-    call(['ls', '-F'])
 
     try:
         call(['docker-compose', 'up', '--build', '-d'], cwd='./docker/test-%s' % db, stdout=subprocess.PIPE)
@@ -44,15 +36,14 @@ def test_function_for_chain_with_db(chain, db, test_file, env_file_export):
         return False
 
     print('---------------------------------------------------')
-    print('%s: %s: Running file %s' % (chain, db, test_file))
+    print('Testing %s: Running file %s' % (db, test_file))
 
     status = 1
     time.sleep(20) # Wait for db to start and be created from scratch
     func_init_time = time.time()
     try:
-        # status = call("docker exec -it rpcexplorer_explorer_1 bash", shell=True)
-        call_command = "docker exec -it rpcexplorer_explorer_1 /bin/sh -c '%s python ./explorer/tests/%s --chain=%s'" % (
-            env_file_export, test_file, chain)
+        call_command = "docker exec -it rpcexplorer_explorer_1 /bin/sh -c '%s python ./explorer/tests/%s'" % (
+            env_file_export, test_file)
         print('call_command', call_command)
         status = call(call_command, cwd='./docker/test-%s' % db, shell=True)
     except Exception as e:
@@ -85,22 +76,16 @@ def test_function_for_chain_with_db(chain, db, test_file, env_file_export):
 
     return True
 
-
-time.sleep(0.00001) # REM How to add "uncalled-for" waits
-
-
 print('---------------------------------------------------')
 init_time = time.time()
 print('GLOBAL INIT TIME: %s' % (init_time))
 
 print('Testing %s DBs' % (len(AVAILABLE_DBS_ITEMS)))
-print('Testing %s chains' % (len(AVAILABLE_CHAINS_ITEMS)))
 print('Testing with %s test files' % (len(AVAILABLE_TESTS)))
-print('Total tests: %s * %s * %s = %s ' % (
+print('Total tests: %s * %s = %s ' % (
     len(AVAILABLE_DBS_ITEMS),
-    len(AVAILABLE_CHAINS_ITEMS),
     len(AVAILABLE_TESTS),
-    len(AVAILABLE_DBS_ITEMS) * len(AVAILABLE_CHAINS_ITEMS) * len(AVAILABLE_TESTS)
+    len(AVAILABLE_DBS_ITEMS) * len(AVAILABLE_TESTS),
 ))
 
 for db, db_properties in AVAILABLE_DBS_ITEMS:
@@ -110,12 +95,9 @@ for db, db_properties in AVAILABLE_DBS_ITEMS:
         if line and line[0] != '\n' and line[0] != '#':
             env_file_export += 'export %s ; ' % line.rstrip()
 
-    for chain, chain_properties in AVAILABLE_CHAINS_ITEMS:
-        if chain == 'DEFAULT_CHAIN':
-            continue
-        for test in AVAILABLE_TESTS:
-            if not test_function_for_chain_with_db(chain, db, test, env_file_export):
-                exit(1)
+    for test in AVAILABLE_TESTS:
+        if not test_function_with_db(db, test, env_file_export):
+            exit(1)
 
 final_time = time.time()
 print('---------------------------------------------------')
@@ -123,3 +105,5 @@ print('GLOBAL FINAL TIME: %s' % (final_time))
 
 diff_time = final_time - init_time
 print('GLOBAL DIFF TIME: %s' % (diff_time))
+
+time.sleep(0.00001) # REM How to add "uncalled-for" waits

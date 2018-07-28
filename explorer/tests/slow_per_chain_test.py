@@ -7,15 +7,7 @@
 if __name__ != '__main__':
     raise ImportError(u"%s may only be run as a script" % __file__)
 
-import argparse
-
-parser = argparse.ArgumentParser(description='Test block api.')
-parser.add_argument('--chain', help='specify the chain.')
-
-args = parser.parse_args()
-
-chain = args.chain
-print('Running %s for chain %s' % (__file__, chain))
+print('Running %s for' % (__file__))
 
 # ===----------------------------------------------------------------------===
 
@@ -31,6 +23,8 @@ class ExampleTest(object):
 
     def __init__(self):
         super(ExampleTest, self).__init__()
+
+    def run_test(self, chain):
 
         DB_CLIENT = DB_FACTORY.create()
 
@@ -50,8 +44,6 @@ class ExampleTest(object):
         reorg_cron_params.extend(AVAILABLE_CHAINS[chain]['proc']['reorg_cron'])
         self.daemon_reorg_cron = DaemonReorgManager(*reorg_cron_params)
 
-    def run_test(self, chain):
-
         for i in xrange(101):
             self.block_generator._cron_loop()
 
@@ -70,5 +62,11 @@ class ExampleTest(object):
         # After calling reorg cron, it should cache more things again
         self.greedy_cacher._cron_loop()
 
+def run_test_across_chains(_ExampleTest, AVAILABLE_CHAINS_ITEMS):
+    print('Testing %s chains' % (len(AVAILABLE_CHAINS_ITEMS)))
+    for chain, chain_properties in AVAILABLE_CHAINS_ITEMS:
+        if chain == 'DEFAULT_CHAIN':
+            continue
+        _ExampleTest().run_test(chain)
 
-ExampleTest().run_test(chain)
+run_test_across_chains(ExampleTest, AVAILABLE_CHAINS.items())
