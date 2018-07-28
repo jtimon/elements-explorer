@@ -27,38 +27,48 @@ from explorer.process.generator.transaction import TxGenerator
 from explorer.process.greedy import GreedyCacher
 from explorer.process.subscriber import DaemonReorgManager
 
-block_gen_params = [chain, AVAILABLE_RPCS[chain]]
-block_gen_params.extend(AVAILABLE_CHAINS[chain]['proc']['block_gen'])
-block_generator = BlockGenerator(*block_gen_params)
+class ExampleTest(object):
 
-tx_gen_params = [chain, AVAILABLE_RPCS[chain]]
-tx_gen_params.extend(AVAILABLE_CHAINS[chain]['proc']['tx_gen'])
-tx_generator = TxGenerator(*tx_gen_params)
+    def __init__(self):
+        super(ExampleTest, self).__init__()
 
-DB_CLIENT = DB_FACTORY.create()
+        DB_CLIENT = DB_FACTORY.create()
 
-greedy_cacher_params = [chain, AVAILABLE_RPCS[chain], DB_CLIENT]
-greedy_cacher_params.extend(AVAILABLE_CHAINS[chain]['proc']['greedy_cacher'])
-greedy_cacher = GreedyCacher(*greedy_cacher_params, wait_time_greedy=0)
+        block_gen_params = [chain, AVAILABLE_RPCS[chain]]
+        block_gen_params.extend(AVAILABLE_CHAINS[chain]['proc']['block_gen'])
+        self.block_generator = BlockGenerator(*block_gen_params)
 
-reorg_cron_params = [chain, AVAILABLE_RPCS[chain], DB_CLIENT]
-reorg_cron_params.extend(AVAILABLE_CHAINS[chain]['proc']['reorg_cron'])
-daemon_reorg_cron = DaemonReorgManager(*reorg_cron_params)
+        tx_gen_params = [chain, AVAILABLE_RPCS[chain]]
+        tx_gen_params.extend(AVAILABLE_CHAINS[chain]['proc']['tx_gen'])
+        self.tx_generator = TxGenerator(*tx_gen_params)
 
-for i in xrange(101):
-    block_generator._cron_loop()
+        greedy_cacher_params = [chain, AVAILABLE_RPCS[chain], DB_CLIENT]
+        greedy_cacher_params.extend(AVAILABLE_CHAINS[chain]['proc']['greedy_cacher'])
+        self.greedy_cacher = GreedyCacher(*greedy_cacher_params, wait_time_greedy=0)
 
-greedy_cacher._cron_loop()
-    
-for i in xrange(5):
-    for j in xrange(5):
-        tx_generator._cron_loop()
-    block_generator._cron_loop()
+        reorg_cron_params = [chain, AVAILABLE_RPCS[chain], DB_CLIENT]
+        reorg_cron_params.extend(AVAILABLE_CHAINS[chain]['proc']['reorg_cron'])
+        self.daemon_reorg_cron = DaemonReorgManager(*reorg_cron_params)
 
-# Shouldn't cache anything else because greedy_cacher doesn't handle tip changes
-greedy_cacher._cron_loop()
+    def run_test(self, chain):
 
-daemon_reorg_cron._cron_loop()
+        for i in xrange(101):
+            self.block_generator._cron_loop()
 
-# After calling reorg cron, it should cache more things again
-greedy_cacher._cron_loop()
+        self.greedy_cacher._cron_loop()
+
+        for i in xrange(5):
+            for j in xrange(5):
+                self.tx_generator._cron_loop()
+            self.block_generator._cron_loop()
+
+        # Shouldn't cache anything else because greedy_cacher doesn't handle tip changes
+        self.greedy_cacher._cron_loop()
+
+        self.daemon_reorg_cron._cron_loop()
+
+        # After calling reorg cron, it should cache more things again
+        self.greedy_cacher._cron_loop()
+
+
+ExampleTest().run_test(chain)
