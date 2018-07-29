@@ -4,7 +4,7 @@
 
 .PHONY: check
 check:
-	python3 ./test/run_tests.py
+	python3 ./run_tests.py
 
 .PHONY: dev dev-nod staging staging-nod production production-nod
 all: dev-nod
