@@ -2,10 +2,6 @@
 #  awk cat cmp cp diff echo egrep expr false grep install-info ln ls
 #  mkdir mv printf pwd rm rmdir sed sleep sort tar test touch tr true
 
-.PHONY: check
-check:
-	python3 ./run_tests.py
-
 .PHONY: dev dev-nod staging staging-nod production production-nod
 all: dev-nod
 
@@ -21,6 +17,10 @@ production:
 	cd docker/production && docker-compose up -d --build
 production-nod:
 	cd docker/production && docker-compose up --build
+
+.PHONY: check
+check:
+	python3 ./run_tests.py
 
 .PHONY: stop stop-dev stop-staging stop-production
 stop-dev:
