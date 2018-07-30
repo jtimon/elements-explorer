@@ -17,36 +17,15 @@ DB_FACTORY = MinqlFactory(
     os.environ.get('DB_PASS')
 )
 
-AVAILABLE_RPCS = {
-
-    'bitcoin': RpcCaller(os.environ.get('BITCOIN_ADR'),
-                         os.environ.get('BITCOIN_RPCUSER'),
-                         os.environ.get('BITCOIN_RPCPASSWORD')
-    ),
-
-    'testnet3': RpcCaller(os.environ.get('TESTNET3_ADR'),
-                          os.environ.get('TESTNET3_RPCUSER'),
-                          os.environ.get('TESTNET3_RPCPASSWORD')
-    ),
-
-    'regtest': RpcCaller(os.environ.get('REGTEST_ADR'),
-                         os.environ.get('REGTEST_RPCUSER'),
-                         os.environ.get('REGTEST_RPCPASSWORD')
-    ),
-
-    'elementsregtest': RpcCaller(os.environ.get('ELEMENTSREGTEST_ADR'),
-                                 os.environ.get('ELEMENTSREGTEST_RPCUSER'),
-                                 os.environ.get('ELEMENTSREGTEST_RPCPASSWORD')
-    ),
-
-    'elementsparent': RpcCaller(os.environ.get('ELEMENTSPARENT_ADR'),
-                                os.environ.get('ELEMENTSPARENT_RPCUSER'),
-                                os.environ.get('ELEMENTSPARENT_RPCPASSWORD')
-    ),
-
-    'elementside': RpcCaller(os.environ.get('ELEMENTSIDE_ADR'),
-                             os.environ.get('ELEMENTSIDE_RPCUSER'),
-                             os.environ.get('ELEMENTSIDE_RPCPASSWORD')
-    ),
-
-}
+def rpccaller_for_chain(chain):
+    CHAIN_UPPER = chain.upper()
+    return RpcCaller(os.environ.get('%s_ADR' % CHAIN_UPPER),
+                     os.environ.get('%s_RPCUSER' % CHAIN_UPPER),
+                     os.environ.get('%s_RPCPASSWORD' % CHAIN_UPPER)
+    )
+    
+AVAILABLE_RPCS = {}
+for chain in AVAILABLE_CHAINS:
+    if chain == 'DEFAULT_CHAIN':
+        continue
+    AVAILABLE_RPCS[chain] = rpccaller_for_chain(chain)
