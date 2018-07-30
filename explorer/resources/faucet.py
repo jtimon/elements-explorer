@@ -38,7 +38,7 @@ class FaucetInfoResource(ChainResource):
         newaddress = self.rpccaller.RpcCall('getnewaddress', {})
         if 'error' in newaddress:
             return {'error': newaddress['error']}, 400
-            
+
         return {
             'amount': amount,
             'balance': balance,
@@ -61,6 +61,9 @@ class FreeCoinsResource(ChainResource):
         address = request['address']
         balance = get_balance(self.rpccaller, self.chain)
         amount = get_amount(balance)
+
+        if amount <= 0:
+            return {'error': {'message': '%s: Not enough funds for chain %s' % ('freecoins', self.chain)}}, 400
 
         print('Faucet: Sending %s to %s' % (amount, address))
         txid = self.rpccaller.RpcCall('sendtoaddress', {'address': address, 'amount': str(amount)})
