@@ -4,9 +4,26 @@
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+import time
+
 from explorer.env_config import AVAILABLE_CHAINS, DB_FACTORY
 
-class DbTest(object):
+class BenchmarkTest(object):
+
+    def init_chrono(self):
+        self._init_time = time.time()
+
+    def stop_chrono(self):
+        self._final_time = time.time()
+
+    def print_chrono(self, chrono_name):
+        print('---------------------------------------------------')
+        print('%s INIT TIME: %s' % (chrono_name, self._init_time))
+        print('%s FINAL TIME: %s' % (chrono_name, self._final_time))
+        print('%s DIFF TIME: %s' % (chrono_name, self._final_time - self._init_time))
+        print('---------------------------------------------------')
+
+class DbTest(BenchmarkTest):
     
     def __init__(self):
         super(DbTest, self).__init__()
@@ -19,5 +36,8 @@ class RepeatPerAvailableChainTest(DbTest):
         for chain, chain_properties in AVAILABLE_CHAINS.items():
             if chain == 'DEFAULT_CHAIN':
                 continue
-            print('Running %s for chain %s' % (__file__, chain))
+            print('Running %s for chain %s' % (self.__class__.__name__, chain))
+            self.init_chrono()
             self.run_tests_for_chain(chain)
+            self.stop_chrono()
+            self.print_chrono('%s_%s' % (self.__class__.__name__, chain))
