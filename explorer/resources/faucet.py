@@ -4,7 +4,9 @@ import datetime
 from .chain import UnknownChainError, ChainResource
 
 COIN = 100000000
-MIN_KEEP = 10
+MIN_KEEP = 0.5
+MIN_SATOSHIS_SEND = 1000
+MAX_SATOSHIS_SEND = COIN
 
 def get_balance(rpccaller, chain):
     balance_dict = rpccaller.RpcCall('getbalance', {})
@@ -21,8 +23,12 @@ def get_amount(balance):
     if balance <= MIN_KEEP:
         return 0
     satoshis = int((balance / 10000) * COIN)
-    return float(satoshis / COIN)
-    
+    if satoshis < MIN_SATOSHIS_SEND:
+        return 0
+    elif satoshis > MAX_SATOSHIS_SEND:
+        satoshis = MAX_SATOSHIS_SEND
+    return satoshis / float(COIN)
+
 
 class FaucetInfoResource(ChainResource):
 
