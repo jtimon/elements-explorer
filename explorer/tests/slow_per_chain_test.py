@@ -41,8 +41,8 @@ class ExampleTest(RepeatPerAvailableChainTest):
         reorg_cron_params.extend(AVAILABLE_CHAINS[chain]['proc']['reorg_cron'])
         self.daemon_reorg_cron = DaemonReorgManager(*reorg_cron_params)
 
-        for i in xrange(101):
-            self.block_generator._cron_loop()
+        if self.needs_101(chain):
+            self.do_101(chain)
 
         self.greedy_cacher._cron_loop()
 

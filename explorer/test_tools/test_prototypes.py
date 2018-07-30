@@ -6,7 +6,7 @@
 
 import time
 
-from explorer.env_config import AVAILABLE_CHAINS, DB_FACTORY
+from explorer.env_config import AVAILABLE_CHAINS, AVAILABLE_RPCS, DB_FACTORY
 
 class BenchmarkTest(object):
 
@@ -32,6 +32,12 @@ class DbTest(BenchmarkTest):
 
 class RepeatPerAvailableChainTest(DbTest):
 
+    def needs_101(self, chain):
+        return chain in ['regtest']
+
+    def do_101(self, chain):
+        block_hashes = AVAILABLE_RPCS[chain].RpcCall('generate', {'nblocks': 101})
+    
     def run_tests(self):
         for chain, chain_properties in AVAILABLE_CHAINS.items():
             if chain == 'DEFAULT_CHAIN':
