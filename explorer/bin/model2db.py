@@ -51,6 +51,7 @@ FLAGS = gflags.FLAGS
 # ===----------------------------------------------------------------------===
 
 import json
+import time
 
 from mintools.minql import (
     MinqlClientFactory,
@@ -59,7 +60,7 @@ from mintools.minql import (
     write_json,
 )
 
-import time
+# Wait for db to start
 time.sleep(12)
 
 migration_schema = {}
