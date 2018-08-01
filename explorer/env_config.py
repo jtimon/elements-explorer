@@ -23,3 +23,7 @@ def rpccaller_for_chain(chain):
                      os.environ.get('%s_RPCUSER' % CHAIN_UPPER),
                      os.environ.get('%s_RPCPASSWORD' % CHAIN_UPPER)
     )
+
+def node_zmq_for_chain(chain):
+    # TODO Move AVAILABLE_CHAINS[chain]['zmq'] to os.environ.get('%s_ZMQ' % CHAIN_UPPER)
+    return AVAILABLE_CHAINS[chain]['zmq']

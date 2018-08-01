@@ -27,7 +27,7 @@ chain = FLAGS.chain
 # Wait for db to start
 time.sleep(12)
 
-daemon_subscriber = DaemonSubscriber(env_config.AVAILABLE_CHAINS[chain]['zmq'],
+daemon_subscriber = DaemonSubscriber(env_config.node_zmq_for_chain(chain),
                                      chain, env_config.rpccaller_for_chain(chain),
                                      env_config.DB_FACTORY, cache_stats=env_config.AVAILABLE_CHAINS[chain]['properties']['stats_support'])
 daemon_subscriber.start()
