@@ -23,9 +23,3 @@ def rpccaller_for_chain(chain):
                      os.environ.get('%s_RPCUSER' % CHAIN_UPPER),
                      os.environ.get('%s_RPCPASSWORD' % CHAIN_UPPER)
     )
-    
-AVAILABLE_RPCS = {}
-for chain in AVAILABLE_CHAINS:
-    if chain == 'DEFAULT_CHAIN':
-        continue
-    AVAILABLE_RPCS[chain] = rpccaller_for_chain(chain)

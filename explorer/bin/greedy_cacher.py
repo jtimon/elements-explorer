@@ -27,7 +27,7 @@ chain = FLAGS.chain
 # Wait for db to start
 time.sleep(12)
 
-greedy_cacher_params = [chain, env_config.AVAILABLE_RPCS[chain], env_config.DB_FACTORY.create()]
+greedy_cacher_params = [chain, env_config.rpccaller_for_chain(chain), env_config.DB_FACTORY.create()]
 greedy_cacher_params.extend(env_config.AVAILABLE_CHAINS[chain]['proc']['greedy_cacher'])
 greedy_cacher = GreedyCacher(*greedy_cacher_params)
 greedy_cacher.start()

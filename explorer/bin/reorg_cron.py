@@ -27,7 +27,7 @@ chain = FLAGS.chain
 # Wait for db to start
 time.sleep(12)
 
-reorg_cron_params = [chain, env_config.AVAILABLE_RPCS[chain], env_config.DB_FACTORY.create()]
+reorg_cron_params = [chain, env_config.rpccaller_for_chain(chain), env_config.DB_FACTORY.create()]
 reorg_cron_params.extend(env_config.AVAILABLE_CHAINS[chain]['proc']['reorg_cron'])
 daemon_reorg_cron = DaemonReorgManager(*reorg_cron_params)
 daemon_reorg_cron.start()

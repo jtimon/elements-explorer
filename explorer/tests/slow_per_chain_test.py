@@ -26,19 +26,19 @@ class ExampleTest(RepeatPerAvailableChainTest):
 
     def run_tests_for_chain(self, chain):
 
-        block_gen_params = [chain, env_config.AVAILABLE_RPCS[chain]]
+        block_gen_params = [chain, env_config.rpccaller_for_chain(chain)]
         block_gen_params.extend(env_config.AVAILABLE_CHAINS[chain]['proc']['block_gen'])
         self.block_generator = BlockGenerator(*block_gen_params)
 
-        tx_gen_params = [chain, env_config.AVAILABLE_RPCS[chain]]
+        tx_gen_params = [chain, env_config.rpccaller_for_chain(chain)]
         tx_gen_params.extend(env_config.AVAILABLE_CHAINS[chain]['proc']['tx_gen'])
         self.tx_generator = TxGenerator(*tx_gen_params)
 
-        greedy_cacher_params = [chain, env_config.AVAILABLE_RPCS[chain], self.DB_CLIENT]
+        greedy_cacher_params = [chain, env_config.rpccaller_for_chain(chain), self.DB_CLIENT]
         greedy_cacher_params.extend(env_config.AVAILABLE_CHAINS[chain]['proc']['greedy_cacher'])
         self.greedy_cacher = GreedyCacher(*greedy_cacher_params, wait_time_greedy=0)
 
-        reorg_cron_params = [chain, env_config.AVAILABLE_RPCS[chain], self.DB_CLIENT]
+        reorg_cron_params = [chain, env_config.rpccaller_for_chain(chain), self.DB_CLIENT]
         reorg_cron_params.extend(env_config.AVAILABLE_CHAINS[chain]['proc']['reorg_cron'])
         self.daemon_reorg_cron = DaemonReorgManager(*reorg_cron_params)
 

@@ -28,6 +28,6 @@ chain = FLAGS.chain
 time.sleep(12)
 
 daemon_subscriber = DaemonSubscriber(env_config.AVAILABLE_CHAINS[chain]['zmq'],
-                                     chain, env_config.AVAILABLE_RPCS[chain],
+                                     chain, env_config.rpccaller_for_chain(chain),
                                      env_config.DB_FACTORY, cache_stats=env_config.AVAILABLE_CHAINS[chain]['properties']['stats_support'])
 daemon_subscriber.start()

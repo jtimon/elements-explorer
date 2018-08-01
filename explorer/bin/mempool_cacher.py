@@ -29,13 +29,13 @@ chain = FLAGS.chain
 # Wait for db to start
 time.sleep(12)
 
-mempool_cacher_params = [chain, env_config.AVAILABLE_RPCS[chain], env_config.DB_FACTORY.create()]
+mempool_cacher_params = [chain, env_config.rpccaller_for_chain(chain), env_config.DB_FACTORY.create()]
 mempool_cacher_params.extend(env_config.AVAILABLE_CHAINS[chain]['proc']['mempool_cacher'])
 mempool_cacher = MempoolStatsCacher(*mempool_cacher_params)
 mempool_cacher.start()
 
 if 'mempool_saver' in env_config.AVAILABLE_CHAINS[chain]:
-    mempool_saver_params = [chain, env_config.AVAILABLE_RPCS[chain]]
+    mempool_saver_params = [chain, env_config.rpccaller_for_chain(chain)]
     mempool_saver_params.extend(env_config.AVAILABLE_CHAINS[chain]['proc']['mempool_saver'])
     mempool_saver = MempoolSaver(*mempool_saver_params)
     mempool_saver.start()
