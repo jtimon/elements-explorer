@@ -42,7 +42,7 @@ COPY gui2 /build_docker/gui2
 RUN cd gui2 && npm run build
 
 ARG ENV_NAME
-COPY docker/$ENV_NAME/conf/AVAILABLE_CHAINS.json /root/conf/AVAILABLE_CHAINS.json
+COPY docker/$ENV_NAME/conf/AVAILABLE_CHAINS.json /build_docker/docker/conf/AVAILABLE_CHAINS.json
 COPY docker/$ENV_NAME/conf/explorer.proc /build_docker/docker/conf/explorer.proc
 COPY docker/$ENV_NAME/conf/explorer.env /build_docker/docker/conf/explorer.env
 CMD honcho start -e docker/conf/explorer.env -f docker/conf/explorer.proc

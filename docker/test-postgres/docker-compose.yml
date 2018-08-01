@@ -20,8 +20,8 @@ services:
         - ENV_NAME
       dockerfile: docker/explorer/Dockerfile
     volumes:
-      - /tmp/test-elemements-explorer/target:/root/target
-      - /tmp/test-elemements-explorer/keys:/root/keys
+      - /tmp/test-elemements-explorer/target:/build_docker/target
+      - /tmp/test-elemements-explorer/keys:/build_docker/keys
     ports:
       - "5000:5000"
     networks:
@@ -41,9 +41,9 @@ services:
         - ENV_NAME
       dockerfile: docker/daemon/elements.docker
     volumes:
-      - /tmp/test-elemements-explorer/elementsregtest:/root/.elements
-      - /tmp/test-elemements-explorer/elementsparent:/root/.elementsparent
-      - /tmp/test-elemements-explorer/elementside:/root/.elementside
+      - /tmp/test-elemements-explorer/elementsregtest:/build_docker/.elements
+      - /tmp/test-elemements-explorer/elementsparent:/build_docker/.elementsparent
+      - /tmp/test-elemements-explorer/elementside:/build_docker/.elementside
     networks:
       main:
         aliases:
@@ -56,9 +56,9 @@ services:
         - ENV_NAME
       dockerfile: docker/daemon/bitcoin.docker
     volumes:
-      - /tmp/test-elemements-explorer/bitcoin:/root/.bitcoin
-      - /tmp/test-elemements-explorer/testnet3:/root/.testnet3
-      - /tmp/test-elemements-explorer/regtest:/root/.regtest
+      - /tmp/test-elemements-explorer/bitcoin:/build_docker/.bitcoin
+      - /tmp/test-elemements-explorer/testnet3:/build_docker/.testnet3
+      - /tmp/test-elemements-explorer/regtest:/build_docker/.regtest
     networks:
       main:
         aliases:
