@@ -19,6 +19,9 @@ services:
       args:
         - ENV_NAME
       dockerfile: docker/explorer/Dockerfile
+    environment:
+      - CURRENT_UID
+    user: ${CURRENT_UID}
     volumes:
       - /tmp/test-elemements-explorer/target:/build_docker/target
       - /tmp/test-elemements-explorer/keys:/build_docker/keys
@@ -40,6 +43,9 @@ services:
       args:
         - ENV_NAME
       dockerfile: docker/daemon/elements.docker
+    environment:
+      - CURRENT_UID
+    user: ${CURRENT_UID}
     volumes:
       - /tmp/test-elemements-explorer/elementsregtest:/build_docker/.elements
       - /tmp/test-elemements-explorer/elementsparent:/build_docker/.elementsparent
@@ -55,6 +61,9 @@ services:
       args:
         - ENV_NAME
       dockerfile: docker/daemon/bitcoin.docker
+    environment:
+      - CURRENT_UID
+    user: ${CURRENT_UID}
     volumes:
       - /tmp/test-elemements-explorer/bitcoin:/build_docker/.bitcoin
       - /tmp/test-elemements-explorer/testnet3:/build_docker/.testnet3
@@ -67,13 +76,19 @@ services:
   data:
     restart: "no"
     image: postgres:9.6
+    environment:
+      - CURRENT_UID
+    user: ${CURRENT_UID}
     volumes:
       - /tmp/test-elemements-explorer/db/postgresql:/var/lib/postgresql/data
-    command: "true"
+    command: bash -c "chown -R $$(id -u) /var/lib/postgresql/data"
 
   postgres:
     restart: "always"
     image: postgres:9.6
+    environment:
+      - CURRENT_UID
+    user: ${CURRENT_UID}
     volumes_from:
       - data
     ports:

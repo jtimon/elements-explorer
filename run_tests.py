@@ -46,12 +46,23 @@ else:
 # individual test files for a given db
 def test_file_with_db(db, test_file, env_file_export):
     print('---------------------------------------------------')
-    # TODO Remove use of sudo
-    call(['sudo', 'rm', '-rf', '/tmp/test-elemements-explorer'])
+    # TODO Remove volumes that aren't used for testing
+    call(['rm', '-rf', '/tmp/test-elemements-explorer'])
     call(['mkdir', '/tmp/test-elemements-explorer'])
+    call(['mkdir', '/tmp/test-elemements-explorer/bitcoin'])
+    call(['mkdir', '/tmp/test-elemements-explorer/db'])
+    call(['mkdir', '/tmp/test-elemements-explorer/db/postgresql'])
+    call(['mkdir', '/tmp/test-elemements-explorer/elementside'])
+    call(['mkdir', '/tmp/test-elemements-explorer/elementsparent'])
+    call(['mkdir', '/tmp/test-elemements-explorer/elementsregtest'])
+    call(['mkdir', '/tmp/test-elemements-explorer/keys'])
+    call(['mkdir', '/tmp/test-elemements-explorer/regtest'])
+    call(['mkdir', '/tmp/test-elemements-explorer/target'])
+    call(['mkdir', '/tmp/test-elemements-explorer/testnet3'])
 
     try:
-        call(['docker-compose', 'up', '--build', '-d'], cwd='./docker/test-%s' % db, stdout=subprocess.PIPE)
+        call('export CURRENT_UID=$(id -u):$(id -g) && docker-compose up --build -d',
+             shell=True, cwd='./docker/test-%s' % db, stdout=subprocess.PIPE)
     except Exception as e:
         print("docker-compose up: Error in %s:" % (test_file), type(e), e)
         return False
@@ -87,7 +98,8 @@ def test_file_with_db(db, test_file, env_file_export):
         status2 = call('docker ps -a', shell=True)
 
     try:
-        call(['docker-compose', 'stop'], cwd='./docker/test-%s' % db)
+        call('export CURRENT_UID=$(id -u):$(id -g) && docker-compose stop',
+             shell=True, cwd='./docker/test-%s' % db)
     except Exception as e:
         print("docker-compose stop: Error in %s:" % (test_file), type(e), e)
         return False
