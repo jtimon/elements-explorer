@@ -19,15 +19,15 @@ FLAGS = gflags.FLAGS
 
 import time
 
+from explorer import env_config
 from explorer.process.subscriber import DaemonSubscriber
-from explorer.env_config import AVAILABLE_CHAINS, DB_FACTORY, AVAILABLE_RPCS
 
 chain = FLAGS.chain
 
 # Wait for db to start
 time.sleep(12)
 
-daemon_subscriber = DaemonSubscriber(AVAILABLE_CHAINS[chain]['zmq'],
-                                     chain, AVAILABLE_RPCS[chain],
-                                     DB_FACTORY, cache_stats=AVAILABLE_CHAINS[chain]['properties']['stats_support'])
+daemon_subscriber = DaemonSubscriber(env_config.AVAILABLE_CHAINS[chain]['zmq'],
+                                     chain, env_config.AVAILABLE_RPCS[chain],
+                                     env_config.DB_FACTORY, cache_stats=env_config.AVAILABLE_CHAINS[chain]['properties']['stats_support'])
 daemon_subscriber.start()

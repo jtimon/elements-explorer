@@ -3,7 +3,7 @@ from mintools.ormin import Model as ormin_model
 from mintools.restmin import Domain as restmin_domain
 from mintools.restmin.resources import FunctionResource
 
-from explorer.env_config import DB_FACTORY, AVAILABLE_CHAINS
+from explorer import env_config
 
 from explorer.models.block import Block
 from explorer.models.chaininfo import Chaininfo
@@ -19,11 +19,11 @@ from explorer.resources.mempoolstats import MempoolStatsResource
 from explorer.resources.rpccaller import RpcCallerResource
 
 def get_default_chain(**kwargs):
-    return AVAILABLE_CHAINS['DEFAULT_CHAIN']
+    return env_config.AVAILABLE_CHAINS['DEFAULT_CHAIN']
 
 def get_available_chains(**kwargs):
     available_chains = {}
-    for k, v in AVAILABLE_CHAINS.iteritems():
+    for k, v in env_config.AVAILABLE_CHAINS.iteritems():
         if k == 'DEFAULT_CHAIN':
             continue
         available_chains[k] = v['properties']
@@ -56,4 +56,4 @@ API_DOMAIN = ExplorerApiDomain({
     'blockstats': GetByIdResource('blockstats', Blockstats, ['stats_support']),
     # TODO handle reorgs from gui (ie use websockets)
     'chaininfo': GetByIdResource('chaininfo', Chaininfo),
-}, DB_FACTORY.create())
+}, env_config.DB_FACTORY.create())

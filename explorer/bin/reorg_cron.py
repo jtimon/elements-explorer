@@ -19,15 +19,15 @@ FLAGS = gflags.FLAGS
 
 import time
 
+from explorer import env_config
 from explorer.process.subscriber import DaemonReorgManager
-from explorer.env_config import AVAILABLE_CHAINS, DB_FACTORY, AVAILABLE_RPCS
 
 chain = FLAGS.chain
 
 # Wait for db to start
 time.sleep(12)
 
-reorg_cron_params = [chain, AVAILABLE_RPCS[chain], DB_FACTORY.create()]
-reorg_cron_params.extend(AVAILABLE_CHAINS[chain]['proc']['reorg_cron'])
+reorg_cron_params = [chain, env_config.AVAILABLE_RPCS[chain], env_config.DB_FACTORY.create()]
+reorg_cron_params.extend(env_config.AVAILABLE_CHAINS[chain]['proc']['reorg_cron'])
 daemon_reorg_cron = DaemonReorgManager(*reorg_cron_params)
 daemon_reorg_cron.start()

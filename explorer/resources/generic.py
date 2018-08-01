@@ -3,7 +3,7 @@ import json
 
 from mintools.ormin import Model as ormin_model
 
-from explorer.env_config import AVAILABLE_CHAINS
+from explorer import env_config
 
 from .chain import UnknownChainError, ChainResource
 
@@ -23,7 +23,7 @@ class GetByIdResource(ChainResource):
             return {'error': {'message': 'Chain "%s" not supported.' % self.chain}}, 400
 
         for required_property in self.chain_required_properties:
-            if not AVAILABLE_CHAINS[self.chain]['properties'][required_property]:
+            if not env_config.AVAILABLE_CHAINS[self.chain]['properties'][required_property]:
                 return {'error': {'message': 'API resource %s is not supported by chain %s' % (self.resource, self.chain)}}, 400
 
         request = req['json']
