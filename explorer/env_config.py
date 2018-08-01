@@ -25,5 +25,4 @@ def rpccaller_for_chain(chain):
     )
 
 def node_zmq_for_chain(chain):
-    # TODO Move AVAILABLE_CHAINS[chain]['zmq'] to os.environ.get('%s_ZMQ' % CHAIN_UPPER)
-    return AVAILABLE_CHAINS[chain]['zmq']
+    return os.environ.get('%s_ZMQ' % chain.upper())

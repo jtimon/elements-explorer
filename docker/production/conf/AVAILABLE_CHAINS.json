@@ -42,8 +42,7 @@
             "parent_chain": "regtest",
             "parent_chain_has_CT": false,
             "stats_support": true
-        },
-        "zmq": "tcp://elements:7043"
+        }
     }
 
 }

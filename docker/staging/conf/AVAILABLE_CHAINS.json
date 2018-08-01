@@ -27,8 +27,7 @@
         "properties": {
             "chain_id": "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
             "stats_support": true
-        },
-        "zmq": "tcp://bitcoin:8534"
+        }
     },
 
     "elementside": {
@@ -72,8 +71,7 @@
             "parent_chain": "elementsparent",
             "parent_chain_has_CT": true,
             "stats_support": true
-        },
-        "zmq": "tcp://elements:7049"
+        }
     },
 
     "elementsparent": {
@@ -107,8 +105,7 @@
         "properties": {
             "chain_id": "e34a37cff130f0844b11047127e3069b72ac95b000d380d2cee2b91e34f1762a",
             "stats_support": true
-        },
-        "zmq": "tcp://elements:7046"
+        }
     },
 
     "elementsregtest": {
@@ -152,8 +149,7 @@
             "parent_chain": "regtest",
             "parent_chain_has_CT": false,
             "stats_support": true
-        },
-        "zmq": "tcp://elements:7043"
+        }
     },
 
     "regtest": {
@@ -187,8 +183,7 @@
         "properties": {
             "chain_id": "0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206",
             "stats_support": true
-        },
-        "zmq": "tcp://bitcoin:18537"
+        }
     },
 
     "testnet3": {
@@ -217,8 +212,7 @@
         "properties": {
             "chain_id": "000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943",
             "stats_support": true
-        },
-        "zmq": "tcp://bitcoin:18534"
+        }
     }
 
 }
