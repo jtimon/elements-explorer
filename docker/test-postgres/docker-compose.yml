@@ -12,8 +12,8 @@ services:
       - CURRENT_UID
     user: ${CURRENT_UID}
     volumes:
-      - /tmp/test-elemements-explorer/target:/build_docker/target
-      - /tmp/test-elemements-explorer/keys:/build_docker/keys
+      - /tmp/test-elements-explorer/target:/build_docker/target
+      - /tmp/test-elements-explorer/keys:/build_docker/keys
     ports:
       - "5000:5000"
     networks:
@@ -36,7 +36,7 @@ services:
       - CURRENT_UID
     user: ${CURRENT_UID}
     volumes:
-      - /tmp/test-elemements-explorer/elementsregtest:/build_docker/.elements
+      - /tmp/test-elements-explorer/elementsregtest:/build_docker/.elements
     networks:
       main:
         aliases:
@@ -52,7 +52,7 @@ services:
       - CURRENT_UID
     user: ${CURRENT_UID}
     volumes:
-      - /tmp/test-elemements-explorer/regtest:/build_docker/.regtest
+      - /tmp/test-elements-explorer/regtest:/build_docker/.regtest
     networks:
       main:
         aliases:
@@ -65,7 +65,7 @@ services:
       - CURRENT_UID
     user: ${CURRENT_UID}
     volumes:
-      - /tmp/test-elemements-explorer/db/postgresql:/var/lib/postgresql/data
+      - /tmp/test-elements-explorer/db/postgresql:/var/lib/postgresql/data
     command: bash -c "chown -R $$(id -u) /var/lib/postgresql/data"
 
   postgres:
