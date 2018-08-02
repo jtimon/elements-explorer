@@ -1,4 +1,6 @@
 
+import time
+
 from mintools.ormin import Model as ormin_model
 from mintools.restmin import Domain as restmin_domain
 from mintools.restmin.resources import FunctionResource
@@ -29,9 +31,11 @@ def get_available_chains(**kwargs):
 
 class ExplorerApiDomain(restmin_domain):
 
-    def __init__(self, domain, db_client, *args, **kwargs):
+    def __init__(self, domain, db_factory, *args, **kwargs):
 
-        ormin_model.set_db( db_client )
+        # Wait for db to start
+        time.sleep(12)
+        ormin_model.set_db( db_factory.create() )
 
         super(ExplorerApiDomain, self).__init__(domain, *args, **kwargs)
 
@@ -54,4 +58,4 @@ API_DOMAIN = ExplorerApiDomain({
     'blockstats': GetByIdResource('blockstats', Blockstats, ['stats_support']),
     # TODO handle reorgs from gui (ie use websockets)
     'chaininfo': GetByIdResource('chaininfo', Chaininfo),
-}, env_config.DB_FACTORY.create())
+}, env_config.DB_FACTORY)
