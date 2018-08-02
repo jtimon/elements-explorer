@@ -2,17 +2,6 @@ version: '2'
 
 services:
 
-  # dummydb:
-  #   build:
-  #     context: ../../
-  #     dockerfile: docker/dummydb/Dockerfile
-  #   ports:
-  #     - "1984:1984"
-  #   networks:
-  #     main:
-  #       aliases:
-  #         - dummydb
-
   explorer:
     build:
       context: ../../
@@ -48,8 +37,6 @@ services:
     user: ${CURRENT_UID}
     volumes:
       - /tmp/test-elemements-explorer/elementsregtest:/build_docker/.elements
-      - /tmp/test-elemements-explorer/elementsparent:/build_docker/.elementsparent
-      - /tmp/test-elemements-explorer/elementside:/build_docker/.elementside
     networks:
       main:
         aliases:
@@ -65,8 +52,6 @@ services:
       - CURRENT_UID
     user: ${CURRENT_UID}
     volumes:
-      - /tmp/test-elemements-explorer/bitcoin:/build_docker/.bitcoin
-      - /tmp/test-elemements-explorer/testnet3:/build_docker/.testnet3
       - /tmp/test-elemements-explorer/regtest:/build_docker/.regtest
     networks:
       main:

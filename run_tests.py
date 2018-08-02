@@ -46,19 +46,14 @@ else:
 # individual test files for a given db
 def test_file_with_db(db, test_file, env_file_export):
     print('---------------------------------------------------')
-    # TODO Remove volumes that aren't used for testing
     call(['rm', '-rf', '/tmp/test-elemements-explorer'])
     call(['mkdir', '/tmp/test-elemements-explorer'])
-    call(['mkdir', '/tmp/test-elemements-explorer/bitcoin'])
     call(['mkdir', '/tmp/test-elemements-explorer/db'])
     call(['mkdir', '/tmp/test-elemements-explorer/db/postgresql'])
-    call(['mkdir', '/tmp/test-elemements-explorer/elementside'])
-    call(['mkdir', '/tmp/test-elemements-explorer/elementsparent'])
     call(['mkdir', '/tmp/test-elemements-explorer/elementsregtest'])
     call(['mkdir', '/tmp/test-elemements-explorer/keys'])
     call(['mkdir', '/tmp/test-elemements-explorer/regtest'])
     call(['mkdir', '/tmp/test-elemements-explorer/target'])
-    call(['mkdir', '/tmp/test-elemements-explorer/testnet3'])
 
     try:
         call('export CURRENT_UID=$(id -u):$(id -g) && docker-compose up --build -d',
