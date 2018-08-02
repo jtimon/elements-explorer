@@ -40,8 +40,6 @@ class RepeatPerAvailableChainTest(DbTest):
     
     def run_tests(self):
         for chain, chain_properties in env_config.AVAILABLE_CHAINS.items():
-            if chain == 'DEFAULT_CHAIN':
-                continue
             print('Running %s for chain %s' % (self.__class__.__name__, chain))
             self.init_chrono()
             self.run_tests_for_chain(chain)

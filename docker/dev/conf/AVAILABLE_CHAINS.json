@@ -1,6 +1,4 @@
 {
-    "DEFAULT_CHAIN": "elementsregtest",
-
     "elementsregtest": {
         "proc": {
             "block_gen": [

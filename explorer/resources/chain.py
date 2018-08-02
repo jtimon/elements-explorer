@@ -16,7 +16,7 @@ class ChainResource(restmin_resource):
             self.chain = request_data['chain']
             del request_data['chain']
         else:
-            self.chain = env_config.AVAILABLE_CHAINS['DEFAULT_CHAIN']
+            self.chain = env_config.DEFAULT_CHAIN
         if not self.chain in env_config.AVAILABLE_CHAINS:
             raise UnknownChainError
 

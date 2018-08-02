@@ -1,6 +1,4 @@
 {
-    "DEFAULT_CHAIN": "bitcoin",
-
     "bitcoin": {
         "proc": {
             "greedy_cacher": [

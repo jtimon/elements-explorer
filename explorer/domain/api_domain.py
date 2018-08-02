@@ -19,13 +19,11 @@ from explorer.resources.mempoolstats import MempoolStatsResource
 from explorer.resources.rpccaller import RpcCallerResource
 
 def get_default_chain(**kwargs):
-    return env_config.AVAILABLE_CHAINS['DEFAULT_CHAIN']
+    return env_config.DEFAULT_CHAIN
 
 def get_available_chains(**kwargs):
     available_chains = {}
     for k, v in env_config.AVAILABLE_CHAINS.iteritems():
-        if k == 'DEFAULT_CHAIN':
-            continue
         available_chains[k] = v['properties']
     return available_chains, 200
 
