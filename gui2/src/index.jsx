@@ -23,10 +23,14 @@ function initLibraries() {
   window.Immutable = Immutable;
 }
 
+function defaultChain() {
+  return 'elementsregtest';
+}
+
 function initStateValues() {
   store.dispatchMerge({
     availableChains: Immutable({}),
-    chain: 'elementsregtest',
+    chain: defaultChain(),
     chainInfo: Immutable({}),
     blocks: Immutable.from({
       hashes: {},
@@ -38,6 +42,8 @@ function initStateValues() {
       elementsregtest: {},
       regtest: {},
       testnet3: {},
+      liquid: {},
+      liquidtestnet: {},
     }),
     searchRedirect: '',
   });
