@@ -44,12 +44,8 @@
   </button>
 </div>
 
+<p></p>
 <table border="1" ng-show="freecoins" >
-
-  <tr>
-    <td>Amount received:</td>
-    <td>{{ freecoins.amount }}</td>
-  </tr>
 
   <tr>
     <td>Received in address:</td>
@@ -57,13 +53,23 @@
   </tr>
 
   <tr>
-    <td>Txid:</td>
-    <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{freecoins.txid}}">{{ freecoins.txid }}</a></td>
+    <td>Amount received:</td>
+    <td>{{ freecoins.amount }}</td>
+  </tr>
+
+  <tr>
+    <td>Asked from ip:</td>
+    <td>{{ freecoins.ip }}</td>
   </tr>
 
   <tr>
     <td>Time:</td>
     <td>{{freecoins.time * 1000 | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+  </tr>
+
+  <tr>
+    <td>Txid:</td>
+    <td><a ng-href="#!/chain/{{selected_chain}}/tx/{{freecoins.txid}}">{{ freecoins.txid }}</a></td>
   </tr>
 
 </table>
