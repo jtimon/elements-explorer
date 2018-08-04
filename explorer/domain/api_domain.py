@@ -39,23 +39,27 @@ class ExplorerApiDomain(restmin_domain):
 
         super(ExplorerApiDomain, self).__init__(domain, *args, **kwargs)
 
-API_DOMAIN = ExplorerApiDomain({
-    'default_chain': FunctionResource(get_default_chain),
-    'available_chains': FunctionResource(get_available_chains),
-    # never cached, always hits the node
+API_DOMAIN = ExplorerApiDomain(
+{
+    # never cached, always hits the node if the request not rejected before
     'getmempoolentry': RpcCallerResource('getmempoolentry'),
     'getrawmempool': RpcCallerResource('getrawmempool', limit_array_result=4),
     'faucetinfo': FaucetInfoResource(),
     'freecoins': FreeCoinsResource(),
-    # Data from db, independent from reorgs
-    'mempoolstats': MempoolStatsResource(),
-    # currently goes throught the whole block
-    'address': AddressResource(),
+
     # cached in server and gui
     'block': GetByIdResource('block', Block),
     'blockheight': BlockheightResource(),
     'tx': GetByIdResource('tx', Tx),
     'blockstats': GetByIdResource('blockstats', Blockstats, ['stats_support']),
+    # TODO currently goes throught the whole block
+    'address': AddressResource(),
     # TODO handle reorgs from gui (ie use websockets)
     'chaininfo': GetByIdResource('chaininfo', Chaininfo),
+
+    # Data const or from db, independent from reorgs or caching
+    'default_chain': FunctionResource(get_default_chain),
+    'available_chains': FunctionResource(get_available_chains),
+    'mempoolstats': MempoolStatsResource(),
+
 }, env_config.DB_FACTORY)
