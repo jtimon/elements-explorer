@@ -6,6 +6,8 @@
 
 import time
 
+from mintools.ormin import Model as ormin_model
+
 from explorer import env_config
 
 class BenchmarkTest(object):
@@ -29,6 +31,7 @@ class DbTest(BenchmarkTest):
         super(DbTest, self).__init__()
 
         self.DB_CLIENT = env_config.DB_FACTORY.create()
+        ormin_model.set_db( self.DB_CLIENT )
 
 class RepeatPerAvailableChainTest(DbTest):
 
