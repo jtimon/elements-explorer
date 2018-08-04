@@ -15,6 +15,7 @@ def api_generic(request, request_processor, app, resource, auth_required=False):
     req['method'] = request.method
     req['resource'] = resource
     req['json'] = request.json
+    req['ip'] = request.remote_addr
     req['params'] = {}
 
     params = {}
