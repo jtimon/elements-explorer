@@ -1,6 +1,8 @@
 
 import datetime
 
+import mintools
+
 from explorer.models.faucet import Faucetsent
 
 from .chain import UnknownChainError, ChainResource
@@ -72,6 +74,12 @@ class FreeCoinsResource(ChainResource):
 
         if amount <= 0:
             return {'error': {'message': '%s: Not enough funds for chain %s' % ('freecoins', self.chain)}}, 400
+
+        try:
+            Faucetsent.get(address)
+            return {'error': {'message': "%s: Don't reuse address %s (chain %s)" % ('freecoins', address, self.chain)}}, 400
+        except mintools.minql.NotFoundError:
+            pass
 
         print('Faucet: Sending %s to %s' % (amount, address))
         txid = self.rpccaller.RpcCall('sendtoaddress', {'address': address, 'amount': str(amount)})

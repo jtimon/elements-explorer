@@ -92,6 +92,18 @@ class FaucetTest(RepeatPerAvailableChainTest):
         else:
             self.assert_free_coins(faucet_result, status)
 
+        # Test that reusing addresses isn't allowed
+        req = {
+            'json': {
+                'chain': chain,
+                'address': faucet_info['donation_address'],
+            },
+        }
+        faucet_result, status = freecoins_resource.resolve_request(req)
+        assert status == 400
+        assert faucet_result == {'error': {'message': "freecoins: Don't reuse address %s (chain %s)" % (
+            faucet_info['donation_address'], chain)}}
+            
         req = {
             'json': {
                 'chain': chain,
