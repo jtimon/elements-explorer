@@ -1,6 +1,8 @@
 
 import datetime
 
+from explorer.models.faucet import Faucetsent
+
 from .chain import UnknownChainError, ChainResource
 
 COIN = 100000000
@@ -76,9 +78,11 @@ class FreeCoinsResource(ChainResource):
         if 'error' in txid:
             return {'error': txid['error']}, 400
 
-        return {
+        faucetsent = Faucetsent(json_dict={
             'address': address,
             'amount': amount,
-            'time': datetime.datetime.now(),
+            'time': int(datetime.datetime.now().strftime('%s')),
             'txid': txid,
-        }, 200
+        })
+        faucetsent.save()
+        return faucetsent.json(), 200
