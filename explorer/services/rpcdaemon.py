@@ -3,31 +3,9 @@ import requests
 import json
 import time
 
-RPC_ALLOWED_CALLS = [
-    'getblockchaininfo',
-    'getblock',
-    'getblockhash',
-    'getrawtransaction',
-    'getblockstats',
-    'getrawmempool',
-    'getmempoolentry',
-    'savemempool',
-    'getbalance',
-    'generate',
-    'getnewaddress',
-    'validateaddress',
-    'sendtoaddress',
-    'sendtomainchain',
-    'getpeginaddress',
-    'gettxoutproof',
-    'claimpegin',
-    # Exclusively for 1-of-1 multisig support in process.generator.block
-    'importprivkey',
-    'getnewblockhex',
-    'signblock',
-    'combineblocksigs',
-    'submitblock',
-]
+file = open('/build_docker/docker/conf/RPC_ALLOWED_CALLS.json', 'r').read()
+RPC_ALLOWED_CALLS = json.loads(file)['allowed_rpc']
+# print('RPC_ALLOWED_CALLS', len(RPC_ALLOWED_CALLS), RPC_ALLOWED_CALLS)
 
 class RpcCaller(object):
 
