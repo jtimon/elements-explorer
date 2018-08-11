@@ -18,9 +18,14 @@ production:
 production-nod:
 	cd docker/production && docker-compose up --build
 
-.PHONY: check
-check:
-	python3 ./run_tests.py
+.PHONY: check check-dummydb check-postgres check-all
+check-dummydb:
+	python3 ./run_tests.py --dbs=dummydb
+check-postgres:
+	python3 ./run_tests.py --dbs=postgres
+check-all:
+	python3 ./run_tests.py --dbs=dummydb,postgres
+check: check-postgres
 
 .PHONY: stop stop-dev stop-staging stop-production
 stop-dev:

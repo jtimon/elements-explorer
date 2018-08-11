@@ -20,6 +20,7 @@ parser.add_argument('--tests', default='all', help='Specify a coma separated lis
 args = parser.parse_args()
 
 AVAILABLE_DBS = [
+    'dummydb',
     'postgres',
 ]
 RUN_DBS = args.dbs.split(',')

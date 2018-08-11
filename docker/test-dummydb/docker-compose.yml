@@ -8,9 +8,12 @@ services:
       args:
         - ENV_NAME
       dockerfile: docker/explorer/Dockerfile
+    environment:
+      - CURRENT_UID
+    user: ${CURRENT_UID}
     volumes:
-      - ../../../explorer-data/target:/build_docker/target
-      - ../../../explorer-data/keys:/build_docker/keys
+      - /tmp/test-elements-explorer/target:/build_docker/target
+      - /tmp/test-elements-explorer/keys:/build_docker/keys
     ports:
       - "5000:5000"
     networks:
@@ -21,7 +24,7 @@ services:
     depends_on:
       - bitcoin
       - elements
-      - postgres
+      - dummydb
 
   elements:
     build:
@@ -29,10 +32,11 @@ services:
       args:
         - ENV_NAME
       dockerfile: docker/daemon/elements.docker
+    environment:
+      - CURRENT_UID
+    user: ${CURRENT_UID}
     volumes:
-      - ../../../explorer-data/elementsregtest:/build_docker/.elements
-      - ../../../explorer-data/elementsparent:/build_docker/.elementsparent
-      - ../../../explorer-data/elementside:/build_docker/.elementside
+      - /tmp/test-elements-explorer/elementsregtest:/build_docker/.elements
     networks:
       main:
         aliases:
@@ -44,33 +48,24 @@ services:
       args:
         - ENV_NAME
       dockerfile: docker/daemon/bitcoin.docker
+    environment:
+      - CURRENT_UID
+    user: ${CURRENT_UID}
     volumes:
-      - ../../../explorer-data/bitcoin:/build_docker/.bitcoin
-      - ../../../explorer-data/testnet3:/build_docker/.testnet3
-      - ../../../explorer-data/regtest:/build_docker/.regtest
+      - /tmp/test-elements-explorer/regtest:/build_docker/.regtest
     networks:
       main:
         aliases:
           - bitcoin
 
-  data:
-    restart: "no"
-    image: postgres:9.6
-    volumes:
-      - ../../../explorer-data/db/postgresql:/var/lib/postgresql/data
-    command: "true"
-
-  postgres:
-    restart: "always"
-    image: postgres:9.6
-    volumes_from:
-      - data
-    ports:
-      - "5432:5432"
+  dummydb:
+    build:
+      context: ../../
+      dockerfile: docker/dummydb/Dockerfile
     networks:
       main:
         aliases:
-          - postgresalias
+          - dummydb
 
 networks:
   main:

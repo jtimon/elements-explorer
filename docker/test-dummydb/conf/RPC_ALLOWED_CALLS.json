@@ -1,0 +1,19 @@
+{
+    "allowed_rpc": [
+        "getblockchaininfo",
+        "getblock",
+        "getblockhash",
+        "getrawtransaction",
+        "getblockstats",
+        "getrawmempool",
+        "getmempoolentry",
+        "savemempool",
+        "getbalance",
+        "generate",
+        "getnewaddress",
+        "validateaddress",
+        "sendtoaddress",
+        "gettxoutproof",
+        "importprivkey"
+    ]
+}
