@@ -18,6 +18,11 @@ production:
 production-nod:
 	cd docker/production && docker-compose up --build
 
+test-dummydb-nod:
+	rm -rf /tmp/test-elements-explorer && cd docker/test-dummydb && export CURRENT_UID=$(id -u):$(id -g) && docker-compose up --build
+test-postgres-nod:
+	rm -rf /tmp/test-elements-explorer && cd docker/test-postgres && export CURRENT_UID=$(id -u):$(id -g) && docker-compose up --build
+
 .PHONY: check check-dummydb check-postgres check-all
 check-dummydb:
 	python3 ./run_tests.py --dbs=dummydb
