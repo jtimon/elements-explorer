@@ -160,4 +160,4 @@ if FLAGS.dataset:
     db_client.put_dataset_from_file(FLAGS.dataset)
 
 # Force printing after completing (the process will keep running with ddb)
-raise NotImplementedError
+# raise NotImplementedError
