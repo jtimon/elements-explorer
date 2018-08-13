@@ -39,7 +39,6 @@ stop-staging:
 	cd docker/staging ; docker-compose stop
 stop-production:
 	cd docker/production ; docker-compose stop
-stop: stop-dev stop-staging stop-production
 
 .PHONY: clean docker-prune clean-db
 # docker-compose rm -f
