@@ -3,7 +3,7 @@ from ...interface import MinqlBaseClient
 
 class DummyMinqlClient(MinqlBaseClient):
 
-    def __init__(self, address=None, *args, **kwargs):
+    def __init__(self, address=None, name='', user='', password='', *args, **kwargs):
 
         self.tables = {}
         self.schemas = {}

@@ -5,7 +5,7 @@ from ...interface import MinqlBaseClient
 
 class ZmqMinqlClient(MinqlBaseClient):
 
-    def __init__(self, address, *args, **kwargs):
+    def __init__(self, address, name='', user='', password='', *args, **kwargs):
 
         self.client = zmqmin.Client(address)
 
