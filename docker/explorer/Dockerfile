@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     npm \
     python-pip \
     python-dev \
+    ipython \
     libpq-dev \
     postgresql-server-dev-all
 
