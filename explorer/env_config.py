@@ -7,9 +7,7 @@ from mintools.minql import MinqlFactory
 from explorer.services.rpcdaemon import RpcCaller
 
 DEFAULT_CHAIN = os.environ.get('DEFAULT_CHAIN')
-
-file = open('/build_docker/docker/conf/AVAILABLE_CHAINS.json', 'r').read()
-AVAILABLE_CHAINS = json.loads(file)
+AVAILABLE_CHAINS = json.loads(open('/build_docker/docker/conf/AVAILABLE_CHAINS.json', 'r').read())
 
 DB_FACTORY = MinqlFactory(
     os.environ.get('DB_TYPE'),
