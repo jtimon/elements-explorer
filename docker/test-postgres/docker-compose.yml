@@ -22,41 +22,25 @@ services:
         aliases:
           - explorer
     depends_on:
-      - bitcoin
-      - elements
       - postgres
+      - daemons
 
-  elements:
+  daemons:
     build:
       context: ../../
       args:
         - ENV_NAME
-      dockerfile: docker/daemon/elements.docker
+      dockerfile: docker/daemon/Dockerfile
     environment:
       - CURRENT_UID
     user: ${CURRENT_UID}
     volumes:
       - /tmp/test-elements-explorer/elementsregtest:/build_docker/.elements
-    networks:
-      main:
-        aliases:
-          - elements
-
-  bitcoin:
-    build:
-      context: ../../
-      args:
-        - ENV_NAME
-      dockerfile: docker/daemon/bitcoin.docker
-    environment:
-      - CURRENT_UID
-    user: ${CURRENT_UID}
-    volumes:
       - /tmp/test-elements-explorer/regtest:/build_docker/.regtest
     networks:
       main:
         aliases:
-          - bitcoin
+          - daemons
 
   data:
     restart: "no"
