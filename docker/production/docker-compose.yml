@@ -18,21 +18,21 @@ services:
         aliases:
           - explorer
     depends_on:
-      - elements
       - postgres
+      - daemons
 
-  elements:
+  daemons:
     build:
       context: ../../
       args:
         - ENV_NAME
-      dockerfile: docker/daemon/elements.docker
+      dockerfile: docker/daemon/Dockerfile
     volumes:
       - ../../../explorer-data/elementsregtest:/build_docker/.elements
     networks:
       main:
         aliases:
-          - elements
+          - daemons
 
   data:
     restart: "no"
