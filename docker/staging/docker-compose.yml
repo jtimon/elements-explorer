@@ -19,39 +19,26 @@ services:
         aliases:
           - explorer
     depends_on:
-      - bitcoin
-      - elements
       - postgres
+      - daemons
 
-  elements:
+  daemons:
     build:
       context: ../../
       args:
         - ENV_NAME
-      dockerfile: docker/daemon/elements.docker
+      dockerfile: docker/daemon/Dockerfile
     volumes:
+      - ../../../explorer-data/bitcoin:/build_docker/.bitcoin
+      - ../../../explorer-data/testnet3:/build_docker/.testnet3
+      - ../../../explorer-data/regtest:/build_docker/.regtest
       - ../../../explorer-data/elementsregtest:/build_docker/.elements
       - ../../../explorer-data/elementsparent:/build_docker/.elementsparent
       - ../../../explorer-data/elementside:/build_docker/.elementside
     networks:
       main:
         aliases:
-          - elements
-
-  bitcoin:
-    build:
-      context: ../../
-      args:
-        - ENV_NAME
-      dockerfile: docker/daemon/bitcoin.docker
-    volumes:
-      - ../../../explorer-data/bitcoin:/build_docker/.bitcoin
-      - ../../../explorer-data/testnet3:/build_docker/.testnet3
-      - ../../../explorer-data/regtest:/build_docker/.regtest
-    networks:
-      main:
-        aliases:
-          - bitcoin
+          - daemons
 
   data:
     restart: "no"
