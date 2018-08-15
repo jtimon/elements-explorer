@@ -1,2 +1,0 @@
-
-regtest: ./$BITCOIN_BRANCH_DIR/src/$BITCOIN_DAEMON -rpcbind=$REGTEST_HOST:$REGTEST_RPCPORT -datadir=$REGTEST_DATADIR -rpcallowip=$REGTEST_ALLLOWFROM -rpcuser=$REGTEST_RPCUSER -rpcpassword=$REGTEST_RPCPASSWORD -zmqpubhashblock=$REGTEST_ZMQ -port=$REGTEST_PORT -logips -logtimestamps -server -txindex -listen -discover -dbcache=8000 -maxmempool=8000 -regtest -addresstype=legacy
