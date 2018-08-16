@@ -10,6 +10,26 @@ function handleErrors(response) {
   return resp.then(json => Promise.reject(json));
 }
 
+function getDefaultChain() {
+  const state = store.getState();
+  if (!utils.isEmptyObject(state.availableChains)) {
+    return Promise.resolve().then(() => state.availableChains);
+  }
+  const url = '/api/v0/default_chain';
+  const requestParams = {
+    method: 'GET',
+    credentials: 'include',
+  };
+  return fetch(url, requestParams)
+    .then(handleErrors)
+    .then((data) => {
+      store.dispatchMerge({
+        chain: data.default_chain,
+      });
+      return data;
+    });
+}
+
 function getAvailableChains() {
   const state = store.getState();
   if (!utils.isEmptyObject(state.availableChains)) {
@@ -59,8 +79,10 @@ function getChainInfo() {
 }
 
 function getAllChainInformation() {
-  return getAvailableChains().then(() => (
-    getChainInfo()
+  return getDefaultChain().then(() => (
+    getAvailableChains().then(() => (
+      getChainInfo()
+    ))
   ));
 }
 
