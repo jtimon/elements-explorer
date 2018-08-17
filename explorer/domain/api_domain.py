@@ -34,7 +34,7 @@ class ExplorerApiDomain(restmin_domain):
     def __init__(self, domain, db_factory, *args, **kwargs):
 
         # Wait for db to start
-        time.sleep(12)
+        time.sleep(20)
         ormin_model.set_db( db_factory.create() )
 
         super(ExplorerApiDomain, self).__init__(domain, *args, **kwargs)
