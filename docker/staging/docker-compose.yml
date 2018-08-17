@@ -27,6 +27,8 @@ services:
       context: ../../
       args:
         - ENV_NAME
+        - CORE_DAEMON_NAME
+        - ELEMENTS_DAEMON_NAME
       dockerfile: docker/daemon/Dockerfile
     volumes:
       - ../../../explorer-data/bitcoin:/build_docker/.bitcoin
