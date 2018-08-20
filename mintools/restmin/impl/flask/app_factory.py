@@ -3,10 +3,11 @@
 # Proprietary property and company confidential: all rights reserved.
 # See COPYRIGHT for details.
 
-from flask import make_response, jsonify, abort, request, Response
-from flask import Blueprint, current_app
-
 import json
+
+from flask import Blueprint, current_app
+from flask import Flask
+from flask import make_response, jsonify, abort, request, Response
 
 from .crossdomain import crossdomain
 
@@ -52,7 +53,6 @@ def api_generic(request, request_processor, app, resource, auth_required=False):
     return jsonify(response['json']), response['status']
 
 def create_restmin_app(app_name, config_path, base_url, request_processor, auth_required=False):
-    from flask import Flask
     app = Flask(app_name)
     if config_path:
         app.config.from_object(config_path)
