@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-# Copyright © 2012-2013, RokuSigma Inc. as an unpublished work.
-# Proprietary property and company confidential: all rights reserved.
-# See COPYRIGHT for details.
+# Copyright (c) 2012-2018 The Mintools developers
+# Distributed under the MIT software license, see the accompanying
+# file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import json
 

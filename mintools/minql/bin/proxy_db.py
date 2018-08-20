@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+
+# Copyright (c) 2012-2018 The Mintools developers
+# Distributed under the MIT software license, see the accompanying
+# file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 if __name__ != '__main__':
     raise ImportError(u"%s may only be run as a script" % __file__)
 
