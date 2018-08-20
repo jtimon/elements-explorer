@@ -32,6 +32,14 @@ check-all:
 	python3 ./run_tests.py --dbs=dummydb,postgres
 check: check-postgres
 
+.PHONY: ipython-dev ipython-staging ipython-production
+ipython-dev: dev
+	docker exec -it rpcexplorer_explorer_1 ipython
+ipython-staging: staging
+	docker exec -it rpcexplorer_explorer_1 ipython
+ipython-production: production
+	docker exec -it rpcexplorer_explorer_1 ipython
+
 .PHONY: stop stop-dev stop-staging stop-production
 stop-dev:
 	cd docker/dev ; docker-compose stop
