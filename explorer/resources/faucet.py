@@ -89,6 +89,7 @@ class FreeCoinsResource(ChainResource):
         faucetsent = Faucetsent(json_dict={
             'address': address,
             'amount': amount,
+            'ip': req['ip'],
             'time': int(datetime.datetime.now().strftime('%s')),
             'txid': txid,
         })

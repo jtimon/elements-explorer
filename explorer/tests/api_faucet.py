@@ -58,7 +58,7 @@ class FaucetTest(RepeatPerAvailableChainTest):
         }
         faucet_info, status = faucet_info_resource.resolve_request(req)
         self.assert_faucet_info(faucet_info, status)
-        
+
         req = {
             'json': {
                 'chain': chain,
@@ -73,6 +73,7 @@ class FaucetTest(RepeatPerAvailableChainTest):
                 'chain': chain,
                 'address': faucet_info['donation_address'],
             },
+            'ip': '0.0.0.0',
         }
         faucet_result, status = freecoins_resource.resolve_request(req)
         print('faucet_result', faucet_result, req)
@@ -86,6 +87,7 @@ class FaucetTest(RepeatPerAvailableChainTest):
                     'chain': chain,
                     'address': faucet_info['donation_address'],
                 },
+                'ip': '0.0.0.0',
             }
             faucet_result, status = freecoins_resource.resolve_request(req)
             self.assert_free_coins(faucet_result, status)
@@ -98,23 +100,24 @@ class FaucetTest(RepeatPerAvailableChainTest):
                 'chain': chain,
                 'address': faucet_info['donation_address'],
             },
+            'ip': '0.0.0.0',
         }
         faucet_result, status = freecoins_resource.resolve_request(req)
         assert status == 400
         assert faucet_result == {'error': {'message': "freecoins: Don't reuse address %s (chain %s)" % (
             faucet_info['donation_address'], chain)}}
-            
+
         req = {
             'json': {
                 'chain': chain,
                 'address': 'AAA',
             },
+            'ip': '0.0.0.0',
         }
         faucet_result = freecoins_resource.resolve_request(req)
-        print('faucet_result', faucet_result)
         assert (
             faucet_result == ({'error': {u'message': u'Invalid address', u'code': -5}}, 400) or
             faucet_result == ({'error': {u'message': u'Invalid Bitcoin address', u'code': -5}}, 400)
         )
-            
+
 FaucetTest().run_tests()
