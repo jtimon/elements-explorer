@@ -84,6 +84,14 @@ class FreeCoinsResource(ChainResource):
         except mintools.minql.NotFoundError:
             pass
 
+        hours_ago = 24
+        seconds_ago = hours_ago * 60 * 60
+        min_epoch = int((datetime.datetime.now() - datetime.timedelta(seconds=seconds_ago)).strftime('%s'))
+        recent_sends = Faucetsent.search({'ip': req['ip'], 'time': {'ge': min_epoch}})
+        if len(recent_sends) > 0:
+            return {'error': {'message': "freecoins: Coins were given to ip %s in the last %s hours (chain %s)" % (
+                req['ip'], hours_ago, self.chain)}}, 400
+        
         print('Faucet: Sending %s to %s' % (amount, address))
         txid = self.rpccaller.RpcCall('sendtoaddress', {'address': address, 'amount': str(amount)})
         if 'error' in txid:

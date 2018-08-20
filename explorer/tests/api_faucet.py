@@ -112,7 +112,30 @@ class FaucetTest(RepeatPerAvailableChainTest):
                 'chain': chain,
                 'address': 'AAA',
             },
+        }
+        try:
+            faucet_result, status = freecoins_resource.resolve_request(req)
+            raise Exception("Expected exception KeyError('ip')")
+        except KeyError as e:
+            assert str(e) == "'ip'"
+        
+        req = {
+            'json': {
+                'chain': chain,
+                'address': 'AAA',
+            },
             'ip': '0.0.0.0',
+        }
+        faucet_result = freecoins_resource.resolve_request(req)
+        assert faucet_result == ({'error': {u'message': u'freecoins: Coins were given to ip 0.0.0.0 in the last 24 hours (chain %s)' % (
+            chain)}}, 400)
+        
+        req = {
+            'json': {
+                'chain': chain,
+                'address': 'AAA',
+            },
+            'ip': '0.0.0.1',
         }
         faucet_result = freecoins_resource.resolve_request(req)
         assert (
