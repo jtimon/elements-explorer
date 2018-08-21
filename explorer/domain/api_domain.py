@@ -42,8 +42,7 @@ class ExplorerApiDomain(restmin_domain):
 
         super(ExplorerApiDomain, self).__init__(domain, *args, **kwargs)
 
-API_DOMAIN = ExplorerApiDomain(
-{
+ALL_API_DOMAIN = {
     # never cached, always hits the node if the request not rejected before
     'getmempoolentry': RpcCallerResource('getmempoolentry'),
     'getrawmempool': RpcCallerResource('getrawmempool', limit_array_result=4),
@@ -64,5 +63,12 @@ API_DOMAIN = ExplorerApiDomain(
     'default_chain': FunctionResource(get_default_chain),
     'available_chains': FunctionResource(get_available_chains),
     'mempoolstats': MempoolStatsResource(),
+}
 
-}, env_config.DB_FACTORY)
+# TODO comprehensive dict
+AVAILABLE_API_DOMAIN = {}
+for resource_name, resource_impl in ALL_API_DOMAIN.iteritems():
+    if resource_name in env_config.AVAILABLE_API:
+        AVAILABLE_API_DOMAIN[resource_name] = resource_impl
+
+API_DOMAIN = ExplorerApiDomain(AVAILABLE_API_DOMAIN, env_config.DB_FACTORY)

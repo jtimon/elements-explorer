@@ -43,6 +43,7 @@ COPY gui2 /build_docker/gui2
 RUN cd gui2 && npm run build
 
 ARG ENV_NAME
+COPY docker/$ENV_NAME/conf/API_AVAILABLE.json /build_docker/docker/conf/API_AVAILABLE.json
 COPY docker/$ENV_NAME/conf/AVAILABLE_CHAINS.json /build_docker/docker/conf/AVAILABLE_CHAINS.json
 COPY docker/$ENV_NAME/conf/RPC_ALLOWED_CALLS.json /build_docker/docker/conf/RPC_ALLOWED_CALLS.json
 COPY docker/$ENV_NAME/conf/explorer.proc /build_docker/docker/conf/explorer.proc
