@@ -1,6 +1,5 @@
 {
     "api_available": [
-        "address",
         "available_chains",
         "block",
         "blockheight",
@@ -9,9 +8,6 @@
         "default_chain",
         "faucetinfo",
         "freecoins",
-        "getmempoolentry",
-        "getrawmempool",
-        "mempoolstats",
         "tx"
     ]
 }
