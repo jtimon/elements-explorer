@@ -62,8 +62,6 @@ services:
     user: ${CURRENT_UID}
     volumes_from:
       - data
-    ports:
-      - "5432:5432"
     networks:
       main:
         aliases:
