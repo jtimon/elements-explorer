@@ -1,0 +1,146 @@
+
+* Introduction to the role of the db in the explorer project
+
+In this project, databases mostly exist as a cache for data that comes
+from the daemons' container. 
+Therefore, the data cached in the database can be always cleaned or
+reduced without touching the daemon's data directories.
+
+A production target is defined as a server using the CI code included
+in ./bs for deployment and with a given configuration and branch name.
+
+For better scalability, it is recommended to support only one chain
+per production target. One can always put as many chains as necessary
+under the same URL using proxies.
+
+On the other hand, if one wants to put scalability at tests, the more
+chains the better, that's what the environment staging is mostly for.
+If you have plenty of space as a developer, you can also use
+staging-nod instead of dev-nod as your favorite make target.
+
+
+* Managing DBs
+
+The db is currently managed on docker start with ./explorer/bin/model2db.py.
+
+That script, run from the create_db process in
+./docker/<env>/conf/explorer.proc (one can customize its calling
+arguments from there) determines which changes need to be made to the
+database depending on the changes made to any dependency of
+./explorer/domain/db_damin.py (ie mostly changes to
+./explorer/models/*).
+
+It will know the previous state by looking at ../explorer-data/target/schema.json .
+Thus, one can always clean all DBs with:
+
+```
+rm ./../explorer-data/target/schema.json
+```
+
+When that file doesn't exist, it will assume no table exists and
+create the one it needs according to ./explorer/domain/db_damin.py,
+then create the file.
+
+The migration system is still far from ideal, for any change to a
+given table, it will always try a to remove the table before creating
+the new table, but that's all that it does: any change to a table will
+result in the table emptied and created again, even if it's just for
+removing a field.
+
+Not only that, it repeats the same thing per namespace, in this
+context, a namespace is a chain, that is, each table is created per
+chain, for example: regtest_block, regtest_tx, elementsregtest_block, elementsregtest_tx, etc
+
+Since each <env> defines the chains it supports independently in
+./docker/<env>/conf/API_AVAILABLE.json, if you make some change to the
+models that affects the db schema and you're changing among different
+<env>s, or adding and subtracting new chains intermittently; some
+chains may not be properly adapted and you may get errors about a
+table or a field not existing or similar. To get our of this kind of
+errors, by setting --forcechains=<chain_to_clean1>,<chain_to_clean2>
+in the create_db process in ./docker/<env>/conf/explorer.proc.
+
+STRONG RECOMMENDATION: Only jump across <env>s locally, never do it on
+any staging or production server.
+
+Some times cleaning fully cleaning the db cache for a given chain is
+not enough since the chain's daemon is in a bad state for whatever
+reason.
+One needs to run:
+
+```
+rm -R /home/jt/code/explorer-data/<chain_to_clean1>
+```
+
+Apart from that, some times there's semantic dependencies within
+tables, that aren't currently properly managed by the migration
+system.
+
+For example, one may add or remove a field to the input table, and
+that will cause the input table to be restarted, but it won't cause
+the tx and output tables to also restart as it currently should.
+
+That can be forced from the create_db process in
+./docker/<env>/conf/explorer.proc with:
+
+```
+--forcetables=chaininfo,tx,input,output
+```
+
+Additionally, some reorgs may require manual intervention.
+
+In theory, any chain with signed blocks should not produce any
+reorg longer that 1 block.
+
+That's why the reorg management code is not a priority and it's
+currently faulty for longer reorgs. It can get stuck for pow chains on
+a given reorg, which can be solved with --forcechains=<chain_to_clean1> 
+at the cost of losing all cached data for that chain.
+
+Before making such drastic decisions, please estimate what you're
+going to potentially erase with:
+
+```
+sudo du -sh ../explorer-data/*
+```
+
+To make things even worse, even when the reorg code is perfectly
+tested and working, it will always be limited by its own daemon's
+capacity to handle reorgs, which is currently 100 blocks.
+
+* ------- DEPRECATED ------- 
+
+Now it has persistence via cach* fields in Chaininfo
+(cached_blocks, caching_first, caching_blockhash, caching_last)
+
+** Greedy caching
+
+Apart from create_db, there are other processes that one may want to 
+
+As explained in the previous section, processes can be activated or
+deactivated in https://github.com/jtimon/elements-explorer/blob/master/docker/explorer/Procfile .
+
+One of the processes one may want to run when the db is not being
+restarted is the greedy cacher for any selected set of chains.
+
+It will slow down initialization and in general everything until it
+runs down to height 0 for its chain from the first successfully
+getchaininfo result at least once. After that, if the reorg handling
+processes are activated, it just double checks that blocks are cached
+at least once. Greedy cachers are independent from reorg handling
+processes, and thus what they cache may be deleted.
+
+Since they are very noisy, they are only recommended when you want to
+fill the db cache but you don't want to see extra messages in your
+logs. Deactivating them should be always fine.
+
+On anything resembling production, they should be activated too, even
+if they take days to fill the db cache the first time, since any
+response coming the db without bothering the daemon is one chance less
+for a denial of service attack, which, by the way, the whole project
+is exposed to even after that unless you're working on a closed
+network where you can take care of those attacks in some other way or
+if you're just using this project as a developer as you should. In
+that latter case you just have to remember not to DoS yourself harder
+than your machine can take, but please send back any weird concurrency
+errors you get.
