@@ -124,14 +124,6 @@ that latter case you just have to remember not to DoS yourself harder
 than your machine can take, but please send back any weird concurrency
 errors you get.
 
-# TODO #
-
-- [ ] Nodes: Not hardcoded rpcuser/rpcpassword:
-- [ ] elements: Show -signblockscript and block.scriptSig
-- [ ] elements: Show -fedpegscript
-- [ ] Angular: directive for both scriptSig and scriptPubKey
-- [ ] e2e Testing: Karma/Protractor/whatever
-
 # License
 
 MIT, see COPYING
