@@ -42,10 +42,12 @@ class RpcCaller(object):
         response = None
         counter = 0
         while response == None:
+            json_result = False
             try:
                 response = requests.request('post', 'http://' + self.address,
                                             data=json.dumps(requestData), auth=rpcAuth, headers=rpcHeaders)
                 # response.raise_for_status()
+                json_result = response.json()
             except Exception as e:
                 print("Error in RpcCaller.RpcCall:", type(e), e)
                 if counter == 5:
@@ -54,7 +56,6 @@ class RpcCaller(object):
                 counter = counter + 1
                 continue
 
-        json_result = response.json()
         if not json_result:
             return {'error': {'message': 'No rpc result for method %s' % method}}
         # If there's errors, only return the errors

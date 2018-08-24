@@ -1,8 +1,18 @@
-version: '2'
+version: '3.6'
 
 services:
+  nginx:
+    restart: always
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - explorer
 
   explorer:
+    #restart: always
     build:
       context: ../../
       args:
@@ -12,17 +22,13 @@ services:
       - ../../../explorer-data/target:/build_docker/target
       - ../../../explorer-data/keys:/build_docker/keys
     ports:
-      - "5000:5000"
-    networks:
-      main:
-        ipv4_address: 10.5.0.5
-        aliases:
-          - explorer
-    depends_on:
+      - 5000
+    links:
       - postgres
       - daemons
 
   daemons:
+    #restart: always
     build:
       context: ../../
       args:
@@ -31,12 +37,12 @@ services:
         - ELEMENTS_DAEMON_NAME
       dockerfile: docker/daemon/Dockerfile
     volumes:
-      - ../../../explorer-data/elementsregtest:/build_docker/.elements
+      - ../../../explorer-data/bitcoin:/build_docker/.bitcoin
+      - ../../../explorer-data/testnet3:/build_docker/.testnet3
       - ../../../explorer-data/regtest:/build_docker/.regtest
-    networks:
-      main:
-        aliases:
-          - daemons
+      - ../../../explorer-data/elementsregtest:/build_docker/.elements
+      - ../../../explorer-data/elementsparent:/build_docker/.elementsparent
+      - ../../../explorer-data/elementside:/build_docker/.elementside
 
   data:
     restart: "no"
@@ -48,16 +54,5 @@ services:
   postgres:
     restart: "always"
     image: postgres:9.6
-    volumes_from:
-      - data
-    networks:
-      main:
-        aliases:
-          - postgresalias
-
-networks:
-  main:
-    driver: bridge
-    ipam:
-      config:
-      - subnet: 10.5.0.0/16
+    volumes:
+      - ../../../explorer-data/db/postgresql:/var/lib/postgresql/data
