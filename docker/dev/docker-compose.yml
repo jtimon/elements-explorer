@@ -37,12 +37,8 @@ services:
         - ELEMENTS_DAEMON_NAME
       dockerfile: docker/daemon/Dockerfile
     volumes:
-      - ../../../explorer-data/bitcoin:/build_docker/.bitcoin
-      - ../../../explorer-data/testnet3:/build_docker/.testnet3
-      - ../../../explorer-data/regtest:/build_docker/.regtest
       - ../../../explorer-data/elementsregtest:/build_docker/.elements
-      - ../../../explorer-data/elementsparent:/build_docker/.elementsparent
-      - ../../../explorer-data/elementside:/build_docker/.elementside
+      - ../../../explorer-data/regtest:/build_docker/.regtest
 
   data:
     restart: "no"
