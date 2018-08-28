@@ -1,0 +1,26 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: none
+  CI_DISPOSABLE_ENVIRONMENT: "true"
+
+before_script:
+  - mkdir -p ${HOME}/.ssh
+  - '[[ -f /.dockerenv ]] && echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts'
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking yes\n\n" > ~/.ssh/config'
+  - chmod -R 700 ~/.ssh
+  - ssh-keyscan -H github.com >> ${HOME}/.ssh/known_hosts
+  - ssh-keyscan -H gl.blockstream.io >> ${HOME}/.ssh/known_hosts
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 --decode)
+
+build:
+  only:
+    - staging
+    - testing
+    - production
+  script:
+    - docker rmi glregistry.blockstream.io/liquid/elements-explorer/explorer:$CI_COMMIT_REF_NAME
+    - docker rmi glregistry.blockstream.io/liquid/elements-explorer/daemon:$CI_COMMIT_REF_NAME
+    - docker build --build-arg ENV_NAME=$CI_COMMIT_REF_NAME -t glregistry.blockstream.io/liquid/elements-explorer/explorer:$CI_COMMIT_REF_NAME ./docker/explorer/
+    - docker push glregistry.blockstream.io/liquid/elements-explorer/explorer:latest
+    - docker build --build-arg ENV_NAME=$CI_COMMIT_REF_NAME -t glregistry.blockstream.io/liquid/elements-explorer/daemon:$CI_COMMIT_REF_NAME ./docker/daemon/
+    - docker push glregistry.blockstream.io/liquid/elements-explorer/daemon:latest
