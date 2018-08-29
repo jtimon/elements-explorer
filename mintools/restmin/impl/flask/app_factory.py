@@ -15,7 +15,10 @@ def api_generic(request, request_processor, app, resource, auth_required=False):
     req['method'] = request.method
     req['resource'] = resource
     req['json'] = request.json
-    req['ip'] = request.remote_addr
+    if request.environ.get('HTTP_X_REAL_IP'):
+        req['ip'] = request.environ.get('HTTP_X_REAL_IP')
+    else:
+        req['ip'] = request.remote_addr
     req['params'] = {}
 
     params = {}
