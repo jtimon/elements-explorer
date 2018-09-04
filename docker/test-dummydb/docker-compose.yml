@@ -1,4 +1,4 @@
-version: '2'
+version: '3.6'
 
 services:
 
@@ -16,12 +16,7 @@ services:
       - /tmp/test-elements-explorer/keys:/build_docker/keys
     ports:
       - "5000:5000"
-    networks:
-      main:
-        ipv4_address: 10.5.0.5
-        aliases:
-          - explorer
-    depends_on:
+    links:
       - daemons
       - dummydb
 
@@ -39,23 +34,8 @@ services:
     volumes:
       - /tmp/test-elements-explorer/elementsregtest:/build_docker/.elements
       - /tmp/test-elements-explorer/regtest:/build_docker/.regtest
-    networks:
-      main:
-        aliases:
-          - daemons
 
   dummydb:
     build:
       context: ../../
       dockerfile: docker/dummydb/Dockerfile
-    networks:
-      main:
-        aliases:
-          - dummydb
-
-networks:
-  main:
-    driver: bridge
-    ipam:
-      config:
-      - subnet: 10.5.0.0/16
