@@ -1,4 +1,4 @@
-version: '2'
+version: '3.6'
 
 services:
 
@@ -12,12 +12,7 @@ services:
       - ../../../explorer-data/target:/build_docker/target
     ports:
       - "5000:5000"
-    networks:
-      main:
-        ipv4_address: 10.5.0.5
-        aliases:
-          - explorer
-    depends_on:
+    links:
       - postgres
       - daemons
 
@@ -31,10 +26,6 @@ services:
       dockerfile: docker/daemon/Dockerfile
     volumes:
       - ../../../explorer-data/elementsregtest:/build_docker/.elements
-    networks:
-      main:
-        aliases:
-          - daemons
 
   data:
     restart: "no"
@@ -46,16 +37,5 @@ services:
   postgres:
     restart: "always"
     image: postgres:9.6
-    volumes_from:
-      - data
-    networks:
-      main:
-        aliases:
-          - postgresalias
-
-networks:
-  main:
-    driver: bridge
-    ipam:
-      config:
-      - subnet: 10.5.0.0/16
+    volumes:
+      - ../../../explorer-data/db/postgresql:/var/lib/postgresql/data
