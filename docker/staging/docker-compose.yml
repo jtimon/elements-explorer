@@ -29,6 +29,7 @@ services:
       - ../../../explorer-data/bitcoin:/build_docker/.bitcoin
       - ../../../explorer-data/testnet3:/build_docker/.testnet3
       - ../../../explorer-data/regtest:/build_docker/.regtest
+      - ../../../explorer-data/signet:/build_docker/.signet
       - ../../../explorer-data/elementsregtest:/build_docker/.elements
       - ../../../explorer-data/elementsparent:/build_docker/.elementsparent
       - ../../../explorer-data/elementside:/build_docker/.elementside
