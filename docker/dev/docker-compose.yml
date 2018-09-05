@@ -39,6 +39,7 @@ services:
     volumes:
       - ../../../explorer-data/elementsregtest:/build_docker/.elements
       - ../../../explorer-data/regtest:/build_docker/.regtest
+      - ../../../explorer-data/signet:/build_docker/.signet
 
   data:
     restart: "no"

@@ -5,7 +5,7 @@ web: gunicorn webflask:app -b "$WEB_HOST:$WEB_PORT" -w $WEB_WORKERS -k gevent --
 # Force db restart for all chains by removing $ORM_SCHEMA/schema.json:
 # --forcechains=elementside,elementsparent --forcetables=chaininfo,tx,input,output
 
-create_db: python explorer/bin/model2db.py --address $DB_PROXY_ADR --dbaddress $DB_BACKEND_ADR --dbtype $DB_PROXY_TYPE --dbname $DB_NAME --dbuser $DB_USER --dbpass $DB_PASS --model $ORM_MODEL --modelschema $ORM_SCHEMA --chains=regtest,elementsregtest --forcetables=faucetsent
+create_db: python explorer/bin/model2db.py --address $DB_PROXY_ADR --dbaddress $DB_BACKEND_ADR --dbtype $DB_PROXY_TYPE --dbname $DB_NAME --dbuser $DB_USER --dbpass $DB_PASS --model $ORM_MODEL --modelschema $ORM_SCHEMA --chains=regtest,elementsregtest,signet --forcechains=regtest,elementsregtest,signet
 
 
 mempool_regtest: python explorer/bin/mempool_cacher.py --chain regtest
@@ -19,3 +19,8 @@ subscriber_elementsregtest: python explorer/bin/chain_subscriber.py --chain elem
 reorg_cron_elementsregtest: python explorer/bin/reorg_cron.py --chain elementsregtest
 generator_elementsregtest: python explorer/bin/generator.py --chain elementsregtest
 greedy_cacher_elementsregtest: python explorer/bin/greedy_cacher.py --chain elementsregtest
+
+mempool_signet: python explorer/bin/mempool_cacher.py --chain signet
+subscriber_signet: python explorer/bin/chain_subscriber.py --chain signet
+reorg_cron_signet: python explorer/bin/reorg_cron.py --chain signet
+greedy_cacher_signet: python explorer/bin/greedy_cacher.py --chain signet

@@ -75,6 +75,31 @@
             "chain_id": "0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206",
             "stats_support": true
         }
+    },
+
+    "signet": {
+        "proc": {
+            "greedy_cacher": [
+                60,
+                420,
+                true,
+                true
+            ],
+            "mempool_cacher": [
+                60,
+                180
+            ],
+            "reorg_cron": [
+                60,
+                180,
+                false,
+                true
+            ]
+        },
+        "properties": {
+            "chain_id": "signet_genesis_hash",
+            "stats_support": false
+        }
     }
 
 }
