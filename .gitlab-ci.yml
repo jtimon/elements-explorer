@@ -2,6 +2,12 @@ variables:
   GIT_SUBMODULE_STRATEGY: none
   CI_DISPOSABLE_ENVIRONMENT: "true"
 
+image: docker:latest
+stages:
+  - build
+  - release
+  - cleanup
+
 before_script:
   - mkdir -p ${HOME}/.ssh
   - '[[ -f /.dockerenv ]] && echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts'
@@ -13,6 +19,27 @@ before_script:
   - ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 --decode)
 
 build:
+  stage: build
+  only:
+    - staging
+    - testing
+    - master
+  script:
+    - docker build --build-arg ENV_NAME=$CI_COMMIT_REF_NAME -t glregistry.blockstream.io/liquid/elements-explorer/explorer:$CI_COMMIT_REF_NAME ./docker/explorer/
+    - docker build --build-arg ENV_NAME=$CI_COMMIT_REF_NAME -t glregistry.blockstream.io/liquid/elements-explorer/daemon:$CI_COMMIT_REF_NAME ./docker/daemon/
+
+release:
+  stage: release
+  only:
+    - staging
+    - testing
+    - master
+  script:
+    - docker push glregistry.blockstream.io/liquid/elements-explorer/explorer:latest
+    - docker push glregistry.blockstream.io/liquid/elements-explorer/daemon:latest
+
+cleanup:
+  stage: cleanup
   only:
     - staging
     - testing
@@ -20,7 +47,3 @@ build:
   script:
     - docker rmi glregistry.blockstream.io/liquid/elements-explorer/explorer:$CI_COMMIT_REF_NAME
     - docker rmi glregistry.blockstream.io/liquid/elements-explorer/daemon:$CI_COMMIT_REF_NAME
-    - docker build --build-arg ENV_NAME=$CI_COMMIT_REF_NAME -t glregistry.blockstream.io/liquid/elements-explorer/explorer:$CI_COMMIT_REF_NAME ./docker/explorer/
-    - docker push glregistry.blockstream.io/liquid/elements-explorer/explorer:latest
-    - docker build --build-arg ENV_NAME=$CI_COMMIT_REF_NAME -t glregistry.blockstream.io/liquid/elements-explorer/daemon:$CI_COMMIT_REF_NAME ./docker/daemon/
-    - docker push glregistry.blockstream.io/liquid/elements-explorer/daemon:latest
