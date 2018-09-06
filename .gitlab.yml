@@ -16,7 +16,7 @@ build:
   only:
     - staging
     - testing
-    - production
+    - master
   script:
     - docker rmi glregistry.blockstream.io/liquid/elements-explorer/explorer:$CI_COMMIT_REF_NAME
     - docker rmi glregistry.blockstream.io/liquid/elements-explorer/daemon:$CI_COMMIT_REF_NAME
