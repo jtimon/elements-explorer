@@ -1,6 +1,16 @@
-version: '2'
+version: '3.6'
 
 services:
+
+  nginx:
+    restart: always
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - explorer
 
   explorer:
     build:
@@ -16,12 +26,7 @@ services:
       - /tmp/test-elements-explorer/keys:/build_docker/keys
     ports:
       - "5000:5000"
-    networks:
-      main:
-        ipv4_address: 10.5.0.5
-        aliases:
-          - explorer
-    depends_on:
+    links:
       - postgres
       - daemons
 
@@ -39,10 +44,6 @@ services:
     volumes:
       - /tmp/test-elements-explorer/elementsregtest:/build_docker/.elements
       - /tmp/test-elements-explorer/regtest:/build_docker/.regtest
-    networks:
-      main:
-        aliases:
-          - daemons
 
   data:
     restart: "no"
@@ -60,16 +61,5 @@ services:
     environment:
       - CURRENT_UID
     user: ${CURRENT_UID}
-    volumes_from:
-      - data
-    networks:
-      main:
-        aliases:
-          - postgresalias
-
-networks:
-  main:
-    driver: bridge
-    ipam:
-      config:
-      - subnet: 10.5.0.0/16
+    volumes:
+      - /tmp/test-elements-explorer/db/postgresql:/var/lib/postgresql/data
