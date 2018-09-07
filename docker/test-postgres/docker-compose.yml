@@ -63,3 +63,4 @@ services:
     user: ${CURRENT_UID}
     volumes:
       - /tmp/test-elements-explorer/db/postgresql:/var/lib/postgresql/data
+      - /etc/passwd:/etc/passwd:ro

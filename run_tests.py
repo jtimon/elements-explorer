@@ -89,8 +89,7 @@ def test_file_with_db(db, test_file, env_file_export):
         # status2 = call('docker ps -a', shell=True)
         # status2 = call('docker logs rpcexplorer_explorer_1', shell=True)
         # status2 = call('docker logs rpcexplorer_postgres_1', shell=True)
-        # status2 = call('docker logs rpcexplorer_bitcoin_1', shell=True)
-        # status2 = call('docker logs rpcexplorer_elements_1', shell=True)
+        # status2 = call('docker logs rpcexplorer_daemons_1', shell=True)
         status2 = call('docker ps -a', shell=True)
 
     try:
