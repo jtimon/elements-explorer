@@ -98,7 +98,7 @@
         },
         "properties": {
             "chain_id": "signet_genesis_hash",
-            "stats_support": false
+            "stats_support": true
         }
     }
 
