@@ -202,7 +202,7 @@ class BlockPage extends Component {
                       </div>
                       <div>
                         <span>Median</span>
-                        <span>{blockStats.medianfeerate}</span>
+                        <span>{blockStats.feerate_percentiles_50}</span>
                       </div>
                     </div>
                   </div>
