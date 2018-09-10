@@ -14,12 +14,16 @@ class Blockstats(RpcCachedModel):
     avgfee = ormin.BigIntField()
     avgfeerate = ormin.IntField()
     avgtxsize = ormin.IntField()
+    feerate_percentiles_10 = ormin.IntField(required=False)
+    feerate_percentiles_25 = ormin.IntField(required=False)
+    feerate_percentiles_50 = ormin.IntField(required=False)
+    feerate_percentiles_75 = ormin.IntField(required=False)
+    feerate_percentiles_90 = ormin.IntField(required=False)
     ins = ormin.IntField()
     maxfee = ormin.BigIntField()
     maxfeerate = ormin.IntField()
     maxtxsize = ormin.IntField()
     medianfee = ormin.BigIntField()
-    medianfeerate = ormin.IntField()
     mediantime = ormin.IntField()
     mediantxsize = ormin.IntField()
     minfee = ormin.BigIntField()
@@ -36,6 +40,18 @@ class Blockstats(RpcCachedModel):
     txs = ormin.IntField()
     utxo_increase = ormin.IntField()
     utxo_size_inc = ormin.IntField()
+
+    def __init__(self, json_dict=None, *args, **kwargs):
+
+        if 'feerate_percentiles' in json_dict and len(json_dict['feerate_percentiles']) == 5:
+            json_dict['feerate_percentiles_10'] = json_dict['feerate_percentiles'][0]
+            json_dict['feerate_percentiles_25'] = json_dict['feerate_percentiles'][1]
+            json_dict['feerate_percentiles_50'] = json_dict['feerate_percentiles'][2]
+            json_dict['feerate_percentiles_75'] = json_dict['feerate_percentiles'][3]
+            json_dict['feerate_percentiles_90'] = json_dict['feerate_percentiles'][4]
+            del json_dict['feerate_percentiles']
+        
+        super(Blockstats, self).__init__(json_dict=json_dict, *args, **kwargs)
     
     @classmethod
     def truth_src_get(cls, req_id):
