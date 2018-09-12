@@ -25,6 +25,10 @@ function VOut({ showAdvanced, vout }) {
           <div>scriptPubKey.hex</div>
           <div>{vout.scriptpubkey_hex}</div>
         </div>
+        <div>
+          <div>Asset</div>
+          <div>{vout.asset}</div>
+        </div>
       </div>
     );
   } else if (isPegOut && vout.pegout_scriptpubkey_type !== 'fee') {
@@ -41,6 +45,10 @@ function VOut({ showAdvanced, vout }) {
         <div>
           <div>Peg-out Hex</div>
           <div>{vout.pegout_scriptpubkey_hex}</div>
+        </div>
+        <div>
+          <div>Asset</div>
+          <div>{vout.asset}</div>
         </div>
       </div>
     );
