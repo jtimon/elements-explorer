@@ -26,8 +26,8 @@ function VOut({ showAdvanced, vout }) {
           <div>{vout.scriptpubkey_hex}</div>
         </div>
         <div>
-          <div>Asset</div>
-          <div>{vout.asset}</div>
+          <div>Asset {vout.assetcommitment ? 'commitment' : ''}</div>
+          <div>{vout.asset ? vout.asset : vout.assetcommitment}</div>
         </div>
       </div>
     );
@@ -47,8 +47,8 @@ function VOut({ showAdvanced, vout }) {
           <div>{vout.pegout_scriptpubkey_hex}</div>
         </div>
         <div>
-          <div>Asset</div>
-          <div>{vout.asset}</div>
+          <div>Asset {vout.assetcommitment ? 'commitment' : ''}</div>
+          <div>{vout.asset ? vout.asset : vout.assetcommitment}</div>
         </div>
       </div>
     );
