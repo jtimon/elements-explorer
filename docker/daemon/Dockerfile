@@ -1,11 +1,11 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 WORKDIR /build_docker
 
 COPY docker/daemon/deps.sh /build_docker/docker/daemon/deps.sh
 RUN sh docker/daemon/deps.sh
 
-RUN apt-get update && apt-get install -y python-pip
+RUN apt-get update && apt-get install -qfy python-pip
 COPY docker/daemon/requirements.txt /build_docker/requirements.txt
 RUN pip install -r requirements.txt --require-hashes
 

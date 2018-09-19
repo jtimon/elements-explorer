@@ -1,8 +1,8 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 EXPOSE 5000
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -qfy \
     curl \
     git \
     nodejs \
@@ -14,9 +14,6 @@ RUN apt-get update && apt-get install -y \
     postgresql-server-dev-all
 
 WORKDIR /build_docker
-
-# Or install nodejs-legacy to avoid the symlink
-RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 COPY docker/explorer/requirements.txt /build_docker/requirements.txt
 RUN pip install -r requirements.txt --require-hashes
