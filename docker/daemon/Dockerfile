@@ -20,7 +20,7 @@ RUN sh /build_docker/docker/daemon/build-with-wallet.sh $CORE_BRANCH_COMMIT $COR
 
 # Install elementsd
 ARG ELEMENTS_DAEMON_NAME
-ENV ELEMENTS_BRANCH_COMMIT=58dee91e37454282c3fcf1b20ed526c594e1ebd2
+ENV ELEMENTS_BRANCH_COMMIT=1920d8480e807c3d4bcbad787c71bef25a75d4d7
 ENV ELEMENTS_REPO_HOST=https://github.com/jtimon
 ENV ELEMENTS_REPO_NAME=elements
 RUN sh /build_docker/docker/daemon/build-with-wallet.sh $ELEMENTS_BRANCH_COMMIT $ELEMENTS_REPO_NAME $ELEMENTS_REPO_HOST $ELEMENTS_DAEMON_NAME
