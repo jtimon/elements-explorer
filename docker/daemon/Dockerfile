@@ -25,10 +25,10 @@ ENV ELEMENTS_REPO_HOST=https://github.com/jtimon
 ENV ELEMENTS_REPO_NAME=elements
 RUN sh /build_docker/docker/daemon/build-with-wallet.sh $ELEMENTS_BRANCH_COMMIT $ELEMENTS_REPO_NAME $ELEMENTS_REPO_HOST $ELEMENTS_DAEMON_NAME
 
-# Install bitcoind from ElementsProject/signet
+# Install bitcoind with signet support from jtimon/signet-explorer
 # TODO maintain only one branch directly on top of bitcoin core's master
-ENV SIGNET_BRANCH_COMMIT=1530cf40d60da34b6b46ea2bbe1e93bbb45615dc
-RUN sh /build_docker/docker/daemon/build-with-wallet.sh $SIGNET_BRANCH_COMMIT $CORE_REPO_NAME $CORE_REPO_HOST $CORE_DAEMON_NAME
+ENV SIGNET_BRANCH_COMMIT=e416403ddc15225507d6bf6b5833f8f63c524278
+RUN sh /build_docker/docker/daemon/build-with-wallet.sh $SIGNET_BRANCH_COMMIT $ELEMENTS_REPO_NAME $ELEMENTS_REPO_HOST $CORE_DAEMON_NAME
 
 ARG ENV_NAME
 COPY docker/$ENV_NAME/conf/torrc /etc/torrc
