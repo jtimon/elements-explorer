@@ -236,6 +236,50 @@
             "chain_id": "signet_genesis_hash",
             "stats_support": true
         }
+    },
+
+    "signetside": {
+        "proc": {
+            "block_gen": [
+                60,
+                180,
+                "onesigner"
+            ],
+            "tx_gen": [
+                60,
+                180
+            ],
+            "pegin_gen": [
+                60,
+                180
+            ],
+            "pegout_gen": [
+                60,
+                180
+            ],
+            "greedy_cacher": [
+                60,
+                420,
+                true,
+                true
+            ],
+            "mempool_cacher": [
+                60,
+                180
+            ],
+            "reorg_cron": [
+                60,
+                180,
+                false,
+                true
+            ]
+        },
+        "properties": {
+            "chain_id": "80206e1a60d1e2bd87e528785114c5f99ae1a9da1c694a6f1c60af6df4fdf195",
+            "parent_chain": "signet",
+            "parent_chain_has_CT": false,
+            "stats_support": true
+        }
     }
 
 }
