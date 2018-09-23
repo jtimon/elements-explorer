@@ -1,6 +1,6 @@
 
-regtest: ./$BITCOIN_BRANCH_DIR/src/$BITCOIN_DAEMON -rpcbind=$REGTEST_HOST:$REGTEST_RPCPORT -datadir=$REGTEST_DATADIR -rpcallowip=$REGTEST_ALLLOWFROM -rpcuser=$REGTEST_RPCUSER -rpcpassword=$REGTEST_RPCPASSWORD -zmqpubhashblock=$REGTEST_ZMQ -port=$REGTEST_PORT -logips -logtimestamps -server -txindex -listen -discover -dbcache=8000 -maxmempool=8000 -regtest -addresstype=legacy
+regtest: ./$BITCOIN_BRANCH_DIR/src/bitcoind -conf=/build_docker/daemon-conf/regtest.conf -datadir=/build_docker/.regtest/
 
-elementsregtest: ./$ELEMENTS_BRANCH_DIR/src/$ELEMENTS_DAEMON -conf=/build_docker/daemon-conf/elementsregtest.conf -datadir=/build_docker/.elements/
+elementsregtest: ./$ELEMENTS_BRANCH_DIR/src/elementsd -conf=/build_docker/daemon-conf/elementsregtest.conf -datadir=/build_docker/.elements/
 
-signet: ./$SIGNET_BRANCH_DIR/src/$BITCOIN_DAEMON -rpcbind=$SIGNET_HOST:$SIGNET_RPCPORT -datadir=$SIGNET_DATADIR -rpcallowip=$SIGNET_ALLLOWFROM -rpcuser=$SIGNET_RPCUSER -rpcpassword=$SIGNET_RPCPASSWORD -zmqpubhashblock=$SIGNET_ZMQ -port=$SIGNET_PORT -logips -logtimestamps -server -txindex -listen -discover -dbcache=8000 -maxmempool=8000 -addresstype=legacy -signet -signet_blockscript=512102551778971154247208b530bb8325c73e3c7f3a1b13019bc134cdd73427b192e551ae -signet_seednode=178.128.221.177 -signet_siglen=77 -fallbackfee=0.00001
+signet: ./$SIGNET_BRANCH_DIR/src/bitcoind -rpcbind=$SIGNET_HOST:$SIGNET_RPCPORT -datadir=$SIGNET_DATADIR -rpcallowip=$SIGNET_ALLLOWFROM -rpcuser=$SIGNET_RPCUSER -rpcpassword=$SIGNET_RPCPASSWORD -zmqpubhashblock=$SIGNET_ZMQ -port=$SIGNET_PORT -logips -logtimestamps -server -txindex -listen -discover -dbcache=8000 -maxmempool=8000 -addresstype=legacy -signet -signet_blockscript=512102551778971154247208b530bb8325c73e3c7f3a1b13019bc134cdd73427b192e551ae -signet_seednode=178.128.221.177 -signet_siglen=77 -fallbackfee=0.00001

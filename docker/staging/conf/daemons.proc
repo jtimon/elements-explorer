@@ -3,14 +3,14 @@ bitcoind: ./$BITCOIN_BRANCH_DIR/src/$BITCOIN_DAEMON -rpcbind=$BITCOIN_HOST:$BITC
 
 testnet3: ./$BITCOIN_BRANCH_DIR/src/$BITCOIN_DAEMON -rpcbind=$TESTNET3_HOST:$TESTNET3_RPCPORT -datadir=$TESTNET3_DATADIR -rpcallowip=$TESTNET3_ALLLOWFROM -rpcuser=$TESTNET3_RPCUSER -rpcpassword=$TESTNET3_RPCPASSWORD -zmqpubhashblock=$TESTNET3_ZMQ -port=$TESTNET3_PORT -logips -logtimestamps -server -txindex -listen -discover -dbcache=8000 -maxmempool=8000 -testnet
 
-regtest: ./$BITCOIN_BRANCH_DIR/src/$BITCOIN_DAEMON -rpcbind=$REGTEST_HOST:$REGTEST_RPCPORT -datadir=$REGTEST_DATADIR -rpcallowip=$REGTEST_ALLLOWFROM -rpcuser=$REGTEST_RPCUSER -rpcpassword=$REGTEST_RPCPASSWORD -zmqpubhashblock=$REGTEST_ZMQ -port=$REGTEST_PORT -logips -logtimestamps -server -txindex -listen -discover -dbcache=8000 -maxmempool=8000 -regtest -addresstype=legacy
+regtest: ./$BITCOIN_BRANCH_DIR/src/bitcoind -conf=/build_docker/daemon-conf/regtest.conf -datadir=/build_docker/.regtest/
 
 signet: ./$SIGNET_BRANCH_DIR/src/$BITCOIN_DAEMON -printtoconsole -rpcbind=$SIGNET_HOST:$SIGNET_RPCPORT -datadir=$SIGNET_DATADIR -rpcallowip=$SIGNET_ALLLOWFROM -rpcuser=$SIGNET_RPCUSER -rpcpassword=$SIGNET_RPCPASSWORD -zmqpubhashblock=$SIGNET_ZMQ -port=$SIGNET_PORT -logips -logtimestamps -server -txindex -listen -discover -dbcache=8000 -maxmempool=8000 -addresstype=legacy -signet -signet_blockscript=512102551778971154247208b530bb8325c73e3c7f3a1b13019bc134cdd73427b192e551ae -signet_seednode=178.128.221.177 -signet_siglen=77 -fallbackfee=0.00001
 
-elementsparent: ./$ELEMENTS_BRANCH_DIR/src/$ELEMENTS_DAEMON -conf=/build_docker/daemon-conf/elementsparent.conf -datadir=/build_docker/.elementsparent/
+elementsparent: ./$ELEMENTS_BRANCH_DIR/src/elementsd -conf=/build_docker/daemon-conf/elementsparent.conf -datadir=/build_docker/.elementsparent/
 
-elementsregtest: sleep 1 ; ./$ELEMENTS_BRANCH_DIR/src/$ELEMENTS_DAEMON -conf=/build_docker/daemon-conf/elementsregtest.conf -datadir=/build_docker/.elements/
+elementsregtest: sleep 1 ; ./$ELEMENTS_BRANCH_DIR/src/elementsd -conf=/build_docker/daemon-conf/elementsregtest.conf -datadir=/build_docker/.elements/
 
-elementside: sleep 1 ; ./$ELEMENTS_BRANCH_DIR/src/$ELEMENTS_DAEMON -conf=/build_docker/daemon-conf/elementside.conf -datadir=/build_docker/.elementside/
+elementside: sleep 1 ; ./$ELEMENTS_BRANCH_DIR/src/elementsd -conf=/build_docker/daemon-conf/elementside.conf -datadir=/build_docker/.elementside/
 
-signetside: sleep 1 ; ./$ELEMENTS_BRANCH_DIR/src/$ELEMENTS_DAEMON -conf=/build_docker/daemon-conf/signetside.conf -datadir=/build_docker/.signetside/
+signetside: sleep 1 ; ./$ELEMENTS_BRANCH_DIR/src/elementsd -conf=/build_docker/daemon-conf/signetside.conf -datadir=/build_docker/.signetside/
