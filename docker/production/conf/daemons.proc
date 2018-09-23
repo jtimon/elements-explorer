@@ -1,1 +1,2 @@
-elementsregtest: ./$ELEMENTS_BRANCH_DIR/src/$ELEMENTS_DAEMON -rpcbind=$ELEMENTS_HOST:$ELEMENTSREGTEST_RPCPORT -datadir=$ELEMENTSREGTEST_DATADIR -rpcallowip=$ELEMENTS_ALLLOWFROM -rpcuser=$ELEMENTSREGTEST_RPCUSER -rpcpassword=$ELEMENTSREGTEST_RPCPASSWORD -port=$ELEMENTSREGTEST_PORT -zmqpubhashblock=$ELEMENTSREGTEST_ZMQ -logips -logtimestamps -server -txindex -listen -discover -validatepegin=0 -dbcache=8000 -maxmempool=8000 -initialfreecoins=21000000000000 -anyonecanspendaremine -fdefaultconsistencychecks=0 -regtest
+
+elementsregtest: ./$ELEMENTS_BRANCH_DIR/src/$ELEMENTS_DAEMON -conf=/build_docker/daemon-conf/elementsregtest.conf -datadir=/build_docker/.elements/
