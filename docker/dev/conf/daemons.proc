@@ -3,4 +3,4 @@ regtest: ./$BITCOIN_BRANCH_DIR/src/bitcoind -conf=/build_docker/daemon-conf/regt
 
 elementsregtest: ./$ELEMENTS_BRANCH_DIR/src/elementsd -conf=/build_docker/daemon-conf/elementsregtest.conf -datadir=/build_docker/.elements/
 
-signet: ./$SIGNET_BRANCH_DIR/src/bitcoind -rpcbind=$SIGNET_HOST:$SIGNET_RPCPORT -datadir=$SIGNET_DATADIR -rpcallowip=$SIGNET_ALLLOWFROM -rpcuser=$SIGNET_RPCUSER -rpcpassword=$SIGNET_RPCPASSWORD -zmqpubhashblock=$SIGNET_ZMQ -port=$SIGNET_PORT -logips -logtimestamps -server -txindex -listen -discover -dbcache=8000 -maxmempool=8000 -addresstype=legacy -signet -signet_blockscript=512102551778971154247208b530bb8325c73e3c7f3a1b13019bc134cdd73427b192e551ae -signet_seednode=178.128.221.177 -signet_siglen=77 -fallbackfee=0.00001
+signet: ./$SIGNET_BRANCH_DIR/src/bitcoind -conf=/build_docker/daemon-conf/signet.conf -datadir=/build_docker/.signet/
