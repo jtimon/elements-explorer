@@ -1,2 +1,2 @@
 
-elementsregtest: ./$ELEMENTS_BRANCH_DIR/src/$ELEMENTS_DAEMON -conf=/build_docker/daemon-conf/elementsregtest.conf -datadir=/build_docker/.elements/
+elementsregtest: ./$ELEMENTS_BRANCH_DIR/src/elementsd -conf=/build_docker/daemon-conf/elementsregtest.conf -datadir=/build_docker/.elements/
