@@ -1,7 +1,7 @@
 
 bitcoind: ./$BITCOIN_BRANCH_DIR/src/$BITCOIN_DAEMON -rpcbind=$BITCOIN_HOST:$BITCOIN_RPCPORT -datadir=$BITCOIN_DATADIR -rpcallowip=$BITCOIN_ALLLOWFROM -logips -logtimestamps -server -txindex -rpcuser=$BITCOIN_RPCUSER -rpcpassword=$BITCOIN_RPCPASSWORD -port=$BITCOIN_PORT -zmqpubhashblock=$BITCOIN_ZMQ -listen -discover -dbcache=8000 -maxmempool=8000
 
-testnet3: ./$BITCOIN_BRANCH_DIR/src/$BITCOIN_DAEMON -rpcbind=$TESTNET3_HOST:$TESTNET3_RPCPORT -datadir=$TESTNET3_DATADIR -rpcallowip=$TESTNET3_ALLLOWFROM -rpcuser=$TESTNET3_RPCUSER -rpcpassword=$TESTNET3_RPCPASSWORD -zmqpubhashblock=$TESTNET3_ZMQ -port=$TESTNET3_PORT -logips -logtimestamps -server -txindex -listen -discover -dbcache=8000 -maxmempool=8000 -testnet
+testnet3: ./$BITCOIN_BRANCH_DIR/src/bitcoind -conf=/build_docker/daemon-conf/testnet3.conf -datadir=/build_docker/.testnet3/
 
 regtest: ./$BITCOIN_BRANCH_DIR/src/bitcoind -conf=/build_docker/daemon-conf/regtest.conf -datadir=/build_docker/.regtest/
 
