@@ -97,7 +97,7 @@
             ]
         },
         "properties": {
-            "chain_id": "signet_genesis_hash",
+            "chain_id": "22861f488a5c6cb033a843e476581a8abf5b82a34926babfde1241ed97ba268e",
             "stats_support": true
         }
     }
