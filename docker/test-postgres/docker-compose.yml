@@ -37,6 +37,7 @@ services:
         - ENV_NAME
         - CORE_DAEMON_NAME
         - ELEMENTS_DAEMON_NAME
+        - SIGNET_DAEMON_NAME
       dockerfile: docker/daemon/Dockerfile
     environment:
       - CURRENT_UID
