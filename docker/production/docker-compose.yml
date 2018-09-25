@@ -23,9 +23,10 @@ services:
         - ENV_NAME
         - CORE_DAEMON_NAME
         - ELEMENTS_DAEMON_NAME
+        - SIGNET_DAEMON_NAME
       dockerfile: docker/daemon/Dockerfile
     volumes:
-      - ../../../explorer-data/elementsregtest:/build_docker/.elements
+      - ../../../explorer-data/signet:/build_docker/.signet
 
   data:
     restart: "no"

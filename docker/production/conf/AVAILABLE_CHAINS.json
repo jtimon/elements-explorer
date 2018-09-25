@@ -1,11 +1,6 @@
 {
-    "elementsregtest": {
+    "signet": {
         "proc": {
-            "block_gen": [
-                300,
-                180,
-                "regtestlike"
-            ],
             "greedy_cacher": [
                 60,
                 420,
@@ -16,30 +11,16 @@
                 60,
                 180
             ],
-            "pegin_gen": [
-                60,
-                180
-            ],
-            "pegout_gen": [
-                40,
-                180
-            ],
             "reorg_cron": [
                 60,
                 180,
                 false,
                 true
-            ],
-            "tx_gen": [
-                30,
-                180
             ]
         },
         "properties": {
-            "chain_id": "b69af98be45cf3fb1d992b716a1d6156835c059f6944620d81dcc2487bb5cc8c",
-            "parent_chain": "regtest",
-            "parent_chain_has_CT": false,
-            "stats_support": true
+            "chain_id": "22861f488a5c6cb033a843e476581a8abf5b82a34926babfde1241ed97ba268e",
+            "stats_support": false
         }
     }
 

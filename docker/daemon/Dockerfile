@@ -27,8 +27,9 @@ RUN sh /build_docker/docker/daemon/build-with-wallet.sh $ELEMENTS_BRANCH_COMMIT 
 
 # Install bitcoind with signet support from jtimon/signet-explorer
 # TODO maintain only one branch directly on top of bitcoin core's master
+ARG SIGNET_DAEMON_NAME
 ENV SIGNET_BRANCH_COMMIT=e416403ddc15225507d6bf6b5833f8f63c524278
-RUN sh /build_docker/docker/daemon/build-with-wallet.sh $SIGNET_BRANCH_COMMIT $ELEMENTS_REPO_NAME $ELEMENTS_REPO_HOST $CORE_DAEMON_NAME
+RUN sh /build_docker/docker/daemon/build-with-wallet.sh $SIGNET_BRANCH_COMMIT $ELEMENTS_REPO_NAME $ELEMENTS_REPO_HOST $SIGNET_DAEMON_NAME
 
 ARG ENV_NAME
 COPY docker/daemon-conf /build_docker/daemon-conf

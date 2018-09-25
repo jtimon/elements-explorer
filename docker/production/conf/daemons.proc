@@ -1,2 +1,2 @@
 
-elementsregtest: ./$ELEMENTS_BRANCH_DIR/src/elementsd -conf=/build_docker/daemon-conf/elementsregtest.conf -datadir=/build_docker/.elements/
+signet: ./$SIGNET_BRANCH_DIR/src/bitcoind -conf=/build_docker/daemon-conf/signet.conf -datadir=/build_docker/.signet/
