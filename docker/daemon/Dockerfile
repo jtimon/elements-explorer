@@ -32,8 +32,8 @@ ENV SIGNET_BRANCH_COMMIT=b4c9e7838f16e1947804e6cb12c2282bcb0f9deb
 RUN sh /build_docker/docker/daemon/build-with-wallet.sh $SIGNET_BRANCH_COMMIT $ELEMENTS_REPO_NAME $ELEMENTS_REPO_HOST $SIGNET_DAEMON_NAME
 
 ARG ENV_NAME
+COPY docker/common /build_docker/common
 COPY docker/daemon-conf /build_docker/daemon-conf
 COPY docker/$ENV_NAME/conf/torrc /etc/torrc
-COPY docker/$ENV_NAME/conf/daemons.env /build_docker/docker/conf/daemons.env
 COPY docker/$ENV_NAME/conf/daemons.proc /build_docker/docker/conf/daemons.proc
-CMD honcho start -e docker/conf/daemons.env -f docker/conf/daemons.proc
+CMD honcho start -e common/daemons.env -f docker/conf/daemons.proc
