@@ -27,6 +27,7 @@ RUN npm install -g npm@6.0.0
 COPY docker/explorer/package.json /build_docker/gui_alt/package.json
 RUN cd gui_alt && npm i --production
 COPY gui2/package.json /build_docker/gui2/package.json
+COPY gui2/package-lock.json /build_docker/gui2/package-lock.json
 RUN cd gui2 && npm i --production
 
 COPY mintools /build_docker/mintools
