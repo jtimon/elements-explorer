@@ -13,7 +13,7 @@ COPY docker/daemon/build-with-wallet.sh /build_docker/docker/daemon/build-with-w
 
 # Install bitcoind from bitcoin/0.17 (v0.17.0rc4)
 ARG CORE_DAEMON_NAME
-ENV CORE_BRANCH_COMMIT=c64128df5882e8dc1f76ae7c1e998ed57b8645fe
+ENV CORE_BRANCH_COMMIT=e1ed37edaedc85b8c3468bd9a726046344036243
 ENV CORE_REPO_HOST=https://github.com/bitcoin
 ENV CORE_REPO_NAME=bitcoin
 RUN sh /build_docker/docker/daemon/build-with-wallet.sh $CORE_BRANCH_COMMIT $CORE_REPO_NAME $CORE_REPO_HOST $CORE_DAEMON_NAME
