@@ -14,6 +14,7 @@ print('Importing env_config.py')
 AVAILABLE_API = json.loads(open('/build_docker/docker/conf/API_AVAILABLE.json', 'r').read())['api_available']
 AVAILABLE_CHAINS = json.loads(open('/build_docker/docker/conf/AVAILABLE_CHAINS.json', 'r').read())
 DEFAULT_CHAIN = os.environ.get('DEFAULT_CHAIN')
+FAUCET_SECONDS_AGO = int(os.environ.get('FAUCET_SECONDS_AGO'))
 
 DB_FACTORY = MinqlFactory(
     os.environ.get('DB_TYPE'),
