@@ -16,7 +16,7 @@ reorg_cron_bitcoin: python explorer/bin/reorg_cron.py --chain bitcoin
 mempool_testnet3: python explorer/bin/mempool_cacher.py --chain testnet3
 subscriber_testnet3: python explorer/bin/chain_subscriber.py --chain testnet3
 reorg_cron_testnet3: python explorer/bin/reorg_cron.py --chain testnet3
-greedy_cacher_testnet3: python explorer/bin/greedy_cacher.py --chain testnet3
+# greedy_cacher_testnet3: python explorer/bin/greedy_cacher.py --chain testnet3
 
 mempool_regtest: python explorer/bin/mempool_cacher.py --chain regtest
 subscriber_regtest: python explorer/bin/chain_subscriber.py --chain regtest
@@ -33,7 +33,7 @@ generator_elementsregtest: python explorer/bin/generator.py --chain elementsregt
 mempool_signet: python explorer/bin/mempool_cacher.py --chain signet
 subscriber_signet: python explorer/bin/chain_subscriber.py --chain signet
 reorg_cron_signet: python explorer/bin/reorg_cron.py --chain signet
-greedy_cacher_signet: python explorer/bin/greedy_cacher.py --chain signet
+# greedy_cacher_signet: python explorer/bin/greedy_cacher.py --chain signet
 
 mempool_elementsparent: python explorer/bin/mempool_cacher.py --chain elementsparent
 subscriber_elementsparent: python explorer/bin/chain_subscriber.py --chain elementsparent
