@@ -10,4 +10,4 @@ create_db: python explorer/bin/model2db.py --address $DB_PROXY_ADR --dbaddress $
 mempool_signet: python explorer/bin/mempool_cacher.py --chain signet
 subscriber_signet: python explorer/bin/chain_subscriber.py --chain signet
 reorg_cron_signet: python explorer/bin/reorg_cron.py --chain signet
-greedy_cacher_signet: python explorer/bin/greedy_cacher.py --chain signet
+# greedy_cacher_signet: python explorer/bin/greedy_cacher.py --chain signet
