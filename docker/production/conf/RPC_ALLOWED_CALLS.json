@@ -12,6 +12,15 @@
         "generate",
         "getnewaddress",
         "validateaddress",
-        "sendtoaddress"
+        "sendtoaddress",
+        "sendtomainchain",
+        "getpeginaddress",
+        "gettxoutproof",
+        "claimpegin",
+        "importprivkey",
+        "getnewblockhex",
+        "signblock",
+        "combineblocksigs",
+        "submitblock"
     ]
 }
